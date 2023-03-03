@@ -4,11 +4,11 @@ var totalCookies = 0;
 var cookieBeenClickedTimes = 0;
 // upgrades
 var perClickUpgradeCost = 200;
-var clickerOneUpgradeCost = 20;
-var clickerOneUpgradeCostView = Math.floor(clickerOneUpgradeCost);
-var clickerTwoUpgradeCost = 50;
-var clickerTwoUpgradeCostView = Math.floor(clickerTwoUpgradeCost);
-var clickerTwoUnlocked = 0;
+var keyboardUpgradeCost = 20;
+var keyboardUpgradeCostView = Math.floor(keyboardUpgradeCost);
+var grandpaUpgradeCost = 50;
+var grandpaUpgradeCostView = Math.floor(grandpaUpgradeCost);
+var grandpaUnlocked = 0;
 // stats
 var cookiesPerClick = 1;
 var cookiesPerSecond = 0;
@@ -20,7 +20,7 @@ const perMillisecondUniversalVar = setInterval(perMillisecondUniversal, 1);
 
 function perMillisecondUniversal() {
     cookiesForCounter = Math.round(cookies * 10) / 10;
-    clickerOneUpgradeCostView = Math.floor(clickerOneUpgradeCost);
+    keyboardUpgradeCostView = Math.floor(keyboardUpgradeCost);
     reloadCookieCounter();
 
     // CPS
@@ -31,12 +31,12 @@ function perMillisecondUniversal() {
 
     // upgrade unlocks
     if (cookies >= 200) {
-        clickerTwoUnlocked = 1;
+        grandpaUnlocked = 1;
     }
 
     // keep unlocked
-    if (clickerTwoUnlocked == 1) {
-        document.getElementById("clickerTwoUpgrade").style.visibility = "visible";
+    if (grandpaUnlocked == 1) {
+        document.getElementById("grandpaUpgrade").style.visibility = "visible";
     }
 }
 
@@ -75,25 +75,25 @@ function perClickUpgrade() {
     }
 }
 
-function clickerOneUpgrade() {
-    if (cookies >= clickerOneUpgradeCost) {
-        cookies = cookies - clickerOneUpgradeCost;
-        clickerOneUpgradeCost = clickerOneUpgradeCost * 1.25; // needs balancing
+function keyboardUpgrade() {
+    if (cookies >= keyboardUpgradeCost) {
+        cookies = cookies - keyboardUpgradeCost;
+        keyboardUpgradeCost = keyboardUpgradeCost * 1.2; // needs balancing
         cookiesPerSecond = cookiesPerSecond + 0.1;
         reloadCookieCounter();
-        clickerOneUpgradeCostView = Math.floor(clickerOneUpgradeCost);
-        document.getElementById("clickerOneUpgrade").innerHTML = "Clicker 1: " +clickerOneUpgradeCostView;
+        keyboardUpgradeCostView = Math.floor(keyboardUpgradeCost);
+        document.getElementById("keyboardUpgrade").innerHTML = "Keyboard: " +keyboardUpgradeCostView;
     }
 }
 
-function clickerTwoUpgrade() {
-    if (cookies >= clickerTwoUpgradeCost) {
-        cookies = cookies - clickerTwoUpgradeCost;
-        clickerTwoUpgradeCost = clickerTwoUpgradeCost * 1.25;
+function grandpaUpgrade() {
+    if (cookies >= grandpaUpgradeCost) {
+        cookies = cookies - grandpaUpgradeCost;
+        grandpaUpgradeCost = grandpaUpgradeCost * 1.25;
         cookiesPerSecond = cookiesPerSecond + 1;
         reloadCookieCounter();
-        clickerOneUpgradeCostView = Math.floor(clickerTwoUpgradeCost);
-        document.getElementById("clickerTwoUpgrade").innerHTML = "Clicker 2: " +clickerTwoUpgradeCostView; // something not updating the viewed price tag
+        grandpaUpgradeCostView = Math.floor(grandpaUpgradeCost);
+        document.getElementById("grandpaUpgrade").innerHTML = "Grandpa: " +grandpaUpgradeCostView; // something not updating the viewed price tag
     }
 }
 
