@@ -4,7 +4,7 @@ var totalCookies = 0;
 var cookieBeenClickedTimes = 0;
 // upgrades
 var perClickUpgradeCost = 200;
-var keyboardUpgradeCost = 20;
+var keyboardUpgradeCost = 15;
 var keyboardUpgradeCostView = Math.floor(keyboardUpgradeCost);
 var grandpaUpgradeCost = 50;
 var grandpaUpgradeCostView = Math.floor(grandpaUpgradeCost);
@@ -30,7 +30,7 @@ function perMillisecondUniversal() {
     totalCookies =  cookieBeenClickedTimes * cookiesPerClick;
 
     // upgrade unlocks
-    if (cookies >= 200) {
+    if (totalCookies >= 200) {
         grandpaUnlocked = 1;
     }
 
@@ -42,13 +42,13 @@ function perMillisecondUniversal() {
 
 function cookiesPerSecondUpdate() {
     cookies = cookies + cookiesPerSecond;
-    totalCookies = totalCookies + cookiesPerSecond;
+    totalCookies = totalCookies + cookiesPerSecond; // not working
     reloadCookieCounter();
 }
 
 function cookieClicked() {
     cookies = cookies + cookiesPerClick;
-    cookieBeenClickedTimes = cookieBeenClickedTimes + 1; // not working
+    cookieBeenClickedTimes = cookieBeenClickedTimes + 1;
     reloadCookieCounter();
 }
 
@@ -78,7 +78,7 @@ function perClickUpgrade() {
 function keyboardUpgrade() {
     if (cookies >= keyboardUpgradeCost) {
         cookies = cookies - keyboardUpgradeCost;
-        keyboardUpgradeCost = keyboardUpgradeCost * 1.2; // needs balancing
+        keyboardUpgradeCost = keyboardUpgradeCost * 1.2;
         cookiesPerSecond = cookiesPerSecond + 0.1;
         reloadCookieCounter();
         keyboardUpgradeCostView = Math.floor(keyboardUpgradeCost);
@@ -93,7 +93,7 @@ function grandpaUpgrade() {
         cookiesPerSecond = cookiesPerSecond + 1;
         reloadCookieCounter();
         grandpaUpgradeCostView = Math.floor(grandpaUpgradeCost);
-        document.getElementById("grandpaUpgrade").innerHTML = "Grandpa: " +grandpaUpgradeCostView; // something not updating the viewed price tag
+        document.getElementById("grandpaUpgrade").innerHTML = "Grandpa: " +grandpaUpgradeCostView;
     }
 }
 
