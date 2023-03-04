@@ -79,10 +79,10 @@ function keyboardUpgrade() {
     if (cookies >= keyboardUpgradeCost) {
         cookies = cookies - keyboardUpgradeCost;
         keyboardUpgradeCost = keyboardUpgradeCost * 1.2;
+        keyboardUpgradeCost = Math.floor(keyboardUpgradeCost);
         cookiesPerSecond = cookiesPerSecond + 0.1;
         reloadCookieCounter();
-        keyboardUpgradeCostView = Math.floor(keyboardUpgradeCost);
-        document.getElementById("keyboardUpgrade").innerHTML = "Keyboard: " +keyboardUpgradeCostView;
+        document.getElementById("keyboardUpgrade").innerHTML = "Keyboard: " +keyboardUpgradeCost;
     }
 }
 
@@ -90,10 +90,10 @@ function grandpaUpgrade() {
     if (cookies >= grandpaUpgradeCost) {
         cookies = cookies - grandpaUpgradeCost;
         grandpaUpgradeCost = grandpaUpgradeCost * 1.25;
+        grandpaUpgradeCost = Matn.floor(grandpaUpgradeCost)
         cookiesPerSecond = cookiesPerSecond + 1;
         reloadCookieCounter();
-        grandpaUpgradeCostView = Math.floor(grandpaUpgradeCost);
-        document.getElementById("grandpaUpgrade").innerHTML = "Grandpa: " +grandpaUpgradeCostView;
+        document.getElementById("grandpaUpgrade").innerHTML = "Grandpa: " +grandpaUpgradeCost;
     }
 }
 
