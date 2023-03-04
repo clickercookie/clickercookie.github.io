@@ -90,7 +90,7 @@ function grandpaUpgrade() {
     if (cookies >= grandpaUpgradeCost) {
         cookies = cookies - grandpaUpgradeCost;
         grandpaUpgradeCost = grandpaUpgradeCost * 1.25;
-        grandpaUpgradeCost = Matn.floor(grandpaUpgradeCost)
+        grandpaUpgradeCost = Math.floor(grandpaUpgradeCost)
         cookiesPerSecond = cookiesPerSecond + 1;
         reloadCookieCounter();
         document.getElementById("grandpaUpgrade").innerHTML = "Grandpa: " +grandpaUpgradeCost;
