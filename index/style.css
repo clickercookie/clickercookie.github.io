@@ -1,13 +1,16 @@
 h1 {
     font-family: Arial, Helvetica, sans-serif;
+    float: right;
 }
 
 h3 {
     font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
 }
 
 h4 {
     font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
 }
 
 #grandpaUpgrade {
@@ -20,4 +23,17 @@ img {
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+
+.buttons {
+    float: right;
+}
+
+.leftSide {
+    width: 312px;
+    position: absolute;
 }

@@ -4,10 +4,12 @@ var totalCookies = 0;
 var cookieBeenClickedTimes = 0;
 // upgrades
 var perClickUpgradeCost = 200;
+var keyboardBought = 0;
 var keyboardUpgradeCost = 15;
-var keyboardUpgradeCostView = Math.floor(keyboardUpgradeCost);
+var keyboardUpgradeCostView = Math.floor(keyboardUpgradeCost); // depricated?
+var grandpaBought = 0;
 var grandpaUpgradeCost = 50;
-var grandpaUpgradeCostView = Math.floor(grandpaUpgradeCost);
+var grandpaUpgradeCostView = Math.floor(grandpaUpgradeCost); // depricated?
 var grandpaUnlocked = 0;
 // stats
 var cookiesPerClick = 1;
@@ -80,6 +82,7 @@ function keyboardUpgrade() {
         cookies = cookies - keyboardUpgradeCost;
         keyboardUpgradeCost = keyboardUpgradeCost * 1.2;
         keyboardUpgradeCost = Math.floor(keyboardUpgradeCost);
+        keyboardBought = keyboardBought + 1;
         cookiesPerSecond = cookiesPerSecond + 0.1;
         reloadCookieCounter();
         document.getElementById("keyboardUpgrade").innerHTML = "Keyboard: " +keyboardUpgradeCost;
@@ -91,6 +94,7 @@ function grandpaUpgrade() {
         cookies = cookies - grandpaUpgradeCost;
         grandpaUpgradeCost = grandpaUpgradeCost * 1.25;
         grandpaUpgradeCost = Math.floor(grandpaUpgradeCost)
+        grandpaBought = grandpaBought + 1;
         cookiesPerSecond = cookiesPerSecond + 1;
         reloadCookieCounter();
         document.getElementById("grandpaUpgrade").innerHTML = "Grandpa: " +grandpaUpgradeCost;

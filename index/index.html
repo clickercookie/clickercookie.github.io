@@ -6,12 +6,19 @@
     </head>
     <script src="main.js"></script>
     <body>
-        <img onClick="cookieClicked()" src="cookie.png" alt="cookie">
-        <h3 id="cookieCounter">Cookies: 0</h3>
-        <h4 id ="cookiesPerSecondCounter">Cookies Per Second: 0</h4>
-        <h1>Upgrades</h1>
-        <button onClick="perClickUpgrade()" id="perClickUpgrade">Per Click x2: 200</button>
-        <button onClick="keyboardUpgrade()" id="keyboardUpgrade">Keyboard: 15</button>
-        <button onClick="grandpaUpgrade()" id="grandpaUpgrade">Grandpa: 50</button>
+        <div class="leftSide">
+            <img onClick="cookieClicked()" src="cookie.png" alt="cookie">
+            <h3 id="cookieCounter">Cookies: 0</h3>
+            <h4 id ="cookiesPerSecondCounter">Cookies Per Second: 0</h4>
+        </div>
+        <div class="rightSide">
+            <h1>Upgrades</h1>
+            <div id="buttons" class="buttons">
+                <button onClick="perClickUpgrade()" id="perClickUpgrade">Per Click x2: 200</button>
+                <button onClick="keyboardUpgrade()" id="keyboardUpgrade">Keyboard: 15</button>
+                <button onClick="grandpaUpgrade()" id="grandpaUpgrade">Grandpa: 50</button>
+            </div>
+        </div>
+
     </body>
 </html>
