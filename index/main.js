@@ -38,7 +38,7 @@ function perMillisecondUniversal() {
 
     // keep unlocked
     if (grandpaUnlocked == 1) {
-        document.getElementById("grandpaUpgrade").style.visibility = "visible";
+        document.getElementById("grandpaUpgrade").style.display = "inline";
     }
 }
 
@@ -57,6 +57,7 @@ function cookieClicked() {
 // dev commands
 function setCookies(x) {
     cookies = x;
+    totalCookies = totalCookies + x;
     reloadCookieCounter();
 }
 
