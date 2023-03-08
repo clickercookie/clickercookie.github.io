@@ -1,0 +1,137 @@
+/* basic basis for most html elements */
+h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    float: right;
+    font-size: 50px; /*center at some point*/
+}
+
+h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+h4 {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+p {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+img {
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+
+/* divs */
+.buttons {
+    float: right;
+}
+
+.leftSide {
+    width: 312px;
+    position: absolute;
+}
+
+.rightSide {
+    width: 312px;
+    float: right;
+}
+
+.cookie {
+    background: url(cookie.png);
+}
+
+/* specific upgrades */
+#grandpaUpgrade {
+    display: none;
+}
+
+/* keyboard upgrade related css, copy for other upgrades */
+.upgrade0 {
+    width: 312px;
+    height: 64px;
+    border-style: solid;
+    border-width: 3px;
+}
+
+.keyboard-icon {
+    width: 64px;
+    height: 64px;
+    background: url(keyboard-icon.png);
+    float: left;
+}
+
+.keyboard-content {
+    display: inline-block;
+    position: absolute;
+    width: 248px;
+    height: 64px;
+}
+
+.keyboards-bought {
+    font-size: 35px;
+    margin: 0px;
+    top: 12px;
+    right: 10px;
+    position: absolute;
+    font-family: monospace;
+}
+
+.keyboard-upgrade {
+    font-size: 22px;
+    font-size: 22px;
+    display: inline;
+    line-height: 1px;
+    position: absolute;
+    left: 4px;
+}
+
+/* grandpa upgrade css */
+.upgrade1 {
+    width: 312px;
+    height: 64px;
+    border-style: solid;
+    border-width: 3px;
+    display: none;
+}
+
+.grandpa-icon {
+    width: 64px;
+    height: 64px;
+    background: url(grandpa-temp.png);
+    float: left;
+}
+
+.grandpa-content {
+    display: inline-block;
+    position: absolute;
+    width: 248px;
+    height: 64px;
+}
+
+.grandpas-bought {
+    font-size: 35px;
+    margin: 0px;
+    top: 12px;
+    right: 10px;
+    position: absolute;
+    font-family: monospace;
+}
+
+.grandpa-upgrade {
+    font-size: 22px;
+    font-size: 22px;
+    display: inline;
+    line-height: 1px;
+    position: absolute;
+    left: 4px;
+}
