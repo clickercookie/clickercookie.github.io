@@ -6,6 +6,7 @@
     </head>
     <script src="main.js"></script>
     <body>
+        <!--If you want to edit code, visit the GitHub at https://github.com/FifthTundraG/clickercookie-->
         <div class="leftSide">
             <img onClick="cookieClicked()" src="cookie.png" alt="cookie">
             <h3 id="cookieCounter">Cookies: 0</h3>
@@ -14,13 +15,31 @@
         <div class="rightSide">
             <h1>Upgrades</h1>
             <div id="buttons" class="buttons">
-                <button onClick="perClickUpgrade()" id="perClickUpgrade">Per Click x2: 200</button>
-                <br>
-                <button onClick="keyboardUpgrade()" id="keyboardUpgrade">Keyboard: 15</button>
-                <br>
-                <button onClick="grandpaUpgrade()" id="grandpaUpgrade">Grandpa: 50</button>
+                <table>
+                    <tr>
+                        <td>
+                            <div id="upgrade0" class="upgrade0" onClick="keyboardUpgrade()">
+                                <div class="keyboard-icon"></div>
+                                <div class="keyboard-content">
+                                    <p class="keyboards-bought" id="keyboardsBought">0</p>
+                                    <p id="keyboardUpgrade" class="keyboard-upgrade">Keyboard: 15</p>
+                                </div>
+                            </div>
+                        </td>
+                    <tr>
+                        <td>
+                            <div id="upgrade1" class="upgrade1" onClick="grandpaUpgrade()">
+                                <div class="grandpa-icon"></div>
+                                <div class="grandpa-content">
+                                    <p class="grandpas-bought" id="grandpasBought">0</p>
+                                    <p id="grandpaUpgrade" class="grandpa-upgrade">Grandpa: 50</p>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
             </div>
-        </div>
 
     </body>
 </html>

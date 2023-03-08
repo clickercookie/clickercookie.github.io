@@ -4,12 +4,10 @@ var totalCookies = 0;
 var cookieBeenClickedTimes = 0;
 // upgrades
 var perClickUpgradeCost = 200;
-var keyboardBought = 0;
+var keyboardsBought = 0;
 var keyboardUpgradeCost = 15;
-var keyboardUpgradeCostView = Math.floor(keyboardUpgradeCost); // depricated?
-var grandpaBought = 0;
+var grandpasBought = 0;
 var grandpaUpgradeCost = 50;
-var grandpaUpgradeCostView = Math.floor(grandpaUpgradeCost); // depricated?
 var grandpaUnlocked = 0;
 // stats
 var cookiesPerClick = 1;
@@ -32,14 +30,19 @@ function perMillisecondUniversal() {
     totalCookies =  cookieBeenClickedTimes * cookiesPerClick;
 
     // upgrade unlocks
-    if (totalCookies >= 200) {
+    if (totalCookies >= 50) {
         grandpaUnlocked = 1;
     }
 
     // keep unlocked
     if (grandpaUnlocked == 1) {
         document.getElementById("grandpaUpgrade").style.display = "inline";
+        document.getElementById("upgrade1").style.display = "block";
     }
+
+    // set number of bought to bought
+    document.getElementById("keyboardsBought").innerHTML = +keyboardsBought;
+    document.getElementById("grandpasBought").innerHTML = +grandpasBought;
 }
 
 function cookiesPerSecondUpdate() {
@@ -83,7 +86,7 @@ function keyboardUpgrade() {
         cookies = cookies - keyboardUpgradeCost;
         keyboardUpgradeCost = keyboardUpgradeCost * 1.2;
         keyboardUpgradeCost = Math.floor(keyboardUpgradeCost);
-        keyboardBought = keyboardBought + 1;
+        keyboardsBought = keyboardsBought + 1;
         cookiesPerSecond = cookiesPerSecond + 0.1;
         reloadCookieCounter();
         document.getElementById("keyboardUpgrade").innerHTML = "Keyboard: " +keyboardUpgradeCost;
@@ -95,7 +98,7 @@ function grandpaUpgrade() {
         cookies = cookies - grandpaUpgradeCost;
         grandpaUpgradeCost = grandpaUpgradeCost * 1.25;
         grandpaUpgradeCost = Math.floor(grandpaUpgradeCost)
-        grandpaBought = grandpaBought + 1;
+        grandpasBought = grandpasBought + 1;
         cookiesPerSecond = cookiesPerSecond + 1;
         reloadCookieCounter();
         document.getElementById("grandpaUpgrade").innerHTML = "Grandpa: " +grandpaUpgradeCost;
