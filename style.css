@@ -35,7 +35,6 @@ img {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 80%;
 }
 
 /* divs */
@@ -54,7 +53,20 @@ img {
 }
 
 .cookie {
-    background: url(cookie.png);
+    background: url(img/cookie.png);
+}
+
+/* social links stuff */
+.social-links {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+}
+.github {
+    scale: 30%;
+    position: absolute;
+    left: -25px;
+    bottom: -25px;
 }
 
 /* specific upgrades */
@@ -80,7 +92,7 @@ img {
 .keyboard-icon {
     width: 64px;
     height: 64px;
-    background: url(keyboard-icon.png);
+    background: url(img/keyboard-icon.png);
     float: left;
 }
 
@@ -129,7 +141,7 @@ img {
 .grandpa-icon {
     width: 64px;
     height: 64px;
-    background: url(grandpa-temp.png);
+    background: url(img/grandpa-temp.png);
     float: left;
 }
 
