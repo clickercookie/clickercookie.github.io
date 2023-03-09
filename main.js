@@ -8,7 +8,7 @@ var keyboardsBought = 0;
 var keyboardUpgradeCost = 15;
 // grandpas
 var grandpasBought = 0;
-var grandpaUpgradeCost = 50;
+var grandpaUpgradeCost = 100;
 var grandpaUnlocked = 0;
 // ranches
 var ranchesBought = 0;
@@ -112,7 +112,7 @@ function keyboardUpgrade() {
 function grandpaUpgrade() {
     if (cookies >= grandpaUpgradeCost) {
         cookies = cookies - grandpaUpgradeCost;
-        grandpaUpgradeCost = grandpaUpgradeCost * 1.25;
+        grandpaUpgradeCost = grandpaUpgradeCost * 1.15;
         grandpaUpgradeCost = Math.floor(grandpaUpgradeCost)
         grandpasBought = grandpasBought + 1;
         cookiesPerSecond = cookiesPerSecond + 1;
@@ -129,7 +129,7 @@ function ranchUpgrade() {
         ranchesBought = ranchesBought + 1;
         cookiesPerSecond = cookiesPerSecond + 10;
         reloadCookieCounter();
-        document.getElementById("grandpaUpgrade").innerHTML = "Ranch: " +ranchUpgradeCost;
+        document.getElementById("ranchUpgrade").innerHTML = "Ranch: " +ranchUpgradeCost;
     }
 }
 
