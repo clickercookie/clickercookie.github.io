@@ -1,6 +1,5 @@
 var cookies = 0;
 var cookiesForCounter = Math.floor(cookies);
-var totalCookies = 0;
 var cookieBeenClickedTimes = 0;
 // upgrades
 var perClickUpgradeCost = 200;
@@ -11,6 +10,8 @@ var grandpaUpgradeCost = 50;
 var grandpaUnlocked = 0;
 // stats
 var cookiesPerClick = 1;
+var totalCookies = 0;
+var totalCookiesView = Math.round(totalCookies * 10) / 10; // merge totalcookies & totalcookies view later
 var cookiesPerSecond = 0;
 var cookiesPerSecondView = cookiesPerSecond;
 
@@ -20,6 +21,7 @@ const perMillisecondUniversalVar = setInterval(perMillisecondUniversal, 1);
 
 function perMillisecondUniversal() {
     cookiesForCounter = Math.round(cookies * 10) / 10;
+    totalCookiesView = Math.round(totalCookies * 10) / 10;
     keyboardUpgradeCostView = Math.floor(keyboardUpgradeCost);
     reloadCookieCounter();
 
@@ -27,10 +29,8 @@ function perMillisecondUniversal() {
     cookiesPerSecondView = Math.round(cookiesPerSecond * 10) / 10;
     document.getElementById("cookiesPerSecondCounter").innerHTML = "Cookies Per Second: " +cookiesPerSecondView;
 
-    totalCookies =  cookieBeenClickedTimes * cookiesPerClick;
-
     // upgrade unlocks
-    if (totalCookies >= 50) {
+    if (totalCookies >= 100) {
         grandpaUnlocked = 1;
     }
 
@@ -47,13 +47,15 @@ function perMillisecondUniversal() {
 
 function cookiesPerSecondUpdate() {
     cookies = cookies + cookiesPerSecond;
-    totalCookies = totalCookies + cookiesPerSecond; // not working
+    totalCookies = totalCookies + cookiesPerSecond;
+
     reloadCookieCounter();
 }
 
 function cookieClicked() {
     cookies = cookies + cookiesPerClick;
     cookieBeenClickedTimes = cookieBeenClickedTimes + 1;
+    totalCookies = totalCookies + 1;
     reloadCookieCounter();
 }
 
