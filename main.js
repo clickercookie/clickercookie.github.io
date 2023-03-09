@@ -3,11 +3,18 @@ var cookiesForCounter = Math.floor(cookies);
 var cookieBeenClickedTimes = 0;
 // upgrades
 var perClickUpgradeCost = 200;
+// keyboards
 var keyboardsBought = 0;
 var keyboardUpgradeCost = 15;
+// grandpas
 var grandpasBought = 0;
 var grandpaUpgradeCost = 50;
 var grandpaUnlocked = 0;
+// ranches
+var ranchesBought = 0;
+var ranchUpgradeCost = 1000;
+var ranchUnlocked = 0;
+
 // stats
 var cookiesPerClick = 1;
 var totalCookies = 0;
@@ -33,11 +40,18 @@ function perMillisecondUniversal() {
     if (totalCookies >= 100) {
         grandpaUnlocked = 1;
     }
+    if (totalCookies >= 500) {
+        ranchUnlocked = 1;
+    }
 
     // keep unlocked
     if (grandpaUnlocked == 1) {
         document.getElementById("grandpaUpgrade").style.display = "inline";
         document.getElementById("upgrade1").style.display = "block";
+    }
+    if (ranchUnlocked == 1) {
+        document.getElementById("ranchUpgrade").style.display = "inline";
+        document.getElementById("upgrade2").style.display = "block";
     }
 
     // set number of bought to bought
@@ -104,6 +118,18 @@ function grandpaUpgrade() {
         cookiesPerSecond = cookiesPerSecond + 1;
         reloadCookieCounter();
         document.getElementById("grandpaUpgrade").innerHTML = "Grandpa: " +grandpaUpgradeCost;
+    }
+}
+
+function ranchUpgrade() {
+    if (cookies >= ranchUpgradeCost) {
+        cookies = cookies - ranchUpgradeCost;
+        ranchUpgradeCost = ranchUpgradeCost * 1.25;
+        ranchUpgradeCost = Math.floor(ranchUpgradeCost)
+        ranchesBought = ranchesBought + 1;
+        cookiesPerSecond = cookiesPerSecond + 10;
+        reloadCookieCounter();
+        document.getElementById("grandpaUpgrade").innerHTML = "Ranch: " +ranchUpgradeCost;
     }
 }
 
