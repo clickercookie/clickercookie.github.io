@@ -55,8 +55,6 @@ function perMillisecondUniversal() {
     }
 
     // set number of bought to bought
-    document.getElementById("keyboardsBought").innerHTML = +keyboardsBought;
-    document.getElementById("grandpasBought").innerHTML = +grandpasBought;
 }
 
 function cookiesPerSecondUpdate() {
@@ -106,6 +104,7 @@ function keyboardUpgrade() {
         cookiesPerSecond = cookiesPerSecond + 0.1;
         reloadCookieCounter();
         document.getElementById("keyboardUpgrade").innerHTML = "Keyboard: " +keyboardUpgradeCost;
+        document.getElementById("keyboardsBought").innerHTML = +keyboardsBought;
     }
 }
 
@@ -118,6 +117,7 @@ function grandpaUpgrade() {
         cookiesPerSecond = cookiesPerSecond + 1;
         reloadCookieCounter();
         document.getElementById("grandpaUpgrade").innerHTML = "Grandpa: " +grandpaUpgradeCost;
+        document.getElementById("grandpasBought").innerHTML = +grandpasBought;
     }
 }
 
@@ -130,6 +130,7 @@ function ranchUpgrade() {
         cookiesPerSecond = cookiesPerSecond + 10;
         reloadCookieCounter();
         document.getElementById("ranchUpgrade").innerHTML = "Ranch: " +ranchUpgradeCost;
+        document.getElementById("ranchesBought").innerHTML = +ranchesBought;
     }
 }
 
