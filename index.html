@@ -6,7 +6,6 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <!--If you want to edit code, visit the GitHub at https://github.com/FifthTundraG/clickercookie -->
         <div class="leftSide">
             <img onClick="cookieClicked()" src="img/cookie.png" alt="cookie">
             <h3 id="cookieCounter">Cookies: 0</h3>
@@ -17,6 +16,12 @@
                 <img class="github" src="img/github-mark.svg" alt="github">
             </a>
             <h5 id="versionNumber" class="version-number">Version: null</h5>
+        </div>
+        <div class="popup" id="popup">
+            <p class="popup-content" id="popupContent">null</p>
+            <div class="popup-button-div" id="popupButtonDiv">
+                <button onClick="popupClicked()" id="popupButton" class="popup-button">OK</button>
+            </div>
         </div>
         <div class="rightSide">
             <h1>Upgrades</h1>
