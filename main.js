@@ -1,5 +1,5 @@
-// update every update :shrug:
-var version = "0.2.1";
+// Variable definitions
+const version = "0.2.2";
 // cookies
 var cookies = 0;
 var cookiesForCounter = Math.floor(cookies);
@@ -82,6 +82,11 @@ function perMillisecondUniversal() {
         document.getElementById("upgrade4").style.display = "block";
     }
 
+    // log to console in case of error
+    if (cookies < 0) {
+        createSimplePopUp(300,150,"An error occured: Cookies are in negative!<br>Please report this to the GitHub accessable in the bottom left corner", true)
+    }
+
     // set number of bought to bought
     document.getElementById("keyboardsBought").innerHTML = +keyboardsBought;
     document.getElementById("grandpasBought").innerHTML = +grandpasBought;
@@ -104,6 +109,12 @@ function cookieClicked() {
     reloadCookieCounter();
 }
 
+function popupClicked() {
+    destroySimplePopUp();
+    if (cookies < 0) {
+        cookies = 0;
+    }
+}
 // dev commands
 function setCookies(x) {
     cookies = x;
@@ -192,7 +203,22 @@ function laborerUpgrade() {
     }
 }
 
-// helping things
+// helper functions
 function reloadCookieCounter() {
     document.getElementById("cookieCounter").innerHTML = "Cookies: " +cookiesForCounter;
+}
+function createSimplePopUp(x,y,text,button) {
+    document.getElementById("popup").style.display = "block";
+    document.getElementById("popupContent").innerHTML = text;
+    document.getElementById("popup").style.width = x + "px";
+    document.getElementById("popupButtonDiv").style.width = x + "px";
+    document.getElementById("popup").style.height = y + "px";
+    if (button == true) {
+        document.getElementById("popupButton").style.display = "block";
+    }
+}
+function destroySimplePopUp() {
+    document.getElementById("popup").style.display = "none";
+    document.getElementById("popupContent").innerHTML = "null";
+    document.getElementById("popupButton").style.display = "none";
 }
