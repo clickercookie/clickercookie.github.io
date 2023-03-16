@@ -80,36 +80,42 @@ img {
     bottom: -27px;
 }
 
-/* keyboard upgrade related css, copy for other upgrades */
-.upgrade0 {
+/* universal upgrade css */
+.upgrade-already-unlock {
     width: 312px;
     height: 64px;
     border-style: solid;
     border-width: 3px;
     transition: 0.3s;
 }
-
-.upgrade0:hover {
+.upgrade-already-unlock:hover {
     border-style: solid;
     border-color: gray;
     border-width: 3px;
 }
 
-.keyboard-icon {
-    width: 64px;
+.upgrade-need-unlock {
+    width: 312px;
     height: 64px;
-    background: url(img/keyboard-icon.png);
-    float: left;
+    border-style: solid;
+    border-width: 3px;
+    display: none;
+    transition: 0.3s;
+}
+.upgrade-need-unlock:hover {
+    border-style: solid;
+    border-color: gray;
+    border-width: 3px;
 }
 
-.keyboard-content {
+.upgrade-content {
     display: inline-block;
     position: absolute;
     width: 248px;
     height: 64px;
 }
 
-.keyboards-bought {
+.upgrades-bought {
     font-size: 35px;
     margin: 0px;
     top: 12px;
@@ -118,7 +124,7 @@ img {
     font-family: monospace;
 }
 
-.keyboard-upgrade {
+.upgrade-price {
     font-size: 22px;
     font-size: 22px;
     display: inline;
@@ -127,23 +133,14 @@ img {
     left: 4px;
 }
 
-/* grandpa upgrade css */
-.upgrade1 {
-    width: 312px;
+/* keyboard upgrade related css */
+.keyboard-icon {
+    width: 64px;
     height: 64px;
-    border-style: solid;
-    border-width: 3px;
-    display: none;
-    transition: 0.3s;
+    background: url(img/keyboard-icon.png);
+    float: left;
 }
-
-.upgrade1:hover {
-    border-style: solid;
-    border-color: gray;
-    border-width: 3px;
-}
-
-
+/* grandpa upgrade css */
 .grandpa-icon {
     width: 64px;
     height: 64px;
@@ -151,48 +148,7 @@ img {
     float: left;
 }
 
-.grandpa-content {
-    display: inline-block;
-    position: absolute;
-    width: 248px;
-    height: 64px;
-}
-
-.grandpas-bought {
-    font-size: 35px;
-    margin: 0px;
-    top: 12px;
-    right: 10px;
-    position: absolute;
-    font-family: monospace;
-}
-
-.grandpa-upgrade {
-    font-size: 22px;
-    font-size: 22px;
-    display: inline;
-    line-height: 1px;
-    position: absolute;
-    left: 4px;
-}
-
 /* ranch css */
-.upgrade2 {
-    width: 312px;
-    height: 64px;
-    border-style: solid;
-    border-width: 3px;
-    display: none;
-    transition: 0.3s;
-}
-
-.upgrade2:hover {
-    border-style: solid;
-    border-color: gray;
-    border-width: 3px;
-}
-
-
 .ranch-icon {
     width: 64px;
     height: 64px;
@@ -200,75 +156,10 @@ img {
     float: left;
 }
 
-.ranch-content {
-    display: inline-block;
-    position: absolute;
-    width: 248px;
-    height: 64px;
-}
-
-.ranches-bought {
-    font-size: 35px;
-    margin: 0px;
-    top: 12px;
-    right: 10px;
-    position: absolute;
-    font-family: monospace;
-}
-
-.ranch-upgrade {
-    font-size: 22px;
-    font-size: 22px;
-    display: inline;
-    line-height: 1px;
-    position: absolute;
-    left: 4px;
-}
-
 /* TV stuff */
-.upgrade3 {
-    width: 312px;
-    height: 64px;
-    border-style: solid;
-    border-width: 3px;
-    transition: 0.3s;
-    display: none;
-}
-
-.upgrade3:hover {
-    border-style: solid;
-    border-color: gray;
-    border-width: 3px;
-}
-
 .tv-icon {
     width: 64px;
     height: 64px;
     background: url(img/tv.png);
     float: left;
-}
-
-.tv-content {
-    display: inline-block;
-    position: absolute;
-    width: 248px;
-    height: 64px;
-}
-
-.tvs-bought {
-    font-size: 35px;
-    margin: 0px;
-    top: 12px;
-    right: 10px;
-    position: absolute;
-    font-family: monospace;
-}
-
-.tv-upgrade {
-    font-size: 22px;
-    font-size: 22px;
-    display: inline;
-    line-height: 1px;
-    position: absolute;
-    left: 4px;
 }
