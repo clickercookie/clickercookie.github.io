@@ -180,7 +180,7 @@ function tvUpgrade() {
     }
 }
 function laborerUpgrade() {
-    if (cookies >= tvUpgradeCost) {
+    if (cookies >= laborerUpgradeCost) {
         cookies = cookies - laborerUpgradeCost;
         laborerUpgradeCost = laborerUpgradeCost * 1.25;
         laborerUpgradeCost = Math.floor(laborerUpgradeCost)
