@@ -1,9 +1,5 @@
-// Hey, you must be smart if you're looking here...
-// How about you visit the GitHub by pressing the GitHub
-// logo in the bottom left!
-
 // Variable definitions
-const version = "0.2.1";
+const version = "0.2.2";
 // cookies
 var cookies = 0;
 var cookiesForCounter = Math.floor(cookies);
