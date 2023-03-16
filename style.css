@@ -163,3 +163,11 @@ img {
     background: url(img/tv.png);
     float: left;
 }
+
+/* Laborer stuff */
+.laborer-icon {
+    width: 64px;
+    height: 64px;
+    background: url(img/unknown.png);
+    float: left;
+}

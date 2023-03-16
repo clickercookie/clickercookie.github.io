@@ -21,6 +21,10 @@ var ranchUnlocked = 0;
 var tvsBought = 0;
 var tvUpgradeCost = 5000;
 var tvUnlocked = 0;
+// laborers
+var laborersBought = 0;
+var laborerUpgradeCost = 10000;
+var laborerUnlocked = 0;
 
 // stats
 var cookiesPerClick = 1;
@@ -56,6 +60,9 @@ function perMillisecondUniversal() {
     if (totalCookies >= 3000) {
         tvUnlocked = 1;
     }
+    if (totalCookies >= 7000) {
+        laborerUnlocked = 1;
+    }
 
     // keep unlocked
     if (grandpaUnlocked == 1) {
@@ -70,12 +77,17 @@ function perMillisecondUniversal() {
         document.getElementById("tvUpgrade").style.display = "inline";
         document.getElementById("upgrade3").style.display = "block";
     }
+    if (laborerUnlocked == 1) {
+        document.getElementById("laborerUpgrade").style.display = "inline";
+        document.getElementById("upgrade4").style.display = "block";
+    }
 
     // set number of bought to bought
     document.getElementById("keyboardsBought").innerHTML = +keyboardsBought;
     document.getElementById("grandpasBought").innerHTML = +grandpasBought;
     document.getElementById("ranchesBought").innerHTML = +ranchesBought;
     document.getElementById("tvsBought").innerHTML = +tvsBought;
+    document.getElementById("laborersBought").innerHTML = +laborersBought;
 }
 
 function cookiesPerSecondUpdate() {
@@ -165,6 +177,18 @@ function tvUpgrade() {
         reloadCookieCounter();
         document.getElementById("tvUpgrade").innerHTML = "Television: " +tvUpgradeCost;
         document.getElementById("tvsBought").innerHTML = +tvsBought;
+    }
+}
+function laborerUpgrade() {
+    if (cookies >= tvUpgradeCost) {
+        cookies = cookies - laborerUpgradeCost;
+        laborerUpgradeCost = laborerUpgradeCost * 1.25;
+        laborerUpgradeCost = Math.floor(laborerUpgradeCost)
+        laborersBought = laborersBought + 1;
+        cookiesPerSecond = cookiesPerSecond + 1000; // update
+        reloadCookieCounter();
+        document.getElementById("laborerUpgrade").innerHTML = "Laborer: " +laborerUpgradeCost;
+        document.getElementById("laborersBought").innerHTML = +laborersBought;
     }
 }
 
