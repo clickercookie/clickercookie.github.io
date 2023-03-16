@@ -1,3 +1,6 @@
+// update every update :shrug:
+var version = "0.1.1 Dev";
+// cookies
 var cookies = 0;
 var cookiesForCounter = Math.floor(cookies);
 var cookieBeenClickedTimes = 0;
@@ -25,6 +28,9 @@ var cookiesPerSecondView = cookiesPerSecond;
 // timer things
 const intervalCPSU = setInterval(cookiesPerSecondUpdate, 1000);
 const perMillisecondUniversalVar = setInterval(perMillisecondUniversal, 1);
+
+// set version
+document.getElementById("versionNumber").innerHTML = "Version: " +version;
 
 function perMillisecondUniversal() {
     cookiesForCounter = Math.round(cookies * 10) / 10;
