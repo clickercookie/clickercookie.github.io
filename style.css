@@ -56,17 +56,28 @@ img {
     background: url(img/cookie.png);
 }
 
+.version-number {
+    position: absolute;
+    left: 50px;
+    top: 9.5px;
+    margin: 0px;
+    font-family: monospace;
+    font-size: 20px;
+}
+
 /* social links stuff */
 .social-links {
     position: absolute;
     left: 0px;
     bottom: 0px;
+    width: 312px;
+    height: 40px;
 }
 .github {
     scale: 30%;
     position: absolute;
-    left: -25px;
-    bottom: -25px;
+    left: -28px;
+    bottom: -27px;
 }
 
 /* specific upgrades */
