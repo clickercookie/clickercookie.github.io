@@ -1,5 +1,5 @@
 // update every update :shrug:
-var version = "0.1.1 Dev";
+var version = "0.2";
 // cookies
 var cookies = 0;
 var cookiesForCounter = Math.floor(cookies);
