@@ -17,6 +17,10 @@ var grandpaUnlocked = 0;
 var ranchesBought = 0;
 var ranchUpgradeCost = 1000;
 var ranchUnlocked = 0;
+// televisions
+var tvsBought = 0;
+var tvUpgradeCost = 5000;
+var tvUnlocked = 0;
 
 // stats
 var cookiesPerClick = 1;
@@ -49,6 +53,9 @@ function perMillisecondUniversal() {
     if (totalCookies >= 500) {
         ranchUnlocked = 1;
     }
+    if (totalCookies >= 3000) {
+        tvUnlocked = 1;
+    }
 
     // keep unlocked
     if (grandpaUnlocked == 1) {
@@ -58,6 +65,10 @@ function perMillisecondUniversal() {
     if (ranchUnlocked == 1) {
         document.getElementById("ranchUpgrade").style.display = "inline";
         document.getElementById("upgrade2").style.display = "block";
+    }
+    if (tvUnlocked == 1) {
+        document.getElementById("tvUpgrade").style.display = "inline";
+        document.getElementById("upgrade3").style.display = "block";
     }
 
     // set number of bought to bought
@@ -133,9 +144,22 @@ function ranchUpgrade() {
         ranchUpgradeCost = ranchUpgradeCost * 1.25;
         ranchUpgradeCost = Math.floor(ranchUpgradeCost)
         ranchesBought = ranchesBought + 1;
-        cookiesPerSecond = cookiesPerSecond + 10;
+        cookiesPerSecond = cookiesPerSecond + 10; // check if cookie clicker does this price
         reloadCookieCounter();
         document.getElementById("ranchUpgrade").innerHTML = "Ranch: " +ranchUpgradeCost;
+    }
+}
+
+function tvUpgrade() {
+    if (cookies >= tvUpgradeCost) {
+        cookies = cookies - tvUpgradeCost;
+        tvUpgradeCost = tvUpgradeCost * 1.25;
+        tvUpgradeCost = Math.floor(tvUpgradeCost)
+        tvsBought = tvsBought + 1;
+        cookiesPerSecond = cookiesPerSecond + 100; // update
+        reloadCookieCounter();
+        document.getElementById("tvUpgrade").innerHTML = "Television: " +tvUpgradeCost;
+        document.getElementById("tvsBought").innerHTML = +tvsBought;
     }
 }
 
