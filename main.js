@@ -3,31 +3,61 @@ const version = "0.2.3";
 // cookies
 var cookies = 0;
 var cookiesForCounter = Math.floor(cookies);
-var cookieBeenClickedTimes = 0;
 // upgrades
-var perClickUpgradeCost = 200;
+var numberOfUpgrades = 0;
+
+// yes, i know, this is WILDLY INEFFICENT. If you can code better than me, please rewrite this better :D
+var upgrade0Name = "null";
+var upgrade1Name = "null";
+var upgrade2Name = "null";
+var upgrade3Name = "null";
+var upgrade4Name = "null";
+var upgrade0Description = "null";
+var upgrade1Description = "null";
+var upgrade2Description = "null";
+var upgrade3Description = "null";
+var upgrade4Description = "null";
+var upgrade0Price = 100;
+var upgrade1Price = 100;
+var upgrade2Price = 100;
+var upgrade3Price = 100;
+var upgrade4Price = 100;
+var upgrade0Identifier = "up0";
+var upgrade1Identifier = "up1";
+var upgrade2Identifier = "up2";
+var upgrade3Identifier = "up3";
+var upgrade4Identifier = "up4";
+
+var reinforcedKeysAvaliable = 0; // this is a temporary variable as a solution to an issue until a fix is found
+
 // keyboards
 var keyboardsBought = 0;
+var keyboardCPSGain = 0.1;
 var keyboardUpgradeCost = 15;
 // grandpas
 var grandpasBought = 0;
+var grandpaCPSGain = 1;
 var grandpaUpgradeCost = 100;
 var grandpaUnlocked = 0;
 // ranches
 var ranchesBought = 0;
+var ranchCPSGain = 8;
 var ranchUpgradeCost = 1100;
 var ranchUnlocked = 0;
 // televisions
 var tvsBought = 0;
+var tvCPSGain = 47;
 var tvUpgradeCost = 12000;
 var tvUnlocked = 0;
 // laborers
 var laborersBought = 0;
+var laborerCPSGain = 260;
 var laborerUpgradeCost = 130000;
 var laborerUnlocked = 0;
 
 // stats
 var cookiesPerClick = 1;
+var cookieBeenClickedTimes = 0;
 var totalCookies = 0;
 var totalCookiesView = Math.round(totalCookies * 10) / 10; // merge totalcookies & totalcookies view later
 var cookiesPerSecond = 0;
@@ -54,7 +84,7 @@ function perMillisecondUniversal() {
     cookiesPerSecondView = Math.round(cookiesPerSecond * 10) / 10;
     document.getElementById("cookiesPerSecondCounter").innerHTML = "Cookies Per Second: " +cookiesPerSecondView;
 
-    // upgrade unlocks
+    // building unlocks
     if (totalCookies >= 100) {
         grandpaUnlocked = 1;
     }
@@ -66,6 +96,11 @@ function perMillisecondUniversal() {
     }
     if (totalCookies >= 7000) {
         laborerUnlocked = 1;
+    }
+
+    if (keyboardsBought == 1 && reinforcedKeysAvaliable == 0) {
+        reinforcedKeysAvaliable = 1;
+        createUpgrade("Reinforced Keys", "press harder", 100, "reinforcedKeys");
     }
 
     // keep unlocked
@@ -88,7 +123,10 @@ function perMillisecondUniversal() {
 
     // log to console in case of error
     if (cookies < 0) {
-        createSimplePopUp(300,150,"An error occured: Cookies are in negative!<br>Please report this to the GitHub accessable in the bottom left corner", true)
+        createSimplePopUp(300,150,"An error occured: Cookies are in negative!<br>Please report this to the GitHub accessable in the bottom left corner", true);
+    }
+    if (upgrade0Identifier == upgrade1Identifier) {
+        createSimplePopUp(300,150,"An error occured: Multiple of same upgrade or identifier is not set!<br>Please report this to the GitHub accessable in the bottom left corner", true);
     }
 
     // set number of bought to bought
@@ -150,7 +188,7 @@ function keyboardUpgrade() {
         keyboardUpgradeCost = keyboardUpgradeCost * 1.15;
         keyboardUpgradeCost = Math.floor(keyboardUpgradeCost);
         keyboardsBought = keyboardsBought + 1;
-        cookiesPerSecond = cookiesPerSecond + 0.1;
+        cookiesPerSecond = cookiesPerSecond + keyboardCPSGain;
         reloadCookieCounter();
         document.getElementById("keyboardUpgrade").innerHTML = "Keyboard: " +keyboardUpgradeCost;
         document.getElementById("keyboardsBought").innerHTML = +keyboardsBought;
@@ -164,7 +202,7 @@ function grandpaUpgrade() {
         grandpaUpgradeCost = grandpaUpgradeCost * 1.15;
         grandpaUpgradeCost = Math.floor(grandpaUpgradeCost)
         grandpasBought = grandpasBought + 1;
-        cookiesPerSecond = cookiesPerSecond + 1;
+        cookiesPerSecond = cookiesPerSecond + grandpaCPSGain;
         reloadCookieCounter();
         document.getElementById("grandpaUpgrade").innerHTML = "Grandpa: " +grandpaUpgradeCost;
         document.getElementById("grandpasBought").innerHTML = +grandpasBought;
@@ -178,7 +216,7 @@ function ranchUpgrade() {
         ranchUpgradeCost = ranchUpgradeCost * 1.15;
         ranchUpgradeCost = Math.floor(ranchUpgradeCost)
         ranchesBought = ranchesBought + 1;
-        cookiesPerSecond = cookiesPerSecond + 8;
+        cookiesPerSecond = cookiesPerSecond + ranchCPSGain;
         reloadCookieCounter();
         document.getElementById("ranchUpgrade").innerHTML = "Ranch: " +ranchUpgradeCost;
         document.getElementById("ranchesBought").innerHTML = +ranchesBought;
@@ -192,7 +230,7 @@ function tvUpgrade() {
         tvUpgradeCost = tvUpgradeCost * 1.15;
         tvUpgradeCost = Math.floor(tvUpgradeCost)
         tvsBought = tvsBought + 1;
-        cookiesPerSecond = cookiesPerSecond + 47; // update
+        cookiesPerSecond = cookiesPerSecond + tvCPSGain;
         reloadCookieCounter();
         document.getElementById("tvUpgrade").innerHTML = "Television: " +tvUpgradeCost;
         document.getElementById("tvsBought").innerHTML = +tvsBought;
@@ -205,7 +243,7 @@ function laborerUpgrade() {
         laborerUpgradeCost = laborerUpgradeCost * 1.15;
         laborerUpgradeCost = Math.floor(laborerUpgradeCost)
         laborersBought = laborersBought + 1;
-        cookiesPerSecond = cookiesPerSecond + 260; // update
+        cookiesPerSecond = cookiesPerSecond + laborerCPSGain;
         reloadCookieCounter();
         document.getElementById("laborerUpgrade").innerHTML = "Laborer: " +laborerUpgradeCost;
         document.getElementById("laborersBought").innerHTML = +laborersBought;
@@ -213,13 +251,95 @@ function laborerUpgrade() {
     }
 }
 
+// managing upgrades
+function createUpgrade(name,description,price,identifier) {
+    const newUpgrade = document.createElement("div");
+    switch (numberOfUpgrades) {
+        case 0:
+            numberOfUpgrades = 1;
+            newUpgrade.id = "upgrade0";
+            newUpgrade.onclick = "upgrade0Clicked()";
+            upgrade0Name = name;
+            upgrade0Description = description;
+            upgrade0Price = price;
+            upgrade0Identifier = identifier;
+            break;
+        case 1:
+            numberOfUpgrades = 2;
+            newUpgrade.id = "upgrade1";
+            newUpgrade.onClick = "upgrade1Clicked()";
+            upgrade1Name = name;
+            upgrade1Description = description;
+            upgrade1Price = price;
+            upgrade1Identifier = identifier;
+            break;
+        case 2:
+            numberOfUpgrades = 3;
+            newUpgrade.id = "upgrade2";
+            newUpgrade.onClick = "upgrade2Clicked()";
+            upgrade2Name = name;
+            upgrade2Description = description;
+            upgrade2Price = price;
+            upgrade2Identifier = identifier;
+            break;
+        case 3:
+            numberOfUpgrades = 4;
+            newUpgrade.id = "upgrade3";
+            newUpgrade.onClick = "upgrade3Clicked()";
+            upgrade3Name = name;
+            upgrade3Description = description;
+            upgrade3Price = price;
+            upgrade3Identifier = identifier;
+            break;
+        case 4:
+            numberOfUpgrades = 5;
+            newUpgrade.id = "upgrade4";
+            newUpgrade.onClick = "upgrade4Clicked()";
+            upgrade4Name = name;
+            upgrade4Description = description;
+            upgrade4Price = price;
+            upgrade4Identifier = identifier;
+            break;
+        // continue
+    }
+    newUpgrade.className = "upgrade";
+    
+
+    document.getElementById("upgradesHolder").appendChild(newUpgrade);
+}
+ // yes i know, this is WILDLY INEFFECIENT. If you are better at coding that me, it would be great if you could rewrite this better :D
+function upgrade0Clicked() {
+    switch (upgrade0Identifier) {
+        case "reinforcedKeys":
+            if (cookies >= upgrade0Price) {
+                keyboardCPSGain = keyboardCPSGain * 2;
+                cookiesPerClick = cookiesPerClick * 2;
+                cookiesPerSecond = cookiesPerSecond + keyboardsBought * 0.2
+            }
+    }
+}
+function upgrade1Clicked() {
+    
+}
+function upgrade2Clicked() {
+    
+}
+function upgrade3Clicked() {
+    
+}
+function upgrade4Clicked() {
+    
+}
+
 // helper functions
 function reloadCookieCounter() {
     document.getElementById("cookieCounter").innerHTML = "Cookies: " +cookiesForCounter;
 }
+
 function makeUpgradeSound() {
-    cookieClick.play(); // needs to be updated to higher pitched sound effect
+    cookieClick.play(); // needs to be updated to different sfx
 }
+
 function createSimplePopUp(x,y,text,button) {
     document.getElementById("popup").style.display = "block";
     document.getElementById("popupContent").innerHTML = text;
@@ -230,8 +350,11 @@ function createSimplePopUp(x,y,text,button) {
         document.getElementById("popupButton").style.display = "block";
     }
 }
+
 function destroySimplePopUp() {
     document.getElementById("popup").style.display = "none";
     document.getElementById("popupContent").innerHTML = "null";
     document.getElementById("popupButton").style.display = "none";
 }
+
+console.log("Everything appears to have run successfully.")

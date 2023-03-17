@@ -5,8 +5,9 @@ body {
 
 h1 {
     font-family: Arial, Helvetica, sans-serif;
-    float: right;
-    font-size: 50px; /*center at some point*/
+    font-size: 50px;
+    text-align: center;
+    margin: 3px;
 }
 
 h3 {
@@ -46,8 +47,22 @@ div {
 }
 
 /* divs */
-.buttons {
+.buildings {
     float: right;
+    margin-top: 6px;
+}
+
+.upgrades-holder {
+    width: 330px;
+    height: 64px;
+}
+
+.upgrade {
+    width: 64px;
+    height: 64px;
+    background-image: url(img/unknown-64-64.png);
+    margin: 0px;
+    display: inline-block;
 }
 
 .leftSide {
