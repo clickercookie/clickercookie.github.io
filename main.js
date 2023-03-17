@@ -1,5 +1,5 @@
 // Variable definitions
-const version = "0.2.2";
+const version = "0.2.3";
 // cookies
 var cookies = 0;
 var cookiesForCounter = Math.floor(cookies);
@@ -15,15 +15,15 @@ var grandpaUpgradeCost = 100;
 var grandpaUnlocked = 0;
 // ranches
 var ranchesBought = 0;
-var ranchUpgradeCost = 1000;
+var ranchUpgradeCost = 1100;
 var ranchUnlocked = 0;
 // televisions
 var tvsBought = 0;
-var tvUpgradeCost = 5000;
+var tvUpgradeCost = 12000;
 var tvUnlocked = 0;
 // laborers
 var laborersBought = 0;
-var laborerUpgradeCost = 10000;
+var laborerUpgradeCost = 130000;
 var laborerUnlocked = 0;
 
 // stats
@@ -36,6 +36,10 @@ var cookiesPerSecondView = cookiesPerSecond;
 // timer things
 const intervalCPSU = setInterval(cookiesPerSecondUpdate, 1000);
 const perMillisecondUniversalVar = setInterval(perMillisecondUniversal, 1);
+
+// sounds
+const cookieClick = new Audio("sfx/cookie-click.wav");
+cookieClick.volume = 0.05;
 
 // set version
 document.getElementById("versionNumber").innerHTML = "Version: " +version;
@@ -107,6 +111,7 @@ function cookieClicked() {
     cookieBeenClickedTimes = cookieBeenClickedTimes + 1;
     totalCookies = totalCookies + 1;
     reloadCookieCounter();
+    cookieClick.play();
 }
 
 function popupClicked() {
@@ -142,13 +147,14 @@ function perClickUpgrade() {
 function keyboardUpgrade() {
     if (cookies >= keyboardUpgradeCost) {
         cookies = cookies - keyboardUpgradeCost;
-        keyboardUpgradeCost = keyboardUpgradeCost * 1.2;
+        keyboardUpgradeCost = keyboardUpgradeCost * 1.15;
         keyboardUpgradeCost = Math.floor(keyboardUpgradeCost);
         keyboardsBought = keyboardsBought + 1;
         cookiesPerSecond = cookiesPerSecond + 0.1;
         reloadCookieCounter();
         document.getElementById("keyboardUpgrade").innerHTML = "Keyboard: " +keyboardUpgradeCost;
         document.getElementById("keyboardsBought").innerHTML = +keyboardsBought;
+        makeUpgradeSound();
     }
 }
 
@@ -162,50 +168,57 @@ function grandpaUpgrade() {
         reloadCookieCounter();
         document.getElementById("grandpaUpgrade").innerHTML = "Grandpa: " +grandpaUpgradeCost;
         document.getElementById("grandpasBought").innerHTML = +grandpasBought;
+        makeUpgradeSound();
     }
 }
 
 function ranchUpgrade() {
     if (cookies >= ranchUpgradeCost) {
         cookies = cookies - ranchUpgradeCost;
-        ranchUpgradeCost = ranchUpgradeCost * 1.25;
+        ranchUpgradeCost = ranchUpgradeCost * 1.15;
         ranchUpgradeCost = Math.floor(ranchUpgradeCost)
         ranchesBought = ranchesBought + 1;
-        cookiesPerSecond = cookiesPerSecond + 10; // check if cookie clicker does this price
+        cookiesPerSecond = cookiesPerSecond + 8;
         reloadCookieCounter();
         document.getElementById("ranchUpgrade").innerHTML = "Ranch: " +ranchUpgradeCost;
         document.getElementById("ranchesBought").innerHTML = +ranchesBought;
+        makeUpgradeSound();
     }
 }
 
 function tvUpgrade() {
     if (cookies >= tvUpgradeCost) {
         cookies = cookies - tvUpgradeCost;
-        tvUpgradeCost = tvUpgradeCost * 1.25;
+        tvUpgradeCost = tvUpgradeCost * 1.15;
         tvUpgradeCost = Math.floor(tvUpgradeCost)
         tvsBought = tvsBought + 1;
-        cookiesPerSecond = cookiesPerSecond + 100; // update
+        cookiesPerSecond = cookiesPerSecond + 47; // update
         reloadCookieCounter();
         document.getElementById("tvUpgrade").innerHTML = "Television: " +tvUpgradeCost;
         document.getElementById("tvsBought").innerHTML = +tvsBought;
+        makeUpgradeSound();
     }
 }
 function laborerUpgrade() {
     if (cookies >= laborerUpgradeCost) {
         cookies = cookies - laborerUpgradeCost;
-        laborerUpgradeCost = laborerUpgradeCost * 1.25;
+        laborerUpgradeCost = laborerUpgradeCost * 1.15;
         laborerUpgradeCost = Math.floor(laborerUpgradeCost)
         laborersBought = laborersBought + 1;
-        cookiesPerSecond = cookiesPerSecond + 1000; // update
+        cookiesPerSecond = cookiesPerSecond + 260; // update
         reloadCookieCounter();
         document.getElementById("laborerUpgrade").innerHTML = "Laborer: " +laborerUpgradeCost;
         document.getElementById("laborersBought").innerHTML = +laborersBought;
+        makeUpgradeSound();
     }
 }
 
 // helper functions
 function reloadCookieCounter() {
     document.getElementById("cookieCounter").innerHTML = "Cookies: " +cookiesForCounter;
+}
+function makeUpgradeSound() {
+    cookieClick.play(); // needs to be updated to higher pitched sound effect
 }
 function createSimplePopUp(x,y,text,button) {
     document.getElementById("popup").style.display = "block";
