@@ -197,43 +197,39 @@ div {
     left: 4px;
 }
 
-/* keyboard upgrade related css */
+.building-icon {
+    width: 64px;
+    height: 64px;
+    float: left;
+}
+
+/* building icon css */
 .keyboard-icon {
-    width: 64px;
-    height: 64px;
     background: url(img/keyboard-icon.png);
-    float: left;
 }
-/* grandpa upgrade css */
+
 .grandpa-icon {
-    width: 64px;
-    height: 64px;
     background: url(img/grandpa-temp.png);
-    float: left;
 }
 
-/* ranch css */
 .ranch-icon {
-    width: 64px;
-    height: 64px;
     background: url(img/ranch-icon.png);
-    float: left;
 }
 
-/* TV stuff */
 .tv-icon {
-    width: 64px;
-    height: 64px;
     background: url(img/tv.png);
-    float: left;
 }
 
-/* Laborer stuff */
 .laborer-icon {
-    width: 64px;
-    height: 64px;
     background: url(img/laborer.png);
-    float: left;
+}
+
+.wallet-icon {
+    background-image: url(img/unknown.png);
+}
+
+.church-icon {
+    background-image: url(img/unknown.png);
 }
 
 /* Popup CSS */
