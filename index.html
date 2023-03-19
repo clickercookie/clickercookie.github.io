@@ -12,7 +12,7 @@
             <h4 id ="cookiesPerSecondCounter">Cookies Per Second: 0</h4>
         </div>
         <div class="social-links">
-            <a href="https://github.com/FifthTundraG/clickercookie">
+            <a href="https://github.com/clickercookie/clickercookie.github.io">
                 <img class="github" src="img/github-mark.svg" alt="github">
             </a>
             <h5 id="versionNumber" class="version-number">Version: null</h5>
@@ -23,64 +23,81 @@
                 <button onClick="popupClicked()" id="popupButton" class="popup-button">OK</button>
             </div>
         </div>
+        <div id="middle" class="middle">
+            <div id="upgradeViewer" class="upgrade-viewer">
+                <div id="upgradeViewerContent" class="upgrade-viewer-content">
+                    <p id="upgradeName" class="upgrade-name">Upgrade Name: </p>
+                    <p id="upgradePrice" class="upgradePrice">Upgrade Price: </p>
+                    <p id="upgradeDesc" class="upgrade-desc">Upgrade Description: </p>
+                </div>
+            </div>
+        </div>
         <div class="rightSide">
             <h1>Store</h1>
+            <h3 class="upgradesMarker">Upgrades</h3>
             <div id="upgradesHolder" class="upgrades-holder">
-
+                <div id="upgrade0" class="upgrade" onClick="upgrade0Clicked()" onMouseOver="upgrade0Hovered()"></div>
+                <div id="upgrade1" class="upgrade" onClick="upgrade1Clicked()"></div>
+                <div id="upgrade2" class="upgrade" onClick="upgrade2Clicked()"></div>
+                <div id="upgrade3" class="upgrade" onClick="upgrade3Clicked()"></div>
+                <div id="upgrade4" class="upgrade" onClick="upgrade4Clicked()"></div>
+                <div id="upgrade5" class="upgrade" onClick="upgrade5Clicked()"></div>
+                <div id="upgrade6" class="upgrade" onClick="upgrade6Clicked()"></div>
             </div>
+            <h3 class="buildingsMarker">Buildings</h3>
             <div id="buildings" class="buildings">
                 <table>
                     <tr>
                         <td>
-                            <div id="upgrade0" class="upgrade-already-unlock" onClick="keyboardUpgrade()">
+                            <div id="building0" class="building-already-unlock" onClick="keyboardUpgrade()">
                                 <div class="keyboard-icon"></div>
-                                <div class="upgrade-content">
-                                    <p class="upgrades-bought" id="keyboardsBought">0</p>
-                                    <p class="upgrade-price" id="keyboardUpgrade">Keyboard: 15</p>
+                                <div class="building-content">
+                                    <p class="buildings-bought" id="keyboardsBought">0</p>
+                                    <p class="building-price" id="keyboardUpgrade">Keyboard: 15</p>
                                 </div>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <div id="upgrade1" class="upgrade-need-unlock" onClick="grandpaUpgrade()">
+                            <div id="building1" class="building-need-unlock" onClick="grandpaUpgrade()">
                                 <div class="grandpa-icon"></div>
-                                <div class="upgrade-content">
-                                    <p class="upgrades-bought" id="grandpasBought">0</p>
-                                    <p class="upgrade-price" id="grandpaUpgrade">Grandpa: 100</p>
+                                <div class="building-content">
+                                    <p class="buildings-bought" id="grandpasBought">0</p>
+                                    <p class="building-price" id="grandpaUpgrade">Grandpa: 100</p>
                                 </div>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <div id="upgrade2" class="upgrade-need-unlock" onClick="ranchUpgrade()">
+                            <div id="building2" class="building-need-unlock" onClick="ranchUpgrade()">
                                 <div class="ranch-icon"></div>
-                                <div class="upgrade-content">
-                                    <p class="upgrades-bought" id="ranchesBought">0</p>
-                                    <p class="upgrade-price" id="ranchUpgrade">Ranch: 1100</p>
+                                <div class="building-content">
+                                    <p class="buildings-bought" id="ranchesBought">0</p>
+                                    <p class="building-price" id="ranchUpgrade">Ranch: 1100</p>
                                 </div>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <div id="upgrade3" class="upgrade-need-unlock" onClick="tvUpgrade()">
+                            <div id="building3" class="building-need-unlock" onClick="tvUpgrade()">
                                 <div class="tv-icon"></div>
-                                <div class="upgrade-content">
-                                    <p class="upgrades-bought" id="tvsBought">0</p>
-                                    <p class="upgrade-price" id="tvUpgrade">Television: 12000</p>
+                                <div class="building-content">
+                                    <p class="buildings-bought" id="tvsBought">0</p>
+                                    <p class="building-price" id="tvUpgrade">Television: 12000</p>
                                 </div>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <div id="upgrade4" class="upgrade-need-unlock" onClick="laborerUpgrade()">
+                            <div id="building4" class="building-need-unlock" onClick="laborerUpgrade()">
                                 <div class="laborer-icon"></div>
-                                <div class="upgrade-content">
-                                    <p class="upgrades-bought" id="laborersBought">0</p>
-                                    <p class="upgrade-price" id="laborerUpgrade">Laborer: 130000</p>
+                                <div class="building-content">
+                                    <p class="buildings-bought" id="laborersBought">0</p>
+                                    <p class="building-price" id="laborerUpgrade">Laborer: 130000</p>
                                 </div>
                             </div>
                         </td>

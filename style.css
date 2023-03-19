@@ -57,12 +57,37 @@ div {
     height: 64px;
 }
 
+.upgrade-name {
+    margin: 2px;
+}
+.upgrade-price{
+    margin: 2px;
+}
+.upgrade-desc {
+    margin: 2px;
+}
+
+/* thing that displays upgrade info */
+.upgrade-viewer {
+    display: block;
+    width: 248px;
+    height: 148px;
+    border-style: solid;
+    border-width: 2px;
+    margin: 0px;
+    display: none;
+}
+
+.upgrade-viewer-content {
+    display: block;
+}
+
 .upgrade {
-    width: 64px;
-    height: 64px;
+    width: 62px;
+    height: 62px;
     background-image: url(img/unknown-64-64.png);
     margin: 0px;
-    display: inline-block;
+    display: none;
 }
 
 .leftSide {
@@ -94,6 +119,17 @@ div {
     font-size: 20px;
 }
 
+/* random specific stuff */
+.upgradesMarker {
+    margin-top: 10px;
+    margin-bottom: 3px;
+}
+
+.buildingsMarker {
+    margin-top: 5px;
+    margin-bottom: 3px;
+}
+
 /* social links stuff */
 .social-links {
     position: absolute;
@@ -110,20 +146,20 @@ div {
 }
 
 /* universal upgrade css */
-.upgrade-already-unlock {
+.building-already-unlock {
     width: 312px;
     height: 64px;
     border-style: solid;
     border-width: 3px;
     transition: 0.3s;
 }
-.upgrade-already-unlock:hover {
+.building-already-unlock:hover {
     border-style: solid;
     border-color: gray;
     border-width: 3px;
 }
 
-.upgrade-need-unlock {
+.building-need-unlock {
     width: 312px;
     height: 64px;
     border-style: solid;
@@ -131,20 +167,20 @@ div {
     display: none;
     transition: 0.3s;
 }
-.upgrade-need-unlock:hover {
+.building-need-unlock:hover {
     border-style: solid;
     border-color: gray;
     border-width: 3px;
 }
 
-.upgrade-content {
+.building-content {
     display: inline-block;
     position: absolute;
     width: 248px;
     height: 64px;
 }
 
-.upgrades-bought {
+.buildings-bought {
     font-size: 35px;
     margin: 0px;
     top: 12px;
@@ -153,8 +189,7 @@ div {
     font-family: monospace;
 }
 
-.upgrade-price {
-    font-size: 22px;
+.building-price {
     font-size: 22px;
     display: inline;
     line-height: 1px;
@@ -205,8 +240,10 @@ div {
 .popup {
     border-style: solid;
     border-width: 3px;
+    border-color: red;
     width: 128px;
     height: 96px;
+    background-color: white;
     text-align: center;
     display: none;
     position: absolute;
@@ -215,8 +252,8 @@ div {
     transform: translate(-50%,-50%);
     
 }
-.popup-button {
-    display: none;
+.popupButton {
+    display: block;
 }
 .popup-button-div {
     display: flex;

@@ -1,18 +1,24 @@
 // Variable definitions
-const version = "0.2.3";
+const version = "0.4";
 // cookies
 var cookies = 0;
 var cookiesForCounter = Math.floor(cookies);
 // upgrades
-var numberOfUpgrades = 0;
+var upgrade0sBought = 0;
+var upgrade1sBought = 0;
+var upgrade2sBought = 0;
+var upgrade3sBought = 0;
+var upgrade4sBought = 0;
+var upgrade5sBought = 0;
+var upgrade6sBought = 0;
 
 // yes, i know, this is WILDLY INEFFICENT. If you can code better than me, please rewrite this better :D
-var upgrade0Name = "null";
+var upgrade0Name = "Reinforced Keys";
 var upgrade1Name = "null";
 var upgrade2Name = "null";
 var upgrade3Name = "null";
 var upgrade4Name = "null";
-var upgrade0Description = "null";
+var upgrade0Description = "Multiplys keyboard and clicking cookie production by 2" + "<br>" + "<i>'" + "press harder" + "'</i>";
 var upgrade1Description = "null";
 var upgrade2Description = "null";
 var upgrade3Description = "null";
@@ -28,30 +34,33 @@ var upgrade2Identifier = "up2";
 var upgrade3Identifier = "up3";
 var upgrade4Identifier = "up4";
 
-var reinforcedKeysAvaliable = 0; // this is a temporary variable as a solution to an issue until a fix is found
-
 // keyboards
 var keyboardsBought = 0;
 var keyboardCPSGain = 0.1;
+var keyboardCPSGiven = 0;
 var keyboardUpgradeCost = 15;
 // grandpas
 var grandpasBought = 0;
 var grandpaCPSGain = 1;
+var grandpaCPSGiven = 0;
 var grandpaUpgradeCost = 100;
 var grandpaUnlocked = 0;
 // ranches
 var ranchesBought = 0;
 var ranchCPSGain = 8;
+var ranchCPSGiven = 0;
 var ranchUpgradeCost = 1100;
 var ranchUnlocked = 0;
 // televisions
 var tvsBought = 0;
 var tvCPSGain = 47;
+var tvCPSGiven = 0;
 var tvUpgradeCost = 12000;
 var tvUnlocked = 0;
 // laborers
 var laborersBought = 0;
 var laborerCPSGain = 260;
+var laborerCPSGiven = 0;
 var laborerUpgradeCost = 130000;
 var laborerUnlocked = 0;
 
@@ -74,6 +83,10 @@ cookieClick.volume = 0.05;
 // set version
 document.getElementById("versionNumber").innerHTML = "Version: " +version;
 
+// set default upgrades
+document.getElementById("upgrade0").style.backgroundImage = "url(img/upgrades/reinforced-keys.png)";
+
+
 function perMillisecondUniversal() {
     cookiesForCounter = Math.round(cookies * 10) / 10;
     totalCookiesView = Math.round(totalCookies * 10) / 10;
@@ -83,6 +96,16 @@ function perMillisecondUniversal() {
     // CPS
     cookiesPerSecondView = Math.round(cookiesPerSecond * 10) / 10;
     document.getElementById("cookiesPerSecondCounter").innerHTML = "Cookies Per Second: " +cookiesPerSecondView;
+
+    // upgrade unlocks  |  yes, more inefficent code. expect an upgrade in the future, or fix it yourself and create a pull request
+    if (keyboardsBought >= 1) {
+        document.getElementById("upgrade0").style.display = "inline-block";
+        document.getElementById("upgradeViewer").style.display = "block";
+        document.getElementById("upgradeViewer").style.float = "right";
+    }
+    if (upgrade0sBought == 1) {
+        createUpgrade("upgrade0","Obsidian Keys","Multiplys keyboard and clicking cookies by 2","so heavy they're always pressed",1000,"img/unknown-64-64.png")
+    }
 
     // building unlocks
     if (totalCookies >= 100) {
@@ -98,35 +121,32 @@ function perMillisecondUniversal() {
         laborerUnlocked = 1;
     }
 
-    if (keyboardsBought == 1 && reinforcedKeysAvaliable == 0) {
-        reinforcedKeysAvaliable = 1;
-        createUpgrade("Reinforced Keys", "press harder", 100, "reinforcedKeys");
-    }
+    // these 2 could be combined, but would make manually unlocking buildings more difficult
 
     // keep unlocked
     if (grandpaUnlocked == 1) {
         document.getElementById("grandpaUpgrade").style.display = "inline";
-        document.getElementById("upgrade1").style.display = "block";
+        document.getElementById("building1").style.display = "block";
     }
     if (ranchUnlocked == 1) {
         document.getElementById("ranchUpgrade").style.display = "inline";
-        document.getElementById("upgrade2").style.display = "block";
+        document.getElementById("building2").style.display = "block";
     }
     if (tvUnlocked == 1) {
         document.getElementById("tvUpgrade").style.display = "inline";
-        document.getElementById("upgrade3").style.display = "block";
+        document.getElementById("building3").style.display = "block";
     }
     if (laborerUnlocked == 1) {
         document.getElementById("laborerUpgrade").style.display = "inline";
-        document.getElementById("upgrade4").style.display = "block";
+        document.getElementById("building4").style.display = "block";
     }
 
     // log to console in case of error
     if (cookies < 0) {
-        createSimplePopUp(300,150,"An error occured: Cookies are in negative!<br>Please report this to the GitHub accessable in the bottom left corner", true);
+        createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: Cookies are in negative!<br>Please report this to the GitHub accessable in the bottom left corner");
     }
     if (upgrade0Identifier == upgrade1Identifier) {
-        createSimplePopUp(300,150,"An error occured: Multiple of same upgrade or identifier is not set!<br>Please report this to the GitHub accessable in the bottom left corner", true);
+        createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: Multiple of same upgrade or identifier is not set!<br>Please report this to the GitHub accessable in the bottom left corner");
     }
 
     // set number of bought to bought
@@ -135,10 +155,13 @@ function perMillisecondUniversal() {
     document.getElementById("ranchesBought").innerHTML = +ranchesBought;
     document.getElementById("tvsBought").innerHTML = +tvsBought;
     document.getElementById("laborersBought").innerHTML = +laborersBought;
+
+    cookiesPerSecond = keyboardCPSGiven+grandpaCPSGiven+ranchCPSGiven+tvCPSGiven+laborerCPSGiven;
 }
 
 function cookiesPerSecondUpdate() {
-    cookies = cookies + cookiesPerSecond;
+
+    cookies = cookies + cookiesPerSecond
     totalCookies = totalCookies + cookiesPerSecond;
 
     reloadCookieCounter();
@@ -165,7 +188,7 @@ function setCookies(x) {
     reloadCookieCounter();
 }
 
-function setCPS(x) {
+function setCPS(x,thisFunctionProbablyDoesntWork) {
     cookiesPerSecond = x;
     cookiesPerSecondView = Math.round(cookiesPerSecond * 10) / 10;
     document.getElementById("cookiesPerSecondCounter").innerHTML = "Cookies Per Second: " +cookiesPerSecondView;
@@ -188,7 +211,7 @@ function keyboardUpgrade() {
         keyboardUpgradeCost = keyboardUpgradeCost * 1.15;
         keyboardUpgradeCost = Math.floor(keyboardUpgradeCost);
         keyboardsBought = keyboardsBought + 1;
-        cookiesPerSecond = cookiesPerSecond + keyboardCPSGain;
+        keyboardCPSGiven = keyboardCPSGiven + keyboardCPSGain;
         reloadCookieCounter();
         document.getElementById("keyboardUpgrade").innerHTML = "Keyboard: " +keyboardUpgradeCost;
         document.getElementById("keyboardsBought").innerHTML = +keyboardsBought;
@@ -252,70 +275,48 @@ function laborerUpgrade() {
 }
 
 // managing upgrades
-function createUpgrade(name,description,price,identifier) {
-    const newUpgrade = document.createElement("div");
-    switch (numberOfUpgrades) {
-        case 0:
-            numberOfUpgrades = 1;
-            newUpgrade.id = "upgrade0";
-            newUpgrade.onclick = "upgrade0Clicked()";
+function createUpgrade(identifier,name,description,quote,price,img) {
+    switch (identifier) {
+        case "upgrade0":
+            document.getElementById("upgrade0").style.display = "inline-block";
             upgrade0Name = name;
-            upgrade0Description = description;
+            upgrade0Description = description + "<br>" + "<i>'" + quote + "'</i>";
             upgrade0Price = price;
-            upgrade0Identifier = identifier;
+            document.getElementById("upgrade0").style.backgroundImage = "url(" + img + ")";
             break;
-        case 1:
-            numberOfUpgrades = 2;
-            newUpgrade.id = "upgrade1";
-            newUpgrade.onClick = "upgrade1Clicked()";
+        case "upgrade1":
+            document.getElementById("upgrade1").style.display = "inline-block";
             upgrade1Name = name;
-            upgrade1Description = description;
+            upgrade1Description = description + "<br>" + "<i>'" + quote + "'</i>";
             upgrade1Price = price;
-            upgrade1Identifier = identifier;
+            document.getElementById("upgrade1").style.backgroundImage = "url(" + img + ")";
             break;
-        case 2:
-            numberOfUpgrades = 3;
-            newUpgrade.id = "upgrade2";
-            newUpgrade.onClick = "upgrade2Clicked()";
+        case "upgrade2":
+            document.getElementById("upgrade2").style.display = "inline-block";
             upgrade2Name = name;
-            upgrade2Description = description;
+            upgrade2Description = description + "<br>" + "<i>'" + quote + "'</i>";
             upgrade2Price = price;
-            upgrade2Identifier = identifier;
+            document.getElementById("upgrade2").style.backgroundImage = "url(" + img + ")";
             break;
-        case 3:
-            numberOfUpgrades = 4;
-            newUpgrade.id = "upgrade3";
-            newUpgrade.onClick = "upgrade3Clicked()";
+        case "upgrade3":
+            document.getElementById("upgrade3").style.display = "inline-block";
             upgrade3Name = name;
-            upgrade3Description = description;
+            upgrade3Description = description + "<br>" + "<i>'" + quote + "'</i>";
             upgrade3Price = price;
-            upgrade3Identifier = identifier;
+            document.getElementById("upgrade3").style.backgroundImage = "url(" + img + ")";
             break;
-        case 4:
-            numberOfUpgrades = 5;
-            newUpgrade.id = "upgrade4";
-            newUpgrade.onClick = "upgrade4Clicked()";
-            upgrade4Name = name;
-            upgrade4Description = description;
-            upgrade4Price = price;
-            upgrade4Identifier = identifier;
+        default:
+            createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: upgrade identifier is invalid!<br>Please report this to the GitHub accessable in the bottom left corner");
             break;
-        // continue
     }
-    newUpgrade.className = "upgrade";
-    
-
-    document.getElementById("upgradesHolder").appendChild(newUpgrade);
 }
- // yes i know, this is WILDLY INEFFECIENT. If you are better at coding that me, it would be great if you could rewrite this better :D
+
 function upgrade0Clicked() {
-    switch (upgrade0Identifier) {
-        case "reinforcedKeys":
-            if (cookies >= upgrade0Price) {
-                keyboardCPSGain = keyboardCPSGain * 2;
-                cookiesPerClick = cookiesPerClick * 2;
-                cookiesPerSecond = cookiesPerSecond + keyboardsBought * 0.2
-            }
+    if (cookies >= upgrade0Price) {
+        keyboardCPSGiven = keyboardCPSGiven * 2;
+        keyboardCPSGain = keyboardCPSGain * 2;
+        cookiesPerClick = cookiesPerClick * 2;
+        upgrade0sBought = upgrade0sBought + 1;
     }
 }
 function upgrade1Clicked() {
@@ -331,6 +332,30 @@ function upgrade4Clicked() {
     
 }
 
+function upgrade0Hovered() {
+    document.getElementById("upgradeName").innerHTML = "Name: " + upgrade0Name;
+    document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade0Price;
+    document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade0Description;
+}
+function upgrade1Hovered() {
+
+}
+function upgrade2Hovered() {
+    
+}
+function upgrade3Hovered() {
+    
+}
+function upgrade4Hovered() {
+    
+}
+function upgrade5Hovered() {
+    
+}
+function upgrade6Hovered() {
+    
+}
+
 // helper functions
 function reloadCookieCounter() {
     document.getElementById("cookieCounter").innerHTML = "Cookies: " +cookiesForCounter;
@@ -340,14 +365,14 @@ function makeUpgradeSound() {
     cookieClick.play(); // needs to be updated to different sfx
 }
 
-function createSimplePopUp(x,y,text,button) {
+function createSimplePopUp(x,y,text,buttonNot) {
     document.getElementById("popup").style.display = "block";
     document.getElementById("popupContent").innerHTML = text;
     document.getElementById("popup").style.width = x + "px";
     document.getElementById("popupButtonDiv").style.width = x + "px";
     document.getElementById("popup").style.height = y + "px";
-    if (button == true) {
-        document.getElementById("popupButton").style.display = "block";
+    if (buttonNot == true) {
+        document.getElementById("popupButton").style.display = "none";
     }
 }
 
@@ -358,3 +383,4 @@ function destroySimplePopUp() {
 }
 
 console.log("Everything appears to have run successfully.")
+console.log("## Welcome to the console! Developer commands can be found in the Javascript code. If you cant find that, then you aren't developer enough to be here :) ##");
