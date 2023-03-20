@@ -404,18 +404,27 @@ function upgrade0Clicked() {
 }
 function upgrade1Clicked() {
     if (cookies >= upgrade1Price) {
+        cookies = cookies - upgrade1Price;
         grandpaCPSGiven = grandpaCPSGiven * 2;
         grandpaCPSGain = grandpaCPSGain * 2;
         upgrade1sBought =+ 1;
     }
 }
 function upgrade2Clicked() {
-    ranchCPSGiven = ranchCPSGiven * 2;
-    ranchCPSGain = ranchCPSGain * 2;
-    upgrade2sBought =+ 1;
+    if (cookies >= upgrade2Price) {
+        cookies = cookies - upgrade2Price;
+        ranchCPSGiven = ranchCPSGiven * 2;
+        ranchCPSGain = ranchCPSGain * 2;
+        upgrade2sBought =+ 1;
+    }
 }
 function upgrade3Clicked() {
-    // continue
+    if (cookies >= upgrade3Price) {
+        cookies = cookies - upgrade3Price;
+        tvCPSGiven = tvCPSGiven * 2;
+        tvCPSGain = tvCPSGain * 2;
+        upgrade3sBought =+ 1;
+    }
 }
 function upgrade4Clicked() {
     
