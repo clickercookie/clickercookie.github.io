@@ -105,6 +105,10 @@ document.getElementById("versionNumber").innerHTML = "Version: " +version;
 
 // set default upgrades
 document.getElementById("upgrade0").style.backgroundImage = "url(img/upgrades/reinforced-keys.png)";
+document.getElementById("upgrade1").style.backgroundImage = "url(img/upgrades/hardwood-walking-stick.png)";
+document.getElementById("upgrade2").style.backgroundImage = "url(img/upgrades/ranch-upgrade1.png)";
+document.getElementById("upgrade3").style.backgroundImage = "url(img/upgrades/tv-upgrade1.png)";
+document.getElementById("upgrade4").style.backgroundImage = "url(img/upgrades/laborer-upgrade1.png)";
 
 function perMillisecondUniversal() {
     cookiesForCounter = Math.round(cookies * 10) / 10;
