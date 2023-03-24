@@ -14,25 +14,25 @@ var upgrade6sBought = 0;
 
 // yes, i know, this is WILDLY INEFFICENT. If you can code better than me, please rewrite this better :D
 var upgrade0Name = "Reinforced Keys";
-var upgrade1Name = "null";
-var upgrade2Name = "null";
-var upgrade3Name = "null";
-var upgrade4Name = "null";
-var upgrade5Name = "null";
+var upgrade1Name = "Hardwood Walking Stick";
+var upgrade2Name = "Pig Slop";
+var upgrade3Name = "LED Display";
+var upgrade4Name = "Medkits";
+var upgrade5Name = "200 dollar bills";
 var upgrade6Name = "null";
 var upgrade0Description = "Multiplys keyboard and clicking cookie production by 2" + "<br>" + "<i>'" + "press harder" + "'</i>";
-var upgrade1Description = "null";
-var upgrade2Description = "null";
-var upgrade3Description = "null";
-var upgrade4Description = "null";
-var upgrade5Description = "null";
+var upgrade1Description = "Multiplys grandpa production by 2" + "<br>" + "<i>'" + "nonna dat softwood crap" + "'</i>";
+var upgrade2Description = "Multiplys ranch production by 2" + "<br>" + "<i>'" + "Wait, what have we been feeding them before now?" + "'</i>";
+var upgrade3Description = "Multiplys TV production by 2" + "<br>" + "<i>'" + "Better than that CRT junk" + "'</i>";
+var upgrade4Description = "Multiplys Laborer production by 2" + "<br>" + "<i>'" + "Constant supply of Band-Aids in case of emergency" + "'</i>";
+var upgrade5Description = "Multiplys Wallet production by 2" + "<br>" + "<i>'" + "Don't know how the goverment is going to take to this currency" + "'</i>";
 var upgrade6Description = "null";
 var upgrade0Price = 100;
-var upgrade1Price = 100;
-var upgrade2Price = 100;
-var upgrade3Price = 100;
-var upgrade4Price = 100;
-var upgrade5Price = 100;
+var upgrade1Price = 1000;
+var upgrade2Price = 11000;
+var upgrade3Price = 120000;
+var upgrade4Price = 1300000;
+var upgrade5Price = 14000000;
 var upgrade6Price = 100;
 var upgrade0Identifier = "up0";
 var upgrade1Identifier = "up1";
@@ -106,7 +106,6 @@ document.getElementById("versionNumber").innerHTML = "Version: " +version;
 // set default upgrades
 document.getElementById("upgrade0").style.backgroundImage = "url(img/upgrades/reinforced-keys.png)";
 
-
 function perMillisecondUniversal() {
     cookiesForCounter = Math.round(cookies * 10) / 10;
     totalCookiesView = Math.round(totalCookies * 10) / 10;
@@ -117,15 +116,30 @@ function perMillisecondUniversal() {
     cookiesPerSecondView = Math.round(cookiesPerSecond * 10) / 10;
     document.getElementById("cookiesPerSecondCounter").innerHTML = "Cookies Per Second: " +cookiesPerSecondView;
 
-    // upgrade unlocks  |  yes, more inefficent code. expect an upgrade in the future, or fix it yourself and create a pull request
-    if (keyboardsBought >= 1) {
-        document.getElementById("upgrade0").style.display = "inline-block";
-        document.getElementById("upgradeViewer").style.display = "block";
-        document.getElementById("upgradeViewer").style.float = "right";
-    }
-    if (upgrade0sBought == 1) {
-        createUpgrade("upgrade0","Obsidian Keys","Multiplys keyboard and clicking cookies by 2","so heavy they're always pressed",1000,"img/unknown-64-64.png")
-    }
+    // Upgrade Unlocks (very long) (upgrades accepted) (create a github pull request)
+        // Keyboards
+        if (keyboardsBought == 1 && upgrade0sBought == 0) {
+            document.getElementById("upgrade0").style.display = "inline-block";
+        }
+        if (upgrade0sBought == 1 && keyboardsBought >= 5) {
+            createUpgrade("upgrade0","Obsidian Keys","Multiplys keyboard and clicking cookies by 2","so heavy they're always pressed",500,"img/unknown-64-64.png")
+        }
+        // Grandpas
+        if (grandpasBought == 1 && upgrade1sBought == 0) {
+            document.getElementById("upgrade1").style.display = "inline-block";
+        }
+        // Ranches
+        if (ranchesBought == 1 && upgrade2sBought == 0) {
+            document.getElementById("upgrade2").style.display = "inline-block";
+        }
+        // TVs
+        if (tvsBought == 1 && upgrade3sBought == 0) {
+            document.getElementById("upgrade3").style.display = "inline-block";
+        }
+        // Laborers
+        if (laborersBought == 1 && upgrade4sBought == 0) {
+            document.getElementById("upgrade4").style.display = "inline-block";
+        }
 
     // building unlocks
     if (totalCookies >= 100) {
@@ -196,10 +210,8 @@ function perMillisecondUniversal() {
 }
 
 function cookiesPerSecondUpdate() {
-
     cookies = cookies + cookiesPerSecond
     totalCookies = totalCookies + cookiesPerSecond;
-
     reloadCookieCounter();
 }
 
@@ -259,7 +271,7 @@ function grandpaUpgrade() {
     if (cookies >= grandpaUpgradeCost) {
         cookies = cookies - grandpaUpgradeCost;
         grandpaUpgradeCost = grandpaUpgradeCost * 1.15;
-        grandpaUpgradeCost = Math.floor(grandpaUpgradeCost)
+        grandpaUpgradeCost = Math.floor(grandpaUpgradeCost);
         grandpasBought = grandpasBought + 1;
         grandpaCPSGiven = grandpaCPSGiven + grandpaCPSGain;
         reloadCookieCounter();
@@ -273,7 +285,7 @@ function ranchUpgrade() {
     if (cookies >= ranchUpgradeCost) {
         cookies = cookies - ranchUpgradeCost;
         ranchUpgradeCost = ranchUpgradeCost * 1.15;
-        ranchUpgradeCost = Math.floor(ranchUpgradeCost)
+        ranchUpgradeCost = Math.floor(ranchUpgradeCost);
         ranchesBought = ranchesBought + 1;
         ranchCPSGiven = ranchCPSGiven + ranchCPSGain;
         reloadCookieCounter();
@@ -287,7 +299,7 @@ function tvUpgrade() {
     if (cookies >= tvUpgradeCost) {
         cookies = cookies - tvUpgradeCost;
         tvUpgradeCost = tvUpgradeCost * 1.15;
-        tvUpgradeCost = Math.floor(tvUpgradeCost)
+        tvUpgradeCost = Math.floor(tvUpgradeCost);
         tvsBought = tvsBought + 1;
         tvCPSGiven = tvCPSGiven + tvCPSGain;
         reloadCookieCounter();
@@ -300,7 +312,7 @@ function laborerUpgrade() {
     if (cookies >= laborerUpgradeCost) {
         cookies = cookies - laborerUpgradeCost;
         laborerUpgradeCost = laborerUpgradeCost * 1.15;
-        laborerUpgradeCost = Math.floor(laborerUpgradeCost)
+        laborerUpgradeCost = Math.floor(laborerUpgradeCost);
         laborersBought = laborersBought + 1;
         laborerCPSGiven = laborerCPSGiven + laborerCPSGain;
         reloadCookieCounter();
@@ -313,7 +325,7 @@ function walletUpgrade() {
     if (cookies >= walletUpgradeCost) {
         cookies = cookies - walletUpgradeCost;
         walletUpgradeCost = walletUpgradeCost * 1.15;
-        walletUpgradeCost = Math.floor(walletUpgradeCost)
+        walletUpgradeCost = Math.floor(walletUpgradeCost);
         walletsBought = walletsBought + 1;
         walletCPSGiven = walletCPSGiven + walletCPSGain;
         reloadCookieCounter();
@@ -326,7 +338,7 @@ function churchUpgrade() {
     if (cookies >= churchUpgradeCost) {
         cookies = cookies - churchUpgradeCost;
         churchUpgradeCost = churchUpgradeCost * 1.15;
-        churchUpgradeCost = Math.floor(churchUpgradeCost)
+        churchUpgradeCost = Math.floor(churchUpgradeCost);
         churchesBought = churchesBought + 1;
         churchCPSGiven = churchCPSGiven + churchCPSGain;
         reloadCookieCounter();
@@ -389,17 +401,48 @@ function createUpgrade(identifier,name,description,quote,price,img) {
             document.getElementById("upgrade6").style.backgroundImage = "url(" + img + ")";
             break;
         default:
-            createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: upgrade identifier is invalid!<br>Please report this to the GitHub accessable in the bottom left corner");
+            createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> A fatal error occured: upgrade identifier is invalid!<br>Please report this to the GitHub accessable in the bottom left corner",true);
+            break;
+    }
+}
+function destroyUpgrade(identifier) {
+    switch (identifier) {
+        case "upgrade0":
+            document.getElementById("upgrade0").style.display = "none";
+            break;
+        case "upgrade1":
+            document.getElementById("upgrade1").style.display = "none";
+            break;
+        case "upgrade2":
+            document.getElementById("upgrade2").style.display = "none";
+            break;
+        case "upgrade3":
+            document.getElementById("upgrade3").style.display = "none";
+            break;
+        case "upgrade4":
+            document.getElementById("upgrade4").style.display = "none";
+            break;
+        case "upgrade5":
+            document.getElementById("upgrade5").style.display = "none";
+            break;
+        case "upgrade6":
+            document.getElementById("upgrade6").style.display = "none";
+            break;
+        default:
+            createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> A fatal error occured: upgrade identifier is invalid for destroyed upgrade!<br>Please report this to the GitHub accessable in the bottom left corner",true);
             break;
     }
 }
 
 function upgrade0Clicked() {
     if (cookies >= upgrade0Price) {
+        cookies = cookies - upgrade0Price;
         keyboardCPSGiven = keyboardCPSGiven * 2;
         keyboardCPSGain = keyboardCPSGain * 2;
         cookiesPerClick = cookiesPerClick * 2;
         upgrade0sBought = upgrade0sBought + 1;
+        upgrade0Hovered()
+        destroyUpgrade("upgrade0");
     }
 }
 function upgrade1Clicked() {
@@ -408,6 +451,8 @@ function upgrade1Clicked() {
         grandpaCPSGiven = grandpaCPSGiven * 2;
         grandpaCPSGain = grandpaCPSGain * 2;
         upgrade1sBought =+ 1;
+        upgrade1Hovered();
+        destroyUpgrade("upgrade1");
     }
 }
 function upgrade2Clicked() {
@@ -416,6 +461,8 @@ function upgrade2Clicked() {
         ranchCPSGiven = ranchCPSGiven * 2;
         ranchCPSGain = ranchCPSGain * 2;
         upgrade2sBought =+ 1;
+        upgrade2Hovered();
+        destroyUpgrade("upgrade2");
     }
 }
 function upgrade3Clicked() {
@@ -424,52 +471,96 @@ function upgrade3Clicked() {
         tvCPSGiven = tvCPSGiven * 2;
         tvCPSGain = tvCPSGain * 2;
         upgrade3sBought =+ 1;
+        upgrade3Hovered();
+        destroyUpgrade("upgrade3");
     }
 }
 function upgrade4Clicked() {
-    
+    if (cookies >= upgrade4Price) {
+        cookies = cookies - upgrade4Price;
+        laborerCPSGiven = laborerCPSGiven * 2;
+        laborerCPSGain = laborerCPSGain * 2;
+        upgrade4sBought =+ 1;
+        upgrade4Hovered();
+        destroyUpgrade("upgrade4");
+    }
 }
 function upgrade5Clicked() {
-    
+    if (cookies >= upgrade5Price) {
+        cookies = cookies - upgrade5Price;
+        walletCPSGiven = walletCPSGiven * 2;
+        walletCPSGain = walletCPSGain * 2;
+        upgrade5sBought =+ 1;
+        upgrade5Hovered();
+        destroyUpgrade("upgrade5");
+    }
 }
 function upgrade6Clicked() {
-    
+    if (cookies >= upgrade6Price) {
+        cookies = cookies - upgrade6Price;
+        churchCPSGiven = churchCPSGiven * 2;
+        churchCPSGain = churchCPSGain * 2;
+        upgrade6sBought =+ 1;
+        upgrade6Hovered();
+        destroyUpgrade("upgrade6");
+    }
 }
 
 function upgrade0Hovered() {
     document.getElementById("upgradeName").innerHTML = "Name: " + upgrade0Name;
     document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade0Price;
     document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade0Description;
+    document.getElementById("upgradeViewer").style.display = "block";
+    document.getElementById("upgradeViewer").style.float = "right";
 }
 function upgrade1Hovered() {
     document.getElementById("upgradeName").innerHTML = "Name: " + upgrade1Name;
     document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade1Price;
     document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade1Description;
+    document.getElementById("upgradeViewer").style.display = "block";
+    document.getElementById("upgradeViewer").style.float = "right";
 }
 function upgrade2Hovered() {
     document.getElementById("upgradeName").innerHTML = "Name: " + upgrade2Name;
     document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade2Price;
     document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade2Description;
+    document.getElementById("upgradeViewer").style.display = "block";
+    document.getElementById("upgradeViewer").style.float = "right";
 }
 function upgrade3Hovered() {
     document.getElementById("upgradeName").innerHTML = "Name: " + upgrade3Name;
     document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade3Price;
     document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade3Description;
+    document.getElementById("upgradeViewer").style.display = "block";
+    document.getElementById("upgradeViewer").style.float = "right";
 }
 function upgrade4Hovered() {
     document.getElementById("upgradeName").innerHTML = "Name: " + upgrade4Name;
     document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade4Price;
     document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade5Description;
+    document.getElementById("upgradeViewer").style.display = "block";
+    document.getElementById("upgradeViewer").style.float = "right";
 }
 function upgrade5Hovered() {
     document.getElementById("upgradeName").innerHTML = "Name: " + upgrade5Name;
     document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade5Price;
     document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade5Description;
+    document.getElementById("upgradeViewer").style.display = "block";
+    document.getElementById("upgradeViewer").style.float = "right";
 }
 function upgrade6Hovered() {
     document.getElementById("upgradeName").innerHTML = "Name: " + upgrade6Name;
     document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade6Price;
     document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade6Description;
+    document.getElementById("upgradeViewer").style.display = "block";
+    document.getElementById("upgradeViewer").style.float = "right";
+}
+function upgradeUndoHover() {
+    document.getElementById("upgradeName").innerHTML = "Name: ";
+    document.getElementById("upgradePrice").innerHTML = "Price: ";
+    document.getElementById("upgradeDesc").innerHTML = "Description: ";
+    document.getElementById("upgradeViewer").style.display = "none";
+    document.getElementById("upgradeViewer").style.float = "right";
 }
 
 // helper functions

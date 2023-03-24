@@ -1,6 +1,8 @@
 /* basic basis for most html elements */
 body {
     margin: 0px;
+    display: -webkit-flex;
+    display: flex;
 }
 
 h1 {
@@ -67,15 +69,27 @@ div {
     margin: 2px;
 }
 
+.middle {
+    -webkit-flex: auto;
+    flex: auto;
+    height: 30px;
+}
+
 /* thing that displays upgrade info */
 .upgrade-viewer {
     display: block;
     width: 248px;
     height: 148px;
     border-style: solid;
-    border-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-right-width: 0px;
     margin: 0px;
     display: none;
+    -webkit-flex: auto;
+    flex: auto;
+    background-color: rgb(255, 243, 209);
 }
 
 .upgrade-viewer-content {
@@ -225,11 +239,11 @@ div {
 }
 
 .wallet-icon {
-    background-image: url(img/unknown.png);
+    background-image: url(img/wallet.png);
 }
 
 .church-icon {
-    background-image: url(img/unknown.png);
+    background-image: url(img/church.png);
 }
 
 /* Popup CSS */
