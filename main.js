@@ -20,9 +20,9 @@ var upgrade3Name = "LED Display";
 var upgrade4Name = "Medkits";
 var upgrade5Name = "200 dollar bills";
 var upgrade6Name = "null";
-var upgrade0Description = "Multiplys keyboard and clicking cookie production by 2" + "<br>" + "<i>'" + "press harder" + "'</i>";
-var upgrade1Description = "Multiplys grandpa production by 2" + "<br>" + "<i>'" + "nonna dat softwood crap" + "'</i>";
-var upgrade2Description = "Multiplys ranch production by 2" + "<br>" + "<i>'" + "Wait, what have we been feeding them before now?" + "'</i>";
+var upgrade0Description = "Multiplys Keyboard and clicking cookie production by 2" + "<br>" + "<i>'" + "press harder" + "'</i>";
+var upgrade1Description = "Multiplys Grandpa production by 2" + "<br>" + "<i>'" + "nonna dat softwood crap" + "'</i>";
+var upgrade2Description = "Multiplys Ranch production by 2" + "<br>" + "<i>'" + "Wait, what have we been feeding them before now?" + "'</i>";
 var upgrade3Description = "Multiplys TV production by 2" + "<br>" + "<i>'" + "Better than that CRT junk" + "'</i>";
 var upgrade4Description = "Multiplys Laborer production by 2" + "<br>" + "<i>'" + "Constant supply of Band-Aids in case of emergency" + "'</i>";
 var upgrade5Description = "Multiplys Wallet production by 2" + "<br>" + "<i>'" + "Don't know how the goverment is going to take to this currency" + "'</i>";
@@ -537,7 +537,7 @@ function upgrade3Hovered() {
 function upgrade4Hovered() {
     document.getElementById("upgradeName").innerHTML = "Name: " + upgrade4Name;
     document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade4Price;
-    document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade5Description;
+    document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade4Description;
     document.getElementById("upgradeViewer").style.display = "block";
     document.getElementById("upgradeViewer").style.float = "right";
 }
