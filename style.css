@@ -131,6 +131,25 @@ div {
     margin: 0px;
     font-family: monospace;
     font-size: 20px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.version-switch-info {
+    border-style: solid;
+    border-width: 3px;
+    position: absolute;
+    width: 112px;
+    height: 45px;
+    display: none;
+    bottom: 30px;
+    left: 48px;
+    font-size: 10px;
 }
 
 /* random specific stuff */
@@ -260,7 +279,6 @@ div {
     top:  50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    
 }
 .popupButton {
     display: block;

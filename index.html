@@ -15,7 +15,10 @@
             <a href="https://github.com/clickercookie/clickercookie.github.io">
                 <img class="github" src="img/github-mark.svg" alt="github">
             </a>
-            <h5 id="versionNumber" class="version-number">Version: null</h5>
+            <h5 id="versionNumber" class="version-number" onClick="versionSwitchBeta()" onMouseOver="versionNumberMousedOver()" onMouseOut="versionNumberMousedOverUndo()">Version: null</h5>
+            <div id="versionSwitchInfo" class="version-switch-info">
+                <p style="margin:0px;">Clicking this will switch to the beta branch, this will wipe your current progress!</p>
+            </div>
         </div>
         <div class="popup" id="popup">
             <p class="popup-content" id="popupContent">null</p>

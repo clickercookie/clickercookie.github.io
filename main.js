@@ -246,6 +246,10 @@ function setCPS(x) {
     document.getElementById("cookiesPerSecondCounter").innerHTML = "Cookies Per Second: " +cookiesPerSecondView;
 }
 
+function versionSwitchBeta() {
+    window.location.href = "beta/beta.html";
+}
+
 // upgrades
 function perClickUpgrade() {
     if (cookies >= perClickUpgradeCost) {
@@ -565,6 +569,13 @@ function upgradeUndoHover() {
     document.getElementById("upgradeDesc").innerHTML = "Description: ";
     document.getElementById("upgradeViewer").style.display = "none";
     document.getElementById("upgradeViewer").style.float = "right";
+}
+
+function versionNumberMousedOver() {
+    document.getElementById("versionSwitchInfo").style.display = "block";
+}
+function versionNumberMousedOverUndo() {
+    document.getElementById("versionSwitchInfo").style.display = "none";
 }
 
 // helper functions
