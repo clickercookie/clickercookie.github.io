@@ -5,4 +5,4 @@ You have?!?
 
 Great!
 
-Featuring 3 original upgrades, a few lines of semi-functional Javascript, and 4 temporary pixel art images, Clicker Cookie is an uncompleted masterpiece!
+Featuring 3 original upgrades, semi-functional Javascript, and temporary pixel art images, Clicker Cookie is an uncompleted masterpiece!
