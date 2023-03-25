@@ -1,0 +1,294 @@
+/* basic basis for most html elements */
+body {
+    margin: 0px;
+    display: -webkit-flex;
+    display: flex;
+}
+
+h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 50px;
+    text-align: center;
+    margin: 3px;
+}
+
+h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+h4 {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+p {
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+img {
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* divs */
+.buildings {
+    float: right;
+    margin-top: 6px;
+}
+
+.upgrades-holder {
+    width: 330px;
+    height: 64px;
+}
+
+.upgrade-name {
+    margin: 2px;
+}
+.upgrade-price{
+    margin: 2px;
+}
+.upgrade-desc {
+    margin: 2px;
+}
+
+.middle {
+    -webkit-flex: auto;
+    flex: auto;
+    height: 30px;
+}
+
+/* thing that displays upgrade info */
+.upgrade-viewer {
+    display: block;
+    width: 248px;
+    height: 148px;
+    border-style: solid;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-right-width: 0px;
+    margin: 0px;
+    display: none;
+    -webkit-flex: auto;
+    flex: auto;
+    background-color: rgb(255, 243, 209);
+}
+
+.upgrade-viewer-content {
+    display: block;
+}
+
+.upgrade {
+    width: 62px;
+    height: 62px;
+    background-image: url(img/unknown-64-64.png);
+    margin: 0px;
+    display: none;
+}
+
+.leftSide {
+    width: 312px;
+    position: absolute;
+    height: 100vh;
+    border-style: solid;
+    border-width: 0px 2px 0px 0px;
+}
+
+.rightSide {
+    width: 330px;
+    float: right;
+    height: 100vh;
+    border-style: solid;
+    border-width: 0px 0px 0px 2px;
+}
+
+.cookie {
+    margin-top: 12px;
+}
+
+.version-number {
+    position: absolute;
+    left: 50px;
+    top: 9.5px;
+    margin: 0px;
+    font-family: monospace;
+    font-size: 20px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.version-switch-info {
+    border-style: solid;
+    border-width: 3px;
+    position: absolute;
+    width: 112px;
+    height: 45px;
+    display: none;
+    bottom: 30px;
+    left: 48px;
+    font-size: 10px;
+}
+
+/* random specific stuff */
+.upgradesMarker {
+    margin-top: 10px;
+    margin-bottom: 3px;
+}
+
+.buildingsMarker {
+    margin-top: 5px;
+    margin-bottom: 3px;
+}
+
+/* social links stuff */
+.social-links {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    width: 312px;
+    height: 40px;
+}
+.github {
+    scale: 30%;
+    position: absolute;
+    left: -28px;
+    bottom: -27px;
+}
+
+/* universal upgrade css */
+.building-already-unlock {
+    width: 312px;
+    height: 64px;
+    border-style: solid;
+    border-width: 3px;
+    transition: 0.3s;
+}
+.building-already-unlock:hover {
+    border-style: solid;
+    border-color: gray;
+    border-width: 3px;
+}
+
+.building-need-unlock {
+    width: 312px;
+    height: 64px;
+    border-style: solid;
+    border-width: 3px;
+    display: none;
+    transition: 0.3s;
+}
+.building-need-unlock:hover {
+    border-style: solid;
+    border-color: gray;
+    border-width: 3px;
+}
+
+.building-content {
+    display: inline-block;
+    position: absolute;
+    width: 248px;
+    height: 64px;
+}
+
+.buildings-bought {
+    font-size: 35px;
+    margin: 0px;
+    top: 12px;
+    right: 10px;
+    position: absolute;
+    font-family: monospace;
+}
+
+.building-price {
+    font-size: 22px;
+    display: inline;
+    line-height: 1px;
+    position: absolute;
+    left: 4px;
+}
+
+.building-icon {
+    width: 64px;
+    height: 64px;
+    float: left;
+}
+
+/* building icon css */
+.keyboard-icon {
+    background: url(img/keyboard-icon.png);
+}
+
+.grandpa-icon {
+    background: url(img/grandpa-temp.png);
+}
+
+.ranch-icon {
+    background: url(img/ranch-icon.png);
+}
+
+.tv-icon {
+    background: url(img/tv.png);
+}
+
+.laborer-icon {
+    background: url(img/laborer.png);
+}
+
+.wallet-icon {
+    background-image: url(img/wallet.png);
+}
+
+.church-icon {
+    background-image: url(img/church.png);
+}
+
+/* Popup CSS */
+.popup {
+    border-style: solid;
+    border-width: 3px;
+    border-color: red;
+    width: 128px;
+    height: 96px;
+    background-color: white;
+    text-align: center;
+    display: none;
+    position: absolute;
+    top:  50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.popupButton {
+    display: block;
+}
+.popup-button-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.popup-content {
+    margin-left: 8px;
+    margin-right: 8px;
+}
