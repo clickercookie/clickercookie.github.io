@@ -90,6 +90,7 @@ div {
     -webkit-flex: auto;
     flex: auto;
     background-color: rgb(255, 243, 209);
+    float: right;
 }
 
 .upgrade-viewer-content {
@@ -106,10 +107,11 @@ div {
 
 .leftSide {
     width: 312px;
-    position: absolute;
     height: 100vh;
     border-style: solid;
     border-width: 0px 2px 0px 0px;
+    display: flex;
+    flex-direction: column;
 }
 
 .rightSide {
@@ -118,10 +120,18 @@ div {
     height: 100vh;
     border-style: solid;
     border-width: 0px 0px 0px 2px;
+    display: flex;
+    flex-direction: column;
 }
 
 .cookie {
     margin-top: 12px;
+    width: 256px;
+    height: 256px;
+}
+
+.cookies-per-second-counter {
+    margin-top: 0px;
 }
 
 .version-number {
@@ -291,4 +301,50 @@ div {
 .popup-content {
     margin-left: 8px;
     margin-right: 8px;
+}
+
+/* Stats CSS */
+.stats-popup {
+    border-style: solid;
+    border-width: 3px;
+    border-color: black;
+    width: 90vw;
+    height: 85vh;
+    background-color: white;
+    text-align: center;
+    position: absolute;
+    top:  50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    display: none;
+}
+
+.stats-title {
+    font-size: 35px;
+    font-family: monospace;
+    margin-top: 12px;
+    margin-bottom: 8px;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+}
+
+.stats-button {
+    border-style: solid;
+    border-width: 2px;
+    width: 72px;
+    height: 36px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 0px;
+    border-right-width: 2px;
+}
+
+.stats-text {
+    margin: 0px;
+    text-align: center;
+    margin-top: 9px;
+}
+
+.stat-info {
+    margin: 0px;
 }

@@ -91,6 +91,7 @@ var totalCookies = 0;
 var totalCookiesView = Math.round(totalCookies * 10) / 10; // merge totalcookies & totalcookies view later
 var cookiesPerSecond = 0;
 var cookiesPerSecondView = cookiesPerSecond;
+var statsUp = 0;
 
 // timer things
 const intervalCPSU = setInterval(cookiesPerSecondUpdate, 1000);
@@ -126,7 +127,8 @@ function perMillisecondUniversal() {
             document.getElementById("upgrade0").style.display = "inline-block";
         }
         if (upgrade0sBought == 1 && keyboardsBought >= 5) {
-            createUpgrade("upgrade0","Obsidian Keys","Multiplys keyboard and clicking cookies by 2","so heavy they're always pressed",500,"img/upgrades/obsidian-keys.png")
+            createUpgrade("upgrade0","Obsidian Keys","Multiplys keyboard and clicking cookies by 2","so heavy they're always pressed",500,"img/upgrades/obsidian-keys.png");
+            upgrade0Hovered();
         }
         // Grandpas
         if (grandpasBought == 1 && upgrade1sBought == 0) {
@@ -201,6 +203,11 @@ function perMillisecondUniversal() {
         createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: Multiple of same upgrade or identifier is not set!<br>Please report this to the GitHub accessable in the bottom left corner");
     }
 
+    // set statistic page statistics
+    document.getElementById("cookiesStat").innerHTML = "Cookies: " + cookiesForCounter;
+    document.getElementById("allTimeCookies").innerHTML = "All Time Cookies: " + totalCookiesView;
+    document.getElementById("cookiesPerSecondStat").innerHTML = "Cookies Per Second: " + cookiesPerSecondView;
+
     // set number of bought to bought (not required unless number of bought is set in console)
     document.getElementById("keyboardsBought").innerHTML = +keyboardsBought;
     document.getElementById("grandpasBought").innerHTML = +grandpasBought;
@@ -238,12 +245,14 @@ function setCookies(x) {
     cookies = x;
     totalCookies = totalCookies + x;
     reloadCookieCounter();
+    document.getElementById("ifCheatedStat").innerHTML = "<b>You have cheated on this playthrough!</b>"
 }
 
 function setCPS(x) {
     cookiesPerSecond = x;
     cookiesPerSecondView = Math.round(cookiesPerSecond * 10) / 10;
     document.getElementById("cookiesPerSecondCounter").innerHTML = "Cookies Per Second: " +cookiesPerSecondView;
+    document.getElementById("ifCheatedStat").innerHTML = "<b>You have cheated on this playthrough!</b>"
 }
 
 function versionSwitchMain() {
@@ -602,6 +611,18 @@ function destroySimplePopUp() {
     document.getElementById("popup").style.display = "none";
     document.getElementById("popupContent").innerHTML = "null";
     document.getElementById("popupButton").style.display = "none";
+}
+
+function toggleStats() {
+    switch (statsUp) {
+        case 0:
+            statsUp = 1;
+            document.getElementById("statsPopup").style.display = "block";
+            break;
+        case 1:
+            statsUp = 0;
+            document.getElementById("statsPopup").style.display = "none";
+    }
 }
 
 console.log("Everything appears to have run successfully.");

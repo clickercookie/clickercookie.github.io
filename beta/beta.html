@@ -9,7 +9,7 @@
         <div class="leftSide">
             <img class="cookie" onClick="cookieClicked()" src="img/cookie.png" alt="cookie">
             <h3 id="cookieCounter">Cookies: 0</h3>
-            <h4 id ="cookiesPerSecondCounter">Cookies Per Second: 0</h4>
+            <h4 id="cookiesPerSecondCounter" class="cookies-per-second-counter">Cookies Per Second: 0</h4>
         </div>
         <div class="social-links">
             <a href="https://github.com/clickercookie/clickercookie.github.io">
@@ -33,6 +33,9 @@
                     <p id="upgradePrice" class="upgradePrice">Upgrade Price: </p>
                     <p id="upgradeDesc" class="upgrade-desc">Upgrade Description: </p>
                 </div>
+            </div>
+            <div id="statsButton" class="stats-button" onClick="toggleStats()">
+                <p class="stats-text">Stats</p>
             </div>
         </div>
         <div class="rightSide">
@@ -130,7 +133,13 @@
                 </table>
 
             </div>
-
+            <div id="statsPopup" class="stats-popup">
+                <h3 class="stats-title">Statistics</h3>
+                <p class="stat-info" id="cookiesStat">Cookies: 0</p>
+                <p class="stat-info" id="allTimeCookies">All Time Cookies: 0</p>
+                <p class="stat-info" id="cookiesPerSecondStat">Cookies Per Second: 0</p>
+                <p class="stat-info" id="ifCheatedStat"></p>
+            </div>
     </body>
     <script src="beta.js"></script>
 </html>
