@@ -126,7 +126,7 @@ function perMillisecondUniversal() {
             document.getElementById("upgrade0").style.display = "inline-block";
         }
         if (upgrade0sBought == 1 && keyboardsBought >= 5) {
-            createUpgrade("upgrade0","Obsidian Keys","Multiplys keyboard and clicking cookies by 2","so heavy they're always pressed",500,"img/unknown-64-64.png")
+            createUpgrade("upgrade0","Obsidian Keys","Multiplys keyboard and clicking cookies by 2","so heavy they're always pressed",500,"img/upgrades/obsidian-keys.png")
         }
         // Grandpas
         if (grandpasBought == 1 && upgrade1sBought == 0) {
