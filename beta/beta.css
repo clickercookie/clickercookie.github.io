@@ -10,16 +10,21 @@ h1 {
     font-size: 50px;
     text-align: center;
     margin: 3px;
+    color: white;
+    text-shadow: 0px 1px 4px black;
 }
 
 h3 {
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
+    color: white;
+    text-shadow: 0px 1px 4px black;
 }
 
 h4 {
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
+    color: white;
 }
 
 p {
@@ -31,6 +36,12 @@ p {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    color: white;
+}
+
+a {
+    font-weight: bold;
+    color: white;
 }
 
 img {
@@ -61,18 +72,17 @@ div {
 
 .upgrade-name {
     margin: 2px;
+    color: black;
 }
 .upgrade-price{
-    margin: 2px;
+    margin-left: 2px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    color: black;
 }
 .upgrade-desc {
     margin: 2px;
-}
-
-.middle {
-    -webkit-flex: auto;
-    flex: auto;
-    height: 30px;
+    color: black;
 }
 
 /* thing that displays upgrade info */
@@ -90,11 +100,14 @@ div {
     -webkit-flex: auto;
     flex: auto;
     background-color: rgb(255, 243, 209);
-    float: right;
+    position: absolute;
+    right: 331px;
+    color: black
 }
 
 .upgrade-viewer-content {
     display: block;
+    color: black;
 }
 
 .upgrade {
@@ -109,9 +122,11 @@ div {
     width: 312px;
     height: 100vh;
     border-style: solid;
-    border-width: 0px 2px 0px 0px;
+    border-width: 0px 8px 0px 0px;
+    border-color: rgb(121, 77, 46);
     display: flex;
     flex-direction: column;
+    background-image: url(img/background.png);
 }
 
 .rightSide {
@@ -119,19 +134,56 @@ div {
     float: right;
     height: 100vh;
     border-style: solid;
-    border-width: 0px 0px 0px 2px;
+    border-width: 0px 0px 0px 8px;
+    border-color: rgb(121, 77, 46);
     display: flex;
     flex-direction: column;
+    background-image: url(img/background.png);
+}
+
+.middle {
+    -webkit-flex: auto;
+    flex: auto;
+    height: 100vh;
+    background: url(img/background.png)
 }
 
 .cookie {
     margin-top: 12px;
+    margin-bottom: 12px;
     width: 256px;
     height: 256px;
 }
 
+.cookie-counter {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    font-size: 18px;
+    color: white;
+    text-shadow: 0px 1px 4px black;
+}
+
 .cookies-per-second-counter {
-    margin-top: 0px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    font-size: 14px;
+    color: white;
+    text-shadow: 0px 1px 4px black;
+}
+
+.cookie-counter-wrapper {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.middle-buttons {
+    display: flex;
+    flex: auto;
+    height: 100px;
+    background-image: url(img/background.png);
+    border-style: solid;
+    border-color: rgb(121, 77, 46);
+    border-width: 0px;
+    border-bottom-width: 8px;
 }
 
 .version-number {
@@ -139,7 +191,6 @@ div {
     left: 50px;
     top: 9.5px;
     margin: 0px;
-    font-family: monospace;
     font-size: 20px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -148,6 +199,9 @@ div {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    color: white;
+    font-family: monospace;
+    text-shadow: 0px 1px 4px black;
 }
 
 .version-switch-info {
@@ -160,6 +214,8 @@ div {
     bottom: 30px;
     left: 48px;
     font-size: 10px;
+    background-color: rgb(255, 243, 209);
+    color: black;
 }
 
 /* random specific stuff */
@@ -171,6 +227,10 @@ div {
 .buildingsMarker {
     margin-top: 5px;
     margin-bottom: 3px;
+}
+
+.leftSidePush {
+    width: 320px;
 }
 
 /* social links stuff */
@@ -185,20 +245,22 @@ div {
     scale: 30%;
     position: absolute;
     left: -28px;
-    bottom: -27px;
+    bottom: -28px;
 }
 
-/* universal upgrade css */
+/* universal building css */
 .building-already-unlock {
     width: 312px;
     height: 64px;
     border-style: solid;
+    border-color: rgb(248, 255, 198);
     border-width: 3px;
     transition: 0.3s;
+    background-color: rgb(217, 215, 165);
 }
 .building-already-unlock:hover {
     border-style: solid;
-    border-color: gray;
+    border-color: rgb(249, 255, 164);
     border-width: 3px;
 }
 
@@ -206,13 +268,15 @@ div {
     width: 312px;
     height: 64px;
     border-style: solid;
+    border-color: rgb(248, 255, 198);
     border-width: 3px;
     display: none;
     transition: 0.3s;
+    background-color: rgb(217, 215, 165);
 }
 .building-need-unlock:hover {
     border-style: solid;
-    border-color: gray;
+    border-color: rgb(249, 255, 164);
     border-width: 3px;
 }
 
@@ -221,6 +285,7 @@ div {
     position: absolute;
     width: 248px;
     height: 64px;
+    text-shadow: 0px 1px 4px black;
 }
 
 .buildings-bought {
@@ -319,32 +384,80 @@ div {
     display: none;
 }
 
-.stats-title {
+.middle-title {
     font-size: 35px;
     font-family: monospace;
     margin-top: 12px;
-    margin-bottom: 8px;
+    margin-bottom: 15px;
     text-decoration: underline;
     text-underline-offset: 0.15em;
+    font-weight: bold;
+}
+
+.middle-subtitle {
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 12px;
+    margin-bottom: 15px;
+    margin-left: 6px;
+    font-weight: bold;
 }
 
 .stats-button {
     border-style: solid;
     border-width: 2px;
-    width: 72px;
-    height: 36px;
+    width: 110px;
+    height: 50px;
     border-top-width: 2px;
     border-bottom-width: 2px;
     border-left-width: 0px;
     border-right-width: 2px;
+    float: left;
+    background-color: rgb(255, 243, 209);
 }
 
 .stats-text {
     margin: 0px;
     text-align: center;
-    margin-top: 9px;
+    margin-top: 10px;
+    font-size: 28px;
+    font-family: "Lucida Console", "Courier New", monospace;
+    color: black;
 }
 
-.stat-info {
-    margin: 0px;
+.button-paragraph-text {
+    margin-left: 7px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.button-paragraph-text-gray {
+    margin-left: 7px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    color: gray;
+    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.middle-text-main {
+    display: none;
+    color: white;
+}
+
+/* Info CSS */
+.info-button {
+    border-style: solid;
+    border-width: 2px;
+    width: 110px;
+    height: 50px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-right-width: 0px;
+    float: right;
+    margin-left: auto;
+    background-color: rgb(255, 243, 209);
 }

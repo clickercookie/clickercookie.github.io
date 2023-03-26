@@ -1,5 +1,5 @@
 // Variable definitions
-const version = "0.4";
+const version = "0.4.1";
 // cookies
 var cookies = 0;
 var cookiesForCounter = Math.floor(cookies);
@@ -91,7 +91,11 @@ var totalCookies = 0;
 var totalCookiesView = Math.round(totalCookies * 10) / 10; // merge totalcookies & totalcookies view later
 var cookiesPerSecond = 0;
 var cookiesPerSecondView = cookiesPerSecond;
+var buildingsOwned = 0;
+
+// middle other occupiers
 var statsUp = 0;
+var infoUp = 0;
 
 // timer things
 const intervalCPSU = setInterval(cookiesPerSecondUpdate, 1000);
@@ -128,7 +132,6 @@ function perMillisecondUniversal() {
         }
         if (upgrade0sBought == 1 && keyboardsBought >= 5) {
             createUpgrade("upgrade0","Obsidian Keys","Multiplys keyboard and clicking cookies by 2","so heavy they're always pressed",500,"img/upgrades/obsidian-keys.png");
-            upgrade0Hovered();
         }
         // Grandpas
         if (grandpasBought == 1 && upgrade1sBought == 0) {
@@ -202,11 +205,17 @@ function perMillisecondUniversal() {
     if (upgrade0Identifier == upgrade1Identifier) {
         createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: Multiple of same upgrade or identifier is not set!<br>Please report this to the GitHub accessable in the bottom left corner");
     }
-
+    // stats that need to be updated beforehand
+    buildingsOwned = keyboardsBought + grandpasBought + ranchesBought + tvsBought + laborersBought + walletsBought + churchesBought;
+    
     // set statistic page statistics
-    document.getElementById("cookiesStat").innerHTML = "Cookies: " + cookiesForCounter;
-    document.getElementById("allTimeCookies").innerHTML = "All Time Cookies: " + totalCookiesView;
-    document.getElementById("cookiesPerSecondStat").innerHTML = "Cookies Per Second: " + cookiesPerSecondView;
+    if (statsUp == 1) {
+        document.getElementById("cookiesStat").innerHTML = "Cookies: " + cookiesForCounter;
+        document.getElementById("allTimeCookies").innerHTML = "All Time Cookies: " + totalCookiesView;
+        document.getElementById("cookiesPerSecondStat").innerHTML = "Cookies Per Second: " + cookiesPerSecondView;
+        document.getElementById("buildingsOwnedStat").innerHTML = "Buildings Owned: " + buildingsOwned;
+        document.getElementById("cookieBeenClickedTimesStat").innerHTML = "Total Cookie Clicks: " + cookieBeenClickedTimes; // move to cookieClicked() later
+    }
 
     // set number of bought to bought (not required unless number of bought is set in console)
     document.getElementById("keyboardsBought").innerHTML = +keyboardsBought;
@@ -245,7 +254,7 @@ function setCookies(x) {
     cookies = x;
     totalCookies = totalCookies + x;
     reloadCookieCounter();
-    document.getElementById("ifCheatedStat").innerHTML = "<b>You have cheated on this playthrough!</b>"
+    document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!"
 }
 
 function setCPS(x) {
@@ -617,11 +626,26 @@ function toggleStats() {
     switch (statsUp) {
         case 0:
             statsUp = 1;
-            document.getElementById("statsPopup").style.display = "block";
+            document.getElementById("statsMiddleText").style.display = "block";
+            document.getElementById("middle").style.background = "black";
             break;
         case 1:
             statsUp = 0;
-            document.getElementById("statsPopup").style.display = "none";
+            document.getElementById("statsMiddleText").style.display = "none";
+            document.getElementById("middle").style.background = "url(img/background.png)";
+    }
+}
+function toggleInfo() {
+    switch (infoUp) {
+        case 0:
+            infoUp = 1;
+            document.getElementById("infoMiddleText").style.display = "block";
+            document.getElementById("middle").style.background = "black";
+            break;
+        case 1:
+            infoUp = 0;
+            document.getElementById("infoMiddleText").style.display = "none";
+            document.getElementById("middle").style.background = "url(img/background.png)";
     }
 }
 

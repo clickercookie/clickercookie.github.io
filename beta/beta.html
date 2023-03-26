@@ -8,8 +8,11 @@
     <body>
         <div class="leftSide">
             <img class="cookie" onClick="cookieClicked()" src="img/cookie.png" alt="cookie">
-            <h3 id="cookieCounter">Cookies: 0</h3>
-            <h4 id="cookiesPerSecondCounter" class="cookies-per-second-counter">Cookies Per Second: 0</h4>
+            <div class="cookie-counter-wrapper">
+                <h3 id="cookieCounter" class="cookie-counter">Cookies: 0</h3>
+                <h4 id="cookiesPerSecondCounter" class="cookies-per-second-counter">Cookies Per Second: 0</h4>
+            </div>
+            <div class="leftSidePush"></div>
         </div>
         <div class="social-links">
             <a href="https://github.com/clickercookie/clickercookie.github.io">
@@ -17,7 +20,7 @@
             </a>
             <h5 id="versionNumber" class="version-number" onClick="versionSwitchMain()" onMouseOver="versionNumberMousedOver()" onMouseOut="versionNumberMousedOverUndo()">Version: null</h5>
             <div id="versionSwitchInfo" class="version-switch-info">
-                <p style="margin:0px;">Clicking this will switch to the main branch, this will wipe your current progress!</p>
+                <p style="margin:0px; color:black; text-align:center;">Clicking this will switch to the main branch, this will wipe your current progress!</p>
             </div>
         </div>
         <div class="popup" id="popup">
@@ -30,12 +33,33 @@
             <div id="upgradeViewer" class="upgrade-viewer">
                 <div id="upgradeViewerContent" class="upgrade-viewer-content">
                     <p id="upgradeName" class="upgrade-name">Upgrade Name: </p>
-                    <p id="upgradePrice" class="upgradePrice">Upgrade Price: </p>
+                    <p id="upgradePrice" class="upgrade-price">Upgrade Price: </p>
                     <p id="upgradeDesc" class="upgrade-desc">Upgrade Description: </p>
                 </div>
             </div>
-            <div id="statsButton" class="stats-button" onClick="toggleStats()">
-                <p class="stats-text">Stats</p>
+            <div class="middle-buttons" id="middleButtons">
+                <div id="statsButton" class="stats-button" onClick="toggleStats()">
+                    <p class="stats-text">Stats</p>
+                </div>
+                <div id="infoButton" class="info-button" onClick="toggleInfo()">
+                    <p class="stats-text">Info</p>
+                </div>
+            </div>
+            <!-- middle text html -->
+            <div id="statsMiddleText" class="middle-text-main">
+                <h3 class="middle-title">Statistics</h3>
+                <p class="button-paragraph-text-gray" id="cookiesStat">Cookies: 0</p>
+                <p class="button-paragraph-text-gray" id="allTimeCookies">All Time Cookies: 0</p>
+                <p class="button-paragraph-text-gray" id="buildingsOwnedStat">Buildings Owned: 0</p>
+                <p class="button-paragraph-text-gray" id="cookiesPerSecondStat">Cookies Per Second: 0</p>
+                <p class="button-paragraph-text-gray" id="cookieBeenClickedTimesStat">Total Cookie Clicks: 0</p>
+                <p class="button-paragraph-text-gray" id="ifCheatedStat" style="color:white;"></p>
+            </div>
+            <div id="infoMiddleText" class="middle-text-main">
+                <h3 class="middle-title">Infomation</h3>
+                <h5 class="middle-subtitle">About:</h5>
+                <p class="button-paragraph-text">Clicker Cookie is a totally original game about clicking a cookie. Made by <a href="https://github.com/FifthTundraG">FifthTundraG</a> in a few hours, this game went from a random clone of a decade old, actively developed clicker game to something that spiraled into a land of insanity.</p>
+                <p class="button-paragraph-text">Original game made by Orteil and Opti. <small>we :heart: you!</small></p>
             </div>
         </div>
         <div class="rightSide">
@@ -131,15 +155,8 @@
                         </td>
                     </tr>
                 </table>
-
             </div>
-            <div id="statsPopup" class="stats-popup">
-                <h3 class="stats-title">Statistics</h3>
-                <p class="stat-info" id="cookiesStat">Cookies: 0</p>
-                <p class="stat-info" id="allTimeCookies">All Time Cookies: 0</p>
-                <p class="stat-info" id="cookiesPerSecondStat">Cookies Per Second: 0</p>
-                <p class="stat-info" id="ifCheatedStat"></p>
-            </div>
+        </div>
     </body>
     <script src="beta.js"></script>
 </html>
