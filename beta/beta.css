@@ -126,7 +126,7 @@ div {
     border-color: rgb(121, 77, 46);
     display: flex;
     flex-direction: column;
-    background-image: url(img/background.png);
+    background-image: url(img/backgrounds/background-blue.png);
 }
 
 .rightSide {
@@ -138,14 +138,14 @@ div {
     border-color: rgb(121, 77, 46);
     display: flex;
     flex-direction: column;
-    background-image: url(img/background.png);
+    background-image: url(img/backgrounds/background-blue.png);
 }
 
 .middle {
     -webkit-flex: auto;
     flex: auto;
     height: 100vh;
-    background: url(img/background.png)
+    background: url(img/backgrounds/background-blue.png)
 }
 
 .cookie {
@@ -179,7 +179,7 @@ div {
     display: flex;
     flex: auto;
     height: 100px;
-    background-image: url(img/background.png);
+    background-image: url(img/backgrounds/background-blue.png);
     border-style: solid;
     border-color: rgb(121, 77, 46);
     border-width: 0px;
@@ -215,7 +215,6 @@ div {
     left: 48px;
     font-size: 10px;
     background-color: rgb(255, 243, 209);
-    color: black;
 }
 
 /* random specific stuff */
@@ -227,6 +226,10 @@ div {
 .buildingsMarker {
     margin-top: 5px;
     margin-bottom: 3px;
+}
+
+.store-heading {
+    margin-bottom: 0px;
 }
 
 .leftSidePush {
@@ -366,6 +369,16 @@ div {
 .popup-content {
     margin-left: 8px;
     margin-right: 8px;
+    color: black;
+}
+
+.left-middle-buttons {
+    display: flex;
+    flex-direction: column;
+}
+.right-middle-buttons {
+    float: right;
+    margin-left: auto;
 }
 
 /* Stats CSS */
@@ -403,6 +416,11 @@ div {
     font-weight: bold;
 }
 
+.middle-text-main {
+    display: none;
+    color: white;
+}
+
 .stats-button {
     border-style: solid;
     border-width: 2px;
@@ -416,13 +434,14 @@ div {
     background-color: rgb(255, 243, 209);
 }
 
-.stats-text {
+.middle-button-name {
     margin: 0px;
     text-align: center;
-    margin-top: 10px;
-    font-size: 28px;
+    margin-top: 12px;
+    font-size: 24px;
     font-family: "Lucida Console", "Courier New", monospace;
-    color: black;
+    color: white;
+    text-shadow: 0px 1px 4px black;
 }
 
 .button-paragraph-text {
@@ -442,11 +461,6 @@ div {
     font-weight: bold;
 }
 
-.middle-text-main {
-    display: none;
-    color: white;
-}
-
 /* Info CSS */
 .info-button {
     border-style: solid;
@@ -457,6 +471,20 @@ div {
     border-bottom-width: 2px;
     border-left-width: 2px;
     border-right-width: 0px;
+    float: right;
+    margin-left: auto;
+    background-color: rgb(255, 243, 209);
+}
+
+.options-button {
+    border-style: solid;
+    border-width: 2px;
+    width: 110px;
+    height: 50px;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 2px;
     float: right;
     margin-left: auto;
     background-color: rgb(255, 243, 209);

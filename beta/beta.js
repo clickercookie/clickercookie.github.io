@@ -1,101 +1,112 @@
-// Variable definitions
+// variable definitions
 const version = "0.4.1";
+const versionBranch = 1; // 0 is main, 1 is beta
+
+// customization
+const backgroundForm = document.getElementById("backgroundSelect");
+let currentBackground = "url(img/backgrounds/background-blue.png)";
+
 // cookies
-var cookies = 0;
-var cookiesForCounter = Math.floor(cookies);
+let cookies = 0;
+let cookiesForCounter = Math.floor(cookies);
 // upgrades
-var upgrade0sBought = 0;
-var upgrade1sBought = 0;
-var upgrade2sBought = 0;
-var upgrade3sBought = 0;
-var upgrade4sBought = 0;
-var upgrade5sBought = 0;
-var upgrade6sBought = 0;
+let upgrade0sBought = 0;
+let upgrade1sBought = 0;
+let upgrade2sBought = 0;
+let upgrade3sBought = 0;
+let upgrade4sBought = 0;
+let upgrade5sBought = 0;
+let upgrade6sBought = 0;
 
 // yes, i know, this is WILDLY INEFFICENT. If you can code better than me, please rewrite this better :D
-var upgrade0Name = "Reinforced Keys";
-var upgrade1Name = "Hardwood Walking Stick";
-var upgrade2Name = "Pig Slop";
-var upgrade3Name = "LED Display";
-var upgrade4Name = "Medkits";
-var upgrade5Name = "200 dollar bills";
-var upgrade6Name = "null";
-var upgrade0Description = "Multiplys Keyboard and clicking cookie production by 2" + "<br>" + "<i>'" + "press harder" + "'</i>";
-var upgrade1Description = "Multiplys Grandpa production by 2" + "<br>" + "<i>'" + "nonna dat softwood crap" + "'</i>";
-var upgrade2Description = "Multiplys Ranch production by 2" + "<br>" + "<i>'" + "Wait, what have we been feeding them before now?" + "'</i>";
-var upgrade3Description = "Multiplys TV production by 2" + "<br>" + "<i>'" + "Better than that CRT junk" + "'</i>";
-var upgrade4Description = "Multiplys Laborer production by 2" + "<br>" + "<i>'" + "Constant supply of Band-Aids in case of emergency" + "'</i>";
-var upgrade5Description = "Multiplys Wallet production by 2" + "<br>" + "<i>'" + "Don't know how the goverment is going to take to this currency" + "'</i>";
-var upgrade6Description = "null";
-var upgrade0Price = 100;
-var upgrade1Price = 1000;
-var upgrade2Price = 11000;
-var upgrade3Price = 120000;
-var upgrade4Price = 1300000;
-var upgrade5Price = 14000000;
-var upgrade6Price = 100;
-var upgrade0Identifier = "up0";
-var upgrade1Identifier = "up1";
-var upgrade2Identifier = "up2";
-var upgrade3Identifier = "up3";
-var upgrade4Identifier = "up4";
-var upgrade5Identifier = "up4";
-var upgrade6Identifier = "up4";
+let upgrade0Name = "Reinforced Keys";
+let upgrade1Name = "Hardwood Walking Stick";
+let upgrade2Name = "Pig Slop";
+let upgrade3Name = "LED Display";
+let upgrade4Name = "Medkits";
+let upgrade5Name = "200 dollar bills";
+let upgrade6Name = "null";
+let upgrade0Description = "Multiplys Keyboard and clicking cookie production by 2" + "<br>" + "<i>'" + "press harder" + "'</i>";
+let upgrade1Description = "Multiplys Grandpa production by 2" + "<br>" + "<i>'" + "nonna dat softwood crap" + "'</i>";
+let upgrade2Description = "Multiplys Ranch production by 2" + "<br>" + "<i>'" + "Wait, what have we been feeding them before now?" + "'</i>";
+let upgrade3Description = "Multiplys TV production by 2" + "<br>" + "<i>'" + "Better than that CRT junk" + "'</i>";
+let upgrade4Description = "Multiplys Laborer production by 2" + "<br>" + "<i>'" + "Constant supply of Band-Aids in case of emergency" + "'</i>";
+let upgrade5Description = "Multiplys Wallet production by 2" + "<br>" + "<i>'" + "Don't know how the goverment is going to take to this currency" + "'</i>";
+let upgrade6Description = "null";
+let upgrade0Price = 100;
+let upgrade1Price = 1000;
+let upgrade2Price = 11000;
+let upgrade3Price = 120000;
+let upgrade4Price = 1300000;
+let upgrade5Price = 14000000;
+let upgrade6Price = 100;
+let upgrade0Identifier = "up0";
+let upgrade1Identifier = "up1";
+let upgrade2Identifier = "up2";
+let upgrade3Identifier = "up3";
+let upgrade4Identifier = "up4";
+let upgrade5Identifier = "up4";
+let upgrade6Identifier = "up4";
 
 // keyboards
-var keyboardsBought = 0;
-var keyboardCPSGain = 0.1;
-var keyboardCPSGiven = 0;
-var keyboardUpgradeCost = 15;
+let keyboardsBought = 0;
+let keyboardCPSGain = 0.1;
+let keyboardCPSGiven = 0;
+let keyboardUpgradeCost = 15;
 // grandpas
-var grandpasBought = 0;
-var grandpaCPSGain = 1;
-var grandpaCPSGiven = 0;
-var grandpaUpgradeCost = 100;
-var grandpaUnlocked = 0;
+let grandpasBought = 0;
+let grandpaCPSGain = 1;
+let grandpaCPSGiven = 0;
+let grandpaUpgradeCost = 100;
+let grandpaUnlocked = 0;
 // ranches
-var ranchesBought = 0;
-var ranchCPSGain = 8;
-var ranchCPSGiven = 0;
-var ranchUpgradeCost = 1100;
-var ranchUnlocked = 0;
+let ranchesBought = 0;
+let ranchCPSGain = 8;
+let ranchCPSGiven = 0;
+let ranchUpgradeCost = 1100;
+let ranchUnlocked = 0;
 // televisions
-var tvsBought = 0;
-var tvCPSGain = 47;
-var tvCPSGiven = 0;
-var tvUpgradeCost = 12000;
-var tvUnlocked = 0;
+let tvsBought = 0;
+let tvCPSGain = 47;
+let tvCPSGiven = 0;
+let tvUpgradeCost = 12000;
+let tvUnlocked = 0;
 // laborers
-var laborersBought = 0;
-var laborerCPSGain = 260;
-var laborerCPSGiven = 0;
-var laborerUpgradeCost = 130000;
-var laborerUnlocked = 0;
+let laborersBought = 0;
+let laborerCPSGain = 260;
+let laborerCPSGiven = 0;
+let laborerUpgradeCost = 130000;
+let laborerUnlocked = 0;
 // wallets
-var walletsBought = 0;
-var walletCPSGain = 1440;
-var walletCPSGiven = 0;
-var walletUpgradeCost = 1400000;
-var walletUnlocked = 0;
+let walletsBought = 0;
+let walletCPSGain = 1440;
+let walletCPSGiven = 0;
+let walletUpgradeCost = 1400000;
+let walletUnlocked = 0;
 // churches
-var churchesBought = 0;
-var churchCPSGain = 7800;
-var churchCPSGiven = 0;
-var churchUpgradeCost = 20000000;
-var churchUnlocked = 0;
+let churchesBought = 0;
+let churchCPSGain = 7800;
+let churchCPSGiven = 0;
+let churchUpgradeCost = 20000000;
+let churchUnlocked = 0;
+
+// dev variables
+let devMode = 0;
+let devCPSGiven = 0;
 
 // stats
-var cookiesPerClick = 1;
-var cookieBeenClickedTimes = 0;
-var totalCookies = 0;
-var totalCookiesView = Math.round(totalCookies * 10) / 10; // merge totalcookies & totalcookies view later
-var cookiesPerSecond = 0;
-var cookiesPerSecondView = cookiesPerSecond;
-var buildingsOwned = 0;
+let cookiesPerClick = 1;
+let cookieBeenClickedTimes = 0;
+let totalCookies = 0;
+let totalCookiesView = Math.round(totalCookies * 10) / 10; // merge totalcookies & totalcookies view later
+let cookiesPerSecond = 0;
+let cookiesPerSecondView = cookiesPerSecond;
+let buildingsOwned = 0;
 
 // middle other occupiers
-var statsUp = 0;
-var infoUp = 0;
+let statsUp = 0;
+let infoUp = 0;
+let optionsUp = 0;
 
 // timer things
 const intervalCPSU = setInterval(cookiesPerSecondUpdate, 1000);
@@ -125,7 +136,7 @@ function perMillisecondUniversal() {
     cookiesPerSecondView = Math.round(cookiesPerSecond * 10) / 10;
     document.getElementById("cookiesPerSecondCounter").innerHTML = "Cookies Per Second: " +cookiesPerSecondView;
 
-    // Upgrade Unlocks (very long) (upgrades accepted) (create a github pull request)
+    // Upgrade Unlocks (very long) (fixes accepted) (create a github pull request)
         // Keyboards
         if (keyboardsBought == 1 && upgrade0sBought == 0) {
             document.getElementById("upgrade0").style.display = "inline-block";
@@ -226,7 +237,7 @@ function perMillisecondUniversal() {
     document.getElementById("walletsBought").innerHTML = +walletsBought;
     document.getElementById("churchesBought").innerHTML = +churchesBought;
 
-    cookiesPerSecond = keyboardCPSGiven+grandpaCPSGiven+ranchCPSGiven+tvCPSGiven+laborerCPSGiven+walletCPSGiven+churchCPSGiven;
+    cookiesPerSecond = keyboardCPSGiven+grandpaCPSGiven+ranchCPSGiven+tvCPSGiven+laborerCPSGiven+walletCPSGiven+churchCPSGiven+devCPSGiven;
 }
 
 function cookiesPerSecondUpdate() {
@@ -237,7 +248,7 @@ function cookiesPerSecondUpdate() {
 
 function cookieClicked() {
     cookies = cookies + cookiesPerClick;
-    cookieBeenClickedTimes = cookieBeenClickedTimes + 1;
+    cookieBeenClickedTimes = cookieBeenClickedTimes + cookiesPerClick;
     totalCookies = totalCookies + 1;
     reloadCookieCounter();
     cookieClick.play();
@@ -251,21 +262,38 @@ function popupClicked() {
 }
 // dev commands
 function setCookies(x) {
-    cookies = x;
-    totalCookies = totalCookies + x;
-    reloadCookieCounter();
-    document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!"
+    if (devMode == 1) {
+        cookies = x;
+        totalCookies = totalCookies + x;
+        reloadCookieCounter();
+        document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
+    }
+    else {
+        console.log("You need developer mode ON to run this command.");
+    }
 }
 
 function setCPS(x) {
-    cookiesPerSecond = x;
-    cookiesPerSecondView = Math.round(cookiesPerSecond * 10) / 10;
-    document.getElementById("cookiesPerSecondCounter").innerHTML = "Cookies Per Second: " +cookiesPerSecondView;
-    document.getElementById("ifCheatedStat").innerHTML = "<b>You have cheated on this playthrough!</b>"
+    if (devMode == 1) {
+        devCPSGiven = x;
+        cookiesPerSecondView = Math.round(cookiesPerSecond * 10) / 10;
+        document.getElementById("cookiesPerSecondCounter").innerHTML = "Cookies Per Second: " +cookiesPerSecondView;
+        document.getElementById("ifCheatedStat").innerHTML = "<b>You have cheated on this playthrough!</b>";
+    }
+    else {
+        console.log("You need developer mode ON to run this command.");
+    }
 }
 
-function versionSwitchMain() {
-    window.location.href = "https://clickercookie.github.io";
+function versionSwitch() {
+    switch (versionBranch) {
+        case 0:
+            window.location.href = "beta/beta.html";
+            break;
+        case 1:
+            window.location.href = "https://clickercookie.github.io";
+            break;
+    }
 }
 
 // upgrades
@@ -622,30 +650,77 @@ function destroySimplePopUp() {
     document.getElementById("popupButton").style.display = "none";
 }
 
+function setBackground(color) {
+    currentBackground = "url(img/backgrounds/background-" + color + ".png)";
+    document.getElementById("leftSide").style.background = currentBackground;
+    document.getElementById("middleButtons").style.background = currentBackground;
+    document.getElementById("rightSide").style.background = currentBackground;
+
+    consoleLogDev("Background color set to: " + color);
+}
+
+function setDevMode(value) {
+    switch (value) {
+        case "off":
+            devMode = 0;
+            break;
+        case "on":
+            devMode = 1;
+            console.log("Developer Mode activated.");
+            document.getElementById("devModeSelect").disabled = true;
+            break;
+    }
+}
+
 function toggleStats() {
     switch (statsUp) {
         case 0:
-            statsUp = 1;
-            document.getElementById("statsMiddleText").style.display = "block";
-            document.getElementById("middle").style.background = "black";
+            if (optionsUp == 0 && infoUp == 0) {
+                statsUp = 1;
+                document.getElementById("statsMiddleText").style.display = "block";
+                document.getElementById("middle").style.background = "black";
+            }
             break;
         case 1:
             statsUp = 0;
             document.getElementById("statsMiddleText").style.display = "none";
-            document.getElementById("middle").style.background = "url(img/background.png)";
+            document.getElementById("middle").style.background = currentBackground;
     }
 }
 function toggleInfo() {
     switch (infoUp) {
         case 0:
-            infoUp = 1;
-            document.getElementById("infoMiddleText").style.display = "block";
-            document.getElementById("middle").style.background = "black";
+            if (optionsUp == 0 && statsUp == 0) {
+                infoUp = 1;
+                document.getElementById("infoMiddleText").style.display = "block";
+                document.getElementById("middle").style.background = "black";
+            }
             break;
         case 1:
             infoUp = 0;
             document.getElementById("infoMiddleText").style.display = "none";
-            document.getElementById("middle").style.background = "url(img/background.png)";
+            document.getElementById("middle").style.background = currentBackground;
+    }
+}
+function toggleOptions() {
+    switch (optionsUp) {
+        case 0:
+            if (infoUp == 0 && statsUp == 0) {
+                optionsUp = 1;
+                document.getElementById("optionsMiddleText").style.display = "block";
+                document.getElementById("middle").style.background = "black";
+            }
+            break;
+        case 1:
+            optionsUp = 0;
+            document.getElementById("optionsMiddleText").style.display = "none";
+            document.getElementById("middle").style.background = currentBackground;
+    }
+}
+
+function consoleLogDev(str) {
+    if (devMode == 1) {
+        console.log(str);
     }
 }
 
