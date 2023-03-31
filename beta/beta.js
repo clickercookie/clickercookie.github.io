@@ -248,8 +248,8 @@ function cookiesPerSecondUpdate() {
 
 function cookieClicked() {
     cookies = cookies + cookiesPerClick;
-    cookieBeenClickedTimes = cookieBeenClickedTimes + cookiesPerClick;
-    totalCookies = totalCookies + 1;
+    cookieBeenClickedTimes = cookieBeenClickedTimes + 1;
+    totalCookies = totalCookies + cookiesPerClick;
     reloadCookieCounter();
     cookieClick.play();
 }
