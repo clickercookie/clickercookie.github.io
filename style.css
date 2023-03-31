@@ -10,16 +10,21 @@ h1 {
     font-size: 50px;
     text-align: center;
     margin: 3px;
+    color: white;
+    text-shadow: 0px 1px 4px black;
 }
 
 h3 {
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
+    color: white;
+    text-shadow: 0px 1px 4px black;
 }
 
 h4 {
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
+    color: white;
 }
 
 p {
@@ -31,6 +36,12 @@ p {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    color: white;
+}
+
+a {
+    font-weight: bold;
+    color: white;
 }
 
 img {
@@ -61,18 +72,17 @@ div {
 
 .upgrade-name {
     margin: 2px;
+    color: black;
 }
 .upgrade-price{
-    margin: 2px;
+    margin-left: 2px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    color: black;
 }
 .upgrade-desc {
     margin: 2px;
-}
-
-.middle {
-    -webkit-flex: auto;
-    flex: auto;
-    height: 30px;
+    color: black;
 }
 
 /* thing that displays upgrade info */
@@ -90,10 +100,14 @@ div {
     -webkit-flex: auto;
     flex: auto;
     background-color: rgb(255, 243, 209);
+    position: absolute;
+    right: 331px;
+    color: black
 }
 
 .upgrade-viewer-content {
     display: block;
+    color: black;
 }
 
 .upgrade {
@@ -106,10 +120,13 @@ div {
 
 .leftSide {
     width: 312px;
-    position: absolute;
     height: 100vh;
     border-style: solid;
-    border-width: 0px 2px 0px 0px;
+    border-width: 0px 8px 0px 0px;
+    border-color: rgb(121, 77, 46);
+    display: flex;
+    flex-direction: column;
+    background-image: url(img/backgrounds/background-blue.png);
 }
 
 .rightSide {
@@ -117,11 +134,56 @@ div {
     float: right;
     height: 100vh;
     border-style: solid;
-    border-width: 0px 0px 0px 2px;
+    border-width: 0px 0px 0px 8px;
+    border-color: rgb(121, 77, 46);
+    display: flex;
+    flex-direction: column;
+    background-image: url(img/backgrounds/background-blue.png);
+}
+
+.middle {
+    -webkit-flex: auto;
+    flex: auto;
+    height: 100vh;
+    background: url(img/backgrounds/background-blue.png)
 }
 
 .cookie {
     margin-top: 12px;
+    margin-bottom: 12px;
+    width: 256px;
+    height: 256px;
+}
+
+.cookie-counter {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    font-size: 18px;
+    color: white;
+    text-shadow: 0px 1px 4px black;
+}
+
+.cookies-per-second-counter {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    font-size: 14px;
+    color: white;
+    text-shadow: 0px 1px 4px black;
+}
+
+.cookie-counter-wrapper {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.middle-buttons {
+    display: flex;
+    flex: auto;
+    height: 100px;
+    background-image: url(img/backgrounds/background-blue.png);
+    border-style: solid;
+    border-color: rgb(121, 77, 46);
+    border-width: 0px;
+    border-bottom-width: 8px;
 }
 
 .version-number {
@@ -129,7 +191,6 @@ div {
     left: 50px;
     top: 9.5px;
     margin: 0px;
-    font-family: monospace;
     font-size: 20px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -138,6 +199,9 @@ div {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    color: white;
+    font-family: monospace;
+    text-shadow: 0px 1px 4px black;
 }
 
 .version-switch-info {
@@ -150,6 +214,7 @@ div {
     bottom: 30px;
     left: 48px;
     font-size: 10px;
+    background-color: rgb(255, 243, 209);
 }
 
 /* random specific stuff */
@@ -161,6 +226,14 @@ div {
 .buildingsMarker {
     margin-top: 5px;
     margin-bottom: 3px;
+}
+
+.store-heading {
+    margin-bottom: 0px;
+}
+
+.leftSidePush {
+    width: 320px;
 }
 
 /* social links stuff */
@@ -175,20 +248,22 @@ div {
     scale: 30%;
     position: absolute;
     left: -28px;
-    bottom: -27px;
+    bottom: -28px;
 }
 
-/* universal upgrade css */
+/* universal building css */
 .building-already-unlock {
     width: 312px;
     height: 64px;
     border-style: solid;
+    border-color: rgb(248, 255, 198);
     border-width: 3px;
     transition: 0.3s;
+    background-color: rgb(217, 215, 165);
 }
 .building-already-unlock:hover {
     border-style: solid;
-    border-color: gray;
+    border-color: rgb(249, 255, 164);
     border-width: 3px;
 }
 
@@ -196,13 +271,15 @@ div {
     width: 312px;
     height: 64px;
     border-style: solid;
+    border-color: rgb(248, 255, 198);
     border-width: 3px;
     display: none;
     transition: 0.3s;
+    background-color: rgb(217, 215, 165);
 }
 .building-need-unlock:hover {
     border-style: solid;
-    border-color: gray;
+    border-color: rgb(249, 255, 164);
     border-width: 3px;
 }
 
@@ -211,6 +288,7 @@ div {
     position: absolute;
     width: 248px;
     height: 64px;
+    text-shadow: 0px 1px 4px black;
 }
 
 .buildings-bought {
@@ -253,8 +331,8 @@ div {
     background: url(img/tv.png);
 }
 
-.laborer-icon {
-    background: url(img/laborer.png);
+.worker-icon {
+    background: url(img/worker.png);
 }
 
 .wallet-icon {
@@ -291,4 +369,123 @@ div {
 .popup-content {
     margin-left: 8px;
     margin-right: 8px;
+    color: black;
+}
+
+.left-middle-buttons {
+    display: flex;
+    flex-direction: column;
+}
+.right-middle-buttons {
+    float: right;
+    margin-left: auto;
+}
+
+/* Stats CSS */
+.stats-popup {
+    border-style: solid;
+    border-width: 3px;
+    border-color: black;
+    width: 90vw;
+    height: 85vh;
+    background-color: white;
+    text-align: center;
+    position: absolute;
+    top:  50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    display: none;
+}
+
+.middle-title {
+    font-size: 35px;
+    font-family: monospace;
+    margin-top: 12px;
+    margin-bottom: 15px;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    font-weight: bold;
+}
+
+.middle-subtitle {
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 12px;
+    margin-bottom: 15px;
+    margin-left: 6px;
+    font-weight: bold;
+}
+
+.middle-text-main {
+    display: none;
+    color: white;
+}
+
+.stats-button {
+    border-style: solid;
+    border-width: 2px;
+    width: 110px;
+    height: 50px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 0px;
+    border-right-width: 2px;
+    float: left;
+    background-color: rgb(255, 243, 209);
+}
+
+.middle-button-name {
+    margin: 0px;
+    text-align: center;
+    margin-top: 12px;
+    font-size: 24px;
+    font-family: "Lucida Console", "Courier New", monospace;
+    color: white;
+    text-shadow: 0px 1px 4px black;
+}
+
+.button-paragraph-text {
+    margin-left: 7px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.button-paragraph-text-gray {
+    margin-left: 7px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    color: gray;
+    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+/* Info CSS */
+.info-button {
+    border-style: solid;
+    border-width: 2px;
+    width: 110px;
+    height: 50px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-right-width: 0px;
+    float: right;
+    margin-left: auto;
+    background-color: rgb(255, 243, 209);
+}
+
+.options-button {
+    border-style: solid;
+    border-width: 2px;
+    width: 110px;
+    height: 50px;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 2px;
+    float: right;
+    margin-left: auto;
+    background-color: rgb(255, 243, 209);
 }
