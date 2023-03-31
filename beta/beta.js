@@ -118,6 +118,14 @@ cookieClick.volume = 0.05;
 
 // set version
 document.getElementById("versionNumber").innerHTML = "Version: " +version;
+switch (versionBranch) {
+    case 0:
+        document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the beta branch, this will wipe your current progress!";
+        break;
+    case 1:
+        document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the main branch, this will wipe your current progress!";
+        break;
+}
 
 // set default upgrades
 document.getElementById("upgrade0").style.backgroundImage = "url(img/upgrades/reinforced-keys.png)";
@@ -171,7 +179,7 @@ function perMillisecondUniversal() {
     if (totalCookies >= 8000) {
         tvUnlocked = 1;
     }
-    if (totalCookies >= 50000) {
+    if (totalCookies >= 80000) {
         workerUnlocked = 1;
     }
     if (totalCookies >= 700000) {
@@ -495,7 +503,7 @@ function upgrade0Clicked() {
         keyboardCPSGain = keyboardCPSGain * 2;
         cookiesPerClick = cookiesPerClick * 2;
         upgrade0sBought = upgrade0sBought + 1;
-        upgrade0Hovered()
+        upgrade0Hovered();
         destroyUpgrade("upgrade0");
     }
 }
