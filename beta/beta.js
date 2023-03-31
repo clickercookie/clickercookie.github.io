@@ -30,7 +30,7 @@ let upgrade0Description = "Multiplys Keyboard and clicking cookie production by 
 let upgrade1Description = "Multiplys Grandpa production by 2" + "<br>" + "<i>'" + "nonna dat softwood crap" + "'</i>";
 let upgrade2Description = "Multiplys Ranch production by 2" + "<br>" + "<i>'" + "Wait, what have we been feeding them before now?" + "'</i>";
 let upgrade3Description = "Multiplys TV production by 2" + "<br>" + "<i>'" + "Better than that CRT junk" + "'</i>";
-let upgrade4Description = "Multiplys Laborer production by 2" + "<br>" + "<i>'" + "Constant supply of Band-Aids in case of emergency" + "'</i>";
+let upgrade4Description = "Multiplys Worker production by 2" + "<br>" + "<i>'" + "Constant supply of Band-Aids in case of emergency" + "'</i>";
 let upgrade5Description = "Multiplys Wallet production by 2" + "<br>" + "<i>'" + "Don't know how the goverment is going to take to this currency" + "'</i>";
 let upgrade6Description = "null";
 let upgrade0Price = 100;
@@ -71,12 +71,12 @@ let tvCPSGain = 47;
 let tvCPSGiven = 0;
 let tvUpgradeCost = 12000;
 let tvUnlocked = 0;
-// laborers
-let laborersBought = 0;
-let laborerCPSGain = 260;
-let laborerCPSGiven = 0;
-let laborerUpgradeCost = 130000;
-let laborerUnlocked = 0;
+// workers
+let workersBought = 0;
+let workerCPSGain = 260;
+let workerCPSGiven = 0;
+let workerUpgradeCost = 130000;
+let workerUnlocked = 0;
 // wallets
 let walletsBought = 0;
 let walletCPSGain = 1440;
@@ -124,7 +124,7 @@ document.getElementById("upgrade0").style.backgroundImage = "url(img/upgrades/re
 document.getElementById("upgrade1").style.backgroundImage = "url(img/upgrades/hardwood-walking-stick.png)";
 document.getElementById("upgrade2").style.backgroundImage = "url(img/upgrades/ranch-upgrade1.png)";
 document.getElementById("upgrade3").style.backgroundImage = "url(img/upgrades/tv-upgrade1.png)";
-document.getElementById("upgrade4").style.backgroundImage = "url(img/upgrades/laborer-upgrade1.png)";
+document.getElementById("upgrade4").style.backgroundImage = "url(img/upgrades/worker-upgrade1.png)";
 
 function perMillisecondUniversal() {
     cookiesForCounter = Math.round(cookies * 10) / 10;
@@ -156,8 +156,8 @@ function perMillisecondUniversal() {
         if (tvsBought == 1 && upgrade3sBought == 0) {
             document.getElementById("upgrade3").style.display = "inline-block";
         }
-        // Laborers
-        if (laborersBought == 1 && upgrade4sBought == 0) {
+        // Workers
+        if (workersBought == 1 && upgrade4sBought == 0) {
             document.getElementById("upgrade4").style.display = "inline-block";
         }
 
@@ -172,7 +172,7 @@ function perMillisecondUniversal() {
         tvUnlocked = 1;
     }
     if (totalCookies >= 50000) {
-        laborerUnlocked = 1;
+        workerUnlocked = 1;
     }
     if (totalCookies >= 700000) {
         walletUnlocked = 1;
@@ -196,8 +196,8 @@ function perMillisecondUniversal() {
         document.getElementById("tvUpgrade").style.display = "inline";
         document.getElementById("building3").style.display = "block";
     }
-    if (laborerUnlocked == 1) {
-        document.getElementById("laborerUpgrade").style.display = "inline";
+    if (workerUnlocked == 1) {
+        document.getElementById("workerUpgrade").style.display = "inline";
         document.getElementById("building4").style.display = "block";
     }
     if (walletUnlocked == 1) {
@@ -217,7 +217,7 @@ function perMillisecondUniversal() {
         createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: Multiple of same upgrade or identifier is not set!<br>Please report this to the GitHub accessable in the bottom left corner");
     }
     // stats that need to be updated beforehand
-    buildingsOwned = keyboardsBought + grandpasBought + ranchesBought + tvsBought + laborersBought + walletsBought + churchesBought;
+    buildingsOwned = keyboardsBought + grandpasBought + ranchesBought + tvsBought + workersBought + walletsBought + churchesBought;
     
     // set statistic page statistics
     if (statsUp == 1) {
@@ -233,11 +233,11 @@ function perMillisecondUniversal() {
     document.getElementById("grandpasBought").innerHTML = +grandpasBought;
     document.getElementById("ranchesBought").innerHTML = +ranchesBought;
     document.getElementById("tvsBought").innerHTML = +tvsBought;
-    document.getElementById("laborersBought").innerHTML = +laborersBought;
+    document.getElementById("workersBought").innerHTML = +workersBought;
     document.getElementById("walletsBought").innerHTML = +walletsBought;
     document.getElementById("churchesBought").innerHTML = +churchesBought;
 
-    cookiesPerSecond = keyboardCPSGiven+grandpaCPSGiven+ranchCPSGiven+tvCPSGiven+laborerCPSGiven+walletCPSGiven+churchCPSGiven+devCPSGiven;
+    cookiesPerSecond = keyboardCPSGiven+grandpaCPSGiven+ranchCPSGiven+tvCPSGiven+workerCPSGiven+walletCPSGiven+churchCPSGiven+devCPSGiven;
 }
 
 function cookiesPerSecondUpdate() {
@@ -362,16 +362,16 @@ function tvUpgrade() {
         makeUpgradeSound();
     }
 }
-function laborerUpgrade() {
-    if (cookies >= laborerUpgradeCost) {
-        cookies = cookies - laborerUpgradeCost;
-        laborerUpgradeCost = laborerUpgradeCost * 1.15;
-        laborerUpgradeCost = Math.floor(laborerUpgradeCost);
-        laborersBought = laborersBought + 1;
-        laborerCPSGiven = laborerCPSGiven + laborerCPSGain;
+function workerUpgrade() {
+    if (cookies >= workerUpgradeCost) {
+        cookies = cookies - workerUpgradeCost;
+        workerUpgradeCost = workerUpgradeCost * 1.15;
+        workerUpgradeCost = Math.floor(workerUpgradeCost);
+        workersBought = workersBought + 1;
+        workerCPSGiven = workerCPSGiven + workerCPSGain;
         reloadCookieCounter();
-        document.getElementById("laborerUpgrade").innerHTML = "Laborer: " +laborerUpgradeCost;
-        document.getElementById("laborersBought").innerHTML = +laborersBought;
+        document.getElementById("workerUpgrade").innerHTML = "Worker: " +workerUpgradeCost;
+        document.getElementById("workersBought").innerHTML = +workersBought;
         makeUpgradeSound();
     }
 }
@@ -532,8 +532,8 @@ function upgrade3Clicked() {
 function upgrade4Clicked() {
     if (cookies >= upgrade4Price) {
         cookies = cookies - upgrade4Price;
-        laborerCPSGiven = laborerCPSGiven * 2;
-        laborerCPSGain = laborerCPSGain * 2;
+        workerCPSGiven = workerCPSGiven * 2;
+        workerCPSGain = workerCPSGain * 2;
         upgrade4sBought =+ 1;
         upgrade4Hovered();
         destroyUpgrade("upgrade4");
