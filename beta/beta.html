@@ -64,15 +64,106 @@
             </div>
             <div id="infoMiddleText" class="middle-text-main">
                 <h3 class="middle-title">Infomation</h3>
-                <h5 class="middle-subtitle">About:</h5>
+                <h3 class="middle-subtitle">About:</h5>
                 <p class="button-paragraph-text">Clicker Cookie is a totally original game about clicking a cookie. Made by <a href="https://github.com/FifthTundraG">FifthTundraG</a> in a few hours, this game went from a random clone of a decade old, actively developed clicker game to something that spiraled into a land of insanity.</p>
                 <p class="button-paragraph-text">Original game made by Orteil and Opti. <small>we :heart: you!</small></p>
+                <h3 class="middle-subtitle">Changelog:</h5>
+                <div class="changelog-wrapper">
+                    <div name="version0.4.1" class="changelog">
+                        <h5 class="changelog-version-heading">Version 0.4.1:</h5>
+                        <p class="button-paragraph-text">Added:</p>
+                        <ul class="middle-ul">
+                            <li>Color!</li>
+                            <li>Buttons!</li>
+                            <li>Keyboard Upgrade Chain final pixel art!</li>
+                            <li>+ More!</li>
+                        </ul>
+                        <p class="button-paragraph-text">Fixed:</p>
+                        <ul class="middle-ul">
+                            <li>Incorrect All Time Cookies & Cookie Clicked variable calculations</li>
+                            <li>Switched to let instead of var</li>
+                            <li>Positioning on some incorrect positions</li>
+                        </ul>
+                    </div>
+                    <div name="version0.4" class="changelog">
+                        <h5 class="changelog-version-heading">Version 0.4:</h5>
+                        <p class="button-paragraph-text" style="font-size:14px;">"Hey, what happened to 0.3?" <br>
+                            Well, you see... I made 0.3 while I also had 0.4 content being actively worked on, so I kinda just skipped it because this is a BIG update!</p>
+                        <p class="button-paragraph-text">Added:</p>
+                        <ul class="middle-ul">
+                            <li>Final major buildings (Wallet & Church)</li>
+                            <li>Upgrades! Only first level upgrades are currently available, excluding the keyboard which has 2 upgrades.</li>
+                            <li>Ability to switch to the beta branch by clicking the version number. The beta branch has code that visually works as expected, but may not have completed pixel art and some incorrect values that skipped me during testing.</li>
+                        </ul>
+                        <p class="button-paragraph-text">Changed:</p>
+                        <ul class="middle-ul">
+                            <li>Layout of the body. This may break things so pleases report any issues that occur!</li>
+                        </ul>
+                        <p class="button-paragraph-text">Fixed:</p>
+                        <ul class="middle-ul">
+                            <li>Everything.</li>
+                        </ul>
+                    </div>
+                    <div name="version0.2.2" class="changelog">
+                        <h5 class="changelog-version-heading">Version 0.2.2:</h5>
+                        <p class="button-paragraph-text">Added:</p>
+                        <ul class="middle-ul">
+                            <li>Borders to the left and right sides of the screen.</li>
+                            <li>The capability to create a popup for usage later.</li>
+                        </ul>
+                    </div>
+                    <div name="version0.2.1" class="changelog">
+                        <h5 class="changelog-version-heading">Version 0.2.1:</h5>
+                        <p class="button-paragraph-text">Added:</p>
+                        <ul class="middle-ul">
+                            <li>Television</li>
+                            <li>Laborers</li>
+                        </ul>
+                        <p class="button-paragraph-text">Changes:</p>
+                        <ul class="middle-ul">
+                            <li>Made CSS better</li>
+                        </ul>
+                    </div>
+                    <div name="version0.2" class="changelog">
+                        <h5 class="changelog-version-heading">Version 0.2:</h5>
+                        <p class="button-paragraph-text">Added:</p>
+                        <ul class="middle-ul">
+                            <li>A Github page</li>
+                            <li>Version number</li>
+                        </ul>
+                        <p class="button-paragraph-text" style="font-size:14px;">This is qualified as a major update simply because of the addition of a Github Page, even if it adds little to the actual game.</p>
+                    </div>
+                    <div name="version0.1.1" class="changelog">
+                        <h5 class="changelog-version-heading">Version 0.1.1:</h5>
+                        <p class="button-paragraph-text">Added:</p>
+                        <ul class="middle-ul">
+                            <li>Ranches! Buyable for 1000 cookies for the time being.</li>
+                            <li>Minor hover effect when hovering over buildings</li>
+                        </ul>
+                        <p class="button-paragraph-text">Fixes:</p>
+                        <ul class="middle-ul">
+                            <li>totalCookies variable is fixed, but still unused (but not for long!)</li>
+                        </ul>
+                        <p class="button-paragraph-text">Known issues:</p>
+                        <ul class="middle-ul">
+                            <li>Cookie is draggable on Mozilla Firefox and maybe other browsers.</li>
+                            <li>Resizing windows breaks basically everything, although its unlikely this will be fixed.</li>
+                        </ul>
+                    </div>
+                    <div name="version0.1" class="changelog">
+                        <h5 class="changelog-version-heading">Version 0.1:</h5>
+                        <p class="button-paragraph-text">Added:</p>
+                        <ul class="middle-ul">
+                            <li>Existance.</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
             <div id="optionsMiddleText" class="middle-text-main">
                 <h3 class="middle-title">Options</h3>
                 <h5 class="middle-subtitle">Customization:</h5>
                 <form action="changed">
-                    <label for="backgroundSelect">Background: </label>
+                    <label for="backgroundSelect" class="middle-label">Background: </label>
                     <select id="backgroundSelect" onchange="setBackground(this.value)">
                         <option value="blue">Blue</option>
                         <option value="green">Green</option>
@@ -82,7 +173,7 @@
                 </form>
                 <h5 class="middle-subtitle">Miscellaneous:</h5>
                 <form action="changed">
-                    <label for="devModeSelect">Developer Mode: </label>
+                    <label for="devModeSelect" class="middle-label">Developer Mode: </label>
                     <select id="devModeSelect" onchange="setDevMode(this.value)">
                         <option value="off">Off</option>
                         <option value="on">On</option>

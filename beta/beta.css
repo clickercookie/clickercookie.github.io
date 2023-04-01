@@ -3,6 +3,7 @@ body {
     margin: 0px;
     display: -webkit-flex;
     display: flex;
+    overflow: hidden;
 }
 
 h1 {
@@ -12,6 +13,13 @@ h1 {
     margin: 3px;
     color: white;
     text-shadow: 0px 1px 4px black;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 h3 {
@@ -19,12 +27,26 @@ h3 {
     text-align: center;
     color: white;
     text-shadow: 0px 1px 4px black;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 h4 {
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
     color: white;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 p {
@@ -59,14 +81,21 @@ div {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+ul {
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
 /* divs */
 .buildings {
     float: right;
     margin-top: 6px;
+    display: flex;
+    justify-content: center;
 }
 
 .upgrades-holder {
-    width: 330px;
+    width: 338px;
     height: 64px;
 }
 
@@ -101,7 +130,7 @@ div {
     flex: auto;
     background-color: rgb(255, 243, 209);
     position: absolute;
-    right: 331px;
+    right: 346px;
     color: black
 }
 
@@ -111,8 +140,8 @@ div {
 }
 
 .upgrade {
-    width: 62px;
-    height: 62px;
+    width: 64px;
+    height: 64px;
     background-image: url(img/unknown-64-64.png);
     margin: 0px;
     display: none;
@@ -130,7 +159,7 @@ div {
 }
 
 .rightSide {
-    width: 330px;
+    width: 338px;
     float: right;
     height: 100vh;
     border-style: solid;
@@ -145,7 +174,7 @@ div {
     -webkit-flex: auto;
     flex: auto;
     height: 100vh;
-    background: url(img/backgrounds/background-blue.png)
+    background: url(img/backgrounds/background-blue.png);
 }
 
 .cookie {
@@ -253,7 +282,7 @@ div {
 
 /* universal building css */
 .building-already-unlock {
-    width: 312px;
+    width: 324px;
     height: 64px;
     border-style: solid;
     border-color: rgb(248, 255, 198);
@@ -268,7 +297,7 @@ div {
 }
 
 .building-need-unlock {
-    width: 312px;
+    width: 324px;
     height: 64px;
     border-style: solid;
     border-color: rgb(248, 255, 198);
@@ -397,6 +426,7 @@ div {
     display: none;
 }
 
+/* Middle Text CSS */
 .middle-title {
     font-size: 35px;
     font-family: monospace;
@@ -408,17 +438,20 @@ div {
 }
 
 .middle-subtitle {
-    font-size: 20px;
+    font-size: 26px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin-top: 12px;
     margin-bottom: 15px;
     margin-left: 6px;
     font-weight: bold;
+    text-align: left;
 }
 
 .middle-text-main {
     display: none;
     color: white;
+    overflow-y: auto;
+    height: 86%;
 }
 
 .stats-button {
@@ -445,7 +478,7 @@ div {
 }
 
 .button-paragraph-text {
-    margin-left: 7px;
+    margin-left: 9px;
     margin-bottom: 6px;
     margin-top: 6px;
     font-family: Arial, Helvetica, sans-serif;
@@ -459,6 +492,37 @@ div {
     font-family: Arial, Helvetica, sans-serif;
     letter-spacing: 1px;
     font-weight: bold;
+}
+
+.middle-ul {
+    font-size: 14px;
+}
+
+.middle-label {
+    margin-left: 9px;
+}
+
+.changelog-version-heading {
+    text-align: left;
+    font-size: 19px;
+    margin-top: 6px;
+    margin-bottom: 8px;
+    margin-left: 9px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.changelog-version-text {
+    margin-left: 9px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
 }
 
 /* Info CSS */
