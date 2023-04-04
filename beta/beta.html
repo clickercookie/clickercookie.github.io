@@ -7,7 +7,7 @@
     </head>
     <body>
         <div id="leftSide" class="leftSide">
-            <img class="cookie" onClick="cookieClicked()" src="img/cookie.png" alt="cookie">
+            <img id="cookie" class="cookie" onClick="cookieClicked()" src="img/cookie.png" alt="cookie">
             <div class="cookie-counter-wrapper">
                 <h3 id="cookieCounter" class="cookie-counter">Cookies: 0</h3>
                 <h4 id="cookiesPerSecondCounter" class="cookies-per-second-counter">Cookies Per Second: 0</h4>
@@ -169,6 +169,14 @@
                         <option value="green">Green</option>
                         <option value="gray">Gray</option>
                         <option value="pink">Pink</option>
+                    </select>
+                </form>
+                <form>
+                    <label for="currentClickedSelect" class="middle-label">Currently Clicked: </label>
+                    <select id="currentClickedSelect" onchange="setCurrentClicked(this.value)">
+                        <option value="cookie">Cookie</option>
+                        <option value="potato">Potato</option>
+                        <option value="strawberry">Strawberry</option>
                     </select>
                 </form>
                 <h5 class="middle-subtitle">Miscellaneous:</h5>

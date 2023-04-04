@@ -6,6 +6,11 @@ const versionBranch = 1; // 0 is main, 1 is beta
 const backgroundForm = document.getElementById("backgroundSelect");
 let currentBackground = "url(img/backgrounds/background-blue.png)";
 
+let currentClicked = "Cookie";
+let currentClickedPlural = "Cookies";
+let currentClickedLowercase = "cookie";
+let currentClickedLowercasePlural = "cookies";
+
 // cookies
 let cookies = 0;
 let cookiesForCounter = Math.floor(cookies);
@@ -142,7 +147,7 @@ function perMillisecondUniversal() {
 
     // CPS
     cookiesPerSecondView = Math.round(cookiesPerSecond * 10) / 10;
-    document.getElementById("cookiesPerSecondCounter").innerHTML = "Cookies Per Second: " +cookiesPerSecondView;
+    document.getElementById("cookiesPerSecondCounter").innerHTML = currentClickedPlural + " Per Second: " +cookiesPerSecondView;
 
     // Upgrade Unlocks (very long) (fixes accepted) (create a github pull request)
         // Keyboards
@@ -150,7 +155,7 @@ function perMillisecondUniversal() {
             document.getElementById("upgrade0").style.display = "inline-block";
         }
         if (upgrade0sBought == 1 && keyboardsBought >= 5) {
-            createUpgrade("upgrade0","Obsidian Keys","Multiplys keyboard and clicking cookies by 2","so heavy they're always pressed",500,"img/upgrades/obsidian-keys.png");
+            createUpgrade("upgrade0","Obsidian Keys","Multiplys keyboard and clicking " + currentClickedLowercasePlural + " by 2","so heavy they're always pressed",500,"img/upgrades/obsidian-keys.png");
         }
         // Grandpas
         if (grandpasBought == 1 && upgrade1sBought == 0) {
@@ -219,7 +224,7 @@ function perMillisecondUniversal() {
 
     // log to console in case of error
     if (cookies < 0) {
-        createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: Cookies are in negative!<br>Please report this to the GitHub accessable in the bottom left corner");
+        createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: " + currentClickedPlural + " are in negative!<br>Please report this to the GitHub accessable in the bottom left corner");
     }
     if (upgrade0Identifier == upgrade1Identifier) {
         createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: Multiple of same upgrade or identifier is not set!<br>Please report this to the GitHub accessable in the bottom left corner");
@@ -229,11 +234,11 @@ function perMillisecondUniversal() {
     
     // set statistic page statistics
     if (statsUp == 1) {
-        document.getElementById("cookiesStat").innerHTML = "Cookies: " + cookiesForCounter;
-        document.getElementById("allTimeCookies").innerHTML = "All Time Cookies: " + totalCookiesView;
-        document.getElementById("cookiesPerSecondStat").innerHTML = "Cookies Per Second: " + cookiesPerSecondView;
+        document.getElementById("cookiesStat").innerHTML = currentClickedPlural + ": " + cookiesForCounter;
+        document.getElementById("allTimeCookies").innerHTML = "All Time " + currentClickedPlural + ": " + totalCookiesView;
+        document.getElementById("cookiesPerSecondStat").innerHTML = currentClickedPlural + " Per Second: " + cookiesPerSecondView;
         document.getElementById("buildingsOwnedStat").innerHTML = "Buildings Owned: " + buildingsOwned;
-        document.getElementById("cookieBeenClickedTimesStat").innerHTML = "Total Cookie Clicks: " + cookieBeenClickedTimes; // move to cookieClicked() later
+        document.getElementById("cookieBeenClickedTimesStat").innerHTML = "Total " + currentClicked + " Clicks: " + cookieBeenClickedTimes; // move to cookieClicked() later
     }
 
     // set number of bought to bought (not required unless number of bought is set in console)
@@ -285,7 +290,7 @@ function setCPS(x) {
     if (devMode == 1) {
         devCPSGiven = x;
         cookiesPerSecondView = Math.round(cookiesPerSecond * 10) / 10;
-        document.getElementById("cookiesPerSecondCounter").innerHTML = "Cookies Per Second: " +cookiesPerSecondView;
+        document.getElementById("cookiesPerSecondCounter").innerHTML = currentClickedPlural +" Per Second: " +cookiesPerSecondView;
         document.getElementById("ifCheatedStat").innerHTML = "<b>You have cheated on this playthrough!</b>";
     }
     else {
@@ -634,7 +639,7 @@ function versionNumberMousedOverUndo() {
 
 // helper functions
 function reloadCookieCounter() {
-    document.getElementById("cookieCounter").innerHTML = "Cookies: " +cookiesForCounter;
+    document.getElementById("cookieCounter").innerHTML = currentClickedPlural + ": " +cookiesForCounter;
 }
 
 function makeUpgradeSound() {
@@ -665,6 +670,32 @@ function setBackground(color) {
     document.getElementById("rightSide").style.background = currentBackground;
 
     consoleLogDev("Background color set to: " + color);
+}
+
+function setCurrentClicked(value) {
+    switch (value) {
+        case "cookie":
+            document.getElementById("cookie").src = "img/cookie.png";
+            currentClicked = "Cookie";
+            currentClickedPlural = "Cookies";
+            currentClickedLowercase = "cookie";
+            currentClickedLowercasePlural = "cookies";
+            break;
+        case "potato":
+            document.getElementById("cookie").src = "img/unknown.png";
+            currentClicked = "Potato";
+            currentClickedPlural = "Potatoes";
+            currentClickedLowercase = "potato";
+            currentClickedLowercasePlural = "potatoes";
+            break;
+        case "strawberry":
+            document.getElementById("cookie").src = "img/unknown.png";
+            currentClicked = "Strawberry";
+            currentClickedPlural = "Strawberries";
+            currentClickedLowercase = "strawberry";
+            currentClickedLowercasePlural = "strawberries";
+            break;
+    }
 }
 
 function setDevMode(value) {
