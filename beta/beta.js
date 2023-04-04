@@ -682,14 +682,14 @@ function setCurrentClicked(value) {
             currentClickedLowercasePlural = "cookies";
             break;
         case "potato":
-            document.getElementById("cookie").src = "img/unknown.png";
+            document.getElementById("cookie").src = "img/potato.png";
             currentClicked = "Potato";
             currentClickedPlural = "Potatoes";
             currentClickedLowercase = "potato";
             currentClickedLowercasePlural = "potatoes";
             break;
         case "strawberry":
-            document.getElementById("cookie").src = "img/unknown.png";
+            document.getElementById("cookie").src = "img/strawberry.png";
             currentClicked = "Strawberry";
             currentClickedPlural = "Strawberries";
             currentClickedLowercase = "strawberry";
