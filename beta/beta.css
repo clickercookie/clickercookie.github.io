@@ -265,6 +265,11 @@ ul {
     width: 320px;
 }
 
+.win {
+    display: none;
+    margin-top: 2px;
+}
+
 /* social links stuff */
 .social-links {
     position: absolute;

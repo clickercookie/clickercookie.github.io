@@ -12,6 +12,7 @@
                 <h3 id="cookieCounter" class="cookie-counter">Cookies: 0</h3>
                 <h4 id="cookiesPerSecondCounter" class="cookies-per-second-counter">Cookies Per Second: 0</h4>
             </div>
+            <h3 class="win" id="win">you win.</h3>
             <span class="leftSidePush"></span>
             <div class="social-links">
                 <a href="https://github.com/clickercookie/clickercookie.github.io">
@@ -21,12 +22,6 @@
                 <div id="versionSwitchInfo" class="version-switch-info">
                     <p style="margin:0px; color:black; text-align:center;" id="versionSwitchInfoText">Clicking this will switch to the null branch, this will wipe your current progress!</p>
                 </div>
-            </div>
-        </div>
-        <div class="popup" id="popup">
-            <p class="popup-content" id="popupContent">null</p>
-            <div class="popup-button-div" id="popupButtonDiv">
-                <button onClick="popupClicked()" id="popupButton" class="popup-button">OK</button>
             </div>
         </div>
         <div id="middle" class="middle">
@@ -282,6 +277,13 @@
                         </td>
                     </tr>
                 </table>
+            </div>
+        </div>
+        <div class="popup" id="popup">
+            <img alt="popupImage" style="display:none;" id="popupImage">
+            <p class="popup-content" id="popupContent">null</p>
+            <div class="popup-button-div" id="popupButtonDiv">
+                <button onClick="popupClicked()" id="popupButton" class="popup-button">OK</button>
             </div>
         </div>
     </body>

@@ -113,6 +113,11 @@ let statsUp = 0;
 let infoUp = 0;
 let optionsUp = 0;
 
+// misc
+let grandmaPromptClicks = 0;
+let cookieProductionStopped = 0;
+let buttonDoWhat = "default";
+
 // timer things
 const intervalCPSU = setInterval(cookiesPerSecondUpdate, 1000);
 const perMillisecondUniversalVar = setInterval(perMillisecondUniversal, 1);
@@ -143,7 +148,6 @@ function perMillisecondUniversal() {
     cookiesForCounter = Math.round(cookies * 10) / 10;
     totalCookiesView = Math.round(totalCookies * 10) / 10;
     keyboardUpgradeCostView = Math.floor(keyboardUpgradeCost);
-    reloadCookieCounter();
 
     // CPS
     cookiesPerSecondView = Math.round(cookiesPerSecond * 10) / 10;
@@ -222,6 +226,16 @@ function perMillisecondUniversal() {
         document.getElementById("building6").style.display = "block";
     }
 
+    // check for grandma's visit
+    if (totalCookies >= 1000000000) {
+        grandmasArrival();
+    }
+
+    // check for stopped cookie production
+    if (cookieProductionStopped == 1) {
+        cookies = 0;
+    }
+
     // log to console in case of error
     if (cookies < 0) {
         createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: " + currentClickedPlural + " are in negative!<br>Please report this to the GitHub accessable in the bottom left corner");
@@ -268,18 +282,44 @@ function cookieClicked() {
 }
 
 function popupClicked() {
-    destroySimplePopUp();
+    switch (popupButtonDo) {
+        case "default":
+            destroySimplePopUp();
+            break;
+        case "grandmaPromptClicks":
+            grandmaPromptClicks = grandmaPromptClicks + 1;
+            break;
+    }
     if (cookies < 0) {
         cookies = 0;
     }
 }
 // dev commands
+function beginGrandma() {
+    if (devMode == 1) {
+        grandmaPromptClicks = 0;
+    }
+    else {
+        console.log("You need developer mode ON to run this command.");
+    }
+}
+
+function ignoreGrandma() {
+    if (devMode == 1) {
+        grandmaPromptClicks = 10;
+    }
+    else {
+        console.log("You need developer mode ON to run this command.");
+    }
+}
+
 function setCookies(x) {
     if (devMode == 1) {
         cookies = x;
         totalCookies = totalCookies + x;
         reloadCookieCounter();
         document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
+        ignoreGrandma();
     }
     else {
         console.log("You need developer mode ON to run this command.");
@@ -292,6 +332,7 @@ function setCPS(x) {
         cookiesPerSecondView = Math.round(cookiesPerSecond * 10) / 10;
         document.getElementById("cookiesPerSecondCounter").innerHTML = currentClickedPlural +" Per Second: " +cookiesPerSecondView;
         document.getElementById("ifCheatedStat").innerHTML = "<b>You have cheated on this playthrough!</b>";
+        ignoreGrandma();
     }
     else {
         console.log("You need developer mode ON to run this command.");
@@ -646,7 +687,7 @@ function makeUpgradeSound() {
     cookieClick.play(); // needs to be updated to different sfx
 }
 
-function createSimplePopUp(x,y,text,buttonNot) {
+function createSimplePopUp(x,y,text,buttonNot,doWhat) {
     document.getElementById("popup").style.display = "block";
     document.getElementById("popupContent").innerHTML = text;
     document.getElementById("popup").style.width = x + "px";
@@ -655,6 +696,7 @@ function createSimplePopUp(x,y,text,buttonNot) {
     if (buttonNot == true) {
         document.getElementById("popupButton").style.display = "none";
     }
+    popupButtonDo = doWhat;
 }
 
 function destroySimplePopUp() {
@@ -763,5 +805,43 @@ function consoleLogDev(str) {
     }
 }
 
-console.log("Everything appears to have run successfully.");
-console.log("## Welcome to the console! Developer commands can be found in the Javascript code. If you cant find that, then you aren't developer enough to be here :) ##");
+function grandmasArrival() {
+    switch (grandmaPromptClicks) {
+        case 0:
+            createSimplePopUp(300,150,"a familiar face appears...",false,"grandmaPromptClicks");
+            break;
+        case 1:
+            document.getElementById("popupImage").src = "img/grandma.png";
+            document.getElementById("popupImage").style.display = "block";
+            createSimplePopUp(300,150,"hello...",false,"grandmaPromptClicks");
+            break;
+        case 2:
+            createSimplePopUp(300,150,"how long have you done this for?",false,"grandmaPromptClicks");
+            break;
+        case 3:
+            createSimplePopUp(300,150,"oh my...",false,"grandmaPromptClicks");
+            break;
+        case 4:
+            createSimplePopUp(300,150,"well i suppose you must know this:",false,"grandmaPromptClicks");
+            break;
+        case 5:
+            createSimplePopUp(300,150,"<i>there is nothing else to do here</i>",false,"grandmaPromptClicks");
+            break;
+        case 6:
+            createSimplePopUp(300,150,"you win.",false,"grandmaPromptClicks");
+            document.getElementById("win").style.display = "block";
+            break;
+        case 7:
+            createSimplePopUp(300,150,"you may keep going...",false,"grandmaPromptClicks");
+            break;
+        case 8:
+            createSimplePopUp(300,150,"but you will be wasting your time.",false,"grandmaPromptClicks");
+            break;
+        case 9:
+            destroySimplePopUp();
+            grandmaPromptClicks = grandmaPromptClicks + 1;
+            break;
+    }
+}
+
+console.log("what are you doing here? well... as long as its productive.")
