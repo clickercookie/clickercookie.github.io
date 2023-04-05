@@ -152,6 +152,7 @@ function perMillisecondUniversal() {
     // CPS
     cookiesPerSecondView = Math.round(cookiesPerSecond * 10) / 10;
     document.getElementById("cookiesPerSecondCounter").innerHTML = currentClickedPlural + " Per Second: " +cookiesPerSecondView;
+    reloadCookieCounter();
 
     // Upgrade Unlocks (very long) (fixes accepted) (create a github pull request)
         // Keyboards
