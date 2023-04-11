@@ -688,12 +688,14 @@ function makeUpgradeSound() {
     cookieClick.play(); // needs to be updated to different sfx
 }
 
-function createSimplePopUp(x,y,text,buttonNot,doWhat) {
+function createSimplePopUp(x,y,text,buttonNot,doWhat,title) {
     document.getElementById("popup").style.display = "block";
     document.getElementById("popupContent").innerHTML = text;
     document.getElementById("popup").style.width = x + "px";
     document.getElementById("popupButtonDiv").style.width = x + "px";
     document.getElementById("popup").style.height = y + "px";
+    document.getElementById("popup-title").style.display = "block";
+    document.getElementById("popup-title").innerHTML = title;
     if (buttonNot == true) {
         document.getElementById("popupButton").style.display = "none";
     }
@@ -843,6 +845,87 @@ function grandmasArrival() {
             grandmaPromptClicks = grandmaPromptClicks + 1;
             break;
     }
+}
+
+function exportData() {
+    let data = 
+            '\r' + cookies + ' \r\n' +
+            totalCookies + ' \r\n' +
+
+            keyboardCPSGiven + ' \r\n' +
+            grandpaCPSGiven + ' \r\n' +
+            ranchCPSGiven + ' \r\n' +
+            tvCPSGiven + ' \r\n' +
+            workerCPSGiven + '\r\n' +
+            walletCPSGiven + ' \r\n' +
+            churchCPSGiven + ' \r\n' +
+            devCPSGiven + '\r\n' +
+
+            keyboardsBought + ' \r\n' +
+            grandpasBought + ' \r\n' +
+            ranchesBought + ' \r\n' +
+            tvsBought + ' \r\n' +
+            workersBought + '\r\n' +
+            walletsBought + ' \r\n' +
+            churchesBought + ' \r\n' +
+
+            keyboardCPSGain + ' \r\n' +
+            grandpaCPSGain + ' \r\n' +
+            ranchCPSGain + ' \r\n' +
+            tvCPSGain + ' \r\n' +
+            workerCPSGain + '\r\n' +
+            walletCPSGain + ' \r\n' +
+            churchCPSGain + ' \r\n' +
+
+            keyboardUpgradeCost + ' \r\n' +
+            grandpaUpgradeCost + ' \r\n' +
+            ranchUpgradeCost + ' \r\n' +
+            tvUpgradeCost + ' \r\n' +
+            workerUpgradeCost + '\r\n' +
+            walletUpgradeCost + ' \r\n' +
+            churchUpgradeCost + ' \r\n' +
+
+            upgrade0sBought + ' \r\n' +
+            upgrade1sBought + ' \r\n' +
+            upgrade2sBought + ' \r\n' +
+            upgrade3sBought + ' \r\n' +
+            upgrade4sBought + '\r\n' +
+            upgrade5sBought + ' \r\n' +
+            upgrade6sBought + ' \r\n' +
+
+            cookiesPerClick + ' \r\n' +
+            cookieBeenClickedTimes + ' \r\n' +
+            buildingsOwned;
+
+    const textToBLOB = new Blob([data], { type: 'text/plain' });
+    const sFileName = 'save.ccsave';
+
+    let newLink = document.createElement("a");
+    newLink.download = sFileName;
+
+    if (window.webkitURL != null) {
+        newLink.href = window.webkitURL.createObjectURL(textToBLOB);
+    }
+    else {
+        newLink.href = window.URL.createObjectURL(textToBLOB);
+        newLink.style.display = "none";
+        document.body.appendChild(newLink);
+    }
+
+    newLink.click(); 
+}
+
+function importData() {
+    var file = document.getElementById("importDataInput").files[0];
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+        const file = e.target.result;
+        const lines = file.split(/\r\n|\n/);
+    }
+    reader.onerror = (e) => alert("something broke, don't expect me to fix it :D");
+
+    reader.readAsText(file);
 }
 
 console.log("what are you doing here? well... as long as its productive.")

@@ -175,6 +175,11 @@
                     </select>
                 </form>
                 <h5 class="middle-subtitle">Miscellaneous:</h5>
+                <div class="data-buttons">   
+                    <button id="exportDataButton" class="data-button" onclick="exportData()">Export Data</button>
+                    <label for="importDataInput" class="import-data-label">Import Data</label>
+                    <input type="file" id="importDataInput" class="import-data-input" accept=".ccsave,.txt" onchange="importData()">
+                </div>
                 <form action="changed">
                     <label for="devModeSelect" class="middle-label">Developer Mode: </label>
                     <select id="devModeSelect" onchange="setDevMode(this.value)">
@@ -281,6 +286,7 @@
         </div>
         <div class="popup" id="popup">
             <img alt="popupImage" style="display:none;" id="popupImage">
+            <h3 class="popup-title" id="popup-title">title</h3>
             <p class="popup-content" id="popupContent">null</p>
             <div class="popup-button-div" id="popupButtonDiv">
                 <button onClick="popupClicked()" id="popupButton" class="popup-button">OK</button>

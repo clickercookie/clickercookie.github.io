@@ -86,66 +86,7 @@ ul {
     margin-bottom: 6px;
 }
 
-/* divs */
-.buildings {
-    float: right;
-    margin-top: 6px;
-    display: flex;
-    justify-content: center;
-}
-
-.upgrades-holder {
-    width: 338px;
-    height: 64px;
-}
-
-.upgrade-name {
-    margin: 2px;
-    color: black;
-}
-.upgrade-price{
-    margin-left: 2px;
-    margin-top: 6px;
-    margin-bottom: 6px;
-    color: black;
-}
-.upgrade-desc {
-    margin: 2px;
-    color: black;
-}
-
-/* thing that displays upgrade info */
-.upgrade-viewer {
-    display: block;
-    width: 248px;
-    height: 148px;
-    border-style: solid;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
-    border-right-width: 0px;
-    margin: 0px;
-    display: none;
-    -webkit-flex: auto;
-    flex: auto;
-    background-color: rgb(255, 243, 209);
-    position: absolute;
-    right: 346px;
-    color: black
-}
-
-.upgrade-viewer-content {
-    display: block;
-    color: black;
-}
-
-.upgrade {
-    width: 64px;
-    height: 64px;
-    background-image: url(img/unknown-64-64.png);
-    margin: 0px;
-    display: none;
-}
+/* important things */
 
 .leftSide {
     width: 312px;
@@ -244,6 +185,68 @@ ul {
     left: 48px;
     font-size: 10px;
     background-color: rgb(255, 243, 209);
+}
+
+
+/* divs */
+.buildings {
+    float: right;
+    margin-top: 6px;
+    display: flex;
+    justify-content: center;
+}
+
+.upgrades-holder {
+    width: 338px;
+    height: 64px;
+}
+
+.upgrade-name {
+    margin: 2px;
+    color: black;
+}
+.upgrade-price{
+    margin-left: 2px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    color: black;
+}
+.upgrade-desc {
+    margin: 2px;
+    color: black;
+}
+
+/* thing that displays upgrade info */
+.upgrade-viewer {
+    display: block;
+    width: 248px;
+    height: 148px;
+    border-style: solid;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-right-width: 0px;
+    margin: 0px;
+    display: none;
+    -webkit-flex: auto;
+    flex: auto;
+    background-color: rgb(255, 243, 209);
+    position: absolute;
+    right: 346px;
+    color: black
+}
+
+.upgrade-viewer-content {
+    display: block;
+    color: black;
+}
+
+.upgrade {
+    width: 64px;
+    height: 64px;
+    background-image: url(img/unknown-64-64.png);
+    margin: 0px;
+    display: none;
 }
 
 /* random specific stuff */
@@ -405,7 +408,16 @@ ul {
     margin-right: 8px;
     color: black;
 }
+.popup-title {
+    display: none;
+    color: black;
+    text-shadow: 0px 0px 0px white;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    font-size: 17px;
+}
 
+/* middle buttons */
 .left-middle-buttons {
     display: flex;
     flex-direction: column;
@@ -507,6 +519,8 @@ ul {
     margin-left: 9px;
 }
 
+/* changelog stuff */
+
 .changelog-version-heading {
     text-align: left;
     font-size: 19px;
@@ -530,7 +544,7 @@ ul {
     font-size: 10px;
 }
 
-/* Info CSS */
+/* middle button CSS */
 .info-button {
     border-style: solid;
     border-width: 2px;
@@ -557,4 +571,37 @@ ul {
     float: right;
     margin-left: auto;
     background-color: rgb(255, 243, 209);
+}
+
+/* Data Buttons */
+.data-button {
+    margin-left: 9px;
+}
+
+.import-data-input {
+    display: none;
+}
+.import-data-label {
+    appearance: auto;
+    writing-mode: horizontal-tb !important;
+    text-rendering: auto;
+    color: buttontext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    box-sizing: border-box;
+    background-color: buttonface;
+    margin: 0em;
+    padding: 1px 6px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonborder;
+    border-image: initial;
 }
