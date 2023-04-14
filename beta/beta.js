@@ -231,26 +231,26 @@ function perMillisecondUniversal() {
 
     // Upgrade Unlocks (very long) (fixes accepted) (create a github pull request)
         // Keyboards
-        if (keyboardsBought == 1 && upgrade0sBought == 0) {
+        if (keyboardsBought >= 1 && upgrade0sBought == 0) {
             document.getElementById("upgrade0").style.display = "inline-block";
         }
-        if (upgrade0sBought == 1 && keyboardsBought >= 5) {
+        if (upgrade0sBought >= 1 && keyboardsBought >= 5) {
             createUpgrade("upgrade0","Obsidian Keys","Multiplys keyboard and clicking " + currentClickedLowercasePlural + " by 2","so heavy they're always pressed",500,"img/upgrades/obsidian-keys.png");
         }
         // Grandpas
-        if (grandpasBought == 1 && upgrade1sBought == 0) {
+        if (grandpasBought >= 1 && upgrade1sBought == 0) {
             document.getElementById("upgrade1").style.display = "inline-block";
         }
         // Ranches
-        if (ranchesBought == 1 && upgrade2sBought == 0) {
+        if (ranchesBought >= 1 && upgrade2sBought == 0) {
             document.getElementById("upgrade2").style.display = "inline-block";
         }
         // TVs
-        if (tvsBought == 1 && upgrade3sBought == 0) {
+        if (tvsBought >= 1 && upgrade3sBought == 0) {
             document.getElementById("upgrade3").style.display = "inline-block";
         }
         // Workers
-        if (workersBought == 1 && upgrade4sBought == 0) {
+        if (workersBought >= 1 && upgrade4sBought == 0) {
             document.getElementById("upgrade4").style.display = "inline-block";
         }
 
