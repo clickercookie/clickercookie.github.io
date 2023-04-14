@@ -86,8 +86,17 @@ ul {
     margin-bottom: 6px;
 }
 
-/* important things */
+/* helper classes (in early development) */
+.no-display {
+    display: none;
+}
 
+/* ids that i hate using */
+#importDataInputLabel {
+    display: none;
+}
+
+/* important things */
 .leftSide {
     width: 312px;
     height: 100vh;
@@ -271,6 +280,7 @@ ul {
 .win {
     display: none;
     margin-top: 2px;
+    margin-bottom: 6px;
 }
 
 /* social links stuff */
@@ -576,12 +586,13 @@ ul {
 /* Data Buttons */
 .data-button {
     margin-left: 9px;
+    margin-bottom: 4px;
 }
 
 .import-data-input {
     display: none;
 }
-.import-data-label {
+.custom-button-label { /* this is just stolen from the default CSS for a button, its probably going to change to a custom one later */
     appearance: auto;
     writing-mode: horizontal-tb !important;
     text-rendering: auto;
