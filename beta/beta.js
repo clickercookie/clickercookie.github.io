@@ -374,6 +374,9 @@ function popupClicked() {
         cookies = 0;
     }
 }
+function popupBackClicked() {
+    destroySimplePopUp();
+}
 // dev commands
 function beginGrandma() {
     if (devMode == 1) {
@@ -785,7 +788,7 @@ function makeUpgradeSound() {
     cookieClick.play(); // needs to be updated to different sfx
 }
 
-function createSimplePopUp(x,y,text,buttonNot,doWhat,title) {
+function createSimplePopUp(x,y,text,buttonNot,doWhat,title,backButton) {
     document.getElementById("popup").style.display = "block";
     document.getElementById("popupContent").innerHTML = text;
     document.getElementById("popup").style.width = x + "px";
@@ -803,6 +806,12 @@ function createSimplePopUp(x,y,text,buttonNot,doWhat,title) {
     }
     else {
         document.getElementById("popupButton").style.display = "inline-block";
+    }
+    if (backButton == true) {
+        document.getElementById("popupBackButton").style.display = "inline-block";
+    }
+    else {
+        document.getElementById("popupBackButton").style.display = "none";
     }
     popupButtonDo = doWhat;
 }
@@ -1211,7 +1220,7 @@ function resetSave() {
     loadAutoSave();
 }
 function resetSaveButton() {
-    createSimplePopUp(300,150,"Are you sure you want to do this?",false,"resetSave()","Warning")
+    createSimplePopUp(300,150,"Are you sure you want to do this?",false,"resetSave()","Warning",true )
 }
 
 console.log("what are you doing here? well... as long as its productive.");
