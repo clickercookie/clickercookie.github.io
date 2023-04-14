@@ -160,6 +160,9 @@ switch (versionBranch) {
 }
 
 loadAutoSave();
+if (isNaN(cookies)) {
+    resetSave();
+}
 reloadBuildingPrices();
 
 if (won == 1) {
@@ -770,6 +773,12 @@ function reloadBuildingPrices() {
     document.getElementById("workerUpgrade").innerHTML = "Worker: " +workerUpgradeCost;
     document.getElementById("walletUpgrade").innerHTML = "Wallet: " +walletUpgradeCost;
     document.getElementById("churchUpgrade").innerHTML = "Church: " +churchUpgradeCost;
+}
+
+function checkInvalidCookies() {
+    if (cookies == NaN) {
+        resetSave();
+    }
 }
 
 function makeUpgradeSound() {

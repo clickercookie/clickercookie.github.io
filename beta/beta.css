@@ -4,6 +4,7 @@ body {
     display: -webkit-flex;
     display: flex;
     overflow: hidden;
+    touch-action: manipulation
 }
 
 h1 {
