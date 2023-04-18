@@ -6,7 +6,7 @@
     </head>
     <body>
         <div id="leftSide" class="leftSide">
-            <img id="cookie" class="cookie" onClick="cookieClicked()" src="img/cookie.png" alt="cookie">
+            <img id="cookie" class="cookie pointer" onClick="cookieClicked()" src="img/cookie.png" alt="cookie">
             <div class="cookie-counter-wrapper">
                 <h3 id="cookieCounter" class="cookie-counter">Cookies: 0</h3>
                 <h4 id="cookiesPerSecondCounter" class="cookies-per-second-counter">Cookies Per Second: 0</h4>
@@ -17,7 +17,7 @@
                 <a href="https://github.com/clickercookie/clickercookie.github.io">
                     <img class="github" src="img/github-mark.svg" alt="github">
                 </a>
-                <h5 id="versionNumber" class="version-number" onClick="versionSwitch()" onMouseOver="versionNumberMousedOver()" onMouseOut="versionNumberMousedOverUndo()">Version: null</h5>
+                <h5 id="versionNumber" class="version-number pointer" onClick="versionSwitch()" onMouseOver="versionNumberMousedOver()" onMouseOut="versionNumberMousedOverUndo()">Version: null</h5>
                 <div id="versionSwitchInfo" class="version-switch-info">
                     <p style="margin:0px; color:black; text-align:center;" id="versionSwitchInfoText">Clicking this will switch to the null branch, this will wipe your current progress!</p>
                 </div>
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="middle-buttons" id="middleButtons">
-                <div class="left-middle-buttons">
+                <div class="left-middle-buttons pointer">
                     <div id="statsButton" class=" middle-button-base stats-button" onClick="toggleStats()">
                         <p class="middle-button-name">Stats</p>
                     </div>
@@ -40,7 +40,7 @@
                         <p class="middle-button-name">Options</p>
                     </div>
                 </div>
-                <div class="right-middle-buttons">
+                <div class="right-middle-buttons  pointer">
                     <div id="infoButton" class="info-button" onClick="toggleInfo()">
                         <p class="middle-button-name">Info</p>
                     </div>
@@ -67,8 +67,10 @@
                         <h5 class="changelog-version-heading">Version 0.5:</h5>
                         <p class="button-paragraph-text">Added:</p>
                         <ul class="middle-ul">
-                            <li>SAVING!!!</li>
+                            <li>AUTO SAVING!!!</li>
+                            <li>EXPORTING & IMPORTING DATA!!!</li>
                             <li>New temporary cookie!</li>
+                            <li>Cursor changes type when hovering over certain elements</li>
                             <li>Special development buttons for when in active development</li>
                             <li>Automatic switching between main/beta stylesheets for easier development</li>
                             <li>+ More!</li>
@@ -76,6 +78,7 @@
                         <p class="button-paragraph-text">Fixed:</p>
                         <ul class="middle-ul">
                             <li>Double-tapping cookie zooming in on mobile devices.</li>
+                            <li>These list items being highlightable.</li>
                         </ul>
                         <p class="button-paragraph-text">Changed:</p>
                         <ul class="middle-ul">
@@ -183,7 +186,7 @@
                 <h5 class="middle-subtitle">Customization:</h5>
                 <form action="changed">
                     <label for="backgroundSelect" class="middle-label">Background: </label>
-                    <select id="backgroundSelect" onchange="setBackground(this.value)">
+                    <select class="pointer" id="backgroundSelect" onchange="setBackground(this.value)">
                         <option value="blue">Blue</option>
                         <option value="green">Green</option>
                         <option value="gray">Gray</option>
@@ -192,7 +195,7 @@
                 </form>
                 <form>
                     <label for="currentClickedSelect" class="middle-label">Currently Clicked: </label>
-                    <select id="currentClickedSelect" onchange="setCurrentClicked(this.value)">
+                    <select class="pointer" id="currentClickedSelect" onchange="setCurrentClicked(this.value)">
                         <option value="cookie">Cookie</option>
                         <option value="potato">Potato</option>
                         <option value="strawberry">Strawberry</option>
@@ -201,21 +204,21 @@
                 <h5 class="middle-subtitle">Miscellaneous:</h5>
                 <p class="button-paragraph-text">Autosave Management:</p>
                 <div class="data-buttons">
-                    <button class="data-button" onclick="autoSave()">Save</button>
-                    <button class="data-button" onclick="loadAutoSave()">Load</button>
+                    <button class="data-button pointer" onclick="autoSave()">Save</button>
+                    <button class="data-button pointer" onclick="loadAutoSave()">Load</button>
                 </div>
                 <div class="data-buttons">
-                    <button class="data-button" onclick="resetSaveButton()" style="color:red;">Reset</button>
+                    <button class="data-button pointer" onclick="resetSaveButton()" style="color:red;">Reset</button>
                 </div>
-                <p class="button-paragraph-text no-display" id="warningMSave">The manual saving function is not complete! It is only here for testing purposes!</p>
                 <div class="data-buttons">   
-                    <button id="exportDataButton" class="data-button no-display" onclick="exportData()">Export Data</button>
-                    <label id="importDataInputLabel" for="importDataInput" class="no-display custom-button-label">Import Data</label>
-                    <input type="file" id="importDataInput" class="import-data-input" accept=".ccsave,.txt" onchange="importData()">
+                    <button id="exportDataButton" class="data-button pointer" onclick="exportData()">Export Data</button>
+                    <label id="importDataInputLabel" for="importDataInput" class="custom-button-label">Import Data</label>
+                    <input type="file" id="importDataInput" class="no-display" accept=".ccsave,.json" onchange="importData()">
+                    <small>please ignore the unusual styling :D</small>
                 </div>
                 <form action="changed">
                     <label for="devModeSelect" class="middle-label">Developer Mode: </label>
-                    <select id="devModeSelect" onchange="setDevMode(this.value)">
+                    <select class="pointer" id="devModeSelect" onchange="setDevMode(this.value)">
                         <option value="off" id="offSelectionDev">Off</option>
                         <option value="on">On</option>
                     </select>

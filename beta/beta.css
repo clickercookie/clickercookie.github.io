@@ -87,14 +87,22 @@ ul {
     margin-bottom: 6px;
 }
 
+small {
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* helper classes (in early development) */
 .no-display {
     display: none;
 }
-
-/* ids that i hate using */
-#importDataInputLabel {
-    display: none;
+.pointer {
+    cursor: pointer;
 }
 
 /* important things */
@@ -257,6 +265,7 @@ ul {
     background-image: url(img/unknown-64-64.png);
     margin: 0px;
     display: none;
+    cursor: pointer;
 }
 
 /* random specific stuff */
@@ -308,6 +317,7 @@ ul {
     border-width: 3px;
     transition: 0.3s;
     background-color: rgb(217, 215, 165);
+    cursor: pointer;
 }
 .building-already-unlock:hover {
     border-style: solid;
@@ -324,6 +334,7 @@ ul {
     display: none;
     transition: 0.3s;
     background-color: rgb(217, 215, 165);
+    cursor: pointer;
 }
 .building-need-unlock:hover {
     border-style: solid;
@@ -524,6 +535,13 @@ ul {
 
 .middle-ul {
     font-size: 14px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .middle-label {
@@ -590,9 +608,6 @@ ul {
     margin-bottom: 4px;
 }
 
-.import-data-input {
-    display: none;
-}
 .custom-button-label { /* this is just stolen from the default CSS for a button, its probably going to change to a custom one later */
     appearance: auto;
     writing-mode: horizontal-tb !important;

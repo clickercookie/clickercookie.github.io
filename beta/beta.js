@@ -121,6 +121,11 @@ let buttonDoWhat = "default";
 let hasCheated = 0;
 let won = 0;
 
+// save stuff
+let currentImportedData; // parsed and not ready for object-turning
+let dataIncomplete; // Parsed JSON but cannot be read for an unknown reason without being parsed again
+let dataComplete; // Completely functional parseded JSON
+
 // timer things
 const intervalCPSU = setInterval(cookiesPerSecondUpdate, 1000);
 const perMillisecondUniversalVar = setInterval(perMillisecondUniversal, 1);
@@ -436,16 +441,6 @@ function versionSwitch() {
 }
 
 // upgrades
-function perClickUpgrade() {
-    if (cookies >= perClickUpgradeCost) {
-        cookies = cookies - perClickUpgradeCost;
-        perClickUpgradeCost = perClickUpgradeCost * 4;
-        cookiesPerClick = cookiesPerClick * 2;
-        reloadCookieCounter();
-        document.getElementById("perClickUpgrade").innerHTML = "Per Click x2: " +perClickUpgradeCost;
-    }
-}
-
 function keyboardUpgrade() {
     if (cookies >= keyboardUpgradeCost) {
         cookies = cookies - keyboardUpgradeCost;
@@ -867,9 +862,6 @@ function setDevMode(value) {
             devMode = 1;
             console.log("Developer Mode activated.");
             document.getElementById("devModeSelect").disabled = true;
-            document.getElementById("warningMSave").style.display = "block";
-            document.getElementById("exportDataButton").style.display = "inline-block";
-            document.getElementById("importDataInputLabel").style.display = "inline-block";
             break;
     }
 }
@@ -969,57 +961,10 @@ function grandmasArrival() {
 
 // saves
 function exportData() {
-    let data = 
-            '\r' + cookies + ' \r\n' +
-            totalCookies + ' \r\n' +
+    autoSave();
+    let dataJSON = JSON.stringify(localStorage);
 
-            keyboardCPSGiven + ' \r\n' +
-            grandpaCPSGiven + ' \r\n' +
-            ranchCPSGiven + ' \r\n' +
-            tvCPSGiven + ' \r\n' +
-            workerCPSGiven + '\r\n' +
-            walletCPSGiven + ' \r\n' +
-            churchCPSGiven + ' \r\n' +
-            devCPSGiven + '\r\n' +
-
-            keyboardsBought + ' \r\n' +
-            grandpasBought + ' \r\n' +
-            ranchesBought + ' \r\n' +
-            tvsBought + ' \r\n' +
-            workersBought + '\r\n' +
-            walletsBought + ' \r\n' +
-            churchesBought + ' \r\n' +
-
-            keyboardCPSGain + ' \r\n' +
-            grandpaCPSGain + ' \r\n' +
-            ranchCPSGain + ' \r\n' +
-            tvCPSGain + ' \r\n' +
-            workerCPSGain + '\r\n' +
-            walletCPSGain + ' \r\n' +
-            churchCPSGain + ' \r\n' +
-
-            keyboardUpgradeCost + ' \r\n' +
-            grandpaUpgradeCost + ' \r\n' +
-            ranchUpgradeCost + ' \r\n' +
-            tvUpgradeCost + ' \r\n' +
-            workerUpgradeCost + '\r\n' +
-            walletUpgradeCost + ' \r\n' +
-            churchUpgradeCost + ' \r\n' +
-
-            upgrade0sBought + ' \r\n' +
-            upgrade1sBought + ' \r\n' +
-            upgrade2sBought + ' \r\n' +
-            upgrade3sBought + ' \r\n' +
-            upgrade4sBought + '\r\n' +
-            upgrade5sBought + ' \r\n' +
-            upgrade6sBought + ' \r\n' +
-
-            cookiesPerClick + ' \r\n' +
-            cookieBeenClickedTimes + ' \r\n' +
-            buildingsOwned + ' \r\n' +
-            grandmaPromptClicks;
-
-    const textToBLOB = new Blob([data], { type: 'text/plain' });
+    const textToBLOB = new Blob([dataJSON], { type: 'text/plain' });
     const sFileName = 'save.ccsave';
 
     let newLink = document.createElement("a");
@@ -1038,17 +983,79 @@ function exportData() {
 }
 
 function importData() {
+    autoSave();
     var file = document.getElementById("importDataInput").files[0];
     var reader = new FileReader();
 
     reader.onload = function (e) {
         const file = e.target.result;
         const lines = file.split(/\r\n|\n/);
-        console.log(reader.result);
+        currentImportedData = JSON.stringify(reader.result);
     }
     reader.onerror = (e) => alert("something broke, don't expect me to fix it :D");
 
     reader.readAsText(file);
+    
+    reader.onloadend = () => {
+        importReadData();
+    };
+}
+function importReadData() {
+    dataIncomplete = JSON.parse(currentImportedData);
+    dataComplete = JSON.parse(dataIncomplete);
+
+    cookies = parseFloat(dataComplete.cookies);
+    totalCookies = parseFloat(dataComplete.totalCookies);
+    cookiesPerClick = parseFloat(dataComplete.cookiesPerClick);
+
+    keyboardCPSGiven = parseFloat(dataComplete.keyboardCPSGiven);
+    grandpaCPSGiven = parseFloat(dataComplete.grandpaCPSGiven);
+    ranchCPSGiven = parseFloat(dataComplete.ranchCPSGiven);
+    tvCPSGiven = parseFloat(dataComplete.tvCPSGiven);
+    workerCPSGiven = parseFloat(dataComplete.workerCPSGiven);
+    walletCPSGiven = parseFloat(dataComplete.walletCPSGiven);
+    churchCPSGiven = parseFloat(dataComplete.churchCPSGiven);
+
+    keyboardsBought = parseInt(dataComplete.keyboardsBought);
+    grandpasBought = parseInt(dataComplete.grandpasBought);
+    ranchesBought = parseInt(dataComplete.ranchesBought);
+    tvsBought = parseInt(dataComplete.tvsBought);
+    workersBought = parseInt(dataComplete.workersBought);
+    walletsBought = parseInt(dataComplete.walletsBought);
+    churchesBought = parseInt(dataComplete.churchesBought);
+
+    keyboardCPSGain = parseFloat(dataComplete.keyboardCPSGain);
+    grandpaCPSGain = parseFloat(dataComplete.grandpaCPSGain);
+    ranchCPSGain = parseFloat(dataComplete.ranchCPSGain);
+    tvCPSGain = parseFloat(dataComplete.tvCPSGain);
+    workerCPSGain = parseFloat(dataComplete.workerCPSGain);
+    walletCPSGain = parseFloat(dataComplete.walletCPSGain);
+    churchCPSGain = parseFloat(dataComplete.churchCPSGain);
+
+    keyboardUpgradeCost = parseFloat(dataComplete.keyboardUpgradeCost);
+    grandpaUpgradeCost = parseFloat(dataComplete.grandpaUpgradeCost);
+    ranchUpgradeCost = parseFloat(dataComplete.ranchUpgradeCost);
+    tvUpgradeCost = parseFloat(dataComplete.tvUpgradeCost);
+    workerUpgradeCost = parseFloat(dataComplete.workerUpgradeCost);
+    walletUpgradeCost = parseFloat(dataComplete.walletUpgradeCost);
+    churchUpgradeCost = parseFloat(dataComplete.churchUpgradeCost);
+
+    upgrade0sBought = parseInt(dataComplete.upgrade0sBought);
+    upgrade1sBought = parseInt(dataComplete.upgrade1sBought);
+    upgrade2sBought = parseInt(dataComplete.upgrade2sBought);
+    upgrade3sBought = parseInt(dataComplete.upgrade3sBought);
+    upgrade4sBought = parseInt(dataComplete.upgrade4sBought);
+    upgrade5sBought = parseInt(dataComplete.upgrade5sBought);
+    upgrade6sBought = parseInt(dataComplete.upgrade6sBought);
+
+    cookiesPerClick = parseInt(dataComplete.cookiesPerClick);
+    cookieBeenClickedTimes = parseInt(dataComplete.cookieBeenClickedTimes);
+    buildingsOwned = parseInt(dataComplete.buildingsOwned);
+    grandmaPromptClicks = parseInt(dataComplete.grandmaPromptClicks);
+    hasCheated = parseInt(dataComplete.hasCheated);
+    reloadBuildingPrices();
+
+    consoleLogDev("Imported save with " +cookies+ " cookies.");
 }
 
 function autoSave() {
@@ -1103,13 +1110,14 @@ function autoSave() {
             localStorage.cookieBeenClickedTimes = cookieBeenClickedTimes;
             localStorage.buildingsOwned = buildingsOwned;
             localStorage.grandmaPromptClicks = grandmaPromptClicks;
-            return("Saved with " + cookies + " cookies.")
+            localStorage.hasCheated = hasCheated;
+            return("Saved with " + cookies + " cookies.");
         }
     } 
     else {
         if (autoSaveWarningGiven == 0) {
             autoSaveWarningGiven = 1;
-            alert("Your browser doesn't support auto saving. Consider updating?")
+            alert("Your browser doesn't support auto saving. Consider updating?");
         }
     }
 }
@@ -1163,7 +1171,8 @@ function loadAutoSave() {
     cookiesPerClick = parseInt(localStorage.cookiesPerClick);
     cookieBeenClickedTimes = parseInt(localStorage.cookieBeenClickedTimes);
     buildingsOwned = parseInt(localStorage.buildingsOwned);
-    grandmaPromptClicks = localStorage.grandmaPromptClicks;
+    grandmaPromptClicks = parseInt(localStorage.grandmaPromptClicks);
+    hasCheated = parseInt(localStorage.hasCheated);
     reloadBuildingPrices();
 }
 
@@ -1217,6 +1226,7 @@ function resetSave() {
     localStorage.cookieBeenClickedTimes = 0;
     localStorage.buildingsOwned = 0;
     localStorage.grandmaPromptClicks = 0;
+    localStorage.hasCheated = 0;
     loadAutoSave();
 }
 function resetSaveButton() {
