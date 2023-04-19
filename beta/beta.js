@@ -1,7 +1,7 @@
 // variable definitions
 const version = "0.5";
 const versionBranch = 1; // 0 is main, 1 is beta, switches stylesheets so must say same depending on the .css file name (style.css or beta.css)
-const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode!
+const inDevelopment = 1; // toggle if developing actively. This is completely different than the builtin dev mode!
 
 // customization
 const backgroundForm = document.getElementById("backgroundSelect");
@@ -35,7 +35,7 @@ let upgrade6Name = "null";
 let upgrade0Description = "Multiplys Keyboard and clicking cookie production by 2" + "<br>" + "<i>'" + "press harder" + "'</i>";
 let upgrade1Description = "Multiplys Grandpa production by 2" + "<br>" + "<i>'" + "nonna dat softwood crap" + "'</i>";
 let upgrade2Description = "Multiplys Ranch production by 2" + "<br>" + "<i>'" + "Wait, what have we been feeding them before now?" + "'</i>";
-let upgrade3Description = "Multiplys TV production by 2" + "<br>" + "<i>'" + "Better than that CRT junk" + "'</i>";
+let upgrade3Description = "Multiplys TV production by 2" + "<br>" + "<i>'" + "World's greatest leap in digital technology" + "'</i>";
 let upgrade4Description = "Multiplys Worker production by 2" + "<br>" + "<i>'" + "Constant supply of Band-Aids in case of emergency" + "'</i>";
 let upgrade5Description = "Multiplys Wallet production by 2" + "<br>" + "<i>'" + "Don't know how the goverment is going to take to this currency" + "'</i>";
 let upgrade6Description = "null";
@@ -125,6 +125,14 @@ let won = 0;
 let currentImportedData; // parsed and not ready for object-turning
 let dataIncomplete; // Parsed JSON but cannot be read for an unknown reason without being parsed again
 let dataComplete; // Completely functional parseded JSON
+let allToSave = [cookies, totalCookies, cookiesPerSecond,
+                keyboardCPSGiven,grandpaCPSGiven,ranchCPSGiven,tvCPSGiven,workerCPSGiven,walletCPSGiven,churchCPSGiven,
+                keyboardsBought,grandpasBought,ranchesBought,tvsBought,workersBought,walletsBought,churchesBought,
+                keyboardCPSGain,grandpaCPSGain,ranchCPSGain,tvCPSGain,workerCPSGain,walletCPSGain,churchCPSGain,
+                keyboardUpgradeCost,grandpaUpgradeCost,ranchUpgradeCost,tvUpgradeCost,workerUpgradeCost,walletUpgradeCost,churchUpgradeCost,
+                upgrade0sBought,upgrade1sBought,upgrade2sBought,upgrade3sBought,upgrade4sBought,upgrade5sBought,upgrade6sBought,
+                cookiesPerClick,cookieBeenClickedTimes,buildingsOwned,grandmaPromptClicks,hasCheated];
+let dataLoaded;
 
 // timer things
 const intervalCPSU = setInterval(cookiesPerSecondUpdate, 1000);
@@ -212,6 +220,23 @@ if (inDevelopment == 1) {
 
     setDevMode("on");
     document.getElementById("offSelectionDev").innerHTML = "Overwritten";
+}
+
+// change title
+switch (versionBranch) {
+    case 0:
+        document.getElementById("title").innerHTML = "Clicker Cookie";
+        break;
+    case 1:
+        document.getElementById("title").innerHTML = "Clicker Cookie Beta";
+        break;
+}
+switch (inDevelopment) {
+    case 0:
+        break;
+    case 1:
+        document.getElementById("title").innerHTML = "Clicker Cookie Dev";
+        break;
 }
 
 // sounds
@@ -1122,6 +1147,26 @@ function autoSave() {
     }
 }
 
+function autoSaveTwo() {
+    let allToSave = [cookies, totalCookies, cookiesPerSecond,
+        keyboardCPSGiven,grandpaCPSGiven,ranchCPSGiven,tvCPSGiven,workerCPSGiven,walletCPSGiven,churchCPSGiven,
+        keyboardsBought,grandpasBought,ranchesBought,tvsBought,workersBought,walletsBought,churchesBought,
+        keyboardCPSGain,grandpaCPSGain,ranchCPSGain,tvCPSGain,workerCPSGain,walletCPSGain,churchCPSGain,
+        keyboardUpgradeCost,grandpaUpgradeCost,ranchUpgradeCost,tvUpgradeCost,workerUpgradeCost,walletUpgradeCost,churchUpgradeCost,
+        upgrade0sBought,upgrade1sBought,upgrade2sBought,upgrade3sBought,upgrade4sBought,upgrade5sBought,upgrade6sBought,
+        cookiesPerClick,cookieBeenClickedTimes,buildingsOwned,grandmaPromptClicks,hasCheated];
+    switch (versionBranch) {
+        case 0:
+            localStorage.save = JSON.stringify(allToSave);
+            break;
+        case 1:
+            localStorage.betaSave = JSON.stringify(allToSave);
+            break;
+        default:
+            alert("Version branch is invalid and auto-saving is not functional!");
+    }
+}
+
 function loadAutoSave() {
     cookies = parseFloat(localStorage.cookies);
     totalCookies = parseFloat(localStorage.totalCookies);
@@ -1174,6 +1219,45 @@ function loadAutoSave() {
     grandmaPromptClicks = parseInt(localStorage.grandmaPromptClicks);
     hasCheated = parseInt(localStorage.hasCheated);
     reloadBuildingPrices();
+}
+
+function loadAutoSaveTwo() {
+    switch (versionBranch) {
+        case 0:
+            dataLoaded = JSON.parse(localStorage.save);
+            cookies = dataLoaded[0];
+            break;
+        case 1:
+            dataLoaded = JSON.parse(localStorage.betaSave);
+            cookies = dataLoaded[0];
+            totalcookies = dataLoaded[1];
+            cookiesPerSecond = dataLoaded[2];
+
+            keyboardCPSGiven = dataLoaded[3];
+            grandpaCPSGiven = dataLoaded[4];
+            ranchCPSGiven = dataLoaded[5];
+            tvCPSGiven = dataLoaded[6];
+            workerCPSGiven = dataLoaded[7];
+            walletCPSGiven = dataLoaded[8];
+            churchCPSGiven = dataLoaded[9];
+
+            keyboardsBought = dataLoaded[10];
+            grandpasBought = dataLoaded[11];
+            ranchesBought = dataLoaded[12];
+            tvsBought = dataLoaded[13];
+            workersBought = dataLoaded[14];
+            walletsBought = dataLoaded[15];
+            churchesBought = dataLoaded[16];
+
+            keyboardCPSGain = dataLoaded[17];
+            grandpaCPSGain = dataLoaded[18];
+            ranchCPSGain = dataLoaded[19];
+            tvCPSGain = dataLoaded[20];
+            workerCPSGain = dataLoaded[21];
+            walletCPSGain = dataLoaded[22];
+            churchCPSGain = dataLoaded[23];
+            break;
+    }
 }
 
 function resetSave() {
