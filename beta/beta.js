@@ -1,7 +1,7 @@
 // variable definitions
 const version = "0.5";
 const versionBranch = 1; // 0 is main, 1 is beta, switches stylesheets so must say same depending on the .css file name (style.css or beta.css)
-const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode!
+const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode! Recommended that versionBranch is 1 for easier saving if this is toggled.
 
 // customization
 const backgroundForm = document.getElementById("backgroundSelect");
@@ -122,10 +122,10 @@ let hasCheated = 0;
 let won = 0;
 
 // save stuff
-let currentImportedData; // parsed and not ready for object-turning
+let currentImportedData; // parsed stringified and not ready for object-turning
 let dataIncomplete; // Parsed JSON but cannot be read for an unknown reason without being parsed again
 let dataComplete; // Completely functional parseded JSON
-let allToSave = [cookies, totalCookies, cookiesPerSecond,
+let allToSave = [cookies, totalCookies, cookiesPerSecond, // all additions to this variable MUST BE AT THE END, then reflected in getLocalSave()
                 keyboardCPSGiven,grandpaCPSGiven,ranchCPSGiven,tvCPSGiven,workerCPSGiven,walletCPSGiven,churchCPSGiven,
                 keyboardsBought,grandpasBought,ranchesBought,tvsBought,workersBought,walletsBought,churchesBought,
                 keyboardCPSGain,grandpaCPSGain,ranchCPSGain,tvCPSGain,workerCPSGain,walletCPSGain,churchCPSGain,
@@ -154,21 +154,6 @@ switch (versionBranch) { // info
         break;
     case 1:
         document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the main branch, this will wipe your current progress!";
-        break;
-}
-// set correct stylesheet
-switch (versionBranch) {
-    case 0:
-        const linkTag = document.createElement("link");
-        linkTag.setAttribute("href","style.css");
-        linkTag.setAttribute("rel","stylesheet");
-        document.head.appendChild(linkTag);
-        break;
-    case 1:
-        const linkBetaTag = document.createElement("link");
-        linkBetaTag.setAttribute("href","beta.css");
-        linkBetaTag.setAttribute("rel","stylesheet");
-        document.head.appendChild(linkBetaTag);
         break;
 }
 
@@ -397,6 +382,10 @@ function popupClicked() {
             break;
         case "resetSave()":
             resetSave();
+            destroySimplePopUp();
+            break;
+        case "resetSaveTwo()": // DELETE LATER
+            resetSaveTwo();
             destroySimplePopUp();
             break;
     }
@@ -1148,7 +1137,7 @@ function autoSave() {
 }
 
 function autoSaveTwo() {
-    let allToSave = [cookies, totalCookies, cookiesPerSecond,
+    allToSave = [cookies, totalCookies, cookiesPerSecond,
         keyboardCPSGiven,grandpaCPSGiven,ranchCPSGiven,tvCPSGiven,workerCPSGiven,walletCPSGiven,churchCPSGiven,
         keyboardsBought,grandpasBought,ranchesBought,tvsBought,workersBought,walletsBought,churchesBought,
         keyboardCPSGain,grandpaCPSGain,ranchCPSGain,tvCPSGain,workerCPSGain,walletCPSGain,churchCPSGain,
@@ -1160,7 +1149,14 @@ function autoSaveTwo() {
             localStorage.save = JSON.stringify(allToSave);
             break;
         case 1:
-            localStorage.betaSave = JSON.stringify(allToSave);
+            switch (inDevelopment) {
+                case 0:   
+                    localStorage.betaSave = JSON.stringify(allToSave);
+                    break;
+                case 1:
+                    localStorage.devSave = JSON.stringify(allToSave);
+                    break;
+            }
             break;
         default:
             alert("Version branch is invalid and auto-saving is not functional!");
@@ -1224,40 +1220,84 @@ function loadAutoSave() {
 function loadAutoSaveTwo() {
     switch (versionBranch) {
         case 0:
-            dataLoaded = JSON.parse(localStorage.save);
-            cookies = dataLoaded[0];
+            getLocalSave("save");
             break;
         case 1:
-            dataLoaded = JSON.parse(localStorage.betaSave);
-            cookies = dataLoaded[0];
-            totalcookies = dataLoaded[1];
-            cookiesPerSecond = dataLoaded[2];
-
-            keyboardCPSGiven = dataLoaded[3];
-            grandpaCPSGiven = dataLoaded[4];
-            ranchCPSGiven = dataLoaded[5];
-            tvCPSGiven = dataLoaded[6];
-            workerCPSGiven = dataLoaded[7];
-            walletCPSGiven = dataLoaded[8];
-            churchCPSGiven = dataLoaded[9];
-
-            keyboardsBought = dataLoaded[10];
-            grandpasBought = dataLoaded[11];
-            ranchesBought = dataLoaded[12];
-            tvsBought = dataLoaded[13];
-            workersBought = dataLoaded[14];
-            walletsBought = dataLoaded[15];
-            churchesBought = dataLoaded[16];
-
-            keyboardCPSGain = dataLoaded[17];
-            grandpaCPSGain = dataLoaded[18];
-            ranchCPSGain = dataLoaded[19];
-            tvCPSGain = dataLoaded[20];
-            workerCPSGain = dataLoaded[21];
-            walletCPSGain = dataLoaded[22];
-            churchCPSGain = dataLoaded[23];
+            switch (inDevelopment) {
+                case 0:
+                    getLocalSave("betaSave");
+                    break;
+                case 1:
+                    getLocalSave("devSave");
+                    break;
+            }
             break;
     }
+}
+function getLocalSave(localStorageSave) {
+    switch (localStorageSave) {
+        case "save":
+            dataLoaded = JSON.parse(localStorage.save);
+            break;
+        case "betaSave":
+            dataLoaded = JSON.parse(localStorage.betaSave);
+            break;
+        case "devSave":
+            dataLoaded = JSON.parse(localStorage.devSave);
+            break;
+        default:
+            alert("Loading auto-saving is not functional because versionBranch or inDevelopment is invalid!");
+            break;
+    }
+    cookies = dataLoaded[0];
+    totalcookies = dataLoaded[1];
+    cookiesPerSecond = dataLoaded[2];
+
+    keyboardCPSGiven = dataLoaded[3];
+    grandpaCPSGiven = dataLoaded[4];
+    ranchCPSGiven = dataLoaded[5];
+    tvCPSGiven = dataLoaded[6];
+    workerCPSGiven = dataLoaded[7];
+    walletCPSGiven = dataLoaded[8];
+    churchCPSGiven = dataLoaded[9];
+
+    keyboardsBought = dataLoaded[10];
+    grandpasBought = dataLoaded[11];
+    ranchesBought = dataLoaded[12];
+    tvsBought = dataLoaded[13];
+    workersBought = dataLoaded[14];
+    walletsBought = dataLoaded[15];
+    churchesBought = dataLoaded[16];
+
+    keyboardCPSGain = dataLoaded[17];
+    grandpaCPSGain = dataLoaded[18];
+    ranchCPSGain = dataLoaded[19];
+    tvCPSGain = dataLoaded[20];
+    workerCPSGain = dataLoaded[21];
+    walletCPSGain = dataLoaded[22];
+    churchCPSGain = dataLoaded[23];
+
+    keyboardUpgradeCost = dataLoaded[24];
+    grandpaUpgradeCost = dataLoaded[25];
+    ranchUpgradeCost = dataLoaded[26];
+    tvUpgradeCost = dataLoaded[27];
+    workerUpgradeCost = dataLoaded[28];
+    walletUpgradeCost = dataLoaded[29];
+    churchUpgradeCost = dataLoaded[30];
+
+    upgrade0sBought = dataLoaded[31];
+    upgrade1sBought = dataLoaded[32];
+    upgrade2sBought = dataLoaded[33];
+    upgrade3sBought = dataLoaded[34];
+    upgrade4sBought = dataLoaded[35];
+    upgrade5sBought = dataLoaded[36];
+    upgrade6sBought = dataLoaded[37];
+
+    cookiesPerClick = dataLoaded[38];
+    cookieBeenClickedTimes = dataLoaded[39];
+    buildingsOwned = dataLoaded[40];
+    grandmaPromptClicks = dataLoaded[41];
+    hasCheated = dataLoaded[42];
 }
 
 function resetSave() {
@@ -1313,8 +1353,32 @@ function resetSave() {
     localStorage.hasCheated = 0;
     loadAutoSave();
 }
+
+function resetSaveTwo() {
+    switch (versionBranch) {
+        case 0:
+            localStorage.removeItem(save);
+            break;
+        case 1:
+            switch (inDevelopment) {
+                case 0:
+                    localStorage.removeItem(betaSave);
+                    break;
+                case 1:
+                    localStorage.removeItem(devSave);
+            }
+            break;
+        default:
+            alert("Resetting save is not functional because versionBranch or inDevelopment is invalid!");
+            break;
+    }
+}
+
 function resetSaveButton() {
-    createSimplePopUp(300,150,"Are you sure you want to do this?",false,"resetSave()","Warning",true )
+    createSimplePopUp(300,150,"Are you sure you want to do this?",false,"resetSave()","Warning",true);
+}
+function resetSaveButtonTwo() {
+    createSimplePopUp(300,150,"Are you sure you want to do this?",false,"resetSave()","Warning",true);
 }
 
 console.log("what are you doing here? well... as long as its productive.");

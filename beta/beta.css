@@ -104,6 +104,9 @@ small {
 .pointer {
     cursor: pointer;
 }
+.red {
+    color: red;
+}
 
 /* important things */
 .leftSide {

@@ -3,6 +3,7 @@
     <head>
         <title id="title">Clicker Cookie</title>
         <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+        <link rel="stylesheet" href="beta.css">  <!-- changeMarker -->
     </head>
     <body>
         <div id="leftSide" class="leftSide">
@@ -208,7 +209,12 @@
                     <button class="data-button pointer" onclick="loadAutoSave()">Load</button>
                 </div>
                 <div class="data-buttons">
-                    <button class="data-button pointer" onclick="resetSaveButton()" style="color:red;">Reset</button>
+                    <button class="data-button pointer" onclick="autoSaveTwo()">New Save</button>
+                    <button class="data-button pointer" onclick="loadAutoSaveTwo()">New Load</button>
+                    <button class="data-button pointer red" onclick="resetSaveButtonTwo()">New Reset</button>
+                </div>
+                <div class="data-buttons">
+                    <button class="data-button pointer red" onclick="resetSaveButton()"">Reset</button>
                 </div>
                 <div class="data-buttons">   
                     <button id="exportDataButton" class="data-button pointer" onclick="exportData()">Export Data</button>
