@@ -1234,7 +1234,7 @@ function loadAutoSaveTwo() {
             }
             break;
     }
-}
+} // merge two later (idk why they are seperate things)
 function getLocalSave(localStorageSave) {
     switch (localStorageSave) {
         case "save":
@@ -1299,6 +1299,7 @@ function getLocalSave(localStorageSave) {
     buildingsOwned = dataLoaded[40];
     grandmaPromptClicks = dataLoaded[41];
     hasCheated = dataLoaded[42];
+    reloadBuildingPrices();
 }
 
 function resetSave() {
@@ -1373,6 +1374,7 @@ function resetSaveTwo() {
             alert("Resetting save is not functional because versionBranch or inDevelopment is invalid!");
             break;
     }
+    reloadBuildingPrices();
 }
 
 function resetSaveButton() {
