@@ -66,6 +66,7 @@
                 <div class="changelog-wrapper">
                     <div name="version0.5" class="changelog">
                         <h5 class="changelog-version-heading">Version 0.5:</h5>
+                        <p class="button-paragraph-text" style="font-size:14px;">The longest update gap yet, what have we been waiting for?</p>
                         <p class="button-paragraph-text">Added:</p>
                         <ul class="middle-ul">
                             <li>AUTO SAVING!!!</li>
@@ -73,7 +74,6 @@
                             <li>New temporary cookie!</li>
                             <li>Cursor changes type when hovering over certain elements</li>
                             <li>Special development buttons for when in active development</li>
-                            <li>Automatic switching between main/beta stylesheets for easier development</li>
                             <li>+ More!</li>
                         </ul>
                         <p class="button-paragraph-text">Fixed:</p>
@@ -83,7 +83,7 @@
                         </ul>
                         <p class="button-paragraph-text">Changed:</p>
                         <ul class="middle-ul">
-                            <li>Can now switch between middle button text by pressing another button opposed to pressing the active button and the button you want.</li>
+                            <li>Can now switch between middle button text by pressing another button opposed to pressing the active button and then button you want.</li>
                             <li>Version number now says if the game is in beta or not</li>
                             <li>Extended popup functionality.</li>
                         </ul>
@@ -93,7 +93,7 @@
                         </ul>
                     </div>
                     <div name="version0.4.1" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.4.1:</h5>
+                        <h5 class="changelog-version-heading">Version 0.4.1 - March 24th:</h5>
                         <p class="button-paragraph-text">Added:</p>
                         <ul class="middle-ul">
                             <li>Color!</li>
@@ -109,7 +109,7 @@
                         </ul>
                     </div>
                     <div name="version0.4" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.4:</h5>
+                        <h5 class="changelog-version-heading">Version 0.4 - March 24th:</h5>
                         <p class="button-paragraph-text" style="font-size:14px;">"Hey, what happened to 0.3?" <br>
                             Well, you see... I made 0.3 while I also had 0.4 content being actively worked on, so I kinda just skipped it because this is a BIG update!</p>
                         <p class="button-paragraph-text">Added:</p>
@@ -128,7 +128,7 @@
                         </ul>
                     </div>
                     <div name="version0.2.2" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.2.2:</h5>
+                        <h5 class="changelog-version-heading">Version 0.2.2 - March 16th:</h5>
                         <p class="button-paragraph-text">Added:</p>
                         <ul class="middle-ul">
                             <li>Borders to the left and right sides of the screen.</li>
@@ -136,7 +136,7 @@
                         </ul>
                     </div>
                     <div name="version0.2.1" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.2.1:</h5>
+                        <h5 class="changelog-version-heading">Version 0.2.1 - March 16th:</h5>
                         <p class="button-paragraph-text">Added:</p>
                         <ul class="middle-ul">
                             <li>Television</li>
@@ -148,7 +148,7 @@
                         </ul>
                     </div>
                     <div name="version0.2" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.2:</h5>
+                        <h5 class="changelog-version-heading">Version 0.2 - March 16th:</h5>
                         <p class="button-paragraph-text">Added:</p>
                         <ul class="middle-ul">
                             <li>A Github page</li>
@@ -157,7 +157,7 @@
                         <p class="button-paragraph-text" style="font-size:14px;">This is qualified as a major update simply because of the addition of a Github Page, even if it adds little to the actual game.</p>
                     </div>
                     <div name="version0.1.1" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.1.1:</h5>
+                        <h5 class="changelog-version-heading">Version 0.1.1 - March 9th:</h5>
                         <p class="button-paragraph-text">Added:</p>
                         <ul class="middle-ul">
                             <li>Ranches! Buyable for 1000 cookies for the time being.</li>
@@ -174,7 +174,7 @@
                         </ul>
                     </div>
                     <div name="version0.1" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.1:</h5>
+                        <h5 class="changelog-version-heading">Version 0.1 - March 4th:</h5>
                         <p class="button-paragraph-text">Added:</p>
                         <ul class="middle-ul">
                             <li>Existance.</li>
@@ -209,12 +209,12 @@
                     <button class="data-button pointer" onclick="loadAutoSave()">Load</button>
                 </div>
                 <div class="data-buttons">
+                    <button class="data-button pointer red" onclick="resetSaveButton()">Reset</button>
+                </div>
+                <div id="newDataOptions" class="data-buttons no-display"> <!-- changeMarker -->
                     <button class="data-button pointer" onclick="autoSaveTwo()">New Save</button>
                     <button class="data-button pointer" onclick="loadAutoSaveTwo()">New Load</button>
                     <button class="data-button pointer red" onclick="resetSaveButtonTwo()">New Reset</button>
-                </div>
-                <div class="data-buttons">
-                    <button class="data-button pointer red" onclick="resetSaveButton()"">Reset</button>
                 </div>
                 <div class="data-buttons">   
                     <button id="exportDataButton" class="data-button pointer" onclick="exportData()">Export Data</button>

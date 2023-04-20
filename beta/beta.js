@@ -876,6 +876,7 @@ function setDevMode(value) {
             devMode = 1;
             console.log("Developer Mode activated.");
             document.getElementById("devModeSelect").disabled = true;
+            document.getElementById("newDataOptions").style.display = "block";
             break;
     }
 }
