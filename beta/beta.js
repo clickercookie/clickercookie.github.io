@@ -1,7 +1,7 @@
 // variable definitions
 const version = "0.5";
 const versionBranch = 1; // 0 is main, 1 is beta, switches stylesheets so must say same depending on the .css file name (style.css or beta.css)
-const inDevelopment = 1; // toggle if developing actively. This is completely different than the builtin dev mode! Recommended that versionBranch is 1 for easier saving if this is toggled.
+const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode! Recommended that versionBranch is 1 for easier saving if this is toggled.
 
 // customization
 const backgroundForm = document.getElementById("backgroundSelect");
