@@ -1,0 +1,175 @@
+Contains old saving system in case of catastrophic failure.
+
+function autoSave() {
+    if (typeof(Storage) !== "undefined") {
+        if (hasCheated == 0) {
+            localStorage.cookies = cookies;
+            localStorage.totalCookies = totalCookies;
+            localStorage.cookiesPerClick = cookiesPerClick;
+
+            localStorage.keyboardCPSGiven = keyboardCPSGiven;
+            localStorage.grandpaCPSGiven = grandpaCPSGiven;
+            localStorage.ranchCPSGiven = ranchCPSGiven;
+            localStorage.tvCPSGiven = tvCPSGiven;
+            localStorage.workerCPSGiven = workerCPSGiven;
+            localStorage.walletCPSGiven = walletCPSGiven;
+            localStorage.churchCPSGiven = churchCPSGiven;
+            localStorage.devCPSGiven = devCPSGiven;
+
+            localStorage.keyboardsBought = keyboardsBought;
+            localStorage.grandpasBought = grandpasBought;
+            localStorage.ranchesBought = ranchesBought;
+            localStorage.tvsBought = tvsBought;
+            localStorage.workersBought = workersBought;
+            localStorage.walletsBought = walletsBought;
+            localStorage.churchesBought = churchesBought;
+
+            localStorage.keyboardCPSGain = keyboardCPSGain;
+            localStorage.grandpaCPSGain = grandpaCPSGain;
+            localStorage.ranchCPSGain = ranchCPSGain;
+            localStorage.tvCPSGain = tvCPSGain;
+            localStorage.workerCPSGain = workerCPSGain;
+            localStorage.walletCPSGain = walletCPSGain;
+            localStorage.churchCPSGain = churchCPSGain;
+
+            localStorage.keyboardUpgradeCost = keyboardUpgradeCost;
+            localStorage.grandpaUpgradeCost = grandpaUpgradeCost;
+            localStorage.ranchUpgradeCost = ranchUpgradeCost;
+            localStorage.tvUpgradeCost = tvUpgradeCost;
+            localStorage.workerUpgradeCost = workerUpgradeCost;
+            localStorage.walletUpgradeCost = walletUpgradeCost;
+            localStorage.churchUpgradeCost = churchUpgradeCost;
+
+            localStorage.upgrade0sBought = upgrade0sBought;
+            localStorage.upgrade1sBought = upgrade1sBought;
+            localStorage.upgrade2sBought = upgrade2sBought;
+            localStorage.upgrade3sBought = upgrade3sBought;
+            localStorage.upgrade4sBought = upgrade4sBought;
+            localStorage.upgrade5sBought = upgrade5sBought;
+            localStorage.upgrade6sBought = upgrade6sBought;
+
+            localStorage.cookiesPerClick = cookiesPerClick;
+            localStorage.cookieBeenClickedTimes = cookieBeenClickedTimes;
+            localStorage.buildingsOwned = buildingsOwned;
+            localStorage.grandmaPromptClicks = grandmaPromptClicks;
+            localStorage.hasCheated = hasCheated;
+            return("Saved with " + cookies + " cookies.");
+        }
+    } 
+    else {
+        if (autoSaveWarningGiven == 0) {
+            autoSaveWarningGiven = 1;
+            alert("Your browser doesn't support auto saving. Consider updating?");
+        }
+    }
+}
+
+
+function loadAutoSave() {
+    cookies = parseFloat(localStorage.cookies);
+    totalCookies = parseFloat(localStorage.totalCookies);
+    cookiesPerSecond = parseFloat(localStorage.cookiesPerSecond);
+
+    keyboardCPSGiven = parseFloat(localStorage.keyboardCPSGiven);
+    grandpaCPSGiven = parseFloat(localStorage.grandpaCPSGiven);
+    ranchCPSGiven = parseFloat(localStorage.ranchCPSGiven);
+    tvCPSGiven = parseFloat(localStorage.tvCPSGiven);
+    workerCPSGiven = parseFloat(localStorage.workerCPSGiven);
+    walletCPSGiven = parseFloat(localStorage.walletCPSGiven);
+    churchCPSGiven = parseFloat(localStorage.churchCPSGiven);
+    devCPSGiven = parseFloat(localStorage.devCPSGiven);
+
+    keyboardsBought = parseInt(localStorage.keyboardsBought);
+    grandpasBought = parseInt(localStorage.grandpasBought);
+    ranchesBought = parseInt(localStorage.ranchesBought);
+    tvsBought = parseInt(localStorage.tvsBought);
+    workersBought = parseInt(localStorage.workersBought);
+    walletsBought = parseInt(localStorage.walletsBought);
+    churchesBought = parseInt(localStorage.churchesBought);
+
+    keyboardCPSGain = parseFloat(localStorage.keyboardCPSGain);
+    grandpaCPSGain = parseFloat(localStorage.grandpaCPSGain);
+    ranchCPSGain = parseFloat(localStorage.ranchCPSGain);
+    tvCPSGain = parseFloat(localStorage.tvCPSGain);
+    workerCPSGain = parseFloat(localStorage.workerCPSGain);
+    walletCPSGain = parseFloat(localStorage.walletCPSGain);
+    churchCPSGain = parseFloat(localStorage.churchCPSGain);
+
+    keyboardUpgradeCost = parseFloat(localStorage.keyboardUpgradeCost);
+    grandpaUpgradeCost = parseFloat(localStorage.grandpaUpgradeCost);
+    ranchUpgradeCost = parseFloat(localStorage.ranchUpgradeCost);
+    tvUpgradeCost = parseFloat(localStorage.tvUpgradeCost);
+    workerUpgradeCost = parseFloat(localStorage.workerUpgradeCost);
+    walletUpgradeCost = parseFloat(localStorage.walletUpgradeCost);
+    churchUpgradeCost = parseFloat(localStorage.churchUpgradeCost);
+
+    upgrade0sBought = parseInt(localStorage.upgrade0sBought);
+    upgrade1sBought = parseInt(localStorage.upgrade1sBought);
+    upgrade2sBought = parseInt(localStorage.upgrade2sBought);
+    upgrade3sBought = parseInt(localStorage.upgrade3sBought);
+    upgrade4sBought = parseInt(localStorage.upgrade4sBought);
+    upgrade5sBought = parseInt(localStorage.upgrade5sBought);
+    upgrade6sBought = parseInt(localStorage.upgrade6sBought);
+
+    cookiesPerClick = parseInt(localStorage.cookiesPerClick);
+    cookieBeenClickedTimes = parseInt(localStorage.cookieBeenClickedTimes);
+    buildingsOwned = parseInt(localStorage.buildingsOwned);
+    grandmaPromptClicks = parseInt(localStorage.grandmaPromptClicks);
+    hasCheated = parseInt(localStorage.hasCheated);
+    reloadBuildingPrices();
+}
+
+
+function resetSave() {
+    localStorage.cookies = 0;
+    localStorage.totalCookies = 0;
+    localStorage.cookiesPerSecond = 0;
+
+    localStorage.keyboardCPSGiven = 0;
+    localStorage.grandpaCPSGiven = 0;
+    localStorage.ranchCPSGiven = 0;
+    localStorage.tvCPSGiven = 0;
+    localStorage.workerCPSGiven = 0;
+    localStorage.walletCPSGiven = 0;
+    localStorage.churchCPSGiven = 0;
+    localStorage.devCPSGiven = 0;
+
+    localStorage.keyboardsBought = 0;
+    localStorage.grandpasBought = 0;
+    localStorage.ranchesBought = 0;
+    localStorage.tvsBought = 0;
+    localStorage.workersBought = 0;
+    localStorage.walletsBought = 0;
+    localStorage.churchesBought = 0;
+
+    localStorage.keyboardCPSGain = 0.1;
+    localStorage.grandpaCPSGain = 1;
+    localStorage.ranchCPSGain = 8;
+    localStorage.tvCPSGain = 47;
+    localStorage.workerCPSGain = 260;
+    localStorage.walletCPSGain = 1440;
+    localStorage.churchCPSGain = 7800;
+
+    localStorage.keyboardUpgradeCost = 15;
+    localStorage.grandpaUpgradeCost = 100;
+    localStorage.ranchUpgradeCost = 1100;
+    localStorage.tvUpgradeCost = 12000;
+    localStorage.workerUpgradeCost = 130000;
+    localStorage.walletUpgradeCost = 1400000;
+    localStorage.churchUpgradeCost = 20000000;
+
+    localStorage.upgrade0sBought = 0;
+    localStorage.upgrade1sBought = 0;
+    localStorage.upgrade2sBought = 0;
+    localStorage.upgrade3sBought = 0;
+    localStorage.upgrade4sBought = 0;
+    localStorage.upgrade5sBought = 0;
+    localStorage.upgrade6sBought = 0;
+
+    localStorage.cookiesPerClick = 1;
+    localStorage.cookieBeenClickedTimes = 0;
+    localStorage.buildingsOwned = 0;
+    localStorage.grandmaPromptClicks = 0;
+    localStorage.hasCheated = 0;
+    loadAutoSave();
+}
