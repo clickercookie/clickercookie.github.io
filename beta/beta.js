@@ -168,6 +168,9 @@ switch (versionBranch) { // info
 if (isNaN(cookies)) {
     resetSave();
 }
+if (localStorage.cookies >= 0) {
+    createSimplePopUp(400,200,"You are using the old saving method. You may have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format.",false,"localStorage.clear()","Warning",false);
+}
 reloadBuildingPrices();
 if (localStorage.getItem("save") == null) {
     localStorage.setItem("save",JSON.stringify(defaultSavedValues));
@@ -389,23 +392,6 @@ function cookieClicked() {
     cookieClick.play();
 }
 
-function popupClicked() {
-    switch (popupButtonDo) {
-        case "default":
-            destroySimplePopUp();
-            break;
-        case "grandmaPromptClicks":
-            grandmaPromptClicks = grandmaPromptClicks + 1;
-            break;
-        case "resetSave()":
-            resetSave();
-            destroySimplePopUp();
-            break;
-    }
-    if (cookies < 0) {
-        cookies = 0;
-    }
-}
 function popupBackClicked() {
     destroySimplePopUp();
 }
@@ -821,27 +807,79 @@ function createSimplePopUp(x,y,text,buttonNot,doWhat,title,backButton) {
         document.getElementById("popup-title").innerHTML = title;
     }
     else {
-        consoleLogDev("If you want a titleless popup, due to a technical limitation, please use the title parameter with a blank string")
+        switch (inDevelopment) {
+            case 0:
+                    alert("An error occured: createSimplePopUp() has no title value. Please report this to the GitHub.");
+                    break;
+                case 1:
+                    alert("createSimplePopUp() needs a title value. Use \"\" for a blank title");
+                    break;
+        }
     }
-    if (buttonNot == true) {
-        document.getElementById("popupButton").style.display = "none";
+    switch (buttonNot) {
+        case true:
+            document.getElementById("popupButton").style.display = "none";
+            break;
+        case false:
+            document.getElementById("popupButton").style.display = "inline-block";
+            break;
+        default:
+            switch (inDevelopment) {
+                case 0:
+                    alert("An error occured: createSimplePopUp() needs a buttonNot value. Please report this to the GitHub.");
+                    break;
+                case 1:
+                    alert("createSimplePopUp() needs a buttonNot value.");
+                    break;
+            }
+            break;
     }
-    else {
-        document.getElementById("popupButton").style.display = "inline-block";
-    }
-    if (backButton == true) {
-        document.getElementById("popupBackButton").style.display = "inline-block";
-    }
-    else {
-        document.getElementById("popupBackButton").style.display = "none";
+    switch (backButton) {
+        case true:
+            document.getElementById("popupBackButton").style.display = "inline-block";
+            break;
+        case false:
+            document.getElementById("popupBackButton").style.display = "none";
+            break;
+        default:
+            switch (inDevelopment) {
+                case 0:
+                    alert("An error occured: createSimplePopUp() needs a backButton value. Please report this to the GitHub.");
+                    break;
+                case 1:
+                    alert("createSimplePopUp() needs a backButton value.");
+                    break;
+            }
+            break;
     }
     popupButtonDo = doWhat;
 }
-
 function destroySimplePopUp() {
     document.getElementById("popup").style.display = "none";
     document.getElementById("popupContent").innerHTML = "null";
     document.getElementById("popupButton").style.display = "none";
+}
+function popupClicked() {
+    switch (popupButtonDo) {
+        case "default":
+            destroySimplePopUp();
+            break;
+        case "grandmaPromptClicks":
+            grandmaPromptClicks = grandmaPromptClicks + 1;
+            break;
+        case "resetSave()":
+            resetSave();
+            destroySimplePopUp();
+            break;
+        case "localStorage.clear()":
+            localStorage.clear();
+            destroySimplePopUp();
+            alert("Please refresh your page."); // CHANGE TO AUTOMATIC
+            break;
+    }
+    if (cookies < 0) {
+        cookies = 0;
+    }
 }
 
 // set areas to different things
