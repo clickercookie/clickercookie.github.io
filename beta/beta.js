@@ -349,10 +349,10 @@ function perMillisecondUniversal() {
 
     // log to console in case of error
     if (cookies < 0) {
-        createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: " + currentClickedPlural + " are in negative!<br>Please report this to the GitHub accessable in the bottom left corner",false,"default","");
+        createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: " + currentClickedPlural + " are in negative!<br>Please report this to the GitHub accessable in the bottom left corner",false,"default","",false);
     }
     if (upgrade0Identifier == upgrade1Identifier) {
-        createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: Multiple of same upgrade or identifier is not set!<br>Please report this to the GitHub accessable in the bottom left corner",false,"default","");
+        createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: Multiple of same upgrade or identifier is not set!<br>Please report this to the GitHub accessable in the bottom left corner",false,"default","",false);
     }
     // stats that need to be updated beforehand
     buildingsOwned = keyboardsBought + grandpasBought + ranchesBought + tvsBought + workersBought + walletsBought + churchesBought;
@@ -602,7 +602,7 @@ function createUpgrade(identifier,name,description,quote,price,img) {
             document.getElementById("upgrade6").style.backgroundImage = "url(" + img + ")";
             break;
         default:
-            createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> A fatal error occured: upgrade identifier is invalid!<br>Please report this to the GitHub accessable in the bottom left corner",true);
+            createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> A fatal error occured: upgrade identifier is invalid!<br>Please report this to the GitHub accessable in the bottom left corner",true,"default","",false);
             break;
     }
 }
@@ -630,7 +630,7 @@ function destroyUpgrade(identifier) {
             document.getElementById("upgrade6").style.display = "none";
             break;
         default:
-            createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> A fatal error occured: upgrade identifier is invalid for destroyed upgrade!<br>Please report this to the GitHub accessable in the bottom left corner",true);
+            createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> A fatal error occured: upgrade identifier is invalid for destroyed upgrade!<br>Please report this to the GitHub accessable in the bottom left corner",true,"default","",false);
             break;
     }
 }
@@ -802,19 +802,24 @@ function createSimplePopUp(x,y,text,buttonNot,doWhat,title,backButton) {
     document.getElementById("popup").style.width = x + "px";
     document.getElementById("popupButtonDiv").style.width = x + "px";
     document.getElementById("popup").style.height = y + "px";
-    if (title !== "undefined") {
-        document.getElementById("popup-title").style.display = "block";
-        document.getElementById("popup-title").innerHTML = title;
-    }
-    else {
-        switch (inDevelopment) {
-            case 0:
-                    alert("An error occured: createSimplePopUp() has no title value. Please report this to the GitHub.");
-                    break;
-                case 1:
-                    alert("createSimplePopUp() needs a title value. Use \"\" for a blank title");
-                    break;
-        }
+    switch (title) {
+        case "":
+            document.getElementById("popup-title").style.display = "none";
+            break;
+        case "undefined":
+            switch (inDevelopment) {
+                case 0:
+                        alert("An error occured: createSimplePopUp() has no title value. Please report this to the GitHub.");
+                        break;
+                    case 1:
+                        alert("createSimplePopUp() needs a title value. Use \"\" for a blank title");
+                        break;
+            }
+            break;
+        default:
+            document.getElementById("popup-title").style.display = "block";
+            document.getElementById("popup-title").innerHTML = title;
+            break;
     }
     switch (buttonNot) {
         case true:
@@ -987,7 +992,7 @@ function consoleLogDev(str) {
 function grandmasArrival() {
     switch (grandmaPromptClicks) {
         case 0:
-            createSimplePopUp(300,150,"a familiar face appears...",false,"grandmaPromptClicks");
+            createSimplePopUp(300,150,"a familiar face appears...",false,"grandmaPromptClicks","",false);
             break;
         case 1:
             document.getElementById("popupImage").src = "img/grandma.png";
@@ -995,27 +1000,27 @@ function grandmasArrival() {
             createSimplePopUp(300,150,"hello...",false,"grandmaPromptClicks");
             break;
         case 2:
-            createSimplePopUp(300,150,"how long have you done this for?",false,"grandmaPromptClicks");
+            createSimplePopUp(300,150,"how long have you done this for?",false,"grandmaPromptClicks","",false);
             break;
         case 3:
-            createSimplePopUp(300,150,"oh my...",false,"grandmaPromptClicks");
+            createSimplePopUp(300,150,"oh my...",false,"grandmaPromptClicks","",false);
             break;
         case 4:
-            createSimplePopUp(300,150,"well i suppose you must know this:",false,"grandmaPromptClicks");
+            createSimplePopUp(300,150,"well i suppose you must know this:",false,"grandmaPromptClicks","",false);
             break;
         case 5:
-            createSimplePopUp(300,150,"<i>there is nothing else to do here</i>",false,"grandmaPromptClicks");
+            createSimplePopUp(300,150,"<i>there is nothing else to do here</i>",false,"grandmaPromptClicks","",false);
             break;
         case 6:
-            createSimplePopUp(300,150,"you win.",false,"grandmaPromptClicks");
+            createSimplePopUp(300,150,"you win.",false,"grandmaPromptClicks","",false);
             document.getElementById("win").style.display = "block";
             won = 1;
             break;
         case 7:
-            createSimplePopUp(300,150,"you may keep going...",false,"grandmaPromptClicks");
+            createSimplePopUp(300,150,"you may keep going...",false,"grandmaPromptClicks","",false);
             break;
         case 8:
-            createSimplePopUp(300,150,"but you will be wasting your time.",false,"grandmaPromptClicks");
+            createSimplePopUp(300,150,"but you will be wasting your time.",false,"grandmaPromptClicks","",false);
             break;
         case 9:
             destroySimplePopUp();
