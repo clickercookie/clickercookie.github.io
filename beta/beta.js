@@ -874,7 +874,7 @@ function popupClicked() {
         case "localStorage.clear()":
             localStorage.clear();
             destroySimplePopUp();
-            alert("Please refresh your page."); // CHANGE TO AUTOMATIC
+            location.reload();
             break;
     }
     if (cookies < 0) {
