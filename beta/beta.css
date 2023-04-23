@@ -372,12 +372,17 @@ small {
     font-family: monospace;
 }
 
-.building-price {
+.building-name {
     font-size: 22px;
     display: inline;
     line-height: 1px;
     position: absolute;
     left: 4px;
+}
+
+.building-price {
+    margin-top: 34px;
+    margin-left: 4.6px;
 }
 
 .building-icon {

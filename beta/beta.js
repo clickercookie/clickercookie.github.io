@@ -169,7 +169,7 @@ if (isNaN(cookies)) {
     resetSave();
 }
 if (localStorage.cookies >= 0) {
-    createSimplePopUp(400,200,"You are using the old saving method. You may have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format.",false,"localStorage.clear()","Warning",false);
+    createSimplePopUp(400,200,"You are using the old saving method. You may have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format.",false,"localStorage.clear()","Warning",false,false);
 }
 reloadBuildingPrices();
 if (localStorage.getItem("save") == null) {
@@ -313,27 +313,21 @@ function perMillisecondUniversal() {
 
     // keep unlocked
     if (grandpaUnlocked == 1) {
-        document.getElementById("grandpaUpgrade").style.display = "inline";
         document.getElementById("building1").style.display = "block";
     }
     if (ranchUnlocked == 1) {
-        document.getElementById("ranchUpgrade").style.display = "inline";
         document.getElementById("building2").style.display = "block";
     }
     if (tvUnlocked == 1) {
-        document.getElementById("tvUpgrade").style.display = "inline";
         document.getElementById("building3").style.display = "block";
     }
     if (workerUnlocked == 1) {
-        document.getElementById("workerUpgrade").style.display = "inline";
         document.getElementById("building4").style.display = "block";
     }
     if (walletUnlocked == 1) {
-        document.getElementById("walletUpgrade").style.display = "inline";
         document.getElementById("building5").style.display = "block";
     }
     if (churchUnlocked == 1) {
-        document.getElementById("churchUpgrade").style.display = "inline";
         document.getElementById("building6").style.display = "block";
     }
 
@@ -462,7 +456,7 @@ function keyboardUpgrade() {
         keyboardsBought = keyboardsBought + 1;
         keyboardCPSGiven = keyboardCPSGiven + keyboardCPSGain;
         reloadCookieCounter();
-        document.getElementById("keyboardUpgrade").innerHTML = "Keyboard: " +keyboardUpgradeCost;
+        document.getElementById("keyboardUpgrade").innerHTML = keyboardUpgradeCost;
         document.getElementById("keyboardsBought").innerHTML = +keyboardsBought;
         makeUpgradeSound();
     }
@@ -476,7 +470,7 @@ function grandpaUpgrade() {
         grandpasBought = grandpasBought + 1;
         grandpaCPSGiven = grandpaCPSGiven + grandpaCPSGain;
         reloadCookieCounter();
-        document.getElementById("grandpaUpgrade").innerHTML = "Grandpa: " +grandpaUpgradeCost;
+        document.getElementById("grandpaUpgrade").innerHTML = grandpaUpgradeCost;
         document.getElementById("grandpasBought").innerHTML = +grandpasBought;
         makeUpgradeSound();
     }
@@ -490,7 +484,7 @@ function ranchUpgrade() {
         ranchesBought = ranchesBought + 1;
         ranchCPSGiven = ranchCPSGiven + ranchCPSGain;
         reloadCookieCounter();
-        document.getElementById("ranchUpgrade").innerHTML = "Ranch: " +ranchUpgradeCost;
+        document.getElementById("ranchUpgrade").innerHTML = ranchUpgradeCost;
         document.getElementById("ranchesBought").innerHTML = +ranchesBought;
         makeUpgradeSound();
     }
@@ -504,7 +498,7 @@ function tvUpgrade() {
         tvsBought = tvsBought + 1;
         tvCPSGiven = tvCPSGiven + tvCPSGain;
         reloadCookieCounter();
-        document.getElementById("tvUpgrade").innerHTML = "Television: " +tvUpgradeCost;
+        document.getElementById("tvUpgrade").innerHTML = tvUpgradeCost;
         document.getElementById("tvsBought").innerHTML = +tvsBought;
         makeUpgradeSound();
     }
@@ -517,7 +511,7 @@ function workerUpgrade() {
         workersBought = workersBought + 1;
         workerCPSGiven = workerCPSGiven + workerCPSGain;
         reloadCookieCounter();
-        document.getElementById("workerUpgrade").innerHTML = "Worker: " +workerUpgradeCost;
+        document.getElementById("workerUpgrade").innerHTML = workerUpgradeCost;
         document.getElementById("workersBought").innerHTML = +workersBought;
         makeUpgradeSound();
     }
@@ -530,7 +524,7 @@ function walletUpgrade() {
         walletsBought = walletsBought + 1;
         walletCPSGiven = walletCPSGiven + walletCPSGain;
         reloadCookieCounter();
-        document.getElementById("walletUpgrade").innerHTML = "Wallet: " +walletUpgradeCost;
+        document.getElementById("walletUpgrade").innerHTML = walletUpgradeCost;
         document.getElementById("walletsBought").innerHTML = +walletsBought;
         makeUpgradeSound();
     }
@@ -543,7 +537,7 @@ function churchUpgrade() {
         churchesBought = churchesBought + 1;
         churchCPSGiven = churchCPSGiven + churchCPSGain;
         reloadCookieCounter();
-        document.getElementById("churchUpgrade").innerHTML = "Church: " +churchUpgradeCost;
+        document.getElementById("churchUpgrade").innerHTML = churchUpgradeCost;
         document.getElementById("churchesBought").innerHTML = +churchesBought;
         makeUpgradeSound();
     }
@@ -776,13 +770,13 @@ function reloadCookieCounter() {
     document.getElementById("cookieCounter").innerHTML = currentClickedPlural + ": " +cookiesView;
 }
 function reloadBuildingPrices() {
-    document.getElementById("keyboardUpgrade").innerHTML = "Keyboard: " +keyboardUpgradeCost;
-    document.getElementById("grandpaUpgrade").innerHTML = "Grandpa: " +grandpaUpgradeCost;
-    document.getElementById("ranchUpgrade").innerHTML = "Ranch: " +ranchUpgradeCost;
-    document.getElementById("tvUpgrade").innerHTML = "Television: " +tvUpgradeCost;
-    document.getElementById("workerUpgrade").innerHTML = "Worker: " +workerUpgradeCost;
-    document.getElementById("walletUpgrade").innerHTML = "Wallet: " +walletUpgradeCost;
-    document.getElementById("churchUpgrade").innerHTML = "Church: " +churchUpgradeCost;
+    document.getElementById("keyboardUpgrade").innerHTML = keyboardUpgradeCost;
+    document.getElementById("grandpaUpgrade").innerHTML = grandpaUpgradeCost;
+    document.getElementById("ranchUpgrade").innerHTML = ranchUpgradeCost;
+    document.getElementById("tvUpgrade").innerHTML = tvUpgradeCost;
+    document.getElementById("workerUpgrade").innerHTML = workerUpgradeCost;
+    document.getElementById("walletUpgrade").innerHTML = walletUpgradeCost;
+    document.getElementById("churchUpgrade").innerHTML = churchUpgradeCost;
 }
 function checkInvalidCookies() {
     if (cookies == NaN) {
@@ -1101,7 +1095,7 @@ function importReadData() {
     data = JSON.parse(currentImportedData);
 
     cookies = data[0];
-    totalcookies = data[1];
+    totalCookies = data[1];
     cookiesPerSecond = data[2];
 
     keyboardCPSGiven = data[3];
@@ -1216,7 +1210,7 @@ function getLocalSave(localStorageSave) {
             break;
     }
     cookies = dataLoaded[0];
-    totalcookies = dataLoaded[1];
+    totalCookies = dataLoaded[1];
     cookiesPerSecond = dataLoaded[2];
 
     keyboardCPSGiven = dataLoaded[3];
