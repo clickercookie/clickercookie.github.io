@@ -349,10 +349,10 @@ function perMillisecondUniversal() {
 
     // log to console in case of error
     if (cookies < 0) {
-        createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: " + currentClickedPlural + " are in negative!<br>Please report this to the GitHub accessable in the bottom left corner",false,"default","",false);
+        createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: " + currentClickedPlural + " are in negative!<br>Please report this to the GitHub accessable in the bottom left corner",false,"default","",false,true);
     }
     if (upgrade0Identifier == upgrade1Identifier) {
-        createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: Multiple of same upgrade or identifier is not set!<br>Please report this to the GitHub accessable in the bottom left corner",false,"default","",false);
+        createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> An error occured: Multiple of same upgrade or identifier is not set!<br>Please report this to the GitHub accessable in the bottom left corner",false,"default","",false,true);
     }
     // stats that need to be updated beforehand
     buildingsOwned = keyboardsBought + grandpasBought + ranchesBought + tvsBought + workersBought + walletsBought + churchesBought;
@@ -602,7 +602,7 @@ function createUpgrade(identifier,name,description,quote,price,img) {
             document.getElementById("upgrade6").style.backgroundImage = "url(" + img + ")";
             break;
         default:
-            createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> A fatal error occured: upgrade identifier is invalid!<br>Please report this to the GitHub accessable in the bottom left corner",true,"default","",false);
+            createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> A fatal error occured: upgrade identifier is invalid!<br>Please report this to the GitHub accessable in the bottom left corner",true,"default","",false,true);
             break;
     }
 }
@@ -630,7 +630,7 @@ function destroyUpgrade(identifier) {
             document.getElementById("upgrade6").style.display = "none";
             break;
         default:
-            createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> A fatal error occured: upgrade identifier is invalid for destroyed upgrade!<br>Please report this to the GitHub accessable in the bottom left corner",true,"default","",false);
+            createSimplePopUp(300,150,"<i>huh, what just happened?</i> <br> A fatal error occured: upgrade identifier is invalid for destroyed upgrade!<br>Please report this to the GitHub accessable in the bottom left corner",true,"default","",false,true);
             break;
     }
 }
@@ -775,7 +775,6 @@ function versionNumberMousedOverUndo() {
 function reloadCookieCounter() {
     document.getElementById("cookieCounter").innerHTML = currentClickedPlural + ": " +cookiesView;
 }
-
 function reloadBuildingPrices() {
     document.getElementById("keyboardUpgrade").innerHTML = "Keyboard: " +keyboardUpgradeCost;
     document.getElementById("grandpaUpgrade").innerHTML = "Grandpa: " +grandpaUpgradeCost;
@@ -785,18 +784,30 @@ function reloadBuildingPrices() {
     document.getElementById("walletUpgrade").innerHTML = "Wallet: " +walletUpgradeCost;
     document.getElementById("churchUpgrade").innerHTML = "Church: " +churchUpgradeCost;
 }
-
 function checkInvalidCookies() {
     if (cookies == NaN) {
         resetSave();
     }
 }
-
 function makeUpgradeSound() {
     cookieClick.play(); // needs to be updated to different sfx
 }
-
-function createSimplePopUp(x,y,text,buttonNot,doWhat,title,backButton) {
+function createPopupAlertError(value) {
+    switch (inDevelopment) {
+        case 0:
+            alert("An error occured: createSimplePopUp() has no " + value + " value. Please report this to the GitHub.");
+            break;
+        case 1:
+            if (value == "title") {
+                alert("createSimplePopUp() needs a "+value+" value. Use \"\" for a blank title");
+            }
+            else {
+                alert("createSimplePopUp() needs a "+value+" value.");
+            }
+            break;
+    }
+}
+function createSimplePopUp(x,y,text,noButton,doWhat,title,backButton,isError) {
     document.getElementById("popup").style.display = "block";
     document.getElementById("popupContent").innerHTML = text;
     document.getElementById("popup").style.width = x + "px";
@@ -807,21 +818,14 @@ function createSimplePopUp(x,y,text,buttonNot,doWhat,title,backButton) {
             document.getElementById("popup-title").style.display = "none";
             break;
         case "undefined":
-            switch (inDevelopment) {
-                case 0:
-                        alert("An error occured: createSimplePopUp() has no title value. Please report this to the GitHub.");
-                        break;
-                    case 1:
-                        alert("createSimplePopUp() needs a title value. Use \"\" for a blank title");
-                        break;
-            }
+            createPopupAlertError("title");
             break;
         default:
             document.getElementById("popup-title").style.display = "block";
             document.getElementById("popup-title").innerHTML = title;
             break;
     }
-    switch (buttonNot) {
+    switch (noButton) {
         case true:
             document.getElementById("popupButton").style.display = "none";
             break;
@@ -829,14 +833,7 @@ function createSimplePopUp(x,y,text,buttonNot,doWhat,title,backButton) {
             document.getElementById("popupButton").style.display = "inline-block";
             break;
         default:
-            switch (inDevelopment) {
-                case 0:
-                    alert("An error occured: createSimplePopUp() needs a buttonNot value. Please report this to the GitHub.");
-                    break;
-                case 1:
-                    alert("createSimplePopUp() needs a buttonNot value.");
-                    break;
-            }
+            createPopupAlertError(noButton);
             break;
     }
     switch (backButton) {
@@ -847,22 +844,31 @@ function createSimplePopUp(x,y,text,buttonNot,doWhat,title,backButton) {
             document.getElementById("popupBackButton").style.display = "none";
             break;
         default:
-            switch (inDevelopment) {
-                case 0:
-                    alert("An error occured: createSimplePopUp() needs a backButton value. Please report this to the GitHub.");
-                    break;
-                case 1:
-                    alert("createSimplePopUp() needs a backButton value.");
-                    break;
-            }
+            createPopupAlertError("backButton");
             break;
     }
+    switch (isError) {
+        case true:
+            document.getElementById("popup").style.borderColor = "red";
+            break;
+        case false:
+            document.getElementById("popup").style.borderColor = "black";
+            break;
+        default:
+            createPopupAlertError("isError");
+            break;
+    }
+
+    const filter = document.getElementById("filter");
+    filter.style.display = "block";
+
     popupButtonDo = doWhat;
 }
 function destroySimplePopUp() {
     document.getElementById("popup").style.display = "none";
     document.getElementById("popupContent").innerHTML = "null";
     document.getElementById("popupButton").style.display = "none";
+    document.getElementById("filter").style.display = "none";
 }
 function popupClicked() {
     switch (popupButtonDo) {
@@ -936,15 +942,19 @@ function setDevMode(value) {
     }
 }
 
-// toggle menu openness, needs to be updated to allow switching by pressing another button
+// toggle menu openness
 function toggleStats() {
     switch (statsUp) {
         case 0:
-            if (optionsUp == 0 && infoUp == 0) {
-                statsUp = 1;
-                document.getElementById("statsMiddleText").style.display = "block";
-                document.getElementById("middle").style.background = "black";
-            }
+            optionsUp = 0;
+            infoUp = 0;
+            statsUp = 1;
+                        
+            document.getElementById("infoMiddleText").style.display = "none";
+            document.getElementById("optionsMiddleText").style.display = "none";
+
+            document.getElementById("statsMiddleText").style.display = "block";
+            document.getElementById("middle").style.background = "black";
             break;
         case 1:
             statsUp = 0;
@@ -955,11 +965,15 @@ function toggleStats() {
 function toggleInfo() {
     switch (infoUp) {
         case 0:
-            if (optionsUp == 0 && statsUp == 0) {
-                infoUp = 1;
-                document.getElementById("infoMiddleText").style.display = "block";
-                document.getElementById("middle").style.background = "black";
-            }
+            optionsUp = 0;
+            infoUp = 1;
+            statsUp = 0;
+
+            document.getElementById("optionsMiddleText").style.display = "none";
+            document.getElementById("statsMiddleText").style.display = "none";
+
+            document.getElementById("infoMiddleText").style.display = "block";
+            document.getElementById("middle").style.background = "black";
             break;
         case 1:
             infoUp = 0;
@@ -970,11 +984,15 @@ function toggleInfo() {
 function toggleOptions() {
     switch (optionsUp) {
         case 0:
-            if (infoUp == 0 && statsUp == 0) {
-                optionsUp = 1;
-                document.getElementById("optionsMiddleText").style.display = "block";
-                document.getElementById("middle").style.background = "black";
-            }
+            optionsUp = 1;
+            infoUp = 0;
+            statsUp = 0;
+                        
+            document.getElementById("statsMiddleText").style.display = "none";
+            document.getElementById("infoMiddleText").style.display = "none";
+
+            document.getElementById("optionsMiddleText").style.display = "block";
+            document.getElementById("middle").style.background = "black";
             break;
         case 1:
             optionsUp = 0;
@@ -983,44 +1001,38 @@ function toggleOptions() {
     }
 }
 
-function consoleLogDev(str) {
-    if (devMode == 1) {
-        console.log(str);
-    }
-}
-
 function grandmasArrival() {
     switch (grandmaPromptClicks) {
         case 0:
-            createSimplePopUp(300,150,"a familiar face appears...",false,"grandmaPromptClicks","",false);
+            createSimplePopUp(300,150,"a familiar face appears...",false,"grandmaPromptClicks","",false,false);
             break;
         case 1:
             document.getElementById("popupImage").src = "img/grandma.png";
             document.getElementById("popupImage").style.display = "block";
-            createSimplePopUp(300,150,"hello...",false,"grandmaPromptClicks");
+            createSimplePopUp(300,150,"hello...",false,"grandmaPromptClicks","",false,false);
             break;
         case 2:
-            createSimplePopUp(300,150,"how long have you done this for?",false,"grandmaPromptClicks","",false);
+            createSimplePopUp(300,150,"how long have you done this for?",false,"grandmaPromptClicks","",false,false);
             break;
         case 3:
-            createSimplePopUp(300,150,"oh my...",false,"grandmaPromptClicks","",false);
+            createSimplePopUp(300,150,"oh my...",false,"grandmaPromptClicks","",false,false);
             break;
         case 4:
-            createSimplePopUp(300,150,"well i suppose you must know this:",false,"grandmaPromptClicks","",false);
+            createSimplePopUp(300,150,"well i suppose you must know this:",false,"grandmaPromptClicks","",false,false);
             break;
         case 5:
-            createSimplePopUp(300,150,"<i>there is nothing else to do here</i>",false,"grandmaPromptClicks","",false);
+            createSimplePopUp(300,150,"<i>there is nothing else to do here</i>",false,"grandmaPromptClicks","",false,false);
             break;
         case 6:
-            createSimplePopUp(300,150,"you win.",false,"grandmaPromptClicks","",false);
+            createSimplePopUp(300,150,"you win.",false,"grandmaPromptClicks","",false,false);
             document.getElementById("win").style.display = "block";
             won = 1;
             break;
         case 7:
-            createSimplePopUp(300,150,"you may keep going...",false,"grandmaPromptClicks","",false);
+            createSimplePopUp(300,150,"you may keep going...",false,"grandmaPromptClicks","",false,false);
             break;
         case 8:
-            createSimplePopUp(300,150,"but you will be wasting your time.",false,"grandmaPromptClicks","",false);
+            createSimplePopUp(300,150,"but you will be wasting your time.",false,"grandmaPromptClicks","",false,false);
             break;
         case 9:
             destroySimplePopUp();
@@ -1137,6 +1149,7 @@ function importReadData() {
     buildingsOwned = data[40];
     grandmaPromptClicks = data[41];
     hasCheated = data[42];
+    won = data[43];
     reloadBuildingPrices();
 
     consoleLogDev("Imported save with " +cookies+ " cookies.");
@@ -1149,7 +1162,7 @@ function autoSave() {
         keyboardCPSGain,grandpaCPSGain,ranchCPSGain,tvCPSGain,workerCPSGain,walletCPSGain,churchCPSGain,
         keyboardUpgradeCost,grandpaUpgradeCost,ranchUpgradeCost,tvUpgradeCost,workerUpgradeCost,walletUpgradeCost,churchUpgradeCost,
         upgrade0sBought,upgrade1sBought,upgrade2sBought,upgrade3sBought,upgrade4sBought,upgrade5sBought,upgrade6sBought,
-        cookiesPerClick,cookieBeenClickedTimes,buildingsOwned,grandmaPromptClicks,hasCheated];
+        cookiesPerClick,cookieBeenClickedTimes,buildingsOwned,grandmaPromptClicks,hasCheated,won];
     switch (versionBranch) {
         case 0:
             localStorage.save = JSON.stringify(allToSave);
@@ -1251,6 +1264,7 @@ function getLocalSave(localStorageSave) {
     buildingsOwned = dataLoaded[40];
     grandmaPromptClicks = dataLoaded[41];
     hasCheated = dataLoaded[42];
+    won = dataLoaded[43];
     reloadBuildingPrices();
 }
 
@@ -1277,7 +1291,7 @@ function resetSave() {
 }
 
 function resetSaveButton() {
-    createSimplePopUp(300,150,"Are you sure you want to do this?",false,"resetSave()","Warning",true);
+    createSimplePopUp(300,150,"Are you sure you want to do this?",false,"resetSave()","Warning",true,true);
 }
 
 console.log("what are you doing here? well... as long as its productive.");

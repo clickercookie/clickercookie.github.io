@@ -107,6 +107,9 @@ small {
 .red {
     color: red;
 }
+.absolute {
+    position: absolute;
+}
 
 /* important things */
 .leftSide {
@@ -295,6 +298,13 @@ small {
     margin-top: 2px;
     margin-bottom: 6px;
 }
+.filter {
+    background-color: black;
+    opacity: 50%;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+}
 
 /* social links stuff */
 .social-links {
@@ -409,7 +419,7 @@ small {
 .popup {
     border-style: solid;
     border-width: 3px;
-    border-color: red;
+    border-color: black;
     width: 128px;
     height: 96px;
     background-color: white;
