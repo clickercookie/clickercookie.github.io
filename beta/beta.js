@@ -244,10 +244,6 @@ switch (inDevelopment) {
         break;
 }
 
-// sounds
-const cookieClick = new Audio("sfx/cookie-click.wav");
-cookieClick.volume = 0.05;
-
 // set default upgrades
 document.getElementById("upgrade0").style.backgroundImage = "url(img/upgrades/reinforced-keys.png)";
 document.getElementById("upgrade1").style.backgroundImage = "url(img/upgrades/hardwood-walking-stick.png)";
@@ -383,7 +379,6 @@ function cookieClicked() {
     cookieBeenClickedTimes = cookieBeenClickedTimes + 1;
     totalCookies = totalCookies + cookiesPerClick;
     reloadCookieCounter();
-    cookieClick.play();
 }
 
 function popupBackClicked() {
@@ -782,9 +777,6 @@ function checkInvalidCookies() {
     if (cookies == NaN) {
         resetSave();
     }
-}
-function makeUpgradeSound() {
-    cookieClick.play(); // needs to be updated to different sfx
 }
 function createPopupAlertError(value) {
     switch (inDevelopment) {
