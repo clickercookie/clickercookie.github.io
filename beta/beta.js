@@ -264,7 +264,7 @@ function perMillisecondUniversal() {
     document.getElementById("cookiesPerSecondCounter").innerHTML = currentClickedPlural + " Per Second: " +cookiesPerSecondView;
     reloadCookieCounter();
 
-    // Upgrade Unlocks (very long) (fixes accepted) (create a github pull request)
+    // Upgrade Unlocks (very long) (changes accepted) (create a github pull request)
         // Keyboards
         if (keyboardsBought >= 1 && upgrade0sBought == 0) {
             document.getElementById("upgrade0").style.display = "inline-block";
@@ -932,6 +932,7 @@ function setDevMode(value) {
             devMode = 1;
             console.log("Developer Mode activated.");
             document.getElementById("devModeSelect").disabled = true;
+            document.getElementById("whiteBackground").style.display = "block";
             break;
     }
 }
@@ -1274,6 +1275,7 @@ function resetSave() {
                     break;
                 case 1:
                     localStorage.setItem("devSave",JSON.stringify(defaultSavedValues));
+                    break;
             }
             break;
         default:
