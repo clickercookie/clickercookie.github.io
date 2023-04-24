@@ -453,7 +453,6 @@ function keyboardUpgrade() {
         reloadCookieCounter();
         document.getElementById("keyboardUpgrade").innerHTML = keyboardUpgradeCost;
         document.getElementById("keyboardsBought").innerHTML = +keyboardsBought;
-        makeUpgradeSound();
     }
 }
 
@@ -467,7 +466,6 @@ function grandpaUpgrade() {
         reloadCookieCounter();
         document.getElementById("grandpaUpgrade").innerHTML = grandpaUpgradeCost;
         document.getElementById("grandpasBought").innerHTML = +grandpasBought;
-        makeUpgradeSound();
     }
 }
 
@@ -481,7 +479,6 @@ function ranchUpgrade() {
         reloadCookieCounter();
         document.getElementById("ranchUpgrade").innerHTML = ranchUpgradeCost;
         document.getElementById("ranchesBought").innerHTML = +ranchesBought;
-        makeUpgradeSound();
     }
 }
 
@@ -495,7 +492,6 @@ function tvUpgrade() {
         reloadCookieCounter();
         document.getElementById("tvUpgrade").innerHTML = tvUpgradeCost;
         document.getElementById("tvsBought").innerHTML = +tvsBought;
-        makeUpgradeSound();
     }
 }
 function workerUpgrade() {
@@ -508,7 +504,6 @@ function workerUpgrade() {
         reloadCookieCounter();
         document.getElementById("workerUpgrade").innerHTML = workerUpgradeCost;
         document.getElementById("workersBought").innerHTML = +workersBought;
-        makeUpgradeSound();
     }
 }
 function walletUpgrade() {
@@ -521,7 +516,6 @@ function walletUpgrade() {
         reloadCookieCounter();
         document.getElementById("walletUpgrade").innerHTML = walletUpgradeCost;
         document.getElementById("walletsBought").innerHTML = +walletsBought;
-        makeUpgradeSound();
     }
 }
 function churchUpgrade() {
@@ -534,7 +528,6 @@ function churchUpgrade() {
         reloadCookieCounter();
         document.getElementById("churchUpgrade").innerHTML = churchUpgradeCost;
         document.getElementById("churchesBought").innerHTML = +churchesBought;
-        makeUpgradeSound();
     }
 }
 
