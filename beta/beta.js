@@ -24,7 +24,6 @@ let upgrade4sBought = 0;
 let upgrade5sBought = 0;
 let upgrade6sBought = 0;
 
-// yes, i know, this is WILDLY INEFFICENT. If you can code better than me, please rewrite this better :D
 let upgrade0Name = "Reinforced Keys";
 let upgrade1Name = "Hardwood Walking Stick";
 let upgrade2Name = "Pig Slop";
@@ -32,12 +31,12 @@ let upgrade3Name = "LED Display";
 let upgrade4Name = "Medkits";
 let upgrade5Name = "200 dollar bills";
 let upgrade6Name = "null";
-let upgrade0Description = "Multiplys Keyboard and clicking cookie production by 2" + "<br>" + "<i>'" + "press harder" + "'</i>";
-let upgrade1Description = "Multiplys Grandpa production by 2" + "<br>" + "<i>'" + "nonna dat softwood crap" + "'</i>";
-let upgrade2Description = "Multiplys Ranch production by 2" + "<br>" + "<i>'" + "Wait, what have we been feeding them before now?" + "'</i>";
-let upgrade3Description = "Multiplys TV production by 2" + "<br>" + "<i>'" + "World's greatest leap in digital technology" + "'</i>";
-let upgrade4Description = "Multiplys Worker production by 2" + "<br>" + "<i>'" + "Constant supply of Band-Aids in case of emergency" + "'</i>";
-let upgrade5Description = "Multiplys Wallet production by 2" + "<br>" + "<i>'" + "Don't know how the goverment is going to take to this currency" + "'</i>";
+let upgrade0Description = "Multiplys Keyboard and clicking cookie production by 2" + "<br>" + "<i>\"" + "press harder" + "\"</i>";
+let upgrade1Description = "Multiplys Grandpa production by 2" + "<br>" + "<i>\"" + "nonna dat softwood crap" + "\"</i>";
+let upgrade2Description = "Multiplys Ranch production by 2" + "<br>" + "<i>\"" + "Wait, what have we been feeding them before now?" + "\"</i>";
+let upgrade3Description = "Multiplys TV production by 2" + "<br>" + "<i>\"" + "World's greatest leap in digital technology" + "\"</i>";
+let upgrade4Description = "Multiplys Worker production by 2" + "<br>" + "<i>\"" + "Constant supply of Band-Aids in case of emergency" + "\"</i>";
+let upgrade5Description = "Multiplys Wallet production by 2" + "<br>" + "<i>\"" + "Don't know how the goverment is going to take to this currency" + "\"</i>";
 let upgrade6Description = "null";
 let upgrade0Price = 100;
 let upgrade1Price = 1000;
@@ -53,6 +52,12 @@ let upgrade3Identifier = "up3";
 let upgrade4Identifier = "up4";
 let upgrade5Identifier = "up4";
 let upgrade6Identifier = "up4";
+
+let buildingInfoName = "Name";
+let buildingInfoPrice = 0;
+let buildingInfoQuote = "Quote";
+let buildingInfoProduces = 0;
+let buildingInfoProducing = 0;
 
 // keyboards
 let keyboardsBought = 0;
@@ -218,6 +223,14 @@ if (inDevelopment == 1) {
     devLoadButton.setAttribute("onclick","loadAutoSave()");
     devDiv.appendChild(devLoadButton);
 
+    const br3 = document.createElement("br");
+    devDiv.appendChild(br3);
+
+    const mousePos = document.createElement("p");
+    mousePos.appendChild(document.createTextNode("X: 0, Y = 0"));
+    mousePos.setAttribute("id","mousePosDevText");
+    devDiv.appendChild(mousePos);
+
     document.getElementById("leftSide").insertBefore(devDiv, document.getElementById("leftSidePush"));
 
     // version change
@@ -250,6 +263,19 @@ document.getElementById("upgrade1").style.backgroundImage = "url(img/upgrades/ha
 document.getElementById("upgrade2").style.backgroundImage = "url(img/upgrades/ranch-upgrade1.png)";
 document.getElementById("upgrade3").style.backgroundImage = "url(img/upgrades/tv-upgrade1.png)";
 document.getElementById("upgrade4").style.backgroundImage = "url(img/upgrades/worker-upgrade1.png)";
+
+// mouse position stuff
+const mousePosText = document.getElementById("mousePosDevText");
+let mousePos = { x: undefined, y: undefined };
+let mousePosY = `${mousePos.y}`;
+
+window.addEventListener('mousemove', (event) => {
+    mousePos = { x: event.clientX, y: event.clientY };
+    mousePosText.textContent = "Mouse Pos: " + `(${mousePos.x}, ${mousePos.y})`;
+    mousePosY = `${mousePos.y}`;
+});
+
+let buildingInfoYPos = `${mousePos.y}` - 50;
 
 function perMillisecondUniversal() {
     cookiesView = Math.round(cookies * 10) / 10;
@@ -336,6 +362,10 @@ function perMillisecondUniversal() {
     if (cookieProductionStopped == 1) {
         cookies = 0;
     }
+
+    // set buildingInfo y to ${mousePos.y}
+    buildingInfoYPos = `${mousePos.y}` - 50;
+    document.getElementById("buildingInfo").style.top = buildingInfoYPos + "px";
 
     // log to console in case of error
     if (cookies < 0) {
@@ -453,6 +483,7 @@ function keyboardUpgrade() {
         reloadCookieCounter();
         document.getElementById("keyboardUpgrade").innerHTML = keyboardUpgradeCost;
         document.getElementById("keyboardsBought").innerHTML = +keyboardsBought;
+        buildingHovered("keyboard");
     }
 }
 
@@ -537,49 +568,49 @@ function createUpgrade(identifier,name,description,quote,price,img) {
         case "upgrade0":
             document.getElementById("upgrade0").style.display = "inline-block";
             upgrade0Name = name;
-            upgrade0Description = description + "<br>" + "<i>'" + quote + "'</i>";
+            upgrade0Description = description + "<br>" + "<i>\"" + quote + "\"</i>";
             upgrade0Price = price;
             document.getElementById("upgrade0").style.backgroundImage = "url(" + img + ")";
             break;
         case "upgrade1":
             document.getElementById("upgrade1").style.display = "inline-block";
             upgrade1Name = name;
-            upgrade1Description = description + "<br>" + "<i>'" + quote + "'</i>";
+            upgrade1Description = description + "<br>" + "<i>\"" + quote + "\"</i>";
             upgrade1Price = price;
             document.getElementById("upgrade1").style.backgroundImage = "url(" + img + ")";
             break;
         case "upgrade2":
             document.getElementById("upgrade2").style.display = "inline-block";
             upgrade2Name = name;
-            upgrade2Description = description + "<br>" + "<i>'" + quote + "'</i>";
+            upgrade2Description = description + "<br>" + "<i>\"" + quote + "\"</i>";
             upgrade2Price = price;
             document.getElementById("upgrade2").style.backgroundImage = "url(" + img + ")";
             break;
         case "upgrade3":
             document.getElementById("upgrade3").style.display = "inline-block";
             upgrade3Name = name;
-            upgrade3Description = description + "<br>" + "<i>'" + quote + "'</i>";
+            upgrade3Description = description + "<br>" + "<i>\"" + quote + "\"</i>";
             upgrade3Price = price;
             document.getElementById("upgrade3").style.backgroundImage = "url(" + img + ")";
             break;
         case "upgrade4":
             document.getElementById("upgrade4").style.display = "inline-block";
             upgrade4Name = name;
-            upgrade4Description = description + "<br>" + "<i>'" + quote + "'</i>";
+            upgrade4Description = description + "<br>" + "<i>\"" + quote + "\"</i>";
             upgrade4Price = price;
             document.getElementById("upgrade4").style.backgroundImage = "url(" + img + ")";
             break;
         case "upgrade5":
             document.getElementById("upgrade5").style.display = "inline-block";
             upgrade5Name = name;
-            upgrade5Description = description + "<br>" + "<i>'" + quote + "'</i>";
+            upgrade5Description = description + "<br>" + "<i>\"" + quote + "\"</i>";
             upgrade5Price = price;
             document.getElementById("upgrade5").style.backgroundImage = "url(" + img + ")";
             break;
         case "upgrade6":
             document.getElementById("upgrade6").style.display = "inline-block";
             upgrade6Name = name;
-            upgrade6Description = description + "<br>" + "<i>'" + quote + "'</i>";
+            upgrade6Description = description + "<br>" + "<i>\"" + quote + "\"</i>";
             upgrade6Price = price;
             document.getElementById("upgrade6").style.backgroundImage = "url(" + img + ")";
             break;
@@ -1273,6 +1304,71 @@ function resetSave() {
 
 function resetSaveButton() {
     createSimplePopUp(300,150,"Are you sure you want to do this?",false,"resetSave()","Warning",true,true);
+}
+
+function buildingHovered(building) {
+    const buildingInfo = document.getElementById("buildingInfo");
+    switch (building) {
+        case "keyboard":
+            buildingInfoName = "Keyboard";
+            buildingInfoPrice = keyboardUpgradeCost;
+            buildingInfoQuote = "type in cookies";
+            buildingInfoProduces = keyboardCPSGain;
+            buildingInfoProducing = Math.round(keyboardCPSGiven * 10) / 10;
+            break;
+        case "grandpa":
+            buildingInfoName = "Grandpa";
+            buildingInfoPrice = grandpaUpgradeCost;
+            buildingInfoQuote = "for grandma";
+            buildingInfoProduces = grandpaCPSGain;
+            buildingInfoProducing = Math.round(grandpaCPSGiven * 10) / 10;
+            break;
+        case "ranch":
+            buildingInfoName = "Ranch";
+            buildingInfoPrice = ranchUpgradeCost;
+            buildingInfoQuote = "Not the dressing kind";
+            buildingInfoProduces = ranchCPSGain;
+            buildingInfoProducing = Math.round(ranchCPSGiven * 10) / 10;
+            break;
+        case "tv":
+            buildingInfoName = "Television";
+            buildingInfoPrice = tvUpgradeCost;
+            buildingInfoQuote = "how does this help?"; // CHANGE ME
+            buildingInfoProduces = tvCPSGain;
+            buildingInfoProducing = Math.round(tvCPSGiven * 10) / 10;
+            break;
+        case "worker":
+            buildingInfoName = "Worker";
+            buildingInfoPrice = workerUpgradeCost;
+            buildingInfoQuote = "cookies via manual labor";
+            buildingInfoProduces = workerCPSGain;
+            buildingInfoProducing = Math.round(workerCPSGiven * 10) / 10;
+            break;
+        case "wallet":
+            buildingInfoName = "Wallet";
+            buildingInfoPrice = walletUpgradeCost;
+            buildingInfoQuote = "store cookies and make interest?"; // CHANGE ME
+            buildingInfoProduces = walletCPSGain;
+            buildingInfoProducing = Math.round(walletCPSGiven * 10) / 10;
+            break;
+        case "church":
+            buildingInfoName = "Church";
+            buildingInfoPrice = churchUpgradeCost;
+            buildingInfoQuote = "pray to the almighty cookie gods";
+            buildingInfoProduces = churchCPSGain;
+            buildingInfoProducing = Math.round(churchCPSGiven * 10) / 10;
+            break;
+    }
+    document.getElementById("buildingInfoName").innerHTML = buildingInfoName;
+    document.getElementById("buildingInfoPrice").innerHTML = "Price: " + buildingInfoPrice;
+    document.getElementById("buildingInfoQuote").innerHTML = "\""+buildingInfoQuote+"\"";
+    document.getElementById("buildingInfoProduces").innerHTML = "Produces: "+buildingInfoProduces+" CPS";
+    document.getElementById("buildingInfoProducing").innerHTML = "Producing: "+ buildingInfoProducing+" CPS";
+
+    document.getElementById("buildingInfo").style.display = "block";
+}
+function buildingUnhover() {
+    document.getElementById("buildingInfo").style.display = "none";
 }
 
 console.log("what are you doing here? well... as long as its productive.");

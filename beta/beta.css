@@ -107,6 +107,9 @@ small {
 .red {
     color: red;
 }
+.black {
+    color: black;
+}
 .absolute {
     position: absolute;
 }
@@ -389,6 +392,42 @@ small {
     width: 64px;
     height: 64px;
     float: left;
+}
+
+/* Infobox when hovering over a building */
+.building-info {
+    width: 190px;
+    height: 110px;
+    border-style: solid;
+    border-color: black;
+    border-right: 0px;
+    background-color: rgb(255, 243, 209);
+    right: 346px;
+}
+.building-info-name {
+    font-size: 15px;
+    margin-top: 4px;
+    margin-left: 3px;
+    margin-bottom: 0px;
+}
+.building-info-price {
+    font-size: 15px;
+    right: 0px;
+    top: 0px;
+    margin-top: 4px;
+    margin-right: 3px;
+}
+.building-info-quote {
+    font-size: 12px;
+    margin-top: 5px;
+    margin-left: 3px;
+    overflow-y: hidden;
+}
+.building-info-stats {
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: 3px;
+    margin-bottom: 0px;
 }
 
 /* building icon css */

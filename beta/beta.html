@@ -72,6 +72,7 @@
                             <li>AUTO SAVING!!!</li>
                             <li>EXPORTING & IMPORTING DATA!!!</li>
                             <li>New temporary cookie!</li>
+                            <li>Hovering over buildings gives a small infobox!</li>
                             <li>More backgrounds!</li>
                             <li>A familiar face...</li>
                             <li>Cursor changes type when hovering over certain elements</li>
@@ -235,6 +236,13 @@
                     </select>
                 </form>
             </div>
+            <div class="building-info absolute no-display" id="buildingInfo">
+                <p class="building-info-name black" id="buildingInfoName">Name</p>
+                <p class="building-info-price absolute black" id="buildingInfoPrice">Price</p>
+                <p class="building-info-quote black" id="buildingInfoQuote">"Quote"</p>
+                <p class="building-info-stats black" id="buildingInfoProduces">Produces</p>
+                <p class="building-info-stats black" id="buildingInfoProducing">Producing</p>
+            </div>
         </div>
         <div id="rightSide" class="rightSide">
             <h1 class="store-heading">Store</h1>
@@ -253,7 +261,7 @@
                 <table>
                     <tr>
                         <td>
-                            <div id="building0" class="building-already-unlock" onClick="keyboardUpgrade()">
+                            <div id="building0" class="building-already-unlock" onClick="keyboardUpgrade()" onmouseover="buildingHovered('keyboard')" onmouseout="buildingUnhover()">
                                 <div class="building-icon keyboard-icon"></div>
                                 <div class="building-content">
                                     <p class="buildings-bought" id="keyboardsBought">0</p>
@@ -265,7 +273,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building1" class="building-need-unlock" onClick="grandpaUpgrade()">
+                            <div id="building1" class="building-need-unlock" onClick="grandpaUpgrade()" onmouseover="buildingHovered('grandpa')" onmouseout="buildingUnhover()">
                                 <div class="building-icon grandpa-icon"></div>
                                 <div class="building-content">
                                     <p class="buildings-bought" id="grandpasBought">0</p>
@@ -277,7 +285,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building2" class="building-need-unlock" onClick="ranchUpgrade()">
+                            <div id="building2" class="building-need-unlock" onClick="ranchUpgrade()" onmouseover="buildingHovered('ranch')" onmouseout="buildingUnhover()">
                                 <div class="building-icon ranch-icon"></div>
                                 <div class="building-content">
                                     <p class="buildings-bought" id="ranchesBought">0</p>
@@ -289,7 +297,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building3" class="building-need-unlock" onClick="tvUpgrade()">
+                            <div id="building3" class="building-need-unlock" onClick="tvUpgrade()" onmouseover="buildingHovered('tv')" onmouseout="buildingUnhover()">
                                 <div class="building-icon tv-icon"></div>
                                 <div class="building-content">
                                     <p class="buildings-bought" id="tvsBought">0</p>
@@ -301,7 +309,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building4" class="building-need-unlock" onClick="workerUpgrade()">
+                            <div id="building4" class="building-need-unlock" onClick="workerUpgrade()" onmouseover="buildingHovered('worker')" onmouseout="buildingUnhover()">
                                 <div class="building-icon worker-icon"></div>
                                 <div class="building-content">
                                     <p class="buildings-bought" id="workersBought">0</p>
@@ -313,7 +321,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building5" class="building-need-unlock" onClick="walletUpgrade()">
+                            <div id="building5" class="building-need-unlock" onClick="walletUpgrade()" onmouseover="buildingHovered('wallet')" onmouseout="buildingUnhover()">
                                 <div class="building-icon wallet-icon"></div>
                                 <div class="building-content">
                                     <p class="buildings-bought" id="walletsBought">0</p>
@@ -325,7 +333,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building6" class="building-need-unlock" onClick="churchUpgrade()">
+                            <div id="building6" class="building-need-unlock" onClick="churchUpgrade()" onmouseover="buildingHovered('church')" onmouseout="buildingUnhover()">
                                 <div class="building-icon church-icon"></div>
                                 <div class="building-content">
                                     <p class="buildings-bought" id="churchesBought">0</p>
