@@ -1,0 +1,26 @@
+body {
+    overflow: hidden;
+    margin: 0px;
+}
+
+.big404 {
+    margin-top: 20lvh;
+}
+
+.hidden {
+    display: none;
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.background {
+    position: absolute;
+    background-image: url(img/backgrounds/background-blue.png);
+    width: 100vw;
+    height: 100lvh;
+}
