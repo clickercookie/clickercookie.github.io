@@ -1,7 +1,7 @@
 // variable definitions
 const version = "0.5";
 const versionBranch = 1; // 0 is main, 1 is beta, switches stylesheets so must say same depending on the .css file name (style.css or beta.css)
-const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode! Recommended that versionBranch is 1 for easier saving if this is toggled.
+const inDevelopment = 1; // toggle if developing actively. This is completely different than the builtin dev mode! Recommended that versionBranch is 1 for easier saving if this is toggled.
 
 // customization
 const backgroundForm = document.getElementById("backgroundSelect");
@@ -163,10 +163,10 @@ switch (versionBranch) { // number
 }
 switch (versionBranch) { // info
     case 0:
-        document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the beta branch, this will wipe your current progress!";
+        document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the beta branch";
         break;
     case 1:
-        document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the main branch, this will wipe your current progress!";
+        document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the main branch";
         break;
 }
 
@@ -271,7 +271,9 @@ let mousePosY = `${mousePos.y}`;
 
 window.addEventListener('mousemove', (event) => {
     mousePos = { x: event.clientX, y: event.clientY };
-    mousePosText.textContent = "Mouse Pos: " + `(${mousePos.x}, ${mousePos.y})`;
+    if (inDevelopment == 1) {
+        mousePosText.textContent = "Mouse Pos: " + `(${mousePos.x}, ${mousePos.y})`;
+    }
     mousePosY = `${mousePos.y}`;
 });
 
