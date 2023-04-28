@@ -20,7 +20,7 @@ body {
 
 .background {
     position: absolute;
-    background-image: url(img/backgrounds/background-blue.png);
+    background-image: radial-gradient(rgba(0,0,0,0),black), url(img/backgrounds/background-blue.png);
     width: 100vw;
     height: 100lvh;
 }
