@@ -32,7 +32,7 @@ let upgrade4Name = "Medkits";
 let upgrade5Name = "200 dollar bills";
 let upgrade6Name = "null";
 let upgrade0Description = "Multiplys Keyboard and clicking cookie production by 2" + "<br>" + "<i>\"" + "press harder" + "\"</i>";
-let upgrade1Description = "Multiplys Grandpa production by 2" + "<br>" + "<i>\"" + "nonna dat softwood crap" + "\"</i>";
+let upgrade1Description = "Multiplys Grandpa production by 2" + "<br>" + "<i>\"" + "nonna dat softwood junk" + "\"</i>";
 let upgrade2Description = "Multiplys Ranch production by 2" + "<br>" + "<i>\"" + "Wait, what have we been feeding them before now?" + "\"</i>";
 let upgrade3Description = "Multiplys TV production by 2" + "<br>" + "<i>\"" + "World's greatest leap in digital technology" + "\"</i>";
 let upgrade4Description = "Multiplys Worker production by 2" + "<br>" + "<i>\"" + "Constant supply of Band-Aids in case of emergency" + "\"</i>";
@@ -179,12 +179,15 @@ if (localStorage.cookies >= 0) {
 reloadBuildingPrices();
 if (localStorage.getItem("save") == null) {
     localStorage.setItem("save",JSON.stringify(defaultSavedValues));
+    console.log("Save was null and was automatically reset, if this is your first time playing this is an intended behavior.");
 }
 if (localStorage.getItem("betaSave") == null) {
     localStorage.setItem("betaSave",JSON.stringify(defaultSavedValues));
+    console.log("Save was null and was automatically reset, if this is your first time playing this is an intended behavior.");
 }
 if (localStorage.getItem("devSave") == null) {
     localStorage.setItem("devSave",JSON.stringify(defaultSavedValues));
+    console.log("Save was null and was automatically reset, if this is your first time playing this is an intended behavior.");
 }
 loadAutoSave();
 
@@ -722,52 +725,44 @@ function upgrade6Clicked() {
     }
 }
 
-function upgrade0Hovered() {
-    document.getElementById("upgradeName").innerHTML = "Name: " + upgrade0Name;
-    document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade0Price;
-    document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade0Description;
-    document.getElementById("upgradeViewer").style.display = "block";
-    document.getElementById("upgradeViewer").style.float = "right";
-}
-function upgrade1Hovered() {
-    document.getElementById("upgradeName").innerHTML = "Name: " + upgrade1Name;
-    document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade1Price;
-    document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade1Description;
-    document.getElementById("upgradeViewer").style.display = "block";
-    document.getElementById("upgradeViewer").style.float = "right";
-}
-function upgrade2Hovered() {
-    document.getElementById("upgradeName").innerHTML = "Name: " + upgrade2Name;
-    document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade2Price;
-    document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade2Description;
-    document.getElementById("upgradeViewer").style.display = "block";
-    document.getElementById("upgradeViewer").style.float = "right";
-}
-function upgrade3Hovered() {
-    document.getElementById("upgradeName").innerHTML = "Name: " + upgrade3Name;
-    document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade3Price;
-    document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade3Description;
-    document.getElementById("upgradeViewer").style.display = "block";
-    document.getElementById("upgradeViewer").style.float = "right";
-}
-function upgrade4Hovered() {
-    document.getElementById("upgradeName").innerHTML = "Name: " + upgrade4Name;
-    document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade4Price;
-    document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade4Description;
-    document.getElementById("upgradeViewer").style.display = "block";
-    document.getElementById("upgradeViewer").style.float = "right";
-}
-function upgrade5Hovered() {
-    document.getElementById("upgradeName").innerHTML = "Name: " + upgrade5Name;
-    document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade5Price;
-    document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade5Description;
-    document.getElementById("upgradeViewer").style.display = "block";
-    document.getElementById("upgradeViewer").style.float = "right";
-}
-function upgrade6Hovered() {
-    document.getElementById("upgradeName").innerHTML = "Name: " + upgrade6Name;
-    document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade6Price;
-    document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade6Description;
+function upgradeHovered(upgrade) {
+    switch (upgrade) {
+        case "upgrade0":
+            document.getElementById("upgradeName").innerHTML = "Name: " + upgrade0Name;
+            document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade0Price;
+            document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade0Description;
+            break;
+        case "upgrade1":
+            document.getElementById("upgradeName").innerHTML = "Name: " + upgrade1Name;
+            document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade1Price;
+            document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade1Description;
+            break;
+        case "upgrade2":
+            document.getElementById("upgradeName").innerHTML = "Name: " + upgrade2Name;
+            document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade2Price;
+            document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade2Description;
+            break;
+        case "upgrade3":
+            document.getElementById("upgradeName").innerHTML = "Name: " + upgrade3Name;
+            document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade3Price;
+            document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade3Description;
+            break;
+        case "upgrade4":
+            document.getElementById("upgradeName").innerHTML = "Name: " + upgrade4Name;
+            document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade4Price;
+            document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade4Description;
+            break;
+        case "upgrade5":
+            document.getElementById("upgradeName").innerHTML = "Name: " + upgrade5Name;
+            document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade5Price;
+            document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade5Description;
+            break;
+        case "upgrade6":
+            document.getElementById("upgradeName").innerHTML = "Name: " + upgrade6Name;
+            document.getElementById("upgradePrice").innerHTML = "Price: " + upgrade6Price;
+            document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrade6Description;
+            break;
+    }
     document.getElementById("upgradeViewer").style.display = "block";
     document.getElementById("upgradeViewer").style.float = "right";
 }
@@ -802,6 +797,11 @@ function reloadBuildingPrices() {
 function checkInvalidCookies() {
     if (cookies == NaN) {
         resetSave();
+    }
+}
+function consoleLogDev(str) {
+    if (devMode == 1) {
+        console.log(str);
     }
 }
 function createPopupAlertError(value) {
@@ -1099,7 +1099,6 @@ function importData() {
 
     reader.onload = function (e) {
         const file = e.target.result;
-        const lines = file.split(/\r\n|\n/);
         currentImportedData = JSON.parse(reader.result);
     }
     reader.onerror = (e) => alert("something broke, don't expect me to fix it :D");
@@ -1309,7 +1308,6 @@ function resetSaveButton() {
 }
 
 function buildingHovered(building) {
-    const buildingInfo = document.getElementById("buildingInfo");
     switch (building) {
         case "keyboard":
             buildingInfoName = "Keyboard";
@@ -1321,7 +1319,7 @@ function buildingHovered(building) {
         case "grandpa":
             buildingInfoName = "Grandpa";
             buildingInfoPrice = grandpaUpgradeCost;
-            buildingInfoQuote = "for grandma";
+            buildingInfoQuote = "'as long as I get a cut'";
             buildingInfoProduces = grandpaCPSGain;
             buildingInfoProducing = Math.round(grandpaCPSGiven * 10) / 10;
             break;
@@ -1335,7 +1333,7 @@ function buildingHovered(building) {
         case "tv":
             buildingInfoName = "Television";
             buildingInfoPrice = tvUpgradeCost;
-            buildingInfoQuote = "how does this help?"; // CHANGE ME
+            buildingInfoQuote = "hold infomercials on your cookies";
             buildingInfoProduces = tvCPSGain;
             buildingInfoProducing = Math.round(tvCPSGiven * 10) / 10;
             break;

@@ -90,6 +90,7 @@
                             <li>Can now switch between middle button text by pressing another button opposed to pressing the active button and then button you want.</li>
                             <li>Version number now says if the game is in beta or not</li>
                             <li>Extended popup functionality.</li>
+                            <li>Upgrade hovering is more efficient.</li>
                         </ul>
                         <p class="button-paragraph-text">Bugs:</p>
                         <ul class="middle-ul">
@@ -248,13 +249,13 @@
             <h1 class="store-heading">Store</h1>
             <h3 class="upgradesMarker">Upgrades</h3>
             <div id="upgradesHolder" class="upgrades-holder">
-                <div id="upgrade0" class="upgrade" onClick="upgrade0Clicked()" onMouseOver="upgrade0Hovered()" onMouseOut="upgradeUndoHover()"></div>
-                <div id="upgrade1" class="upgrade" onClick="upgrade1Clicked()" onMouseOver="upgrade1Hovered()" onMouseOut="upgradeUndoHover()"></div>
-                <div id="upgrade2" class="upgrade" onClick="upgrade2Clicked()" onMouseOver="upgrade2Hovered()" onMouseOut="upgradeUndoHover()"></div>
-                <div id="upgrade3" class="upgrade" onClick="upgrade3Clicked()" onMouseOver="upgrade3Hovered()" onMouseOut="upgradeUndoHover()"></div>
-                <div id="upgrade4" class="upgrade" onClick="upgrade4Clicked()" onMouseOver="upgrade4Hovered()" onMouseOut="upgradeUndoHover()"></div>
-                <div id="upgrade5" class="upgrade" onClick="upgrade5Clicked()" onMouseOver="upgrade5Hovered()" onMouseOut="upgradeUndoHover()"></div>
-                <div id="upgrade6" class="upgrade" onClick="upgrade6Clicked()" onMouseOver="upgrade6Hovered()" onMouseOut="upgradeUndoHover()"></div>
+                <div id="upgrade0" class="upgrade" onClick="upgrade0Clicked()" onmouseover="upgradeHovered('upgrade0')" onMouseOut="upgradeUndoHover()"></div>
+                <div id="upgrade1" class="upgrade" onClick="upgrade1Clicked()" onmouseover="upgradeHovered('upgrade1')" onMouseOut="upgradeUndoHover()"></div>
+                <div id="upgrade2" class="upgrade" onClick="upgrade2Clicked()" onmouseover="upgradeHovered('upgrade2')" onMouseOut="upgradeUndoHover()"></div>
+                <div id="upgrade3" class="upgrade" onClick="upgrade3Clicked()" onmouseover="upgradeHovered('upgrade3')" onMouseOut="upgradeUndoHover()"></div>
+                <div id="upgrade4" class="upgrade" onClick="upgrade4Clicked()" onmouseover="upgradeHovered('upgrade4')" onMouseOut="upgradeUndoHover()"></div>
+                <div id="upgrade5" class="upgrade" onClick="upgrade5Clicked()" onmouseover="upgradeHovered('upgrade5')" onMouseOut="upgradeUndoHover()"></div>
+                <div id="upgrade6" class="upgrade" onClick="upgrade6Clicked()" onmouseover="upgradeHovered('upgrade6')" onMouseOut="upgradeUndoHover()"></div>
             </div>
             <h3 class="buildingsMarker">Buildings</h3>
             <div id="buildings" class="buildings">
