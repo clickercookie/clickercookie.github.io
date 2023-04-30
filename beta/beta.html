@@ -34,15 +34,15 @@
             </div>
             <div class="middle-buttons" id="middleButtons">
                 <div class="left-middle-buttons pointer">
-                    <div id="statsButton" class=" middle-button-base stats-button" onClick="toggleStats()">
+                    <div id="statsButton" class="middle-button-base stats-button" onClick="toggleStats()">
                         <p class="middle-button-name">Stats</p>
                     </div>
-                    <div id="optionsButton" class="options-button" onClick="toggleOptions()">
+                    <div id="optionsButton" class="middle-button-base options-button" onClick="toggleOptions()">
                         <p class="middle-button-name">Options</p>
                     </div>
                 </div>
-                <div class="right-middle-buttons  pointer">
-                    <div id="infoButton" class="info-button" onClick="toggleInfo()">
+                <div class="right-middle-buttons pointer">
+                    <div id="infoButton" class="middle-button-base info-button" onClick="toggleInfo()">
                         <p class="middle-button-name">Info</p>
                     </div>
                 </div>
@@ -227,7 +227,6 @@
                     <button id="exportDataButton" class="data-button pointer" onclick="exportData()">Export Data</button>
                     <label id="importDataInputLabel" for="importDataInput" class="custom-button-label">Import Data</label>
                     <input type="file" id="importDataInput" class="no-display" accept=".ccsave,.json" onchange="importData()">
-                    <small>please ignore the unusual styling :D</small>
                 </div>
                 <form action="changed">
                     <label for="devModeSelect" class="middle-label">Developer Mode: </label>

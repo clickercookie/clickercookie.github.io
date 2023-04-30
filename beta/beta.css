@@ -550,19 +550,6 @@ small {
     height: 86%;
 }
 
-.stats-button {
-    border-style: solid;
-    border-width: 2px;
-    width: 110px;
-    height: 50px;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 0px;
-    border-right-width: 2px;
-    float: left;
-    background-color: rgb(255, 243, 209);
-}
-
 .middle-button-name {
     margin: 0px;
     text-align: center;
@@ -606,7 +593,6 @@ small {
 }
 
 /* changelog stuff */
-
 .changelog-version-heading {
     text-align: left;
     font-size: 19px;
@@ -631,32 +617,35 @@ small {
 }
 
 /* middle button CSS */
-.info-button {
-    border-style: solid;
-    border-width: 2px;
-    width: 110px;
-    height: 51.6px;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
-    border-right-width: 0px;
-    float: right;
-    margin-left: auto;
-    background-color: rgb(255, 243, 209);
-}
-
-.options-button {
+.middle-button-base {
     border-style: solid;
     border-width: 2px;
     width: 110px;
     height: 50px;
+    margin-left: auto;
+    background-color: rgb(255, 243, 209);
+}
+.info-button {
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-right-width: 0px;
+    height: 48px;
+    float: right;
+}
+.options-button {
     border-top-width: 0px;
     border-bottom-width: 0px;
     border-left-width: 0px;
     border-right-width: 2px;
-    float: right;
-    margin-left: auto;
-    background-color: rgb(255, 243, 209);
+    float: left;
+}
+.stats-button {
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 0px;
+    border-right-width: 2px;
+    float: left;
 }
 
 /* Data Buttons */
@@ -665,27 +654,24 @@ small {
     margin-bottom: 4px;
 }
 
-.custom-button-label { /* this is just stolen from the default CSS for a button, its probably going to change to a custom one later */
-    appearance: auto;
+.custom-button-label { /* this is just stolen & modified from the default CSS for a button */
     writing-mode: horizontal-tb !important;
-    text-rendering: auto;
     color: buttontext;
-    letter-spacing: normal;
-    word-spacing: normal;
-    line-height: normal;
-    text-transform: none;
-    text-indent: 0px;
-    text-shadow: none;
     display: inline-block;
     text-align: center;
-    align-items: flex-start;
-    cursor: default;
     box-sizing: border-box;
     background-color: buttonface;
-    margin: 0em;
     padding: 1px 6px;
-    border-width: 2px;
-    border-style: outset;
-    border-color: buttonborder;
-    border-image: initial;
+    font-size: 13px;
+    border-style: solid;
+    border-color: gray;
+    border-width: 1.2px;
+    border-radius: 3px;
+    height: 21.45px;
+    padding-top: 2.2px;
+}
+.custom-button-label:hover {
+    cursor: pointer;
+    background-color: rgb(229,229,229);
+    border-color: rgb(65,65,65);
 }
