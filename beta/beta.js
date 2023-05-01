@@ -660,7 +660,7 @@ function upgrade0Clicked() {
         keyboardCPSGain = keyboardCPSGain * 2;
         cookiesPerClick = cookiesPerClick * 2;
         upgrade0sBought = upgrade0sBought + 1;
-        upgrade0Hovered();
+        upgradeHovered("upgrade0");
         destroyUpgrade("upgrade0");
     }
 }
@@ -670,7 +670,7 @@ function upgrade1Clicked() {
         grandpaCPSGiven = grandpaCPSGiven * 2;
         grandpaCPSGain = grandpaCPSGain * 2;
         upgrade1sBought =+ 1;
-        upgrade1Hovered();
+        upgradeHovered("upgrade1");
         destroyUpgrade("upgrade1");
     }
 }
@@ -680,7 +680,7 @@ function upgrade2Clicked() {
         ranchCPSGiven = ranchCPSGiven * 2;
         ranchCPSGain = ranchCPSGain * 2;
         upgrade2sBought =+ 1;
-        upgrade2Hovered();
+        upgradeHovered("upgrade2");
         destroyUpgrade("upgrade2");
     }
 }
@@ -690,7 +690,7 @@ function upgrade3Clicked() {
         tvCPSGiven = tvCPSGiven * 2;
         tvCPSGain = tvCPSGain * 2;
         upgrade3sBought =+ 1;
-        upgrade3Hovered();
+        upgradeHovered("upgrade3");
         destroyUpgrade("upgrade3");
     }
 }
@@ -700,7 +700,7 @@ function upgrade4Clicked() {
         workerCPSGiven = workerCPSGiven * 2;
         workerCPSGain = workerCPSGain * 2;
         upgrade4sBought =+ 1;
-        upgrade4Hovered();
+        upgradeHovered("upgrade4");
         destroyUpgrade("upgrade4");
     }
 }
@@ -710,7 +710,7 @@ function upgrade5Clicked() {
         walletCPSGiven = walletCPSGiven * 2;
         walletCPSGain = walletCPSGain * 2;
         upgrade5sBought =+ 1;
-        upgrade5Hovered();
+        upgradeHovered("upgrade5");
         destroyUpgrade("upgrade5");
     }
 }
@@ -720,7 +720,7 @@ function upgrade6Clicked() {
         churchCPSGiven = churchCPSGiven * 2;
         churchCPSGain = churchCPSGain * 2;
         upgrade6sBought =+ 1;
-        upgrade6Hovered();
+        upgradeHovered("upgrade6");
         destroyUpgrade("upgrade6");
     }
 }
