@@ -1319,7 +1319,7 @@ function buildingHovered(building) {
         case "grandpa":
             buildingInfoName = "Grandpa";
             buildingInfoPrice = grandpaUpgradeCost;
-            buildingInfoQuote = "'as long as I get a cut'";
+            buildingInfoQuote = "as long as gramps gets a cut";
             buildingInfoProduces = grandpaCPSGain;
             buildingInfoProducing = Math.round(grandpaCPSGiven * 10) / 10;
             break;
