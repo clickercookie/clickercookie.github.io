@@ -151,24 +151,6 @@ const intervalCPSU = setInterval(cookiesPerSecondUpdate, 1000);
 const perMillisecondUniversalVar = setInterval(perMillisecondUniversal, 1);
 const autoSaveInterval = setInterval(autoSave, 60 * 1000);
 
-// set version
-switch (versionBranch) { // number
-    case 0:
-        document.getElementById("versionNumber").innerHTML = "Version: " +version;
-        break;
-    case 1:
-        document.getElementById("versionNumber").innerHTML = "Version: " +version+ " Beta";
-        break;
-}
-switch (versionBranch) { // info
-    case 0:
-        document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the beta branch";
-        break;
-    case 1:
-        document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the main branch";
-        break;
-}
-
 if (isNaN(cookies)) {
     resetSave();
     console.log("Cookies were NaN and save was reset.");
@@ -246,13 +228,23 @@ if (inDevelopment == 1) {
     document.getElementById("offSelectionDev").innerHTML = "Overwritten";
 }
 
-// change title
+// change version branch specific stuff
 switch (versionBranch) {
     case 0:
+        // change title
         document.getElementById("title").innerHTML = "Clicker Cookie";
+        // change version displayed
+        document.getElementById("versionNumber").innerHTML = "Version: " +version;
+        document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the beta branch";
         break;
     case 1:
+        // change title
         document.getElementById("title").innerHTML = "Clicker Cookie Beta";
+        // change version displayed
+        document.getElementById("versionNumber").innerHTML = "Version: " +version+ " Beta";
+        document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the main branch";
+        // show the developer mode switch
+        document.getElementById("devForm").style.display = "block";
         break;
 }
 switch (inDevelopment) {

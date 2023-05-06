@@ -228,7 +228,7 @@
                     <label id="importDataInputLabel" for="importDataInput" class="custom-button-label">Import Data</label>
                     <input type="file" id="importDataInput" class="no-display" accept=".ccsave,.json" onchange="importData()">
                 </div>
-                <form action="changed">
+                <form action="changed" class="no-display" id="devForm">
                     <label for="devModeSelect" class="middle-label">Developer Mode: </label>
                     <select class="pointer" id="devModeSelect" onchange="setDevMode(this.value)">
                         <option value="off" id="offSelectionDev">Off</option>
