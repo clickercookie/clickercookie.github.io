@@ -161,15 +161,15 @@ if (localStorage.cookies >= 0) {
 reloadBuildingPrices();
 if (localStorage.getItem("save") == null) {
     localStorage.setItem("save",JSON.stringify(defaultSavedValues));
-    console.log("Save was null and was automatically reset, if this is your first time playing this is an intended behavior.");
+    console.log("save was null and was automatically reset, if this is your first time playing this is an intended behavior.");
 }
 if (localStorage.getItem("betaSave") == null) {
     localStorage.setItem("betaSave",JSON.stringify(defaultSavedValues));
-    console.log("Save was null and was automatically reset, if this is your first time playing this is an intended behavior.");
+    console.log("betaSave was null and was automatically reset, if this is your first time playing this is an intended behavior.");
 }
 if (localStorage.getItem("devSave") == null) {
     localStorage.setItem("devSave",JSON.stringify(defaultSavedValues));
-    console.log("Save was null and was automatically reset, if this is your first time playing this is an intended behavior.");
+    console.log("devSave was null and was automatically reset, if this is your first time playing this is an intended behavior.");
 }
 loadAutoSave();
 
@@ -337,20 +337,38 @@ function perMillisecondUniversal() {
     if (grandpaUnlocked == 1) {
         document.getElementById("building1").style.display = "block";
     }
+    else {
+        document.getElementById("building1").style.display = "none";
+    }
     if (ranchUnlocked == 1) {
         document.getElementById("building2").style.display = "block";
+    }
+    else {
+        document.getElementById("building2").style.display = "none";
     }
     if (tvUnlocked == 1) {
         document.getElementById("building3").style.display = "block";
     }
+    else {
+        document.getElementById("building3").style.display = "none";
+    }
     if (workerUnlocked == 1) {
         document.getElementById("building4").style.display = "block";
+    }
+    else {
+        document.getElementById("building4").style.display = "none";
     }
     if (walletUnlocked == 1) {
         document.getElementById("building5").style.display = "block";
     }
+    else {
+        document.getElementById("building5").style.display = "none";
+    }
     if (churchUnlocked == 1) {
         document.getElementById("building6").style.display = "block";
+    }
+    else {
+        document.getElementById("building6").style.display = "none";
     }
 
     // check for grandma's visit
@@ -470,7 +488,7 @@ function versionSwitch() {
             window.location.href = "beta/beta.html";
             break;
         case 1:
-            window.location.href = "https://clickercookie.github.io";
+            window.location.href = "../index.html";
             break;
     }
 }
@@ -791,11 +809,6 @@ function reloadBuildingPrices() {
     document.getElementById("workerUpgrade").innerHTML = workerUpgradeCost;
     document.getElementById("walletUpgrade").innerHTML = walletUpgradeCost;
     document.getElementById("churchUpgrade").innerHTML = churchUpgradeCost;
-}
-function checkInvalidCookies() {
-    if (cookies == NaN) {
-        resetSave();
-    }
 }
 function consoleLogDev(str) {
     if (devMode == 1) {
@@ -1299,6 +1312,14 @@ function resetSave() {
     }
     loadAutoSave();
     reloadBuildingPrices();
+    // set unlocked for all to false because im a idiot and forgot to save it
+    grandpaUnlocked = 0;
+    ranchUnlocked = 0;
+    tvUnlocked = 0;
+    workerUnlocked = 0;
+    walletUnlocked = 0;
+    churchUnlocked = 0;
+    document.getElementById("ifCheatedStat").innerHTML = "";
 }
 
 function resetSaveButton() {

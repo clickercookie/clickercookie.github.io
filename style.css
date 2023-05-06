@@ -3,6 +3,8 @@ body {
     margin: 0px;
     display: -webkit-flex;
     display: flex;
+    overflow: hidden;
+    touch-action: manipulation
 }
 
 h1 {
@@ -12,6 +14,13 @@ h1 {
     margin: 3px;
     color: white;
     text-shadow: 0px 1px 4px black;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 h3 {
@@ -19,12 +28,26 @@ h3 {
     text-align: center;
     color: white;
     text-shadow: 0px 1px 4px black;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 h4 {
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
     color: white;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 p {
@@ -59,65 +82,48 @@ div {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-/* divs */
-.buildings {
-    float: right;
-    margin-top: 6px;
-}
-
-.upgrades-holder {
-    width: 330px;
-    height: 64px;
-}
-
-.upgrade-name {
-    margin: 2px;
-    color: black;
-}
-.upgrade-price{
-    margin-left: 2px;
+ul {
     margin-top: 6px;
     margin-bottom: 6px;
-    color: black;
-}
-.upgrade-desc {
-    margin: 2px;
-    color: black;
 }
 
-/* thing that displays upgrade info */
-.upgrade-viewer {
-    display: block;
-    width: 248px;
-    height: 148px;
-    border-style: solid;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
-    border-right-width: 0px;
-    margin: 0px;
+small {
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* helper classes (in early development) */
+.no-display {
     display: none;
-    -webkit-flex: auto;
-    flex: auto;
-    background-color: rgb(255, 243, 209);
+}
+.pointer {
+    cursor: pointer;
+}
+.red {
+    color: red;
+}
+.black {
+    color: black;
+}
+.absolute {
     position: absolute;
-    right: 331px;
-    color: black
+}
+.no-select {
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.upgrade-viewer-content {
-    display: block;
-    color: black;
-}
-
-.upgrade {
-    width: 62px;
-    height: 62px;
-    background-image: url(img/unknown-64-64.png);
-    margin: 0px;
-    display: none;
-}
-
+/* important things */
 .leftSide {
     width: 312px;
     height: 100vh;
@@ -130,7 +136,7 @@ div {
 }
 
 .rightSide {
-    width: 330px;
+    width: 338px;
     float: right;
     height: 100vh;
     border-style: solid;
@@ -145,14 +151,14 @@ div {
     -webkit-flex: auto;
     flex: auto;
     height: 100vh;
-    background: url(img/backgrounds/background-blue.png)
+    background: url(img/backgrounds/background-blue.png);
 }
 
 .cookie {
     margin-top: 12px;
     margin-bottom: 12px;
-    width: 256px;
-    height: 256px;
+    width: 257px;
+    height: 257px;
 }
 
 .cookie-counter {
@@ -208,13 +214,76 @@ div {
     border-style: solid;
     border-width: 3px;
     position: absolute;
-    width: 112px;
-    height: 45px;
+    width: 85px;
+    height: 35px;
     display: none;
     bottom: 30px;
     left: 48px;
     font-size: 10px;
     background-color: rgb(255, 243, 209);
+}
+
+
+/* divs */
+.buildings {
+    float: right;
+    margin-top: 6px;
+    display: flex;
+    justify-content: center;
+}
+
+.upgrades-holder {
+    width: 338px;
+    height: 64px;
+}
+
+.upgrade-name {
+    margin: 2px;
+    color: black;
+}
+.upgrade-price{
+    margin-left: 2px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    color: black;
+}
+.upgrade-desc {
+    margin: 2px;
+    color: black;
+}
+
+/* thing that displays upgrade info */
+.upgrade-viewer {
+    display: block;
+    width: 248px;
+    height: 148px;
+    border-style: solid;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-right-width: 0px;
+    margin: 0px;
+    display: none;
+    -webkit-flex: auto;
+    flex: auto;
+    background-color: rgb(255, 243, 209);
+    position: absolute;
+    right: 346px;
+    color: black
+}
+
+.upgrade-viewer-content {
+    display: block;
+    color: black;
+}
+
+.upgrade {
+    width: 64px;
+    height: 64px;
+    background-image: url(img/unknown-64-64.png);
+    margin: 0px;
+    display: none;
+    cursor: pointer;
 }
 
 /* random specific stuff */
@@ -236,6 +305,19 @@ div {
     width: 320px;
 }
 
+.win {
+    display: none;
+    margin-top: 2px;
+    margin-bottom: 6px;
+}
+.filter {
+    background-color: black;
+    opacity: 50%;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+}
+
 /* social links stuff */
 .social-links {
     position: absolute;
@@ -253,13 +335,14 @@ div {
 
 /* universal building css */
 .building-already-unlock {
-    width: 312px;
+    width: 324px;
     height: 64px;
     border-style: solid;
     border-color: rgb(248, 255, 198);
     border-width: 3px;
     transition: 0.3s;
     background-color: rgb(217, 215, 165);
+    cursor: pointer;
 }
 .building-already-unlock:hover {
     border-style: solid;
@@ -268,7 +351,7 @@ div {
 }
 
 .building-need-unlock {
-    width: 312px;
+    width: 324px;
     height: 64px;
     border-style: solid;
     border-color: rgb(248, 255, 198);
@@ -276,6 +359,7 @@ div {
     display: none;
     transition: 0.3s;
     background-color: rgb(217, 215, 165);
+    cursor: pointer;
 }
 .building-need-unlock:hover {
     border-style: solid;
@@ -285,33 +369,72 @@ div {
 
 .building-content {
     display: inline-block;
-    position: absolute;
     width: 248px;
     height: 64px;
     text-shadow: 0px 1px 4px black;
+    margin-left: 4px;
 }
 
 .buildings-bought {
     font-size: 35px;
     margin: 0px;
-    top: 12px;
-    right: 10px;
-    position: absolute;
     font-family: monospace;
+    float: right;
+    margin-top: 12px;
+    margin-right: 10px;
+}
+
+.building-name {
+    font-size: 22px;
+    line-height: 1px;
+    margin-bottom: 0px;
 }
 
 .building-price {
-    font-size: 22px;
-    display: inline;
-    line-height: 1px;
-    position: absolute;
-    left: 4px;
+    margin-top: 11px;
+    margin-left: 0.6px;
 }
 
 .building-icon {
     width: 64px;
     height: 64px;
     float: left;
+}
+
+/* Infobox when hovering over a building */
+.building-info {
+    width: 190px;
+    height: 110px;
+    border-style: solid;
+    border-color: black;
+    border-right: 0px;
+    background-color: rgb(255, 243, 209);
+    right: 346px;
+}
+.building-info-name {
+    font-size: 15px;
+    margin-top: 4px;
+    margin-left: 3px;
+    margin-bottom: 0px;
+}
+.building-info-price {
+    font-size: 15px;
+    right: 0px;
+    top: 0px;
+    margin-top: 4px;
+    margin-right: 3px;
+}
+.building-info-quote {
+    font-size: 12px;
+    margin-top: 5px;
+    margin-left: 3px;
+    overflow-y: hidden;
+}
+.building-info-stats {
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: 3px;
+    margin-bottom: 0px;
 }
 
 /* building icon css */
@@ -347,7 +470,7 @@ div {
 .popup {
     border-style: solid;
     border-width: 3px;
-    border-color: red;
+    border-color: black;
     width: 128px;
     height: 96px;
     background-color: white;
@@ -371,7 +494,16 @@ div {
     margin-right: 8px;
     color: black;
 }
+.popup-title {
+    display: none;
+    color: black;
+    text-shadow: 0px 0px 0px white;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    font-size: 17px;
+}
 
+/* middle buttons */
 .left-middle-buttons {
     display: flex;
     flex-direction: column;
@@ -397,6 +529,7 @@ div {
     display: none;
 }
 
+/* Middle Text CSS */
 .middle-title {
     font-size: 35px;
     font-family: monospace;
@@ -408,30 +541,20 @@ div {
 }
 
 .middle-subtitle {
-    font-size: 20px;
+    font-size: 26px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin-top: 12px;
     margin-bottom: 15px;
     margin-left: 6px;
     font-weight: bold;
+    text-align: left;
 }
 
 .middle-text-main {
     display: none;
     color: white;
-}
-
-.stats-button {
-    border-style: solid;
-    border-width: 2px;
-    width: 110px;
-    height: 50px;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 0px;
-    border-right-width: 2px;
-    float: left;
-    background-color: rgb(255, 243, 209);
+    overflow-y: auto;
+    height: 86%;
 }
 
 .middle-button-name {
@@ -445,7 +568,7 @@ div {
 }
 
 .button-paragraph-text {
-    margin-left: 7px;
+    margin-left: 9px;
     margin-bottom: 6px;
     margin-top: 6px;
     font-family: Arial, Helvetica, sans-serif;
@@ -461,31 +584,101 @@ div {
     font-weight: bold;
 }
 
-/* Info CSS */
-.info-button {
+.middle-ul {
+    font-size: 14px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.middle-label {
+    margin-left: 9px;
+}
+
+/* changelog stuff */
+.changelog-version-heading {
+    text-align: left;
+    font-size: 19px;
+    margin-top: 6px;
+    margin-bottom: 8px;
+    margin-left: 9px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.changelog-version-text {
+    margin-left: 9px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+}
+
+/* middle button CSS */
+.middle-button-base {
     border-style: solid;
     border-width: 2px;
     width: 110px;
     height: 50px;
+    margin-left: auto;
+    background-color: rgb(255, 243, 209);
+}
+.info-button {
     border-top-width: 2px;
     border-bottom-width: 2px;
     border-left-width: 2px;
     border-right-width: 0px;
+    height: 48px;
     float: right;
-    margin-left: auto;
-    background-color: rgb(255, 243, 209);
 }
-
 .options-button {
-    border-style: solid;
-    border-width: 2px;
-    width: 110px;
-    height: 50px;
     border-top-width: 0px;
     border-bottom-width: 0px;
     border-left-width: 0px;
     border-right-width: 2px;
-    float: right;
-    margin-left: auto;
-    background-color: rgb(255, 243, 209);
+    float: left;
+}
+.stats-button {
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 0px;
+    border-right-width: 2px;
+    float: left;
+}
+
+/* Data Buttons */
+.data-button {
+    margin-left: 9px;
+    margin-bottom: 4px;
+}
+
+.custom-button-label { /* this is just stolen & modified from the default CSS for a button */
+    writing-mode: horizontal-tb !important;
+    color: buttontext;
+    display: inline-block;
+    text-align: center;
+    box-sizing: border-box;
+    background-color: buttonface;
+    padding: 1px 6px;
+    font-size: 13px;
+    border-style: solid;
+    border-color: gray;
+    border-width: 1.2px;
+    border-radius: 3px;
+    height: 21.45px;
+    padding-top: 2.2px;
+}
+.custom-button-label:hover {
+    cursor: pointer;
+    background-color: rgb(229,229,229);
+    border-color: rgb(65,65,65);
 }
