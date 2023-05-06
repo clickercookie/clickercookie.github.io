@@ -128,15 +128,14 @@ let won = 0;
 
 // save stuff
 let currentImportedData; // parsed stringified and not ready for object-turning
-let dataIncomplete; // Parsed JSON but cannot be read for an unknown reason without being parsed again
-let data; // Completely functional parseded JSON
+let data; // Data from the Import function
 let allToSave = [cookies, totalCookies, cookiesPerSecond, // all additions to this variable MUST BE AT THE END, then reflected in getLocalSave()
                 keyboardCPSGiven,grandpaCPSGiven,ranchCPSGiven,tvCPSGiven,workerCPSGiven,walletCPSGiven,churchCPSGiven,
                 keyboardsBought,grandpasBought,ranchesBought,tvsBought,workersBought,walletsBought,churchesBought,
                 keyboardCPSGain,grandpaCPSGain,ranchCPSGain,tvCPSGain,workerCPSGain,walletCPSGain,churchCPSGain,
                 keyboardUpgradeCost,grandpaUpgradeCost,ranchUpgradeCost,tvUpgradeCost,workerUpgradeCost,walletUpgradeCost,churchUpgradeCost,
                 upgrade0sBought,upgrade1sBought,upgrade2sBought,upgrade3sBought,upgrade4sBought,upgrade5sBought,upgrade6sBought,
-                cookiesPerClick,cookieBeenClickedTimes,buildingsOwned,grandmaPromptClicks,hasCheated];
+                cookiesPerClick,cookieBeenClickedTimes,buildingsOwned,grandmaPromptClicks,hasCheated,won];
 let defaultSavedValues = [ // matches order of allToSave
     0,0,0,
     0,0,0,0,0,0,0,
@@ -144,7 +143,7 @@ let defaultSavedValues = [ // matches order of allToSave
     0.1,1,8,47,260,1440,7800,
     15,100,1100,12000,130000,1400000,20000000,
     0,0,0,0,0,0,0,
-    1,0,0,0,0];
+    1,0,0,0,0,0];
 let dataLoaded;
 
 // timer things
@@ -172,6 +171,7 @@ switch (versionBranch) { // info
 
 if (isNaN(cookies)) {
     resetSave();
+    console.log("Cookies were NaN and save was reset.");
 }
 if (localStorage.cookies >= 0) {
     createSimplePopUp(400,200,"You are using the old saving method. You may have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format.",false,"localStorage.clear()","Warning",false,false);
@@ -193,6 +193,9 @@ loadAutoSave();
 
 if (won == 1) {
     document.getElementById("win").style.display = "block";
+}
+if (hasCheated == 1) {
+    document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
 }
 
 // check for development special stuff
@@ -423,6 +426,7 @@ function popupBackClicked() {
 function beginGrandma() {
     if (devMode == 1) {
         setCookies(1000000000);
+        hasCheated = 1;
         grandmaPromptClicks = 0;
     }
     else {
@@ -433,6 +437,7 @@ function beginGrandma() {
 function ignoreGrandma() {
     if (devMode == 1) {
         grandmaPromptClicks = 10;
+        hasCheated = 1;
     }
     else {
         console.log("You need developer mode ON to run this command.");
@@ -456,6 +461,7 @@ function setCookies(x) {
 function setCPS(x) {
     if (devMode == 1) {
         devCPSGiven = x;
+        hasCheated = 1;
         cookiesPerSecondView = Math.round(cookiesPerSecond * 10) / 10;
         document.getElementById("cookiesPerSecondCounter").innerHTML = currentClickedPlural +" Per Second: " +cookiesPerSecondView;
         document.getElementById("ifCheatedStat").innerHTML = "<b>You have cheated on this playthrough!</b>";
