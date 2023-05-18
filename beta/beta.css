@@ -508,6 +508,7 @@ small {
 .right-middle-buttons {
     float: right;
     margin-left: auto;
+    height: 50px;
 }
 
 /* Stats CSS */
