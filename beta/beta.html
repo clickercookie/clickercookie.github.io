@@ -11,7 +11,7 @@
     </head>
     <body>
         <div id="leftSide" class="leftSide">
-            <img id="cookie" class="cookie pointer" onClick="cookieClicked()" src="img/cookie.png" alt="cookie">
+            <img id="cookie" class="cookie pointer" onclick="core.cookieClicked()" src="img/cookie.png" alt="cookie">
             <div class="cookie-counter-wrapper">
                 <h3 id="cookieCounter" class="cookie-counter">Cookies: 0</h3>
                 <h4 id="cookiesPerSecondCounter" class="cookies-per-second-counter">Cookies Per Second: 0</h4>
@@ -22,7 +22,7 @@
                 <a href="https://github.com/clickercookie/clickercookie.github.io">
                     <img class="github" src="img/github-mark.svg" alt="github">
                 </a>
-                <h5 id="versionNumber" class="version-number pointer" onClick="versionSwitch()" onMouseOver="versionNumberMousedOver()" onMouseOut="versionNumberMousedOverUndo()">Version: null</h5>
+                <h5 id="versionNumber" class="version-number pointer" onclick="versionSwitch()" onoouseover="versionNumberMousedOver()" onmouseout="versionNumberMousedOverUndo()">Version: null</h5>
                 <div id="versionSwitchInfo" class="version-switch-info">
                     <p style="margin:0px; color:black; text-align:center;" id="versionSwitchInfoText">Clicking this will switch to the null branch.</p>
                 </div>
@@ -38,15 +38,15 @@
             </div>
             <div class="middle-buttons" id="middleButtons">
                 <div class="left-middle-buttons pointer">
-                    <div id="statsButton" class="middle-button-base stats-button" onClick="toggleStats()">
+                    <div id="statsButton" class="middle-button-base stats-button" onclick="toggleStats()">
                         <p class="middle-button-name">Stats</p>
                     </div>
-                    <div id="optionsButton" class="middle-button-base options-button" onClick="toggleOptions()">
+                    <div id="optionsButton" class="middle-button-base options-button" onclick="toggleOptions()">
                         <p class="middle-button-name">Options</p>
                     </div>
                 </div>
                 <div class="right-middle-buttons pointer">
-                    <div id="infoButton" class="middle-button-base info-button" onClick="toggleInfo()">
+                    <div id="infoButton" class="middle-button-base info-button" onclick="toggleInfo()">
                         <p class="middle-button-name">Info</p>
                     </div>
                 </div>
@@ -66,11 +66,39 @@
                 <h3 class="middle-subtitle">About:</h5>
                 <p class="button-paragraph-text">Clicker Cookie is a totally original game about clicking a cookie. Made by <a href="https://github.com/FifthTundraG">FifthTundraG</a> in a few hours, this game went from a random clone of a decade old, actively developed clicker game to something that spiraled into a land of insanity.</p>
                 <p class="button-paragraph-text">Original game made by Orteil and Opti. <small>we :heart: you!</small></p>
-                <button class="data-button pointer" onclick="createSimplePopUp(320,150,'FifthTundraG: Creation<br>potatman4: Playtesting<br>Spencer: Playtesting, Emotional Support',false,'default','Credits',false,false)">Credits</button>
+                <button class="data-button pointer" onclick="helper.popup.createSimple(320,150,'FifthTundraG: Creation<br>potatman4: Playtesting<br>Spencer: Playtesting, Emotional Support',false,'default','Credits',false,false)">Credits</button>
                 <h3 class="middle-subtitle" style="margin-top:0px;">Changelog:</h5>
                 <div class="changelog-wrapper">
+                    <div name="version0.5.1" class="changelog">
+                        <h5 class="changelog-version-heading">Version 0.5.1: Objects Everywhere - Undetermined</h5>
+                        <p class="button-paragraph-text">Added:</p>
+                        <ul class="middle-ul">
+                            <li>Can create an advanced popup with pure HTML, contrary to the old way where everything was predetermined.</li>
+                            <li>Credits button under Info.</li>
+                            <li>Bugs.</li>
+                        </ul>
+                        <p class="button-paragraph-text">Changed:</p>
+                        <ul class="middle-ul">
+                            <li>All variables and functions now are apart of an object</li>
+                            <li>Cleaned up Javascript in general.</li>
+                            <li>Most numbers now have commas.</li>
+                            <li>All versions from now on have a name and their version number assigned in changelogs.</li>
+                            <li>Removed unused/unnessesary functions</li>
+                            <li>camelCase onclick attributes (onclick) have all been switched to lowercase (onclick).</li>
+                            <li>Renamed some save-related variables to make more sense</li>
+                            <li>Init is now inside an object method and called at the bottom of Javascript.</li>
+                        </ul>
+                        <p class="button-paragraph-text">Fixed:</p>
+                        <ul class="middle-ul">
+                            <li>Hover infobox not updating when the mouse doesn't move.</li>
+                            <li>Grandma showing in simple pop ups when she isn't supposed to be.</li>
+                            <li>0.5 header having no date.</li>
+                            <li>upgrade#Identifier is no longer used an has been deleted.</li>
+                            <li>Options middle text is highlightable.</li>
+                        </ul>
+                    </div>
                     <div name="version0.5" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.5:</h5>
+                        <h5 class="changelog-version-heading">Version 0.5 - May 6th:</h5>
                         <p class="button-paragraph-text" style="font-size:14px;">The longest update gap yet, what have we been waiting for?</p>
                         <p class="button-paragraph-text">Added:</p>
                         <ul class="middle-ul">
@@ -192,12 +220,12 @@
                     </div>
                 </div>
             </div>
-            <div id="optionsMiddleText" class="middle-text-main">
+            <div id="optionsMiddleText" class="middle-text-main no-select">
                 <h3 class="middle-title">Options</h3>
                 <h5 class="middle-subtitle">Customization:</h5>
                 <form action="changed">
                     <label for="backgroundSelect" class="middle-label">Background: </label>
-                    <select class="pointer" id="backgroundSelect" onchange="setBackground(this.value)">
+                    <select class="pointer" id="backgroundSelect" onchange="personalization.setBackground(this.value)">
                         <option value="blue">Blue</option>
                         <option value="green">Green</option>
                         <option value="gray">Gray</option>
@@ -213,7 +241,7 @@
                 </form>
                 <form>
                     <label for="currentClickedSelect" class="middle-label">Currently Clicked: </label>
-                    <select class="pointer" id="currentClickedSelect" onchange="setCurrentClicked(this.value)">
+                    <select class="pointer" id="currentClickedSelect" onchange="personalization.setCurrentClicked(this.value)">
                         <option value="cookie">Cookie</option>
                         <option value="potato">Potato</option>
                         <option value="strawberry">Strawberry</option>
@@ -222,20 +250,20 @@
                 <h5 class="middle-subtitle">Miscellaneous:</h5>
                 <p class="button-paragraph-text">Autosave Management:</p>
                 <div class="data-buttons">
-                    <button class="data-button pointer" onclick="autoSave()">Save</button>
-                    <button class="data-button pointer" onclick="loadAutoSave()">Load</button>
+                    <button class="data-button pointer" onclick="saves.autoSave()">Save</button>
+                    <button class="data-button pointer" onclick="saves.loadAutoSave()">Load</button>
                 </div>
                 <div class="data-buttons">
-                    <button class="data-button pointer red" onclick="resetSaveButton()">Reset</button>
+                    <button class="data-button pointer red" onclick="helper.popup.createSimple(300,150,'Are you sure you want to do this?',false,'resetSave()','Warning',true,true)">Reset</button>
                 </div>
                 <div class="data-buttons">   
-                    <button id="exportDataButton" class="data-button pointer" onclick="exportData()">Export Data</button>
+                    <button id="exportDataButton" class="data-button pointer" onclick="saves.exportData()">Export Data</button>
                     <label id="importDataInputLabel" for="importDataInput" class="custom-button-label">Import Data</label>
-                    <input type="file" id="importDataInput" class="no-display" accept=".ccsave,.json" onchange="importData()">
+                    <input type="file" id="importDataInput" class="no-display" accept=".ccsave,.json" onchange="saves.importData()">
                 </div>
                 <form action="changed" class="no-display" id="devForm">
                     <label for="devModeSelect" class="middle-label">Developer Mode: </label>
-                    <select class="pointer" id="devModeSelect" onchange="setDevMode(this.value)">
+                    <select class="pointer" id="devModeSelect" onchange="dev.setDevMode(this.value)">
                         <option value="off" id="offSelectionDev">Off</option>
                         <option value="on">On</option>
                     </select>
@@ -253,20 +281,20 @@
             <h1 class="store-heading">Store</h1>
             <h3 class="upgradesMarker">Upgrades</h3>
             <div id="upgradesHolder" class="upgrades-holder">
-                <div id="upgrade0" class="upgrade" onClick="upgrade0Clicked()" onmouseover="upgradeHovered('upgrade0')" onMouseOut="upgradeUndoHover()"></div>
-                <div id="upgrade1" class="upgrade" onClick="upgrade1Clicked()" onmouseover="upgradeHovered('upgrade1')" onMouseOut="upgradeUndoHover()"></div>
-                <div id="upgrade2" class="upgrade" onClick="upgrade2Clicked()" onmouseover="upgradeHovered('upgrade2')" onMouseOut="upgradeUndoHover()"></div>
-                <div id="upgrade3" class="upgrade" onClick="upgrade3Clicked()" onmouseover="upgradeHovered('upgrade3')" onMouseOut="upgradeUndoHover()"></div>
-                <div id="upgrade4" class="upgrade" onClick="upgrade4Clicked()" onmouseover="upgradeHovered('upgrade4')" onMouseOut="upgradeUndoHover()"></div>
-                <div id="upgrade5" class="upgrade" onClick="upgrade5Clicked()" onmouseover="upgradeHovered('upgrade5')" onMouseOut="upgradeUndoHover()"></div>
-                <div id="upgrade6" class="upgrade" onClick="upgrade6Clicked()" onmouseover="upgradeHovered('upgrade6')" onMouseOut="upgradeUndoHover()"></div>
+                <div id="upgrade0" class="upgrade" onclick="upgrades.upgrade0.clicked()" onmouseover="upgrades.hovered('upgrade0')" onmouseout="upgrades.undoHover()"></div>
+                <div id="upgrade1" class="upgrade" onclick="upgrades.upgrade1.clicked()" onmouseover="upgrades.hovered('upgrade1')" onmouseout="upgrades.undoHover()"></div>
+                <div id="upgrade2" class="upgrade" onclick="upgrades.upgrade2.clicked()" onmouseover="upgrades.hovered('upgrade2')" onmouseout="upgrades.undoHover()"></div>
+                <div id="upgrade3" class="upgrade" onclick="upgrades.upgrade3.clicked()" onmouseover="upgrades.hovered('upgrade3')" onmouseout="upgrades.undoHover()"></div>
+                <div id="upgrade4" class="upgrade" onclick="upgrades.upgrade4.clicked()" onmouseover="upgrades.hovered('upgrade4')" onmouseout="upgrades.undoHover()"></div>
+                <div id="upgrade5" class="upgrade" onclick="upgrades.upgrade5.clicked()" onmouseover="upgrades.hovered('upgrade5')" onmouseout="upgrades.undoHover()"></div>
+                <div id="upgrade6" class="upgrade" onclick="upgrades.upgrade6.clicked()" onmouseover="upgrades.hovered('upgrade6')" onmouseout="upgrades.undoHover()"></div>
             </div>
             <h3 class="buildingsMarker">Buildings</h3>
             <div id="buildings" class="buildings">
                 <table>
                     <tr>
                         <td>
-                            <div id="building0" class="building-already-unlock" onClick="keyboardUpgrade()" onmouseover="buildingHovered('keyboard')" onmouseout="buildingUnhover()">
+                            <div id="building0" class="building-already-unlock" onclick="buildings.keyboard.buy()" onmouseover="buildings.hovered('keyboard')" onmouseout="buildings.undoHover()">
                                 <div class="building-icon keyboard-icon"></div>
                                 <div class="building-content">
                                     <p class="buildings-bought" id="keyboardsBought">0</p>
@@ -278,7 +306,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building1" class="building-need-unlock" onClick="grandpaUpgrade()" onmouseover="buildingHovered('grandpa')" onmouseout="buildingUnhover()">
+                            <div id="building1" class="building-need-unlock" onclick="buildings.grandpa.buy()" onmouseover="buildings.hovered('grandpa')" onmouseout="buildings.undoHover()">
                                 <div class="building-icon grandpa-icon"></div>
                                 <div class="building-content">
                                     <p class="buildings-bought" id="grandpasBought">0</p>
@@ -290,7 +318,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building2" class="building-need-unlock" onClick="ranchUpgrade()" onmouseover="buildingHovered('ranch')" onmouseout="buildingUnhover()">
+                            <div id="building2" class="building-need-unlock" onclick="buildings.ranch.buy()" onmouseover="buildings.hovered('ranch')" onmouseout="buildings.undoHover()">
                                 <div class="building-icon ranch-icon"></div>
                                 <div class="building-content">
                                     <p class="buildings-bought" id="ranchesBought">0</p>
@@ -302,7 +330,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building3" class="building-need-unlock" onClick="tvUpgrade()" onmouseover="buildingHovered('tv')" onmouseout="buildingUnhover()">
+                            <div id="building3" class="building-need-unlock" onclick="buildings.tv.buy()" onmouseover="buildings.hovered('tv')" onmouseout="buildings.undoHover()">
                                 <div class="building-icon tv-icon"></div>
                                 <div class="building-content">
                                     <p class="buildings-bought" id="tvsBought">0</p>
@@ -314,7 +342,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building4" class="building-need-unlock" onClick="workerUpgrade()" onmouseover="buildingHovered('worker')" onmouseout="buildingUnhover()">
+                            <div id="building4" class="building-need-unlock" onclick="buildings.worker.buy()" onmouseover="buildings.hovered('worker')" onmouseout="buildings.undoHover()">
                                 <div class="building-icon worker-icon"></div>
                                 <div class="building-content">
                                     <p class="buildings-bought" id="workersBought">0</p>
@@ -326,7 +354,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building5" class="building-need-unlock" onClick="walletUpgrade()" onmouseover="buildingHovered('wallet')" onmouseout="buildingUnhover()">
+                            <div id="building5" class="building-need-unlock" onclick="buildings.wallet.buy()" onmouseover="buildings.hovered('wallet')" onmouseout="buildings.undoHover()">
                                 <div class="building-icon wallet-icon"></div>
                                 <div class="building-content">
                                     <p class="buildings-bought" id="walletsBought">0</p>
@@ -338,7 +366,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building6" class="building-need-unlock" onClick="churchUpgrade()" onmouseover="buildingHovered('church')" onmouseout="buildingUnhover()">
+                            <div id="building6" class="building-need-unlock" onclick="buildings.church.buy()" onmouseover="buildings.hovered('church')" onmouseout="buildings.undoHover()">
                                 <div class="building-icon church-icon"></div>
                                 <div class="building-content">
                                     <p class="buildings-bought" id="churchesBought">0</p>
@@ -352,14 +380,17 @@
             </div>
         </div>
         <div class="absolute filter" id="filter"></div>
-        <div class="popup" id="popup">
-            <img alt="popupImage" style="display:none;" id="popupImage">
-            <h3 class="popup-title" id="popup-title">title</h3>
-            <p class="popup-content" id="popupContent">null</p>
-            <div class="popup-button-div" id="popupButtonDiv">
-                <button onClick="popupBackClicked()" id="popupBackButton" class="popup-button no-display" style="margin-right:3px;">Back</button>
-                <button onClick="popupClicked()" id="popupButton" class="popup-button">OK</button>
+        <div class="popup" id="simplePopup">
+            <img alt="popup image" style="display:none;" id="simplePopupImage">
+            <h3 class="simple-popup-title" id="simplePopupTitle">title</h3>
+            <p class="popup-content" id="simplePopupContent">null</p>
+            <div class="simple-popup-button-div" id="simplePopupButtonDiv">
+                <button onclick="helper.popup.destroySimple()" id="simplePopupBackButton" class="popup-button no-display" style="margin-right:3px;">Back</button>
+                <button onclick="helper.popup.simpleClicked()" id="simplePopupButton" class="popup-button">OK</button>
             </div>
+        </div>
+        <div class="popup" id="advancedPopup">
+
         </div>
     </body>
     <script src="beta.js"></script> <!-- changeMarker -->
