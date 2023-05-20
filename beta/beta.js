@@ -782,37 +782,37 @@ upgrades.hovered = function(upgrade) {
     switch (upgrade) {
         case "upgrade0":
             document.getElementById("upgradeName").innerHTML = "Name: " + upgrades.info.upgrade0.name;
-            document.getElementById("upgradePrice").innerHTML = "Price: " + upgrades.upgrade0.price;
+            document.getElementById("upgradePrice").innerHTML = "Price: " + helper.commaify(upgrades.upgrade0.price);
             document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrades.info.upgrade0.description;
             break;
         case "upgrade1":
             document.getElementById("upgradeName").innerHTML = "Name: " + upgrades.info.upgrade1.name;
-            document.getElementById("upgradePrice").innerHTML = "Price: " + upgrades.upgrade1.price;
+            document.getElementById("upgradePrice").innerHTML = "Price: " + helper.commaify(upgrades.upgrade1.price);
             document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrades.info.upgrade1.description;
             break;
         case "upgrade2":
             document.getElementById("upgradeName").innerHTML = "Name: " + upgrades.info.upgrade2.name;
-            document.getElementById("upgradePrice").innerHTML = "Price: " + upgrades.upgrade2.price;
+            document.getElementById("upgradePrice").innerHTML = "Price: " + helper.commaify(upgrades.upgrade2.price);
             document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrades.info.upgrade2.description;
             break;
         case "upgrade3":
             document.getElementById("upgradeName").innerHTML = "Name: " + upgrades.info.upgrade3.name;
-            document.getElementById("upgradePrice").innerHTML = "Price: " + upgrades.upgrade3.price;
+            document.getElementById("upgradePrice").innerHTML = "Price: " + helper.commaify(upgrades.upgrade3.price);
             document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrades.info.upgrade3.description;
             break;
         case "upgrade4":
             document.getElementById("upgradeName").innerHTML = "Name: " + upgrades.info.upgrade4.name;
-            document.getElementById("upgradePrice").innerHTML = "Price: " + upgrades.upgrade4.price;
+            document.getElementById("upgradePrice").innerHTML = "Price: " + helper.commaify(upgrades.upgrade4.price);
             document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrades.info.upgrade4.description;
             break;
         case "upgrade5":
             document.getElementById("upgradeName").innerHTML = "Name: " + upgrades.info.upgrade5.name;
-            document.getElementById("upgradePrice").innerHTML = "Price: " + upgrades.upgrade5.price;
+            document.getElementById("upgradePrice").innerHTML = "Price: " + helper.commaify(upgrades.upgrade5.price);
             document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrades.info.upgrade5.description;
             break;
         case "upgrade6":
             document.getElementById("upgradeName").innerHTML = "Name: " + upgrades.info.upgrade6.name;
-            document.getElementById("upgradePrice").innerHTML = "Price: " + upgrades.upgrade6.price;
+            document.getElementById("upgradePrice").innerHTML = "Price: " + helper.commaify(upgrades.upgrade6.price);
             document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrades.info.upgrade6.description;
             break;
     }
@@ -1077,6 +1077,7 @@ function toggleOptions() {
             optionsUp = 0;
             document.getElementById("optionsMiddleText").style.display = "none";
             document.getElementById("middle").style.background = personalization.currentBackground;
+            break;
     }
 }
 
@@ -1232,7 +1233,7 @@ saves.importReadData = function() {
     won = saves.importedData[43];
     helper.reloadBuildingPrices();
 
-    consoleLogDev("Imported save with " +core.cookies+ " cookies.");
+    helper.consoleLogDev("Imported save with " +core.cookies+ " cookies.");
 }
 
 saves.autoSave = function() {
@@ -1385,58 +1386,60 @@ saves.resetSave = function() {
     upgrades.destroy("upgrade4");
     upgrades.destroy("upgrade5");
     upgrades.destroy("upgrade6");
+
+    document.getElementById("win").style.display = "block";
 }
 
 buildings.hovered = function(building) {
     switch (building) {
         case "keyboard":
             buildingInfoName = "Keyboard";
-            buildingInfoPrice = buildings.keyboard.upgradeCost;
+            buildingInfoPrice = helper.commaify(buildings.keyboard.upgradeCost);
             buildingInfoQuote = "type in cookies";
-            buildingInfoProduces = buildings.keyboard.CPSGain;
-            buildingInfoProducing = Math.round(buildings.keyboard.CPSGiven * 10) / 10;
+            buildingInfoProduces = helper.commaify(buildings.keyboard.CPSGain);
+            buildingInfoProducing = helper.commaify(Math.round(buildings.keyboard.CPSGiven * 10) / 10);
             break;
         case "grandpa":
             buildingInfoName = "Grandpa";
-            buildingInfoPrice = buildings.grandpa.upgradeCost;
+            buildingInfoPrice = helper.commaify(buildings.grandpa.upgradeCost);
             buildingInfoQuote = "as long as gramps gets a cut";
-            buildingInfoProduces = buildings.grandpa.CPSGain;
-            buildingInfoProducing = Math.round(buildings.grandpa.CPSGiven * 10) / 10;
+            buildingInfoProduces = helper.commaify(buildings.grandpa.CPSGain);
+            buildingInfoProducing = helper.commaify(Math.round(buildings.grandpa.CPSGiven * 10) / 10);
             break;
         case "ranch":
             buildingInfoName = "Ranch";
-            buildingInfoPrice = buildings.ranch.upgradeCost;
+            buildingInfoPrice = helper.commaify(buildings.ranch.upgradeCost);
             buildingInfoQuote = "Not the dressing kind";
-            buildingInfoProduces = buildings.ranch.CPSGain;
-            buildingInfoProducing = Math.round(buildings.ranch.CPSGiven * 10) / 10;
+            buildingInfoProduces = helper.commaify(buildings.ranch.CPSGain);
+            buildingInfoProducing = helper.commaify(Math.round(buildings.ranch.CPSGiven * 10) / 10);
             break;
         case "tv":
             buildingInfoName = "Television";
-            buildingInfoPrice = buildings.tv.upgradeCost;
+            buildingInfoPrice = helper.commaify(buildings.tv.upgradeCost);
             buildingInfoQuote = "hold infomercials on your cookies";
-            buildingInfoProduces = buildings.tv.CPSGain;
-            buildingInfoProducing = Math.round(buildings.tv.CPSGiven * 10) / 10;
+            buildingInfoProduces = helper.commaify(buildings.tv.CPSGain);
+            buildingInfoProducing = helper.commaify(Math.round(buildings.tv.CPSGiven * 10) / 10);
             break;
         case "worker":
             buildingInfoName = "Worker";
-            buildingInfoPrice = buildings.worker.upgradeCost;
+            buildingInfoPrice = helper.commaify(buildings.worker.upgradeCost);
             buildingInfoQuote = "cookies via manual labor";
-            buildingInfoProduces = buildings.worker.CPSGain;
-            buildingInfoProducing = Math.round(buildings.worker.CPSGiven * 10) / 10;
+            buildingInfoProduces = helper.commaify(buildings.worker.CPSGain);
+            buildingInfoProducing = helper.commaify(Math.round(buildings.worker.CPSGiven * 10) / 10);
             break;
         case "wallet":
             buildingInfoName = "Wallet";
-            buildingInfoPrice = buildings.wallet.upgradeCost;
+            buildingInfoPrice = helper.commaify(buildings.wallet.upgradeCost);
             buildingInfoQuote = "store cookies and make interest?"; // CHANGE ME
-            buildingInfoProduces = buildings.wallet.CPSGain;
-            buildingInfoProducing = Math.round(buildings.wallet.CPSGiven * 10) / 10;
+            buildingInfoProduces = helper.commaify(buildings.wallet.CPSGain);
+            buildingInfoProducing = helper.commaify(Math.round(buildings.wallet.CPSGiven * 10) / 10);
             break;
         case "church":
             buildingInfoName = "Church";
-            buildingInfoPrice = buildings.church.upgradeCost;
+            buildingInfoPrice = helper.commaify(buildings.church.upgradeCost);
             buildingInfoQuote = "pray to the almighty cookie gods";
-            buildingInfoProduces = buildings.church.CPSGain;
-            buildingInfoProducing = Math.round(buildings.church.CPSGiven * 10) / 10;
+            buildingInfoProduces = helper.commaify(buildings.church.CPSGain);
+            buildingInfoProducing = helper.commaify(Math.round(buildings.church.CPSGiven * 10) / 10);
             break;
     }
     document.getElementById("buildingInfoName").innerHTML = buildingInfoName;
