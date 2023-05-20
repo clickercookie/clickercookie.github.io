@@ -1039,6 +1039,7 @@ function toggleStats() {
             statsUp = 0;
             document.getElementById("statsMiddleText").style.display = "none";
             document.getElementById("middle").style.background = personalization.currentBackground;
+            break;
     }
 }
 function toggleInfo() {
@@ -1058,6 +1059,7 @@ function toggleInfo() {
             infoUp = 0;
             document.getElementById("infoMiddleText").style.display = "none";
             document.getElementById("middle").style.background = personalization.currentBackground;
+            break;
     }
 }
 function toggleOptions() {

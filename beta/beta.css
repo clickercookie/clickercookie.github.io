@@ -159,6 +159,27 @@ small {
     margin-bottom: 12px;
     width: 257px;
     height: 257px;
+    animation: cookie-unhover 0.15s ease-out;
+}
+.cookie:hover {
+    animation: cookie-hover 0.15s ease-out;
+    animation-fill-mode: forwards;
+}
+.cookie:active {
+    animation: cookie-clicked 0.2s ease-out;
+    animation-fill-mode: forwards;
+}
+@keyframes cookie-hover {
+    from {scale: 100%;}
+    to {scale: 102%;}
+}
+@keyframes cookie-unhover {
+    to {scale: 100%;}
+    from {scale: 102%;}
+}
+@keyframes cookie-clicked {
+    0% {scale: 100%;}
+    100% {scale: 98%;}
 }
 
 .cookie-counter {
