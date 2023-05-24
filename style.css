@@ -159,6 +159,28 @@ small {
     margin-bottom: 12px;
     width: 257px;
     height: 257px;
+    animation: cookie-unhover 0.15s ease-out;
+    border-radius: 128px;
+}
+.cookie:hover {
+    animation: cookie-hover 0.15s ease-out;
+    animation-fill-mode: forwards;
+}
+.cookie:active {
+    animation: cookie-clicked 0.2s ease-out;
+    animation-fill-mode: forwards;
+}
+@keyframes cookie-hover {
+    from {scale: 100%;}
+    to {scale: 102%;}
+}
+@keyframes cookie-unhover {
+    to {scale: 100%;}
+    from {scale: 102%;}
+}
+@keyframes cookie-clicked {
+    0% {scale: 100%;}
+    100% {scale: 98%;}
 }
 
 .cookie-counter {
@@ -466,7 +488,7 @@ small {
     background-image: url(img/church.png);
 }
 
-/* Popup CSS */
+/* Simple Popup CSS */
 .popup {
     border-style: solid;
     border-width: 3px;
@@ -481,10 +503,7 @@ small {
     left: 50%;
     transform: translate(-50%,-50%);
 }
-.popupButton {
-    display: block;
-}
-.popup-button-div {
+.simple-popup-button-div {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -494,7 +513,7 @@ small {
     margin-right: 8px;
     color: black;
 }
-.popup-title {
+.simple-popup-title {
     display: none;
     color: black;
     text-shadow: 0px 0px 0px white;
@@ -511,6 +530,7 @@ small {
 .right-middle-buttons {
     float: right;
     margin-left: auto;
+    height: 50px;
 }
 
 /* Stats CSS */
@@ -545,7 +565,7 @@ small {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin-top: 12px;
     margin-bottom: 15px;
-    margin-left: 6px;
+    margin-left: 9px;
     font-weight: bold;
     text-align: left;
 }

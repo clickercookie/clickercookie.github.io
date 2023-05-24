@@ -522,7 +522,7 @@ function versionSwitch() {
             window.location.href = "beta/beta.html";
             break;
         case 1:
-            window.location.href = "../index.html";
+            window.location.href = "/";
             break;
     }
 }
