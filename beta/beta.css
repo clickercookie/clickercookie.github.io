@@ -160,6 +160,7 @@ small {
     width: 257px;
     height: 257px;
     animation: cookie-unhover 0.15s ease-out;
+    border-radius: 128px;
 }
 .cookie:hover {
     animation: cookie-hover 0.15s ease-out;
@@ -564,7 +565,7 @@ small {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin-top: 12px;
     margin-bottom: 15px;
-    margin-left: 6px;
+    margin-left: 9px;
     font-weight: bold;
     text-align: left;
 }

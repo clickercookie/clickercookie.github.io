@@ -19,10 +19,10 @@
             <h3 class="win" id="win">you win.</h3>
             <span class="leftSidePush" id="leftSidePush"></span>
             <div class="social-links">
-                <a href="https://github.com/clickercookie/clickercookie.github.io">
+                <a onclick="saves.autoSave()" href="https://github.com/clickercookie/clickercookie.github.io">
                     <img class="github" src="img/github-mark.svg" alt="github">
                 </a>
-                <h5 id="versionNumber" class="version-number pointer" onclick="versionSwitch()" onoouseover="versionNumberMousedOver()" onmouseout="versionNumberMousedOverUndo()">Version: null</h5>
+                <h5 id="versionNumber" class="version-number pointer" onclick="versionSwitch()" onmouseover="versionNumberMousedOver()" onmouseout="versionNumberMousedOverUndo()">Version: null</h5>
                 <div id="versionSwitchInfo" class="version-switch-info">
                     <p style="margin:0px; color:black; text-align:center;" id="versionSwitchInfoText">Clicking this will switch to the null branch.</p>
                 </div>
@@ -96,6 +96,8 @@
                             <li>0.5 header having no date.</li>
                             <li>upgrade#Identifier is no longer used an has been deleted.</li>
                             <li>Options middle text was highlightable.</li>
+                            <li>Middle text subtitles weren't lined up with other text.</li>
+                            <li>Cookie was clickable in a box shape outside the actual visible cookie.</li>
                         </ul>
                     </div>
                     <div name="version0.5" class="changelog">
