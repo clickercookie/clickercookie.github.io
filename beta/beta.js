@@ -314,6 +314,15 @@ core.initialization = function() {
     || navigator.userAgent.match(/Windows Phone/i)) {
         isMobile = 1;
         document.getElementById("cookie").className = "cookie-noanimation";
+        switch (versionBranch) {
+            case 0:
+                location.href = "mobile/index.html";
+                break;
+            case 1:
+                location.href = "../mobile/index.html";
+                break;
+        }
+        
     }
     else {
         isMobile = 0;

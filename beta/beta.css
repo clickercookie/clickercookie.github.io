@@ -4,7 +4,8 @@ body {
     display: -webkit-flex;
     display: flex;
     overflow: hidden;
-    touch-action: manipulation
+    touch-action: manipulation;
+    color: white;
 }
 
 h1 {

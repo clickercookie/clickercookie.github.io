@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CC Mobile Testing</title>
+        <link rel="stylesheet" href="mobile/mobile.css">
+        <!-- <script src="../main.js"></script> -->
+        <script src="mobile/mobile.js"></script>
+    </head>
+    <body class="no-select">
+        <div class="content">
+            <small class="absolute">The following content is in heavy development!</small>
+            <div class="cookie-content flex" id="cookieContent">
+                <img src="../img/cookie.png" class="cookie">
+                <div class="cookie-counter-wrapper">
+                    <h3 class="cookie-counter" id="cookieCounter">Cookies: 0</h3>
+                    <h4 class="cookies-per-second-counter" id="cookiesPerSecondCounter">Cookies Per Second: 0</h4>
+                </div>
+            </div>
+            <div class="store-content no-display flex" id="storeContent">
+                <h1 class="store-heading">Store</h1>
+
+            </div>
+            <div class="stats-content no-display flex" id="statsContent">
+                <h3 class="middle-title">Statistics</h3>
+                <p class="stats-text" id="cookiesStat">Cookies: 0</p>
+                <p class="stats-text" id="allTimeCookies">All Time Cookies: 0</p>
+                <p class="stats-text" id="buildingsOwnedStat">Buildings Owned: 0</p>
+                <p class="stats-text" id="cookiesPerSecondStat">Cookies Per Second: 0</p>
+                <p class="stats-text" id="cookieBeenClickedTimesStat">Total Cookie Clicks: 0</p>
+                <p class="stats-text" id="ifCheatedStat" style="color:white;"></p>
+            </div>
+            <div class="options-content no-display flex" id="optionsContent">
+                <p>Options</p>
+            </div>
+        </div>
+        <footer class="flex">
+            <div class="footer-item" onclick="navbarItemClicked('Cookie')">
+                <p>Cookie</p>
+            </div>
+            <div class="footer-item" onclick="navbarItemClicked('Store')">
+                <p>Store</p>
+            </div>
+            <div class="footer-item" onclick="navbarItemClicked('Stats')">
+                <p>Stats</p>
+            </div>
+            <div class="footer-item" onclick="navbarItemClicked('Options')">
+                <p>Options</p>
+            </div>
+        </footer>
+    </body>
+</html>
