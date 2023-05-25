@@ -145,6 +145,7 @@ let cookieProductionStopped = 0;
 let buttonDoWhat = "default";
 let hasCheated = 0;
 let won = 0;
+let isMobile;
 
 // save stuff
 const saves = {};
@@ -243,9 +244,23 @@ core.initialization = function() {
         devDiv.appendChild(br3);
 
         const mousePos = document.createElement("p");
-        mousePos.appendChild(document.createTextNode("X: 0, Y = 0"));
+        mousePos.appendChild(document.createTextNode("Mouse Pos: (?, ?)"));
         mousePos.setAttribute("id","mousePosDevText");
+        mousePos.setAttribute("style","margin-bottom:0px;");
         devDiv.appendChild(mousePos);
+
+        const br4 = document.createElement("br");
+        devDiv.appendChild(br4);
+
+        const mobileOn = document.createElement("button");
+        mobileOn.appendChild(document.createTextNode("Mobile On"));
+        mobileOn.setAttribute("onclick","isMobile = 1");
+        devDiv.appendChild(mobileOn);
+
+        const mobileOff = document.createElement("button");
+        mobileOff.appendChild(document.createTextNode("Mobile Off"));
+        mobileOff.setAttribute("onclick","isMobile = 0");
+        devDiv.appendChild(mobileOff);
 
         document.getElementById("leftSide").insertBefore(devDiv, document.getElementById("leftSidePush"));
 
@@ -289,17 +304,30 @@ core.initialization = function() {
     document.getElementById("upgrade2").style.backgroundImage = "url(img/upgrades/ranch-upgrade1.png)";
     document.getElementById("upgrade3").style.backgroundImage = "url(img/upgrades/tv-upgrade1.png)";
     document.getElementById("upgrade4").style.backgroundImage = "url(img/upgrades/worker-upgrade1.png)";
+
+    if (navigator.userAgent.match(/Android/i) // stolen from https://www.tutorialspoint.com/How-to-detect-a-mobile-device-with-JavaScript (doesn't always work)
+    || navigator.userAgent.match(/webOS/i)
+    || navigator.userAgent.match(/iPhone/i)
+    || navigator.userAgent.match(/iPad/i)
+    || navigator.userAgent.match(/iPod/i)
+    || navigator.userAgent.match(/BlackBerry/i)
+    || navigator.userAgent.match(/Windows Phone/i)) {
+        isMobile = 1;
+        document.getElementById("cookie").className = "cookie-noanimation";
+    }
+    else {
+        isMobile = 0;
+    }
 }
 
 // mouse position stuff
-const mousePosText = document.getElementById("mousePosDevText");
 let mousePos = { x: undefined, y: undefined };
 let mousePosY = `${mousePos.y}`;
 
 window.addEventListener('mousemove', (event) => {
     mousePos = { x: event.clientX, y: event.clientY };
     if (inDevelopment == 1) {
-        mousePosText.textContent = "Mouse Pos: " + `(${mousePos.x}, ${mousePos.y})`;
+        document.getElementById("mousePosDevText").textContent = "Mouse Pos: " + `(${mousePos.x}, ${mousePos.y})`;
     }
     mousePosY = `${mousePos.y}`;
 });
