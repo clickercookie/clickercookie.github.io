@@ -251,6 +251,7 @@ small {
     left: 48px;
     font-size: 10px;
     background-color: rgb(255, 243, 209);
+    color: black;
 }
 
 
@@ -467,15 +468,15 @@ small {
 
 /* building icon css */
 .keyboard-icon {
-    background: url(img/keyboard-icon.png);
+    background: url(img/keyboard.png);
 }
 
 .grandpa-icon {
-    background: url(img/grandpa-temp.png);
+    background: url(img/grandpa.png);
 }
 
 .ranch-icon {
-    background: url(img/ranch-icon.png);
+    background: url(img/ranch.png);
 }
 
 .tv-icon {

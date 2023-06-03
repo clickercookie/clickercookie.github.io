@@ -547,7 +547,7 @@ dev.setCPS = function(x) {
 function versionSwitch() {
     switch (versionBranch) {
         case 0:
-            window.location.href = "beta/beta.html";
+            window.location.href = "/beta";
             break;
         case 1:
             window.location.href = "/";

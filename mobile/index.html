@@ -4,16 +4,16 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CC Mobile Testing</title>
+        <title id="title">CC Mobile Testing</title>
         <link rel="stylesheet" href="mobile/mobile.css">
-        <!-- <script src="../main.js"></script> -->
+        <script src="../beta/beta.js" defer></script> <!-- CHANGE WHEN BETA PUSH TO MAIN -->
         <script src="mobile/mobile.js" defer></script>
     </head>
     <body class="no-select" id="body">
         <div class="content">
             <small class="absolute">The following content is in heavy development!</small>
             <div class="cookie-content flex" id="cookieContent">
-                <img src="../img/cookie.png" class="cookie">
+                <img src="../img/cookie.png" class="cookie" onclick="core.cookieClicked()">
                 <div class="cookie-counter-wrapper">
                     <h3 class="cookie-counter" id="cookieCounter">Cookies: 0</h3>
                     <h4 class="cookies-per-second-counter" id="cookiesPerSecondCounter">Cookies Per Second: 0</h4>
@@ -23,14 +23,74 @@
                 <h1 class="content-heading">Store</h1>
                 <h3 class="buildings-marker">Buildings</h3>
                 <div class="building-grid">
-                    <div class="building">
+                    <div class="building" id="building0" style="border-width: 2px 0px 2px 0px;" onclick="buildings.keyboard.buy()">
                         <div class="building-icon keyboard-icon"></div>
-                        <div class="building-content">
+                        <div class="building-content" id="building0Content">
                             <p class="buildings-bought" id="keyboardsBought">0</p>
                             <p class="building-name">Keyboard</p>
-                            <p class="building-price">15</p>
+                            <p class="building-price" id="keyboardUpgrade">15</p>
                         </div>
                     </div>
+                    <div class="building" id="building1" onclick="buildings.grandpa.buy()">
+                        <div class="building-icon grandpa-icon"></div>
+                        <div class="building-content" id="building1Content">
+                            <p class="buildings-bought" id="grandpasBought">0</p>
+                            <p class="building-name">Grandpa</p>
+                            <p class="building-price" id="grandpaUpgrade">100</p>
+                        </div>
+                    </div>
+                    <div class="building" id="building2" onclick="buildings.ranch.buy()">
+                        <div class="building-icon ranch-icon"></div>
+                        <div class="building-content" id="building2Content">
+                            <p class="buildings-bought" id="ranchesBought">0</p>
+                            <p class="building-name">Ranch</p>
+                            <p class="building-price" id="ranchUpgrade">1100</p>
+                        </div>
+                    </div>
+                    <div class="building" id="building3" onclick="buildings.tv.buy()">
+                        <div class="building-icon tv-icon"></div>
+                        <div class="building-content" id="building3Content">
+                            <p class="buildings-bought" id="tvsBought">0</p>
+                            <p class="building-name">Television</p>
+                            <p class="building-price" id="tvUpgrade">12000</p>
+                        </div>
+                    </div>
+                    <div class="building" id="building4" onclick="buildings.worker.buy()">
+                        <div class="building-icon worker-icon"></div>
+                        <div class="building-content" id="building4Content">
+                            <p class="buildings-bought" id="workersBought">0</p>
+                            <p class="building-name">Worker</p>
+                            <p class="building-price" id="workerUpgrade">130000</p>
+                        </div>
+                    </div>
+                    <div class="building" id="building5" onclick="buildings.wallet.buy()">
+                        <div class="building-icon wallet-icon"></div>
+                        <div class="building-content" id="building5Content">
+                            <p class="buildings-bought" id="walletsBought">0</p>
+                            <p class="building-name">Wallet</p>
+                            <p class="building-price" id="walletUpgrade">1400000</p>
+                        </div>
+                    </div>
+                    <div class="building" id="building6" style="border-width: 0px 0px 2px 0px;" onclick="buildings.church.buy()">
+                        <div class="building-icon church-icon"></div>
+                        <div class="building-content" id="building6Content">
+                            <p class="buildings-bought" id="churchesBought">0</p>
+                            <p class="building-name">Church</p>
+                            <p class="building-price" id="churchUpgrade">20000000</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="no-display"> <!-- junk to prevent error (invisible) -->
+                    <div id="upgrade0"></div>
+                    <div id="upgrade1"></div>
+                    <div id="upgrade2"></div>
+                    <div id="upgrade3"></div>
+                    <div id="upgrade4"></div>
+                    <div id="upgrade5"></div>
+                    <div id="upgrade6"></div>
+                    <div id="buildingInfo"></div>
+                    <div id="versionSwitchInfoText"></div>
+                    <div id="devForm"></div>
                 </div>
             </div>
             <div class="stats-content no-display" id="statsContent">
@@ -46,20 +106,22 @@
             </div>
             <div class="options-content no-display flex" id="optionsContent">
                 <p>Options</p>
+                <p id="versionNumber" class="version-number absolute">Version: null</p>
             </div>
         </div>
         <footer class="flex" id="footer">
-            <div class="footer-item" onclick="navbarItemClicked('Cookie')">
-                <p>Cookie</p>
+            <div class="footer-item" onclick="navbarItemClicked('Cookie')" id="cookieFooterItem">
+                <img src="mobile/img/cookie-footer.png" alt="cookie footer" width="32px" height="32px" class="footer-img">
+                <p class="footer-text">Cookie</p>
             </div>
-            <div class="footer-item" onclick="navbarItemClicked('Store')">
-                <p>Store</p>
+            <div class="footer-item" onclick="navbarItemClicked('Store')" id="storeFooterItem">
+                <p class="footer-text">Store</p>
             </div>
-            <div class="footer-item" onclick="navbarItemClicked('Stats')">
-                <p>Stats</p>
+            <div class="footer-item" onclick="navbarItemClicked('Stats')" id="statsFooterItem">
+                <p class="footer-text">Stats</p>
             </div>
-            <div class="footer-item" onclick="navbarItemClicked('Options')">
-                <p>Options</p>
+            <div class="footer-item" onclick="navbarItemClicked('Options')" id="optionsFooterItem">
+                <p class="footer-text">Options</p>
             </div>
         </footer>
     </body>

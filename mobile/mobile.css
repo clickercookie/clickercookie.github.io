@@ -4,7 +4,7 @@ body {
     touch-action: manipulation;
     font-family: Arial, Helvetica, sans-serif;
     color: white;
-    min-height: 100vh;
+    min-height: 100svh;
     width: 100vw;
     display: flex;
     flex-direction: column;
@@ -36,9 +36,22 @@ footer {
     padding-left: 28px;
     padding-right: 28px;
     justify-content: space-between;
+    align-items: center;
     background-color: black;
     margin-top: auto;
-    height: 50px;
+    height: 8svh;
+}
+.footer-item {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.footer-text {
+    margin: 3px;
+}
+.footer-img {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Main Content */
@@ -64,6 +77,7 @@ footer {
     margin-bottom: 12px;
     width: 85%;
     height: 85%;
+    border-radius: 128px;
 }
 .cookie-counter-wrapper {
     background-color: rgba(0, 0, 0, 0.4);
@@ -99,6 +113,9 @@ footer {
     width: 100vw;
     height: 66px;
     background-color: rgb(217, 215, 165);
+    border-style: solid;
+    border-width: 0px 0px 2px 0px;
+    border-color: black;
 }
 .building-content {
     display: inline-block;
@@ -109,6 +126,7 @@ footer {
     height: 64px;
     float: left;
     margin-left: 3px;
+    background-image: url(../img/unknown-64-64.png);
 }
 .building-name {
     font-size: 22px;
@@ -117,7 +135,7 @@ footer {
 }
 .buildings-bought {
     font-size: 35px;
-    margin: 12px 13px 0px 0px;
+    margin: 12px 16px 0px 0px;
     font-family: monospace;
     float: right;
 }
@@ -127,7 +145,25 @@ footer {
 }
 
 .keyboard-icon {
-    background-image: url(../img/keyboard-icon.png);
+    background-image: url(../beta/img/keyboard.png); /* CHANGE WHEN BETA PUSH TO MAIN */
+}
+.grandpa-icon {
+    background-image: url(../beta/img/grandpa.png); /* CHANGE WHEN BETA PUSH TO MAIN */
+}
+.ranch-icon {
+    background-image: url(../beta/img/ranch.png); /* CHANGE WHEN BETA PUSH TO MAIN */
+}
+.tv-icon {
+    background-image: url(../img/tv.png);
+}
+.worker-icon {
+    background-image: url(../img/worker.png);
+}
+.wallet-icon {
+    background-image: url(../img/wallet.png);
+}
+.church-icon {
+    background-image: url(../img/church.png);
 }
 /* Statistics */
 .stats-content {
@@ -145,4 +181,12 @@ footer {
     font-family: Arial, Helvetica, sans-serif;
     letter-spacing: 1px;
     font-weight: bold;
+}
+
+/* Misc */
+.version-number {
+    bottom: 50px;
+    left: 7px;
+    font-size: 20px;
+    font-family: monospace;
 }

@@ -1,7 +1,7 @@
 // ------------------------------------
 // Variable & Object Definitions
 // ------------------------------------
-const version = "0.5.1";
+const version = "0.5.2";
 const versionBranch = 1; // 0 is main, 1 is beta
 const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode! Recommended that versionBranch is 1 for easier saving if this is toggled.
 
@@ -145,7 +145,7 @@ let cookieProductionStopped = 0;
 let buttonDoWhat = "default";
 let hasCheated = 0;
 let won = 0;
-let isMobile;
+let mobile;
 
 // save stuff
 const saves = {};
@@ -254,12 +254,12 @@ core.initialization = function() {
 
         const mobileOn = document.createElement("button");
         mobileOn.appendChild(document.createTextNode("Mobile On"));
-        mobileOn.setAttribute("onclick","isMobile = 1");
+        mobileOn.setAttribute("onclick","mobile = 1");
         devDiv.appendChild(mobileOn);
 
         const mobileOff = document.createElement("button");
         mobileOff.appendChild(document.createTextNode("Mobile Off"));
-        mobileOff.setAttribute("onclick","isMobile = 0");
+        mobileOff.setAttribute("onclick","mobile = 0");
         devDiv.appendChild(mobileOff);
 
         document.getElementById("leftSide").insertBefore(devDiv, document.getElementById("leftSidePush"));
@@ -312,20 +312,20 @@ core.initialization = function() {
     || navigator.userAgent.match(/iPod/i)
     || navigator.userAgent.match(/BlackBerry/i)
     || navigator.userAgent.match(/Windows Phone/i)) {
-        isMobile = 1;
-        document.getElementById("cookie").className = "cookie-noanimation";
-        switch (versionBranch) {
-            case 0:
-                location.href = "mobile/index.html";
-                break;
-            case 1:
-                location.href = "../mobile/index.html";
-                break;
+        mobile = 1;
+        if (location.pathname == "/" || location.pathname == "/beta") {
+            switch (versionBranch) {
+                case 0:
+                    location.href = "mobile/index.html";
+                    break;
+                case 1:
+                    location.href = "../mobile/index.html";
+                    break;
+            }
         }
-        
     }
     else {
-        isMobile = 0;
+        mobile = 0;
     }
 }
 
@@ -556,7 +556,7 @@ dev.setCPS = function(x) {
 function versionSwitch() {
     switch (versionBranch) {
         case 0:
-            window.location.href = "beta/beta.html";
+            window.location.href = "/beta";
             break;
         case 1:
             window.location.href = "/";
@@ -1481,11 +1481,13 @@ buildings.hovered = function(building) {
             buildingInfoProducing = helper.commaify(Math.round(buildings.church.CPSGiven * 10) / 10);
             break;
     }
-    document.getElementById("buildingInfoName").innerHTML = buildingInfoName;
-    document.getElementById("buildingInfoPrice").innerHTML = "Price: " + buildingInfoPrice;
-    document.getElementById("buildingInfoQuote").innerHTML = "\""+buildingInfoQuote+"\"";
-    document.getElementById("buildingInfoProduces").innerHTML = "Produces: "+buildingInfoProduces+" CPS";
-    document.getElementById("buildingInfoProducing").innerHTML = "Producing: "+ buildingInfoProducing+" CPS";
+    if (!mobile) {
+        document.getElementById("buildingInfoName").innerHTML = buildingInfoName;
+        document.getElementById("buildingInfoPrice").innerHTML = "Price: " + buildingInfoPrice;
+        document.getElementById("buildingInfoQuote").innerHTML = "\""+buildingInfoQuote+"\"";
+        document.getElementById("buildingInfoProduces").innerHTML = "Produces: "+buildingInfoProduces+" CPS";
+        document.getElementById("buildingInfoProducing").innerHTML = "Producing: "+ buildingInfoProducing+" CPS";
+    }
 
     document.getElementById("buildingInfo").style.display = "block";
 }
