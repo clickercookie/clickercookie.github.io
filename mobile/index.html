@@ -7,9 +7,9 @@
         <title>CC Mobile Testing</title>
         <link rel="stylesheet" href="mobile/mobile.css">
         <!-- <script src="../main.js"></script> -->
-        <script src="mobile/mobile.js"></script>
+        <script src="mobile/mobile.js" defer></script>
     </head>
-    <body class="no-select">
+    <body class="no-select" id="body">
         <div class="content">
             <small class="absolute">The following content is in heavy development!</small>
             <div class="cookie-content flex" id="cookieContent">
@@ -20,11 +20,23 @@
                 </div>
             </div>
             <div class="store-content no-display flex" id="storeContent">
-                <h1 class="store-heading">Store</h1>
-
+                <h1 class="content-heading">Store</h1>
+                <h3 class="buildings-marker">Buildings</h3>
+                <div class="building-grid">
+                    <div class="building">
+                        <div class="building-icon keyboard-icon"></div>
+                        <div class="building-content">
+                            <p class="buildings-bought" id="keyboardsBought">0</p>
+                            <p class="building-name">Keyboard</p>
+                            <p class="building-price">15</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="stats-content no-display flex" id="statsContent">
-                <h3 class="middle-title">Statistics</h3>
+            <div class="stats-content no-display" id="statsContent">
+                <div class="stats-heading-wrapper">
+                    <h1 class="content-heading">Statistics</h3>
+                </div>
                 <p class="stats-text" id="cookiesStat">Cookies: 0</p>
                 <p class="stats-text" id="allTimeCookies">All Time Cookies: 0</p>
                 <p class="stats-text" id="buildingsOwnedStat">Buildings Owned: 0</p>
@@ -36,7 +48,7 @@
                 <p>Options</p>
             </div>
         </div>
-        <footer class="flex">
+        <footer class="flex" id="footer">
             <div class="footer-item" onclick="navbarItemClicked('Cookie')">
                 <p>Cookie</p>
             </div>

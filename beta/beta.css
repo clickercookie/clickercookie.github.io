@@ -407,11 +407,9 @@ small {
 
 .buildings-bought {
     font-size: 35px;
-    margin: 0px;
+    margin: 12px 10px 0px 0px;
     font-family: monospace;
     float: right;
-    margin-top: 12px;
-    margin-right: 10px;
 }
 
 .building-name {
@@ -659,6 +657,7 @@ small {
     height: 50px;
     margin-left: auto;
     background-color: rgb(255, 243, 209);
+    color: black; /* this wasn't nessesary until 6/3/23? idk why */
 }
 .info-button {
     border-top-width: 2px;
