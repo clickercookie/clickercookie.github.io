@@ -105,23 +105,44 @@
                 <p class="stats-text" id="ifCheatedStat" style="color:white;"></p>
             </div>
             <div class="options-content no-display flex" id="optionsContent">
-                <p>Options</p>
+                <div class="options-grid">
+                    <div class="options-grid-part">
+                        <div class="grid-item">
+                            <p>Save</p>
+                        </div>
+                        <div class="grid-item">
+                            <p>Load</p>
+                        </div>
+                        <div class="grid-item">
+                            <p>Reset</p>
+                        </div>
+                    </div>
+                    <div class="options-grid-part">
+                        <div class="grid-item">
+                            <p>Export</p>
+                        </div>
+                        <div class="grid-item">
+                            <p>Import</p>
+                        </div>
+                    </div>
+                </div>
+                <p>Not Finished!!!</p>
                 <p id="versionNumber" class="version-number absolute">Version: null</p>
             </div>
         </div>
         <footer class="flex" id="footer">
             <div class="footer-item" onclick="navbarItemClicked('Cookie')" id="cookieFooterItem">
-                <img src="mobile/img/cookie-footer.png" alt="cookie footer" width="32px" height="32px" class="footer-img">
-                <p class="footer-text">Cookie</p>
+                <img src="mobile/img/cookie-footer.png" alt="cookie footer" width="27px" height="27px" class="footer-img">
+                <p class="footer-text" id="cookieFooterText">Cookie</p>
             </div>
             <div class="footer-item" onclick="navbarItemClicked('Store')" id="storeFooterItem">
-                <p class="footer-text">Store</p>
+                <p class="footer-text" id="storeFooterText">Store</p>
             </div>
             <div class="footer-item" onclick="navbarItemClicked('Stats')" id="statsFooterItem">
-                <p class="footer-text">Stats</p>
+                <p class="footer-text" id="statsFooterText">Stats</p>
             </div>
             <div class="footer-item" onclick="navbarItemClicked('Options')" id="optionsFooterItem">
-                <p class="footer-text">Options</p>
+                <p class="footer-text" id="optionsFooterText">Options</p>
             </div>
         </footer>
     </body>

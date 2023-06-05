@@ -39,7 +39,7 @@ footer {
     align-items: center;
     background-color: black;
     margin-top: auto;
-    height: 8svh;
+    height: 57.5px;
 }
 .footer-item {
     display: flex;
@@ -48,6 +48,7 @@ footer {
 }
 .footer-text {
     margin: 3px;
+    font-size: 15px;
 }
 .footer-img {
     margin-left: auto;
@@ -182,10 +183,34 @@ footer {
     letter-spacing: 1px;
     font-weight: bold;
 }
+/* Options */
+.options-grid {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    padding-left: 7px;
+    padding-right: 7px;
+    margin-top: 5px;
+}
+.options-grid-part {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    height: 85px;
+    background-color: gray;
+    border-style: solid;
+    border-color: black;
+}
+.grid-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* End Main Content */
 
 /* Misc */
 .version-number {
-    bottom: 50px;
+    bottom: 38px;
     left: 7px;
     font-size: 20px;
     font-family: monospace;
