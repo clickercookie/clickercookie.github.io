@@ -7,7 +7,8 @@
         <meta name="description" content="A totally original game about clicking a cookie.">
         <meta name="keywords" content="Clicker Cookie, Clicker, Javascript, Game, Cookie Clicker">
         <meta name="author" content="FifthTundraG">
-        <link rel="stylesheet" href="beta/beta.css">  <!-- changeMarker -->
+        <link rel="stylesheet" href="beta.css">  <!-- changeMarker -->
+        <script src="beta.js" type="text/javascript" defer></script> <!-- changeMarker -->
     </head>
     <body>
         <div id="leftSide" class="leftSide">
@@ -60,6 +61,7 @@
                 <p class="button-paragraph-text-gray" id="cookiesPerSecondStat">Cookies Per Second: 0</p>
                 <p class="button-paragraph-text-gray" id="cookieBeenClickedTimesStat">Total Cookie Clicks: 0</p>
                 <p class="button-paragraph-text-gray" id="ifCheatedStat" style="color:white;"></p>
+                <p class="button-paragraph-text-gray" id="ifModdedStat" style="color:white;"></p>
             </div>
             <div id="infoMiddleText" class="middle-text-main">
                 <h3 class="middle-title">Infomation</h3>
@@ -74,6 +76,11 @@
                         <p class="button-paragraph-text">Added:</p>
                         <ul class="middle-ul">
                             <li>Mobile Support!</li>
+                            <li>Mods!</li>
+                        </ul>
+                        <p class="button-paragraph-text">Changed:</p>
+                        <ul class="middle-ul">
+                            <li>Popups are a flexbox.</li>
                         </ul>
                         <p class="button-paragraph-text">Fixed:</p>
                         <ul class="middle-ul">
@@ -275,7 +282,13 @@
                     <label id="importDataInputLabel" for="importDataInput" class="custom-button-label">Import Data</label>
                     <input type="file" id="importDataInput" class="no-display" accept=".ccsave,.json" onchange="saves.importData()">
                 </div>
-                <form action="changed" class="no-display" id="devForm">
+                <p class="button-paragraph-text" style="margin-bottom:0px;">Modding:</p>
+                <small class="button-paragraph-text" id="modsNumberLoaded">You have 0 mods loaded!</small> <br>
+                <div class="data-buttons">
+                    <button id="addModButton" class="data-button pointer" style="margin-top:3px;" onclick="mods.addClicked()">Add Mod</button>
+                    <button id="addModButton" class="data-button pointer" style="margin-top:3px; margin-left:0px;" onclick="mods.listClicked()">List Mods</button>
+                </div>
+                <form class="no-display" id="devForm">
                     <label for="devModeSelect" class="middle-label">Developer Mode: </label>
                     <select class="pointer" id="devModeSelect" onchange="dev.setDevMode(this.value)">
                         <option value="off" id="offSelectionDev">Off</option>
@@ -407,5 +420,4 @@
 
         </div>
     </body>
-    <script src="beta/beta.js"></script> <!-- changeMarker -->
 </html>

@@ -134,6 +134,13 @@ const dev = {
     CPSGiven: 0
 };
 
+// mods stuff
+const mods = {};
+
+mods.numberLoaded = 0;
+mods.allMods = [];
+let isModded = 0;
+
 // middle other occupiers
 let statsUp = 0;
 let infoUp = 0;
@@ -157,7 +164,7 @@ saves.allToSave = [core.cookies, core.totalCookies, core.cookiesPerSecond, // al
                 buildings.keyboard.CPSGain,buildings.grandpa.CPSGain,buildings.ranch.CPSGain,buildings.tv.CPSGain,buildings.worker.CPSGain,buildings.wallet.CPSGain,buildings.church.CPSGain,
                 buildings.keyboard.upgradeCost,buildings.grandpa.upgradeCost,buildings.ranch.upgradeCost,buildings.tv.upgradeCost,buildings.worker.upgradeCost,buildings.wallet.upgradeCost,buildings.church.upgradeCost,
                 upgrades.upgrade0.bought,upgrades.upgrade1.bought,upgrades.upgrade2.bought,upgrades.upgrade3.bought,upgrades.upgrade4.bought,upgrades.upgrade5.bought,upgrades.upgrade6.bought,
-                core.cookiesPerClick,core.cookieBeenClickedTimes,core.buildingsOwned,grandmaPromptClicks,hasCheated,won];
+                core.cookiesPerClick,core.cookieBeenClickedTimes,core.buildingsOwned,grandmaPromptClicks,hasCheated,won,isModded];
 saves.defaultSavedValues = [ // matches order of allToSave
     0,0,0,
     0,0,0,0,0,0,0,
@@ -165,7 +172,7 @@ saves.defaultSavedValues = [ // matches order of allToSave
     0.1,1,8,47,260,1440,7800,
     15,100,1100,12000,130000,1400000,20000000,
     0,0,0,0,0,0,0,
-    1,0,0,0,0,0];
+    1,0,0,0,0,0,0];
 saves.dataLoaded; // data from an auto-save (local storage)
 
 // view versions of variables (their main versions have long decimal points)
@@ -207,6 +214,9 @@ core.initialization = function() {
     }
     if (hasCheated == 1) {
         document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
+    }
+    if (isModded) {
+        document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
     }
 
     // check for development special stuff
@@ -507,6 +517,7 @@ core.cookieClicked = function() {
 dev.beginGrandma = function() {
     if (dev.devMode == 1) {
         dev.setCookies(1000000000);
+        document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
         hasCheated = 1;
         grandmaPromptClicks = 0;
     }
@@ -518,6 +529,7 @@ dev.beginGrandma = function() {
 dev.ignoreGrandma = function() {
     if (dev.devMode == 1) {
         grandmaPromptClicks = 10;
+        document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
         hasCheated = 1;
     }
     else {
@@ -556,7 +568,7 @@ dev.setCPS = function(x) {
 function versionSwitch() {
     switch (versionBranch) {
         case 0:
-            window.location.href = "/beta";
+            window.location.href = "/beta/beta.html";
             break;
         case 1:
             window.location.href = "/";
@@ -911,7 +923,7 @@ helper.popup.createSimpleAlertError = function(value) {
     }
 }
 helper.popup.createSimple = function(x,y,text,noButton,doWhat,title,backButton,isError) {
-    document.getElementById("simplePopup").style.display = "block";
+    document.getElementById("simplePopup").style.display = "flex";
     document.getElementById("simplePopupContent").innerHTML = text;
     document.getElementById("simplePopup").style.width = x + "px";
     document.getElementById("simplePopupButtonDiv").style.width = x + "px";
@@ -998,7 +1010,7 @@ helper.popup.simpleClicked = function() {
 helper.popup.createAdvanced = function(x,y,html) {
     const advancedPopup = document.getElementById("advancedPopup");
 
-    advancedPopup.style.display = "block";
+    advancedPopup.style.display = "flex";
     advancedPopup.style.width = x+"px";
     advancedPopup.style.height = y+"px";
 
@@ -1270,6 +1282,7 @@ saves.importReadData = function() {
     grandmaPromptClicks = saves.importedData[41];
     hasCheated = saves.importedData[42];
     won = saves.importedData[43];
+    isModded = saves.importedData[44];
     helper.reloadBuildingPrices();
 
     helper.consoleLogDev("Imported save with " +core.cookies+ " cookies.");
@@ -1282,7 +1295,20 @@ saves.autoSave = function() {
         buildings.keyboard.CPSGain,buildings.grandpa.CPSGain,buildings.ranch.CPSGain,buildings.tv.CPSGain,buildings.worker.CPSGain,buildings.wallet.CPSGain,buildings.church.CPSGain,
         buildings.keyboard.upgradeCost,buildings.grandpa.upgradeCost,buildings.ranch.upgradeCost,buildings.tv.upgradeCost,buildings.worker.upgradeCost,buildings.wallet.upgradeCost,buildings.church.upgradeCost,
         upgrades.upgrade0.bought,upgrades.upgrade1.bought,upgrades.upgrade2.bought,upgrades.upgrade3.bought,upgrades.upgrade4.bought,upgrades.upgrade5.bought,upgrades.upgrade6.bought,
-        core.cookiesPerClick,core.cookieBeenClickedTimes,core.buildingsOwned,grandmaPromptClicks,hasCheated,won];
+        core.cookiesPerClick,core.cookieBeenClickedTimes,core.buildingsOwned,grandmaPromptClicks,hasCheated,won,isModded];
+ 
+    const valuesToCheck = saves.allToSave.length; // check if any values are null, if they are set them to their default. this is useful if new values are added because due to execution order they will ususally always be saved as null.
+    let valuesRemaining = valuesToCheck - 1;
+    while (valuesRemaining >= 0) {
+        if (saves.allToSave[valuesRemaining] == null) {
+            saves.allToSave[valuesRemaining] = saves.defaultSavedValues[valuesRemaining];
+            console.log("A value in localstorage was null, is this a new update?");
+            valuesRemaining -= 1;
+        }
+        else {
+            valuesRemaining -= 1;
+        }
+    }
     switch (versionBranch) {
         case 0:
             localStorage.save = JSON.stringify(saves.allToSave);
@@ -1385,6 +1411,8 @@ saves.getLocalSave = function(localStorageSave) {
     grandmaPromptClicks = saves.dataLoaded[41];
     hasCheated = saves.dataLoaded[42];
     won = saves.dataLoaded[43];
+    isModded = saves.dataLoaded[44];
+
     helper.reloadBuildingPrices();
 }
 
@@ -1493,6 +1521,125 @@ buildings.hovered = function(building) {
 }
 buildings.undoHover = function() {
     document.getElementById("buildingInfo").style.display = "none";
+}
+
+// Mods
+mods.loadURL = function(url) {
+    const file = document.createElement("script");
+    file.setAttribute("src",url);
+    file.setAttribute("type","text/javascript");
+    const modId = mods.numberLoaded + 1;
+    file.setAttribute("id","mod" + modId);
+
+    document.head.appendChild(file);
+
+    document.getElementById("addModURLForm").reset();
+    document.getElementById("importedMessage").style.display = "block";
+
+    mods.numberLoaded += 1;
+    isModded = 1;
+    document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
+    mods.reloadModsLoadedText();
+}
+mods.loadFile = function() { // add check if mod is valid
+    var file = document.getElementById("addModFile").files[0];
+    var reader = new FileReader();
+
+    reader.onerror = (e) => alert("something broke, don't expect me to fix it :D");
+
+    reader.readAsText(file);
+    
+    reader.onloadend = () => {
+        const readFile = reader.result;
+        
+        const script = document.createElement("script");
+        script.appendChild(document.createTextNode(readFile));
+        script.setAttribute("type","text/javascript");
+        const modId = mods.numberLoaded + 1;
+        script.setAttribute("id","mod" + modId);
+
+        document.head.appendChild(script);
+
+        document.getElementById("addModURLForm").reset();
+        document.getElementById("importedMessage").style.display = "block";
+
+        mods.numberLoaded += 1;
+        isModded = 1;
+        document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
+        mods.reloadModsLoadedText();
+    };
+}
+
+mods.list = function() {
+    const numberToList = mods.allMods.length;
+
+    let listLeft = numberToList;
+    while (listLeft > 0) {
+        const newModItem = document.createElement("div");
+        newModItem.setAttribute("class","popup-content mod-in-list");
+        newModItem.setAttribute("id","modList" + listLeft);
+
+        const newModID = document.createElement("small");
+        newModID.appendChild(document.createTextNode("#" + listLeft));
+        newModID.setAttribute("class","mod-id popup-content");
+        newModItem.appendChild(newModID);
+
+        const newModName = document.createElement("p");
+        newModName.appendChild(document.createTextNode(JSON.stringify(mods.allMods[listLeft - 1])));
+        newModName.setAttribute("class","popup-content");
+        newModItem.appendChild(newModName);
+
+        document.getElementById("modsList").appendChild(newModItem);
+        listLeft -= 1;
+    }
+
+    if (numberToList == 0) {document.getElementById("noModsMessage").style.display = "block";}
+    if (numberToList > 0) {document.getElementById("removeModsMessage").style.display = "block";}
+}
+
+mods.addModData = function(id,data) { // yes i basically stole and renamed this entire function from cookie clicker's Game.registerMod orteil did it better okay i might seem smart but i'm really not.
+    // READ THE DOCS!
+    if (mods.allMods.includes(id)) {
+        helper.popup.createAdvanced(400,200,"<h3 class='simple-popup-title' style='display:block;'>Error</h3> \
+        <p class='popup-content'>This mod's ID is already present!</p> \
+        <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>");
+        return false;
+    }
+    mods.allMods.push(id);
+    document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
+    isModded = 1;
+    data.initialization();
+    console.log(`Loaded mod ${id}`);
+}
+
+mods.addClicked = function() {
+    helper.popup.createAdvanced(500,350,"<h3 class='simple-popup-title' style='display:block;'>Add Mod</h3> \
+    <h5 class='popup-content' style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5> \
+    <h5 class='popup-content' style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5> \
+    <h5 class='popup-content' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a onclick='saves.autoSave()' href='about:blank' class='blue'>read the documentation (not done!)</a></h5> \
+    <form onsubmit='return false;' id='addModURLForm' style='margin-top:22px;'> \
+        <label for='addModURL' class='popup-content'>From URL: </label> \
+        <input id='addModURL' onchange='mods.loadURL(this.value)'> \
+    </form> \
+    <form> \
+        <label for='addModFile' class='popup-content' style='margin-right:0px;'>From File: </label> \
+        <input type='file' id='addModFile' onchange='mods.loadFile(this.value)' class='popup-content' style='width:86px;'> \
+    </form> \
+    <p class='popup-content no-display' id='importedMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>Imported!</p> \
+    <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>");
+}
+mods.listClicked = function() {
+    helper.popup.createAdvanced(300,350,"<h3 class='simple-popup-title' style='display:block;'>All Mods</h3> \
+    <p class='popup-content no-display' id='noModsMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>You have no mods installed!</p> \
+    <div id='modsList' class='mods-list'></div> \
+    <small class='popup-content no-display' id='removeModsMessage' style='margin-top:3px;'>To remove mods, refresh your page. (make sure to save!)</small> \
+    <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>");
+
+    mods.list();
+}
+
+mods.reloadModsLoadedText = function() {
+    document.getElementById("modsNumberLoaded").innerHTML = "You have " + mods.numberLoaded + " mods loaded!";
 }
 
 console.log("what are you doing here? well... as long as its productive.");
