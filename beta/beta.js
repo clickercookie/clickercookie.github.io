@@ -215,7 +215,7 @@ core.initialization = function() {
     if (hasCheated == 1) {
         document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
     }
-    if (isModded) {
+    if (isModded && mobile == 0) {
         document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
     }
 
@@ -323,6 +323,7 @@ core.initialization = function() {
     || navigator.userAgent.match(/BlackBerry/i)
     || navigator.userAgent.match(/Windows Phone/i)) {
         mobile = 1;
+        personalization.currentBackground = "url(../img/backgrounds/background-blue.png)";
         if (location.pathname == "/" || location.pathname == "/beta") {
             switch (versionBranch) {
                 case 0:
@@ -1022,10 +1023,20 @@ helper.popup.destroyAdvanced = function() {
 
 // set areas to different things
 personalization.setBackground = function(color) {
-    personalization.currentBackground = "url(img/backgrounds/background-" + color + ".png)";
-    document.getElementById("leftSide").style.background = personalization.currentBackground;
-    document.getElementById("middleButtons").style.background = personalization.currentBackground;
-    document.getElementById("rightSide").style.background = personalization.currentBackground;
+    if (!mobile) {
+        personalization.currentBackground = "url(img/backgrounds/background-" + color + ".png)";
+    }
+    else {
+        personalization.currentBackground = "url(../img/backgrounds/background-" + color + ".png)";
+    }
+    if (!mobile) {
+        document.getElementById("leftSide").style.background = personalization.currentBackground;
+        document.getElementById("middleButtons").style.background = personalization.currentBackground;
+        document.getElementById("rightSide").style.background = personalization.currentBackground;
+    }
+    else {
+        document.querySelector(".content").style.background = "linear-gradient(to right, rgba(0,0,0,0.2), rgba(0,0,0,0.2)), "+ personalization.currentBackground;
+    }
 
     helper.consoleLogDev("Background color set to: " + color);
 }
@@ -1455,6 +1466,10 @@ saves.resetSave = function() {
     upgrades.destroy("upgrade6");
 
     document.getElementById("win").style.display = "block";
+
+    if (mobile) {
+        navbarItemClicked("Cookie");
+    }
 }
 
 buildings.hovered = function(building) {

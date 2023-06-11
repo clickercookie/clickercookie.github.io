@@ -13,11 +13,12 @@
         <div class="content">
             <small class="absolute">The following content is in heavy development!</small>
             <div class="cookie-content flex" id="cookieContent">
-                <img src="../img/cookie.png" class="cookie" onclick="core.cookieClicked()">
+                <img src="../img/cookie.png" class="cookie" id="cookie" onclick="core.cookieClicked()">
                 <div class="cookie-counter-wrapper">
                     <h3 class="cookie-counter" id="cookieCounter">Cookies: 0</h3>
                     <h4 class="cookies-per-second-counter" id="cookiesPerSecondCounter">Cookies Per Second: 0</h4>
                 </div>
+                <h3 class="win" id="win">you win.</h3>
             </div>
             <div class="store-content no-display flex" id="storeContent">
                 <h1 class="content-heading">Store</h1>
@@ -107,31 +108,70 @@
             <div class="options-content no-display flex" id="optionsContent">
                 <div class="options-grid">
                     <div class="options-grid-part">
-                        <div class="grid-item">
+                        <div class="grid-item top-grid-item" style="border-right-width:3px;" onclick="saves.autoSave()">
                             <p>Save</p>
                         </div>
-                        <div class="grid-item">
+                        <div class="grid-item top-grid-item" onclick="saves.loadAutoSave()">
                             <p>Load</p>
                         </div>
-                        <div class="grid-item">
+                        <div class="grid-item top-grid-item" style="border-left-width:3px;" onclick="helper.popup.createSimple(300,150,'Are you sure you want to do this?',false,'resetSave()','Warning',true,true)">
                             <p>Reset</p>
                         </div>
                     </div>
-                    <div class="options-grid-part">
-                        <div class="grid-item">
+                    <div class="options-grid-part" style="border-top-width:0px;">
+                        <div class="grid-item bottom-grid-item" style="border-right-width:3px;" onclick="helper.popup.createSimple(300,150,'Not currently implimented!',false,'default','Hey!',false,true)">
                             <p>Export</p>
                         </div>
-                        <div class="grid-item">
+                        <div class="grid-item bottom-grid-item" onclick="helper.popup.createSimple(300,150,'Not currently implimented!',false,'default','Hey!',false,true)">
                             <p>Import</p>
                         </div>
                     </div>
                 </div>
-                <p>Not Finished!!!</p>
+                <div class="options-text-wrapper">
+                    <h3 class="options-title">Customization:</h3>
+                    <form action="changed">
+                        <label for="backgroundSelect" class="middle-label">Background: </label>
+                        <select class="middle-select" id="backgroundSelect" onchange="personalization.setBackground(this.value)">
+                            <option value="blue">Blue</option>
+                            <option value="green">Green</option>
+                            <option value="gray">Gray</option>
+                            <option value="purple">Purple</option>
+                            <option value="darkblue">Dark Blue</option>
+                            <option value="orange">Orange</option>
+                            <option value="pink">Pink</option>
+                            <option value="lime">Lime</option>
+                            <option value="yellow">Yellow</option>
+                            <option value="red">Red</option>
+                            <option value="white" class="no-display" id="whiteBackground">White</option> <!-- hidden by default because it really hurts eyes -->
+                        </select>
+                    </form>
+                    <form>
+                        <label for="currentClickedSelect" class="middle-label">Currently Clicked: </label>
+                        <select class="middle-select" id="currentClickedSelect" onchange="personalization.setCurrentClicked(this.value)">
+                            <option value="cookie">Cookie</option>
+                            <option value="potato">Potato</option>
+                            <option value="strawberry">Strawberry</option>
+                        </select>
+                    </form>
+                </div>
                 <p id="versionNumber" class="version-number absolute">Version: null</p>
             </div>
         </div>
+        <div class="absolute filter" id="filter"></div>
+        <div class="popup" id="simplePopup">
+            <img alt="popup image" style="display:none;" id="simplePopupImage">
+            <h3 class="simple-popup-title" id="simplePopupTitle">title</h3>
+            <p class="popup-content" id="simplePopupContent">null</p>
+            <div class="simple-popup-button-div" id="simplePopupButtonDiv">
+                <button onclick="helper.popup.destroySimple()" id="simplePopupBackButton" class="popup-button no-display" style="margin-right:3px;">Back</button>
+                <button onclick="helper.popup.simpleClicked()" id="simplePopupButton" class="popup-button">OK</button>
+            </div>
+        </div>
+        <div class="popup" id="advancedPopup">
+
+        </div>
         <footer class="flex" id="footer">
-            <div class="footer-item" onclick="navbarItemClicked('Cookie')" id="cookieFooterItem">
+            <div class="footer-item" onclick="navbarItemClicked('Cookie')" id="cookieFooterItem" style="scale:1.1;">
                 <img src="mobile/img/cookie-footer.png" alt="cookie footer" width="27px" height="27px" class="footer-img">
                 <p class="footer-text" id="cookieFooterText">Cookie</p>
             </div>

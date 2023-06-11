@@ -1,6 +1,7 @@
 let availableScreenSpace;
 
 const content = document.querySelector(".content");
+let filtered = "linear-gradient(to right, rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url(" + personalization.currentBackground +")";
 
 function mobileInit() {
     sizeCheck();
@@ -38,7 +39,7 @@ function navbarItemClicked(item) {
     document.getElementById("storeContent").style.display = "none";
     document.getElementById("statsContent").style.display = "none";
     document.getElementById("optionsContent").style.display = "none";
-    const filtered = "linear-gradient(to right, rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url(../img/backgrounds/background-blue.png)";
+    filtered = "linear-gradient(to right, rgba(0,0,0,0.2), rgba(0,0,0,0.2)), " + personalization.currentBackground;
 
     statsUp = 0;
     document.getElementById("cookieFooterItem").style.scale = "100%";
@@ -52,7 +53,7 @@ function navbarItemClicked(item) {
     switch (item) {
         case "Cookie":
             document.getElementById("cookieContent").style.display = "flex";
-            content.style.background = "url(../img/backgrounds/background-blue.png)";
+            content.style.background = personalization.currentBackground;
             document.getElementById("cookieFooterItem").style.scale = "110%";
             // document.getElementById("cookieFooterText").style.color = "white";
             break;
