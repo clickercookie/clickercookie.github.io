@@ -6,6 +6,10 @@ let filtered = "linear-gradient(to right, rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url
 function mobileInit() {
     sizeCheck();
     content.style.height = availableScreenSpace + "px";
+    document.getElementById("cookieContent").style.height = availableScreenSpace + "px";
+    document.getElementById("storeContent").style.height = availableScreenSpace + "px";
+    document.getElementById("statsContent").style.height = availableScreenSpace + "px";
+    document.getElementById("optionsContent").style.height = availableScreenSpace + "px";
 
     document.getElementById("title").innerHTML = "CC Mobile Testing";
 }

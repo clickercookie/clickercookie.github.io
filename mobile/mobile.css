@@ -127,8 +127,7 @@ footer {
 .cookie {
     margin-top: 80px;
     margin-bottom: 12px;
-    width: 85%;
-    height: 85%;
+    width: 85vw;
     border-radius: 128px;
 }
 .cookie-counter-wrapper {
@@ -160,6 +159,7 @@ footer {
 }
 .building-grid {
     display: grid;
+    overflow-y: scroll;
 }
 .building {
     width: 100vw;
