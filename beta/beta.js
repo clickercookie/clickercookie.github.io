@@ -763,7 +763,9 @@ upgrades.upgrade0.clicked = function() {
         buildings.keyboard.CPSGain *= 2;
         core.cookiesPerClick *= 2;
         upgrades.upgrade0.bought += 1;
-        upgrades.hovered("upgrade0");
+        if (!mobile) {
+            upgrades.hovered("upgrade0");
+        }
         upgrades.destroy("upgrade0");
     }
 }
@@ -773,7 +775,9 @@ upgrades.upgrade1.clicked = function() {
         buildings.grandpa.CPSGiven *= 2;
         buildings.grandpa.CPSGain *= 2;
         upgrades.upgrade1.bought += 1;
-        upgrades.hovered("upgrade1");
+        if (!mobile) {
+            upgrades.hovered("upgrade1");
+        }
         upgrades.destroy("upgrade1");
     }
 }
@@ -783,7 +787,9 @@ upgrades.upgrade2.clicked = function() {
         buildings.ranch.CPSGiven *= 2;
         buildings.ranch.CPSGain *= 2;
         upgrades.upgrade2.bought += 1;
-        upgrades.hovered("upgrade2");
+        if (!mobile) {
+            upgrades.hovered("upgrade1");
+        }
         upgrades.destroy("upgrade2");
     }
 }
@@ -793,7 +799,9 @@ upgrades.upgrade3.clicked = function() {
         buildings.tv.CPSGiven *= 2;
         buildings.tv.CPSGain *= 2;
         upgrades.upgrade3.bought += 1;
-        upgrades.hovered("upgrade3");
+        if (!mobile) {
+            upgrades.hovered("upgrade3");
+        }
         upgrades.destroy("upgrade3");
     }
 }
@@ -803,7 +811,9 @@ upgrades.upgrade4.clicked = function() {
         buildings.worker.CPSGiven *= 2;
         buildings.worker.CPSGain *= 2;
         upgrades.upgrade4.bought += 1;
-        upgrades.hovered("upgrade4");
+        if (!mobile) {
+            upgrades.hovered("upgrade4");
+        }
         upgrades.destroy("upgrade4");
     }
 }
@@ -813,7 +823,9 @@ upgrades.upgrade5.clicked = function() {
         buildings.wallet.CPSGiven *= 2;
         buildings.wallet.CPSGain *= 2;
         upgrades.upgrade5.bought += 1;
-        upgrades.hovered("upgrade5");
+        if (!mobile) {
+            upgrades.hovered("upgrade5");
+        }
         upgrades.destroy("upgrade5");
     }
 }
@@ -823,7 +835,9 @@ upgrades.upgrade6.clicked = function() {
         buildings.church.CPSGiven *= 2;
         buildings.church.CPSGain *= 2;
         upgrades.upgrade6.bought += 1;
-        upgrades.hovered("upgrade6");
+        if (!mobile) {
+            upgrades.hovered("upgrade6");
+        }
         upgrades.destroy("upgrade6");
     }
 }

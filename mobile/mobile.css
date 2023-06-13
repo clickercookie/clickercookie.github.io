@@ -152,10 +152,18 @@ footer {
     align-items: center;
     flex-direction: column;
 }
+.store-switch {
+    display: flex;
+}
 /* Buildings */
-.buildings-marker {
+.buildings-content { /* wrapper for everything in the buildings section */
+    display: grid;
+    overflow-y: scroll;
+}
+.store-marker {
     margin-top: 5px;
     margin-bottom: 9px;
+    margin-right:8px;
 }
 .building-grid {
     display: grid;
@@ -169,7 +177,7 @@ footer {
     border-width: 0px 0px 2px 0px;
     border-color: black;
 }
-.building-content {
+.building-content { /* wrapper for number bought, name, and price of a building */
     display: inline-block;
     margin-left: 4px;
 }
@@ -217,6 +225,18 @@ footer {
 .church-icon {
     background-image: url(../img/church.png);
 }
+/* Upgrades */
+.upgrades-content {
+    display: none;
+}
+.upgrade {
+    width: 64px;
+    height: 64px;
+    background-image: url(img/unknown-64-64.png);
+    margin: 0px;
+    display: none;
+}
+
 /* Statistics */
 .stats-content {
     flex-direction: column;

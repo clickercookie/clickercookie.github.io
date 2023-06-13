@@ -6,6 +6,7 @@ let filtered = "linear-gradient(to right, rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url
 function mobileInit() {
     sizeCheck();
     content.style.height = availableScreenSpace + "px";
+    // random things that need specified heights can go here
     document.getElementById("cookieContent").style.height = availableScreenSpace + "px";
     document.getElementById("storeContent").style.height = availableScreenSpace + "px";
     document.getElementById("statsContent").style.height = availableScreenSpace + "px";
@@ -80,6 +81,27 @@ function navbarItemClicked(item) {
             break;
         default:
             alert("navbarItemClicked() has an invalid parameter!");
+            break;
+    }
+}
+
+function switchShopCategory(select) {
+    const buildingContent = document.querySelector(".buildings-content");
+    const upgradesContent = document.querySelector(".upgrades-content");
+    buildingContent.style.display = "none";
+    upgradesContent.style.display = "none";
+
+    document.getElementById("buildingsMarker").style.color = "gray";
+    document.getElementById("upgradesMarker").style.color = "gray";
+
+    switch (select) {
+        case "buildings":
+            buildingContent.style.display = "block";
+            document.getElementById("buildingsMarker").style.color = "white";
+            break;
+        case "upgrades":
+            upgradesContent.style.display = "block";
+            document.getElementById("upgradesMarker").style.color = "white";
             break;
     }
 }
