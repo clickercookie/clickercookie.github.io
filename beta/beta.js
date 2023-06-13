@@ -1311,6 +1311,10 @@ saves.importReadData = function() {
     helper.reloadBuildingPrices();
 
     helper.consoleLogDev("Imported save with " +core.cookies+ " cookies.");
+
+    if (mobile) {
+        navbarItemClicked("Cookie");
+    }
 }
 
 saves.autoSave = function() {

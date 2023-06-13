@@ -77,7 +77,7 @@
                                 <p class="building-price" id="walletUpgrade">1400000</p>
                             </div>
                         </div>
-                        <div class="building" id="building6" style="border-width: 0px 0px 2px 0px;" onclick="buildings.church.buy()">
+                        <div class="building" id="building6" style="border-width: 0px 0px 3px 0px;" onclick="buildings.church.buy()">
                             <div class="building-icon church-icon"></div>
                             <div class="building-content" id="building6Content">
                                 <p class="buildings-bought" id="churchesBought">0</p>
@@ -130,11 +130,12 @@
                         </div>
                     </div>
                     <div class="options-grid-part" style="border-top-width:0px;">
-                        <div class="grid-item bottom-grid-item" style="border-right-width:3px;" onclick="helper.popup.createSimple(300,150,'Not currently implimented!',false,'default','Hey!',false,true)">
+                        <div class="grid-item bottom-grid-item" style="border-right-width:3px;" onclick="saves.exportData()">
                             <p>Export</p>
                         </div>
-                        <div class="grid-item bottom-grid-item" onclick="helper.popup.createSimple(300,150,'Not currently implimented!',false,'default','Hey!',false,true)">
-                            <p>Import</p>
+                        <div class="grid-item bottom-grid-item">
+                            <label for="importDataInput" class="import-label">Import</label>
+                            <input type="file" id="importDataInput" class="no-display" accept=".ccsave,.json" onchange="saves.importData()">
                         </div>
                     </div>
                 </div>

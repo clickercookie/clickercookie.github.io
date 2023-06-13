@@ -296,6 +296,11 @@ footer {
     border-width: 0px;
     border-color: black;
 }
+.import-label {
+    width: 100%;
+    height: 100%;
+    transform: translate(30%,33%);
+}
 /* Options Text */
 .options-text-wrapper {
     align-items: flex-start;

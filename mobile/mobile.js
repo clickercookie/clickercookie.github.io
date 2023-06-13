@@ -66,6 +66,7 @@ function navbarItemClicked(item) {
             document.getElementById("storeContent").style.display = "flex";
             content.style.background = filtered;
             document.getElementById("storeFooterItem").style.scale = "110%";
+            switchShopCategory("buildings");
             // document.getElementById("storeFooterText").style.color = "white";
             break;
         case "Stats":
@@ -96,7 +97,7 @@ function switchShopCategory(select) {
 
     switch (select) {
         case "buildings":
-            buildingContent.style.display = "block";
+            buildingContent.style.display = "grid";
             document.getElementById("buildingsMarker").style.color = "white";
             break;
         case "upgrades":
