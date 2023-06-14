@@ -1,7 +1,7 @@
 // ------------------------------------
 // Variable & Object Definitions
 // ------------------------------------
-const version = "0.5.1";
+const version = "0.5.2";
 const versionBranch = 1; // 0 is main, 1 is beta
 const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode! Recommended that versionBranch is 1 for easier saving if this is toggled.
 
@@ -134,6 +134,13 @@ const dev = {
     CPSGiven: 0
 };
 
+// mods stuff
+const mods = {};
+
+mods.numberLoaded = 0;
+mods.allMods = [];
+let isModded = 0;
+
 // middle other occupiers
 let statsUp = 0;
 let infoUp = 0;
@@ -145,7 +152,7 @@ let cookieProductionStopped = 0;
 let buttonDoWhat = "default";
 let hasCheated = 0;
 let won = 0;
-let isMobile;
+let mobile;
 
 // save stuff
 const saves = {};
@@ -157,7 +164,7 @@ saves.allToSave = [core.cookies, core.totalCookies, core.cookiesPerSecond, // al
                 buildings.keyboard.CPSGain,buildings.grandpa.CPSGain,buildings.ranch.CPSGain,buildings.tv.CPSGain,buildings.worker.CPSGain,buildings.wallet.CPSGain,buildings.church.CPSGain,
                 buildings.keyboard.upgradeCost,buildings.grandpa.upgradeCost,buildings.ranch.upgradeCost,buildings.tv.upgradeCost,buildings.worker.upgradeCost,buildings.wallet.upgradeCost,buildings.church.upgradeCost,
                 upgrades.upgrade0.bought,upgrades.upgrade1.bought,upgrades.upgrade2.bought,upgrades.upgrade3.bought,upgrades.upgrade4.bought,upgrades.upgrade5.bought,upgrades.upgrade6.bought,
-                core.cookiesPerClick,core.cookieBeenClickedTimes,core.buildingsOwned,grandmaPromptClicks,hasCheated,won];
+                core.cookiesPerClick,core.cookieBeenClickedTimes,core.buildingsOwned,grandmaPromptClicks,hasCheated,won,isModded,versionBranch];
 saves.defaultSavedValues = [ // matches order of allToSave
     0,0,0,
     0,0,0,0,0,0,0,
@@ -165,7 +172,8 @@ saves.defaultSavedValues = [ // matches order of allToSave
     0.1,1,8,47,260,1440,7800,
     15,100,1100,12000,130000,1400000,20000000,
     0,0,0,0,0,0,0,
-    1,0,0,0,0,0];
+    1,0,0,0,0,0,0,0];
+saves.defaultSavedValues[45] = versionBranch;
 saves.dataLoaded; // data from an auto-save (local storage)
 
 // view versions of variables (their main versions have long decimal points)
@@ -207,6 +215,9 @@ core.initialization = function() {
     }
     if (hasCheated == 1) {
         document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
+    }
+    if (isModded && mobile == 0) {
+        document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
     }
 
     // check for development special stuff
@@ -254,12 +265,12 @@ core.initialization = function() {
 
         const mobileOn = document.createElement("button");
         mobileOn.appendChild(document.createTextNode("Mobile On"));
-        mobileOn.setAttribute("onclick","isMobile = 1");
+        mobileOn.setAttribute("onclick","mobile = 1");
         devDiv.appendChild(mobileOn);
 
         const mobileOff = document.createElement("button");
         mobileOff.appendChild(document.createTextNode("Mobile Off"));
-        mobileOff.setAttribute("onclick","isMobile = 0");
+        mobileOff.setAttribute("onclick","mobile = 0");
         devDiv.appendChild(mobileOff);
 
         document.getElementById("leftSide").insertBefore(devDiv, document.getElementById("leftSidePush"));
@@ -312,11 +323,21 @@ core.initialization = function() {
     || navigator.userAgent.match(/iPod/i)
     || navigator.userAgent.match(/BlackBerry/i)
     || navigator.userAgent.match(/Windows Phone/i)) {
-        isMobile = 1;
-        document.getElementById("cookie").className = "cookie-noanimation";
+        mobile = 1;
+        personalization.currentBackground = "url(../img/backgrounds/background-blue.png)";
+        if (location.pathname == "/" || location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") {
+            switch (versionBranch) {
+                case 0:
+                    location.href = "mobile/index.html";
+                    break;
+                case 1:
+                    location.href = "../mobile/index.html";
+                    break;
+            }
+        }
     }
     else {
-        isMobile = 0;
+        mobile = 0;
     }
 }
 
@@ -498,6 +519,7 @@ core.cookieClicked = function() {
 dev.beginGrandma = function() {
     if (dev.devMode == 1) {
         dev.setCookies(1000000000);
+        document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
         hasCheated = 1;
         grandmaPromptClicks = 0;
     }
@@ -509,6 +531,7 @@ dev.beginGrandma = function() {
 dev.ignoreGrandma = function() {
     if (dev.devMode == 1) {
         grandmaPromptClicks = 10;
+        document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
         hasCheated = 1;
     }
     else {
@@ -547,7 +570,7 @@ dev.setCPS = function(x) {
 function versionSwitch() {
     switch (versionBranch) {
         case 0:
-            window.location.href = "beta/beta.html";
+            window.location.href = "/beta/beta.html";
             break;
         case 1:
             window.location.href = "/";
@@ -741,7 +764,9 @@ upgrades.upgrade0.clicked = function() {
         buildings.keyboard.CPSGain *= 2;
         core.cookiesPerClick *= 2;
         upgrades.upgrade0.bought += 1;
-        upgrades.hovered("upgrade0");
+        if (!mobile) {
+            upgrades.hovered("upgrade0");
+        }
         upgrades.destroy("upgrade0");
     }
 }
@@ -751,7 +776,9 @@ upgrades.upgrade1.clicked = function() {
         buildings.grandpa.CPSGiven *= 2;
         buildings.grandpa.CPSGain *= 2;
         upgrades.upgrade1.bought += 1;
-        upgrades.hovered("upgrade1");
+        if (!mobile) {
+            upgrades.hovered("upgrade1");
+        }
         upgrades.destroy("upgrade1");
     }
 }
@@ -761,7 +788,9 @@ upgrades.upgrade2.clicked = function() {
         buildings.ranch.CPSGiven *= 2;
         buildings.ranch.CPSGain *= 2;
         upgrades.upgrade2.bought += 1;
-        upgrades.hovered("upgrade2");
+        if (!mobile) {
+            upgrades.hovered("upgrade1");
+        }
         upgrades.destroy("upgrade2");
     }
 }
@@ -771,7 +800,9 @@ upgrades.upgrade3.clicked = function() {
         buildings.tv.CPSGiven *= 2;
         buildings.tv.CPSGain *= 2;
         upgrades.upgrade3.bought += 1;
-        upgrades.hovered("upgrade3");
+        if (!mobile) {
+            upgrades.hovered("upgrade3");
+        }
         upgrades.destroy("upgrade3");
     }
 }
@@ -781,7 +812,9 @@ upgrades.upgrade4.clicked = function() {
         buildings.worker.CPSGiven *= 2;
         buildings.worker.CPSGain *= 2;
         upgrades.upgrade4.bought += 1;
-        upgrades.hovered("upgrade4");
+        if (!mobile) {
+            upgrades.hovered("upgrade4");
+        }
         upgrades.destroy("upgrade4");
     }
 }
@@ -791,7 +824,9 @@ upgrades.upgrade5.clicked = function() {
         buildings.wallet.CPSGiven *= 2;
         buildings.wallet.CPSGain *= 2;
         upgrades.upgrade5.bought += 1;
-        upgrades.hovered("upgrade5");
+        if (!mobile) {
+            upgrades.hovered("upgrade5");
+        }
         upgrades.destroy("upgrade5");
     }
 }
@@ -801,7 +836,9 @@ upgrades.upgrade6.clicked = function() {
         buildings.church.CPSGiven *= 2;
         buildings.church.CPSGain *= 2;
         upgrades.upgrade6.bought += 1;
-        upgrades.hovered("upgrade6");
+        if (!mobile) {
+            upgrades.hovered("upgrade6");
+        }
         upgrades.destroy("upgrade6");
     }
 }
@@ -902,7 +939,7 @@ helper.popup.createSimpleAlertError = function(value) {
     }
 }
 helper.popup.createSimple = function(x,y,text,noButton,doWhat,title,backButton,isError) {
-    document.getElementById("simplePopup").style.display = "block";
+    document.getElementById("simplePopup").style.display = "flex";
     document.getElementById("simplePopupContent").innerHTML = text;
     document.getElementById("simplePopup").style.width = x + "px";
     document.getElementById("simplePopupButtonDiv").style.width = x + "px";
@@ -989,7 +1026,7 @@ helper.popup.simpleClicked = function() {
 helper.popup.createAdvanced = function(x,y,html) {
     const advancedPopup = document.getElementById("advancedPopup");
 
-    advancedPopup.style.display = "block";
+    advancedPopup.style.display = "flex";
     advancedPopup.style.width = x+"px";
     advancedPopup.style.height = y+"px";
 
@@ -1001,10 +1038,20 @@ helper.popup.destroyAdvanced = function() {
 
 // set areas to different things
 personalization.setBackground = function(color) {
-    personalization.currentBackground = "url(img/backgrounds/background-" + color + ".png)";
-    document.getElementById("leftSide").style.background = personalization.currentBackground;
-    document.getElementById("middleButtons").style.background = personalization.currentBackground;
-    document.getElementById("rightSide").style.background = personalization.currentBackground;
+    if (!mobile) {
+        personalization.currentBackground = "url(img/backgrounds/background-" + color + ".png)";
+    }
+    else {
+        personalization.currentBackground = "url(../img/backgrounds/background-" + color + ".png)";
+    }
+    if (!mobile) {
+        document.getElementById("leftSide").style.background = personalization.currentBackground;
+        document.getElementById("middleButtons").style.background = personalization.currentBackground;
+        document.getElementById("rightSide").style.background = personalization.currentBackground;
+    }
+    else {
+        document.querySelector(".content").style.background = "linear-gradient(to right, rgba(0,0,0,0.2), rgba(0,0,0,0.2)), "+ personalization.currentBackground;
+    }
 
     helper.consoleLogDev("Background color set to: " + color);
 }
@@ -1110,6 +1157,16 @@ function toggleOptions() {
             break;
     }
 }
+function closeMiddle() {
+    optionsUp = 0;
+    infoUp = 0;
+    statsUp = 0;
+
+    document.getElementById("optionsMiddleText").style.display = "none";
+    document.getElementById("statsMiddleText").style.display = "none";
+    document.getElementById("infoMiddleText").style.display = "none";
+    document.getElementById("middle").style.background = personalization.currentBackground;
+}
 
 core.grandmasArrival = function() {
     switch (grandmaPromptClicks) {
@@ -1197,7 +1254,7 @@ saves.importData = function() {
     var reader = new FileReader();
 
     reader.onload = function (e) {
-        const file = e.target.result;
+        console.log(e.target.result);
         saves.rawImportedData = JSON.parse(reader.result);
     }
     reader.onerror = (e) => alert("something broke, don't expect me to fix it :D");
@@ -1210,6 +1267,20 @@ saves.importData = function() {
 }
 saves.importReadData = function() {
     saves.importedData = JSON.parse(saves.rawImportedData);
+
+    let versionBranchToDisplay;
+    switch (versionBranch) {
+        case 0:
+            versionBranchToDisplay = "main";
+            break;
+        case 1:
+            versionBranchToDisplay = "beta";
+            break;
+    }
+    if (saves.importedData[45] != versionBranch) {
+        helper.popup.createSimple(300,150,`This is a save file from another version branch (${versionBranchToDisplay}). This is incompatible with this version. Please use a different file.`,false,"default","Alert",false,true);
+        return false;
+    }
 
     core.cookies = saves.importedData[0];
     core.totalCookies = saves.importedData[1];
@@ -1261,9 +1332,14 @@ saves.importReadData = function() {
     grandmaPromptClicks = saves.importedData[41];
     hasCheated = saves.importedData[42];
     won = saves.importedData[43];
+    isModded = saves.importedData[44];
     helper.reloadBuildingPrices();
 
     helper.consoleLogDev("Imported save with " +core.cookies+ " cookies.");
+
+    if (mobile) {
+        navbarItemClicked("Cookie");
+    }
 }
 
 saves.autoSave = function() {
@@ -1273,7 +1349,20 @@ saves.autoSave = function() {
         buildings.keyboard.CPSGain,buildings.grandpa.CPSGain,buildings.ranch.CPSGain,buildings.tv.CPSGain,buildings.worker.CPSGain,buildings.wallet.CPSGain,buildings.church.CPSGain,
         buildings.keyboard.upgradeCost,buildings.grandpa.upgradeCost,buildings.ranch.upgradeCost,buildings.tv.upgradeCost,buildings.worker.upgradeCost,buildings.wallet.upgradeCost,buildings.church.upgradeCost,
         upgrades.upgrade0.bought,upgrades.upgrade1.bought,upgrades.upgrade2.bought,upgrades.upgrade3.bought,upgrades.upgrade4.bought,upgrades.upgrade5.bought,upgrades.upgrade6.bought,
-        core.cookiesPerClick,core.cookieBeenClickedTimes,core.buildingsOwned,grandmaPromptClicks,hasCheated,won];
+        core.cookiesPerClick,core.cookieBeenClickedTimes,core.buildingsOwned,grandmaPromptClicks,hasCheated,won,isModded,versionBranch];
+ 
+    const valuesToCheck = saves.allToSave.length; // check if any values are null, if they are set them to their default. this is useful if new values are added because due to execution order they will ususally always be saved as null.
+    let valuesRemaining = valuesToCheck - 1;
+    while (valuesRemaining >= 0) {
+        if (saves.allToSave[valuesRemaining] == null) {
+            saves.allToSave[valuesRemaining] = saves.defaultSavedValues[valuesRemaining];
+            console.log("A value in localstorage was null, is this a new update?");
+            valuesRemaining -= 1;
+        }
+        else {
+            valuesRemaining -= 1;
+        }
+    }
     switch (versionBranch) {
         case 0:
             localStorage.save = JSON.stringify(saves.allToSave);
@@ -1376,6 +1465,8 @@ saves.getLocalSave = function(localStorageSave) {
     grandmaPromptClicks = saves.dataLoaded[41];
     hasCheated = saves.dataLoaded[42];
     won = saves.dataLoaded[43];
+    isModded = saves.dataLoaded[44];
+
     helper.reloadBuildingPrices();
 }
 
@@ -1418,6 +1509,10 @@ saves.resetSave = function() {
     upgrades.destroy("upgrade6");
 
     document.getElementById("win").style.display = "block";
+
+    if (mobile) {
+        navbarItemClicked("Cookie");
+    }
 }
 
 buildings.hovered = function(building) {
@@ -1472,16 +1567,137 @@ buildings.hovered = function(building) {
             buildingInfoProducing = helper.commaify(Math.round(buildings.church.CPSGiven * 10) / 10);
             break;
     }
-    document.getElementById("buildingInfoName").innerHTML = buildingInfoName;
-    document.getElementById("buildingInfoPrice").innerHTML = "Price: " + buildingInfoPrice;
-    document.getElementById("buildingInfoQuote").innerHTML = "\""+buildingInfoQuote+"\"";
-    document.getElementById("buildingInfoProduces").innerHTML = "Produces: "+buildingInfoProduces+" CPS";
-    document.getElementById("buildingInfoProducing").innerHTML = "Producing: "+ buildingInfoProducing+" CPS";
+    if (!mobile) {
+        document.getElementById("buildingInfoName").innerHTML = buildingInfoName;
+        document.getElementById("buildingInfoPrice").innerHTML = "Price: " + buildingInfoPrice;
+        document.getElementById("buildingInfoQuote").innerHTML = "\""+buildingInfoQuote+"\"";
+        document.getElementById("buildingInfoProduces").innerHTML = "Produces: "+buildingInfoProduces+" CPS";
+        document.getElementById("buildingInfoProducing").innerHTML = "Producing: "+ buildingInfoProducing+" CPS";
+    }
 
     document.getElementById("buildingInfo").style.display = "block";
 }
 buildings.undoHover = function() {
     document.getElementById("buildingInfo").style.display = "none";
+}
+
+// Mods
+mods.loadURL = function(url) {
+    const file = document.createElement("script");
+    file.setAttribute("src",url);
+    file.setAttribute("type","text/javascript");
+    const modId = mods.numberLoaded + 1;
+    file.setAttribute("id","mod" + modId);
+
+    document.head.appendChild(file);
+
+    document.getElementById("addModURLForm").reset();
+    document.getElementById("importedMessage").style.display = "block";
+
+    mods.numberLoaded += 1;
+    isModded = 1;
+    document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
+    mods.reloadModsLoadedText();
+}
+mods.loadFile = function() { // add check if mod is valid
+    var file = document.getElementById("addModFile").files[0];
+    var reader = new FileReader();
+
+    reader.onerror = (e) => alert("something broke, don't expect me to fix it :D");
+
+    reader.readAsText(file);
+    
+    reader.onloadend = () => {
+        const readFile = reader.result;
+        
+        const script = document.createElement("script");
+        script.appendChild(document.createTextNode(readFile));
+        script.setAttribute("type","text/javascript");
+        const modId = mods.numberLoaded + 1;
+        script.setAttribute("id","mod" + modId);
+
+        document.head.appendChild(script);
+
+        document.getElementById("addModURLForm").reset();
+        document.getElementById("importedMessage").style.display = "block";
+
+        mods.numberLoaded += 1;
+        isModded = 1;
+        document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
+        mods.reloadModsLoadedText();
+    };
+}
+
+mods.list = function() {
+    const numberToList = mods.allMods.length;
+
+    let listLeft = numberToList;
+    while (listLeft > 0) {
+        const newModItem = document.createElement("div");
+        newModItem.setAttribute("class","popup-content mod-in-list");
+        newModItem.setAttribute("id","modList" + listLeft);
+
+        const newModID = document.createElement("small");
+        newModID.appendChild(document.createTextNode("#" + listLeft));
+        newModID.setAttribute("class","mod-id popup-content");
+        newModItem.appendChild(newModID);
+
+        const newModName = document.createElement("p");
+        newModName.appendChild(document.createTextNode(JSON.stringify(mods.allMods[listLeft - 1])));
+        newModName.setAttribute("class","popup-content");
+        newModItem.appendChild(newModName);
+
+        document.getElementById("modsList").appendChild(newModItem);
+        listLeft -= 1;
+    }
+
+    if (numberToList == 0) {document.getElementById("noModsMessage").style.display = "block";}
+    if (numberToList > 0) {document.getElementById("removeModsMessage").style.display = "block";}
+}
+
+mods.addModData = function(id,data) { // yes i basically stole and renamed this entire function from cookie clicker's Game.registerMod orteil did it better okay i might seem smart but i'm really not.
+    // READ THE DOCS!
+    if (mods.allMods.includes(id)) {
+        helper.popup.createAdvanced(400,200,"<h3 class='simple-popup-title' style='display:block;'>Error</h3> \
+        <p class='popup-content'>This mod's ID is already present!</p> \
+        <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>");
+        return false;
+    }
+    mods.allMods.push(id);
+    document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
+    isModded = 1;
+    data.initialization();
+    console.log(`Loaded mod ${id}`);
+}
+
+mods.addClicked = function() {
+    helper.popup.createAdvanced(500,350,"<h3 class='simple-popup-title' style='display:block;'>Add Mod</h3> \
+    <h5 class='popup-content' style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5> \
+    <h5 class='popup-content' style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5> \
+    <h5 class='popup-content' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a onclick='saves.autoSave()' href='about:blank' class='blue'>read the documentation (not done!)</a></h5> \
+    <form onsubmit='return false;' id='addModURLForm' style='margin-top:22px;'> \
+        <label for='addModURL' class='popup-content'>From URL: </label> \
+        <input id='addModURL' onchange='mods.loadURL(this.value)'> \
+    </form> \
+    <form> \
+        <label for='addModFile' class='popup-content' style='margin-right:0px;'>From File: </label> \
+        <input type='file' id='addModFile' onchange='mods.loadFile(this.value)' class='popup-content' style='width:86px;'> \
+    </form> \
+    <p class='popup-content no-display' id='importedMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>Imported!</p> \
+    <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>");
+}
+mods.listClicked = function() {
+    helper.popup.createAdvanced(300,350,"<h3 class='simple-popup-title' style='display:block;'>All Mods</h3> \
+    <p class='popup-content no-display' id='noModsMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>You have no mods installed!</p> \
+    <div id='modsList' class='mods-list'></div> \
+    <small class='popup-content no-display' id='removeModsMessage' style='margin-top:3px;'>To remove mods, refresh your page. (make sure to save!)</small> \
+    <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>");
+
+    mods.list();
+}
+
+mods.reloadModsLoadedText = function() {
+    document.getElementById("modsNumberLoaded").innerHTML = "You have " + mods.numberLoaded + " mods loaded!";
 }
 
 console.log("what are you doing here? well... as long as its productive.");
