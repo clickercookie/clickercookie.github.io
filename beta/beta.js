@@ -1156,6 +1156,16 @@ function toggleOptions() {
             break;
     }
 }
+function closeMiddle() {
+    optionsUp = 0;
+    infoUp = 0;
+    statsUp = 0;
+
+    document.getElementById("optionsMiddleText").style.display = "none";
+    document.getElementById("statsMiddleText").style.display = "none";
+    document.getElementById("infoMiddleText").style.display = "none";
+    document.getElementById("middle").style.background = personalization.currentBackground;
+}
 
 core.grandmasArrival = function() {
     switch (grandmaPromptClicks) {

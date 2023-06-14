@@ -17,7 +17,6 @@
                 <h3 id="cookieCounter" class="cookie-counter">Cookies: 0</h3>
                 <h4 id="cookiesPerSecondCounter" class="cookies-per-second-counter">Cookies Per Second: 0</h4>
             </div>
-            <img src="https://parade.com/.image/t_share/MTkwNTc1OTI2MjAxOTUyMTI0/unique-baby-names-2019-jpg.jpg" alt="baby" width="200px" height="134px"> <!-- in case i leave this here, please don't question it it was my 3 year old -->
             <h3 class="win" id="win">you win.</h3>
             <span class="leftSidePush" id="leftSidePush"></span>
             <div class="social-links">
@@ -55,8 +54,8 @@
             </div>
             <!-- middle text html -->
             <div id="statsMiddleText" class="middle-main">
-                <div class="middle-x">
-
+                <div class="middle-x" onclick="closeMiddle()">
+                    <img src="img/white-x.png" alt="x button" width="38px" height="38px" class="no-margin">
                 </div>
                 <h3 class="middle-title">Statistics</h3>
                 <p class="middle-text-gray" id="cookiesStat">Cookies: 0</p>
@@ -68,6 +67,9 @@
                 <p class="middle-text-gray" id="ifModdedStat" style="color:white;"></p>
             </div>
             <div id="infoMiddleText" class="middle-main">
+                <div class="middle-x" onclick="closeMiddle()">
+                    <img src="img/white-x.png" alt="x button" width="38px" height="38px" class="no-margin">
+                </div>
                 <h3 class="middle-title">Infomation</h3>
                 <h3 class="middle-subtitle">About:</h5>
                 <p class="middle-text">Clicker Cookie is a totally original game about clicking a cookie. Made by <a href="https://github.com/FifthTundraG">FifthTundraG</a> in a few hours, this game went from a random clone of a decade old, actively developed clicker game to something that spiraled into a land of insanity.</p>
@@ -246,6 +248,9 @@
                 </div>
             </div>
             <div id="optionsMiddleText" class="middle-main no-select">
+                <div class="middle-x" onclick="closeMiddle()">
+                    <img src="img/white-x.png" alt="x button" width="38px" height="38px" class="no-margin">
+                </div>
                 <h3 class="middle-title">Options</h3>
                 <h5 class="middle-subtitle">Customization:</h5>
                 <form action="changed">
