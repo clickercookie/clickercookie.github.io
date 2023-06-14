@@ -324,7 +324,7 @@ core.initialization = function() {
     || navigator.userAgent.match(/Windows Phone/i)) {
         mobile = 1;
         personalization.currentBackground = "url(../img/backgrounds/background-blue.png)";
-        if (location.pathname == "/" || location.pathname == "/beta") {
+        if (location.pathname == "/" || location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") {
             switch (versionBranch) {
                 case 0:
                     location.href = "mobile/index.html";
