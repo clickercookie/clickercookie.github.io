@@ -164,7 +164,7 @@ saves.allToSave = [core.cookies, core.totalCookies, core.cookiesPerSecond, // al
                 buildings.keyboard.CPSGain,buildings.grandpa.CPSGain,buildings.ranch.CPSGain,buildings.tv.CPSGain,buildings.worker.CPSGain,buildings.wallet.CPSGain,buildings.church.CPSGain,
                 buildings.keyboard.upgradeCost,buildings.grandpa.upgradeCost,buildings.ranch.upgradeCost,buildings.tv.upgradeCost,buildings.worker.upgradeCost,buildings.wallet.upgradeCost,buildings.church.upgradeCost,
                 upgrades.upgrade0.bought,upgrades.upgrade1.bought,upgrades.upgrade2.bought,upgrades.upgrade3.bought,upgrades.upgrade4.bought,upgrades.upgrade5.bought,upgrades.upgrade6.bought,
-                core.cookiesPerClick,core.cookieBeenClickedTimes,core.buildingsOwned,grandmaPromptClicks,hasCheated,won,isModded];
+                core.cookiesPerClick,core.cookieBeenClickedTimes,core.buildingsOwned,grandmaPromptClicks,hasCheated,won,isModded,versionBranch];
 saves.defaultSavedValues = [ // matches order of allToSave
     0,0,0,
     0,0,0,0,0,0,0,
@@ -172,7 +172,8 @@ saves.defaultSavedValues = [ // matches order of allToSave
     0.1,1,8,47,260,1440,7800,
     15,100,1100,12000,130000,1400000,20000000,
     0,0,0,0,0,0,0,
-    1,0,0,0,0,0,0];
+    1,0,0,0,0,0,0,0];
+saves.defaultSavedValues[45] = versionBranch;
 saves.dataLoaded; // data from an auto-save (local storage)
 
 // view versions of variables (their main versions have long decimal points)
@@ -1253,7 +1254,7 @@ saves.importData = function() {
     var reader = new FileReader();
 
     reader.onload = function (e) {
-        const file = e.target.result;
+        console.log(e.target.result);
         saves.rawImportedData = JSON.parse(reader.result);
     }
     reader.onerror = (e) => alert("something broke, don't expect me to fix it :D");
@@ -1266,6 +1267,20 @@ saves.importData = function() {
 }
 saves.importReadData = function() {
     saves.importedData = JSON.parse(saves.rawImportedData);
+
+    let versionBranchToDisplay;
+    switch (versionBranch) {
+        case 0:
+            versionBranchToDisplay = "main";
+            break;
+        case 1:
+            versionBranchToDisplay = "beta";
+            break;
+    }
+    if (saves.importedData[45] != versionBranch) {
+        helper.popup.createSimple(300,150,`This is a save file from another version branch (${versionBranchToDisplay}). This is incompatible with this version. Please use a different file.`,false,"default","Alert",false,true);
+        return false;
+    }
 
     core.cookies = saves.importedData[0];
     core.totalCookies = saves.importedData[1];
@@ -1334,7 +1349,7 @@ saves.autoSave = function() {
         buildings.keyboard.CPSGain,buildings.grandpa.CPSGain,buildings.ranch.CPSGain,buildings.tv.CPSGain,buildings.worker.CPSGain,buildings.wallet.CPSGain,buildings.church.CPSGain,
         buildings.keyboard.upgradeCost,buildings.grandpa.upgradeCost,buildings.ranch.upgradeCost,buildings.tv.upgradeCost,buildings.worker.upgradeCost,buildings.wallet.upgradeCost,buildings.church.upgradeCost,
         upgrades.upgrade0.bought,upgrades.upgrade1.bought,upgrades.upgrade2.bought,upgrades.upgrade3.bought,upgrades.upgrade4.bought,upgrades.upgrade5.bought,upgrades.upgrade6.bought,
-        core.cookiesPerClick,core.cookieBeenClickedTimes,core.buildingsOwned,grandmaPromptClicks,hasCheated,won,isModded];
+        core.cookiesPerClick,core.cookieBeenClickedTimes,core.buildingsOwned,grandmaPromptClicks,hasCheated,won,isModded,versionBranch];
  
     const valuesToCheck = saves.allToSave.length; // check if any values are null, if they are set them to their default. this is useful if new values are added because due to execution order they will ususally always be saved as null.
     let valuesRemaining = valuesToCheck - 1;
