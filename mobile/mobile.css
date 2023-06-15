@@ -232,7 +232,7 @@ footer {
 .upgrade {
     width: 64px;
     height: 64px;
-    background-image: url(img/unknown-64-64.png);
+    background-image: url(../img/unknown-64-64.png);
     margin: 0px;
     display: none;
 }

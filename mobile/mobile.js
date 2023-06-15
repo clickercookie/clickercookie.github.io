@@ -51,23 +51,17 @@ function navbarItemClicked(item) {
     document.getElementById("storeFooterItem").style.scale = "100%";
     document.getElementById("statsFooterItem").style.scale = "100%";
     document.getElementById("optionsFooterItem").style.scale = "100%";
-    // document.getElementById("cookieFooterText").style.color = "gray";
-    // document.getElementById("storeFooterText").style.color = "gray";
-    // document.getElementById("statsFooterText").style.color = "gray";
-    // document.getElementById("optionsFooterText").style.color = "gray";
     switch (item) {
         case "Cookie":
             document.getElementById("cookieContent").style.display = "flex";
             content.style.background = personalization.currentBackground;
             document.getElementById("cookieFooterItem").style.scale = "110%";
-            // document.getElementById("cookieFooterText").style.color = "white";
             break;
         case "Store":
             document.getElementById("storeContent").style.display = "flex";
             content.style.background = filtered;
             document.getElementById("storeFooterItem").style.scale = "110%";
             switchShopCategory("buildings");
-            // document.getElementById("storeFooterText").style.color = "white";
             break;
         case "Stats":
             document.getElementById("statsContent").style.display = "flex";

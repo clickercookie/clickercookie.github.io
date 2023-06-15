@@ -309,13 +309,6 @@ core.initialization = function() {
             break;
     }
 
-    // set default upgrades
-    document.getElementById("upgrade0").style.backgroundImage = "url(img/upgrades/reinforced-keys.png)";
-    document.getElementById("upgrade1").style.backgroundImage = "url(img/upgrades/hardwood-walking-stick.png)";
-    document.getElementById("upgrade2").style.backgroundImage = "url(img/upgrades/ranch-upgrade1.png)";
-    document.getElementById("upgrade3").style.backgroundImage = "url(img/upgrades/tv-upgrade1.png)";
-    document.getElementById("upgrade4").style.backgroundImage = "url(img/upgrades/worker-upgrade1.png)";
-
     if (navigator.userAgent.match(/Android/i) // stolen from https://www.tutorialspoint.com/How-to-detect-a-mobile-device-with-JavaScript (doesn't always work)
     || navigator.userAgent.match(/webOS/i)
     || navigator.userAgent.match(/iPhone/i)
@@ -328,16 +321,32 @@ core.initialization = function() {
         if (location.pathname == "/" || location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") {
             switch (versionBranch) {
                 case 0:
-                    location.href = "mobile/index.html";
+                    location.href = "mobile/mobile.html";
                     break;
                 case 1:
-                    location.href = "../mobile/index.html";
+                    location.href = "../mobile/mobile.html";
                     break;
             }
         }
     }
     else {
         mobile = 0;
+    }
+
+    // set default upgrades
+    if (!mobile) {
+        document.getElementById("upgrade0").style.backgroundImage = "url(img/upgrades/reinforced-keys.png)";
+        document.getElementById("upgrade1").style.backgroundImage = "url(img/upgrades/hardwood-walking-stick.png)";
+        document.getElementById("upgrade2").style.backgroundImage = "url(img/upgrades/ranch-upgrade1.png)";
+        document.getElementById("upgrade3").style.backgroundImage = "url(img/upgrades/tv-upgrade1.png)";
+        document.getElementById("upgrade4").style.backgroundImage = "url(img/upgrades/worker-upgrade1.png)";
+    }
+    if (mobile) {
+        document.getElementById("upgrade0").style.backgroundImage = "url(../img/upgrades/reinforced-keys.png)";
+        document.getElementById("upgrade1").style.backgroundImage = "url(../img/upgrades/hardwood-walking-stick.png)";
+        document.getElementById("upgrade2").style.backgroundImage = "url(../img/upgrades/ranch-upgrade1.png)";
+        document.getElementById("upgrade3").style.backgroundImage = "url(../img/upgrades/tv-upgrade1.png)";
+        document.getElementById("upgrade4").style.backgroundImage = "url(../img/upgrades/worker-upgrade1.png)";
     }
 }
 
@@ -679,49 +688,84 @@ upgrades.create = function(identifier,name,description,quote,price,img) {
             upgrades.info.upgrade0.name = name;
             upgrades.info.upgrade0.description = description + "<br>" + "<i>\"" + quote + "\"</i>";
             upgrades.upgrade0.price = price;
-            document.getElementById("upgrade0").style.backgroundImage = "url(" + img + ")";
+            if (!mobile) {
+                document.getElementById("upgrade0").style.backgroundImage = "url(" + img + ")";
+            }
+            if (mobile) {
+                document.getElementById("upgrade0").style.backgroundImage = "url(../" + img + ")";
+            }
             break;
         case "upgrade1":
             document.getElementById("upgrade1").style.display = "inline-block";
             upgrades.info.upgrade1.name = name;
             upgrades.info.upgrade1.description = description + "<br>" + "<i>\"" + quote + "\"</i>";
             upgrades.upgrade1.price = price;
-            document.getElementById("upgrade1").style.backgroundImage = "url(" + img + ")";
+            if (!mobile) {
+                document.getElementById("upgrade1").style.backgroundImage = "url(" + img + ")";
+            }
+            if (mobile) {
+                document.getElementById("upgrade1").style.backgroundImage = "url(../" + img + ")";
+            }
             break;
         case "upgrade2":
             document.getElementById("upgrade2").style.display = "inline-block";
             upgrades.info.upgrade2.name = name;
             upgrades.info.upgrade2.description = description + "<br>" + "<i>\"" + quote + "\"</i>";
             upgrades.upgrade2.price = price;
-            document.getElementById("upgrade2").style.backgroundImage = "url(" + img + ")";
+            if (!mobile) {
+                document.getElementById("upgrade2").style.backgroundImage = "url(" + img + ")";
+            }
+            if (mobile) {
+                document.getElementById("upgrade2").style.backgroundImage = "url(../" + img + ")";
+            }
             break;
         case "upgrade3":
             document.getElementById("upgrade3").style.display = "inline-block";
             upgrades.info.upgrade3.name = name;
             upgrades.info.upgrade3.description = description + "<br>" + "<i>\"" + quote + "\"</i>";
             upgrades.upgrade3.price = price;
-            document.getElementById("upgrade3").style.backgroundImage = "url(" + img + ")";
+            if (!mobile) {
+                document.getElementById("upgrade3").style.backgroundImage = "url(" + img + ")";
+            }
+            if (mobile) {
+                document.getElementById("upgrade3").style.backgroundImage = "url(../" + img + ")";
+            }
             break;
         case "upgrade4":
             document.getElementById("upgrade4").style.display = "inline-block";
             upgrades.info.upgrade4.name = name;
             upgrades.info.upgrade4.description = description + "<br>" + "<i>\"" + quote + "\"</i>";
             upgrades.upgrade4.price = price;
-            document.getElementById("upgrade4").style.backgroundImage = "url(" + img + ")";
+            if (!mobile) {
+                document.getElementById("upgrade4").style.backgroundImage = "url(" + img + ")";
+            }
+            if (mobile) {
+                document.getElementById("upgrade4").style.backgroundImage = "url(../" + img + ")";
+            }
             break;
         case "upgrade5":
             document.getElementById("upgrade5").style.display = "inline-block";
             upgrades.info.upgrade5.name = name;
             upgrades.info.upgrade5.description = description + "<br>" + "<i>\"" + quote + "\"</i>";
             upgrades.upgrade5.price = price;
-            document.getElementById("upgrade5").style.backgroundImage = "url(" + img + ")";
+            if (!mobile) {
+                document.getElementById("upgrade5").style.backgroundImage = "url(" + img + ")";
+            }
+            if (mobile) {
+                document.getElementById("upgrade5").style.backgroundImage = "url(../" + img + ")";
+            }
             break;
         case "upgrade6":
             document.getElementById("upgrade6").style.display = "inline-block";
             upgrades.info.upgrade6.name = name;
             upgrades.info.upgrade6.description = description + "<br>" + "<i>\"" + quote + "\"</i>";
             upgrades.upgrade6.price = price;
-            document.getElementById("upgrade6").style.backgroundImage = "url(" + img + ")";
+            if (!mobile) {
+                document.getElementById("upgrade6").style.backgroundImage = "url(" + img + ")";
+            }
+            if (mobile) {
+                document.getElementById("upgrade6").style.backgroundImage = "url(../" + img + ")";
+            }
             break;
         default:
             helper.popup.createSimple(300,150,"<i>huh, what just happened?</i> <br> A fatal error occured: upgrade identifier is invalid!<br>Please report this to the GitHub accessable in the bottom left corner",true,"default","",false,true);
@@ -1041,7 +1085,7 @@ personalization.setBackground = function(color) {
     if (!mobile) {
         personalization.currentBackground = "url(img/backgrounds/background-" + color + ".png)";
     }
-    else {
+    if (mobile) {
         personalization.currentBackground = "url(../img/backgrounds/background-" + color + ".png)";
     }
     if (!mobile) {
@@ -1059,21 +1103,36 @@ personalization.setBackground = function(color) {
 personalization.setCurrentClicked = function(value) {
     switch (value) {
         case "cookie":
-            document.getElementById("cookie").src = "img/cookie.png";
+            if (!mobile) {
+                document.getElementById("cookie").src = "img/cookie.png";
+            }
+            if (mobile) {
+                document.getElementById("cookie").src = "../img/cookie.png";
+            }
             personalization.currentClicked = "Cookie";
             personalization.currentClickedPlural = "Cookies";
             personalization.currentClickedLowercase = "cookie";
             personalization.currentClickedLowercasePlural = "cookies";
             break;
         case "potato":
-            document.getElementById("cookie").src = "img/potato.png";
+            if (!mobile) {
+                document.getElementById("cookie").src = "img/potato.png";
+            }
+            if (mobile) {
+                document.getElementById("cookie").src = "../img/potato.png";
+            }
             personalization.currentClicked = "Potato";
             personalization.currentClickedPlural = "Potatoes";
             personalization.currentClickedLowercase = "potato";
             personalization.currentClickedLowercasePlural = "potatoes";
             break;
         case "strawberry":
-            document.getElementById("cookie").src = "img/strawberry.png";
+            if (!mobile) {
+                document.getElementById("cookie").src = "img/strawberry.png";
+            }
+            if (mobile) {
+                document.getElementById("cookie").src = "../img/strawberry.png";
+            }
             personalization.currentClicked = "Strawberry";
             personalization.currentClickedPlural = "Strawberries";
             personalization.currentClickedLowercase = "strawberry";
@@ -1174,7 +1233,12 @@ core.grandmasArrival = function() {
             helper.popup.createSimple(300,150,"a familiar face appears...",false,"grandmaPromptClicks","",false,false);
             break;
         case 1:
-            document.getElementById("simplePopupImage").src = "img/grandma.png";
+            if (!mobile) {
+                document.getElementById("simplePopupImage").src = "img/grandma.png";
+            }
+            if (mobile) {
+                document.getElementById("simplePopupImage").src = "../img/grandma.png";
+            }
             document.getElementById("simplePopupImage").style.display = "block";
             helper.popup.createSimple(300,150,"hello...",false,"grandmaPromptClicks","",false,false);
             break;
