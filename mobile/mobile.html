@@ -12,7 +12,6 @@
     </head>
     <body class="no-select" id="body">
         <div class="content">
-            <small class="absolute">The following content is in heavy development!</small>
             <div class="cookie-content flex" id="cookieContent">
                 <img src="../img/cookie.png" class="cookie" id="cookie" onclick="core.cookieClicked()">
                 <div class="cookie-counter-wrapper">
@@ -22,6 +21,10 @@
                 <h3 class="win" id="win">you win.</h3>
             </div>
             <div class="store-content no-display flex" id="storeContent">
+                <div class="cookie-counter-wrapper-no-background">
+                    <h3 class="cookie-counter" id="cookieCounterStore">Cookies: 0</h3>
+                    <h4 class="cookies-per-second-counter" id="cookiesPerSecondCounterStore">Cookies Per Second: 0</h4>
+                </div>
                 <h1 class="content-heading">Store</h1>
                 <div class="store-switch">
                     <h3 class="store-marker" id="buildingsMarker" style="margin-right:8px;" onclick="switchShopCategory('buildings')">Buildings</h3>
@@ -106,6 +109,10 @@
                 </div>
             </div>
             <div class="stats-content no-display" id="statsContent">
+                <div class="cookie-counter-wrapper-no-background">
+                    <h3 class="cookie-counter" id="cookieCounterStats">Cookies: 0</h3>
+                    <h4 class="cookies-per-second-counter" id="cookiesPerSecondCounterStats">Cookies Per Second: 0</h4>
+                </div>
                 <div class="stats-heading-wrapper">
                     <h1 class="content-heading">Statistics</h3>
                 </div>
@@ -117,6 +124,10 @@
                 <p class="stats-text" id="ifCheatedStat" style="color:white;"></p>
             </div>
             <div class="options-content no-display flex" id="optionsContent">
+                <div class="cookie-counter-wrapper-no-background">
+                    <h3 class="cookie-counter" id="cookieCounterOptions">Cookies: 0</h3>
+                    <h4 class="cookies-per-second-counter" id="cookiesPerSecondCounterOptions">Cookies Per Second: 0</h4>
+                </div>
                 <div class="options-grid">
                     <div class="options-grid-part">
                         <div class="grid-item top-grid-item" style="border-right-width:3px;" onclick="saves.autoSave()">

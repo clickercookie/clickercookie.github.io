@@ -264,14 +264,11 @@ core.initialization = function() {
         devDiv.appendChild(br4);
 
         const mobileOn = document.createElement("button");
-        mobileOn.appendChild(document.createTextNode("Mobile On"));
-        mobileOn.setAttribute("onclick","mobile = 1");
-        devDiv.appendChild(mobileOn);
-
-        const mobileOff = document.createElement("button");
-        mobileOff.appendChild(document.createTextNode("Mobile Off"));
-        mobileOff.setAttribute("onclick","mobile = 0");
-        devDiv.appendChild(mobileOff);
+        mobileOn.appendChild(document.createTextNode("Goto Mobile Mode"));
+        const mobileOnHyperlink = document.createElement("a");
+        mobileOnHyperlink.setAttribute("href","../mobile/mobile.html");
+        mobileOnHyperlink.appendChild(mobileOn);
+        devDiv.appendChild(mobileOnHyperlink);
 
         document.getElementById("leftSide").insertBefore(devDiv, document.getElementById("leftSidePush"));
 
@@ -379,7 +376,7 @@ function perMillisecondUniversal() {
     variableView.cookiesPerSecondView = helper.commaify(variableView.cookiesPerSecondView);
 
     // CPS
-    document.getElementById("cookiesPerSecondCounter").innerHTML = personalization.currentClickedPlural + " Per Second: " +variableView.cookiesPerSecondView;
+    helper.reloadCPSCounter();
     helper.reloadCookieCounter();
 
     // Upgrade Unlocks (very long) (changes accepted) (create a github pull request)
@@ -567,7 +564,7 @@ dev.setCPS = function(x) {
         dev.CPSGiven = x;
         hasCheated = 1;
         variableView.cookiesPerSecondView = Math.round(core.cookiesPerSecond * 10) / 10;
-        document.getElementById("cookiesPerSecondCounter").innerHTML = personalization.currentClickedPlural +" Per Second: " +cookiesPerSecondView;
+        helper.reloadCPSCounter();
         document.getElementById("ifCheatedStat").innerHTML = "<b>You have cheated on this playthrough!</b>";
         dev.ignoreGrandma();
     }
@@ -946,6 +943,19 @@ function versionNumberMousedOverUndo() {
 // helper functions
 helper.reloadCookieCounter = function() {
     document.getElementById("cookieCounter").innerHTML = personalization.currentClickedPlural + ": " +variableView.cookiesView;
+    if (mobile) {
+        document.getElementById("cookieCounterStore").innerHTML = personalization.currentClickedPlural + ": " +variableView.cookiesView;
+        document.getElementById("cookieCounterStats").innerHTML = personalization.currentClickedPlural + ": " +variableView.cookiesView;
+        document.getElementById("cookieCounterOptions").innerHTML = personalization.currentClickedPlural + ": " +variableView.cookiesView;
+    }
+}
+helper.reloadCPSCounter = function() {
+    document.getElementById("cookiesPerSecondCounter").innerHTML = personalization.currentClickedPlural + " Per Second: " +variableView.cookiesPerSecondView;
+    if (mobile) {
+        document.getElementById("cookiesPerSecondCounterStore").innerHTML = personalization.currentClickedPlural + " Per Second: " +variableView.cookiesPerSecondView;
+        document.getElementById("cookiesPerSecondCounterStats").innerHTML = personalization.currentClickedPlural + " Per Second: " +variableView.cookiesPerSecondView;
+        document.getElementById("cookiesPerSecondCounterOptions").innerHTML = personalization.currentClickedPlural + " Per Second: " +variableView.cookiesPerSecondView;
+    }
 }
 helper.reloadBuildingPrices = function() {
     document.getElementById("keyboardUpgrade").innerHTML = helper.commaify(buildings.keyboard.upgradeCost);

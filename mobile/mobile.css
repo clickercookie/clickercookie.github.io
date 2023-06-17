@@ -135,6 +135,11 @@ footer {
     width: 100%;
     text-align: center;
 }
+.cookie-counter-wrapper-no-background {
+    margin-top: 3px;
+    width: 100%;
+    text-align: center;
+}
 .cookie-counter {
     margin-top: 4px;
     margin-bottom: 4px;
