@@ -9,6 +9,7 @@ body {
     display: flex;
     flex-direction: column;
     text-shadow: 0px 1px 4px black;
+    -webkit-touch-callout: none;
 }
 
 /* Popups */
@@ -66,10 +67,6 @@ body {
 .no-select {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: -moz-none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
 .no-display {
@@ -131,14 +128,10 @@ footer {
     border-radius: 128px;
 }
 .cookie-counter-wrapper {
-    background-color: rgba(0, 0, 0, 0.4);
     width: 100%;
     text-align: center;
-}
-.cookie-counter-wrapper-no-background {
-    margin-top: 3px;
-    width: 100%;
-    text-align: center;
+    background: linear-gradient(rgba(0,0,0,0.25),rgba(0,0,0,0.12),transparent);
+    padding-top: 3px;
 }
 .cookie-counter {
     margin-top: 4px;

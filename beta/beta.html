@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title id="title">Clicker Cookie</title>
         <link rel="icon" type="image/x-icon" href="img/favicon.ico">
@@ -12,18 +12,18 @@
     </head>
     <body>
         <div id="leftSide" class="leftSide">
-            <img id="cookie" class="cookie pointer" onclick="core.cookieClicked()" src="img/cookie.png" alt="cookie">
+            <img id="cookie" class="cookie pointer" onclick="core.cookieClicked()" src="img/cookie.png" alt="cookie" draggable="false">
             <div class="cookie-counter-wrapper">
-                <h3 id="cookieCounter" class="cookie-counter">Cookies: 0</h3>
+                <h3 id="cookieCounter" class="cookie-counter shadow">Cookies: 0</h3>
                 <h4 id="cookiesPerSecondCounter" class="cookies-per-second-counter">Cookies Per Second: 0</h4>
             </div>
-            <h3 class="win" id="win">you win.</h3>
+            <h3 class="win shadow" id="win">you win.</h3>
             <span class="leftSidePush" id="leftSidePush"></span>
             <div class="social-links">
                 <a onclick="saves.autoSave()" href="https://github.com/clickercookie/clickercookie.github.io">
                     <img class="github" src="img/github-mark.svg" alt="github">
                 </a>
-                <h5 id="versionNumber" class="version-number pointer" onclick="versionSwitch()" onmouseover="versionNumberMousedOver()" onmouseout="versionNumberMousedOverUndo()">Version: null</h5>
+                <h5 id="versionNumber" class="version-number pointer no-select" onclick="versionSwitch()" onmouseover="versionNumberMousedOver()" onmouseout="versionNumberMousedOverUndo()">Version: null</h5>
                 <div id="versionSwitchInfo" class="version-switch-info">
                     <p style="margin:0px; color:black; text-align:center;" id="versionSwitchInfoText">Clicking this will switch to the null branch.</p>
                 </div>
@@ -39,15 +39,15 @@
             </div>
             <div class="middle-buttons" id="middleButtons">
                 <div class="left-middle-buttons pointer">
-                    <div id="statsButton" class="middle-button-base stats-button" onclick="toggleStats()">
+                    <div id="statsButton" class="middle-button-base stats-button" onclick="toggleMiddle('stats')">
                         <p class="middle-button-name">Stats</p>
                     </div>
-                    <div id="optionsButton" class="middle-button-base options-button" onclick="toggleOptions()">
+                    <div id="optionsButton" class="middle-button-base options-button" onclick="toggleMiddle('options')">
                         <p class="middle-button-name">Options</p>
                     </div>
                 </div>
                 <div class="right-middle-buttons pointer">
-                    <div id="infoButton" class="middle-button-base info-button" onclick="toggleInfo()">
+                    <div id="infoButton" class="middle-button-base info-button" onclick="toggleMiddle('info')">
                         <p class="middle-button-name">Info</p>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                 <h3 class="middle-subtitle">About:</h5>
                 <p class="middle-text">Clicker Cookie is a totally original game about clicking a cookie. Made by <a href="https://github.com/FifthTundraG">FifthTundraG</a> in a few hours, this game went from a random clone of a decade old, actively developed clicker game to something that spiraled into a land of insanity.</p>
                 <p class="middle-text">Original game made by Orteil and Opti. <small>we :heart: you!</small></p>
-                <button class="data-button pointer" onclick="helper.popup.createSimple(320,150,'FifthTundraG: Creation<br>potatman4: Playtesting<br>Spencer: Playtesting, Emotional Support',false,'default','Credits',false,false)">Credits</button>
+                <button class="data-button pointer no-select" onclick="helper.popup.createSimple(320,150,'FifthTundraG: Creation<br>potatman4: Playtesting<br>Spencer: Playtesting, Emotional Support',false,'default','Credits',false,false)">Credits</button>
                 <h3 class="middle-subtitle" style="margin-top:0px;">Changelog:</h5>
                 <div class="changelog-wrapper">
                     <div name="version0.5.2" class="changelog">
@@ -87,7 +87,9 @@
                         <p class="middle-text">Changed:</p>
                         <ul class="middle-ul">
                             <li>Saves from the main branch no longer are allowed in beta and vice versa to prevent corrupted saves.</li>
-                            <li>Popups are a flexbox.</li>
+                            <li>Popups are now a flexbox.</li>
+                            <li>Small gradient on middle text to make it slightly more nice to look at then solid black</li>
+                            <li>Better middle button function</li>
                         </ul>
                         <p class="middle-text">Fixed:</p>
                         <ul class="middle-ul">
@@ -315,8 +317,8 @@
             </div>
         </div>
         <div id="rightSide" class="rightSide">
-            <h1 class="store-heading">Store</h1>
-            <h3 class="upgradesMarker">Upgrades</h3>
+            <h1 class="store-heading shadow">Store</h1>
+            <h3 class="upgrades-marker shadow">Upgrades</h3>
             <div id="upgradesHolder" class="upgrades-holder">
                 <div id="upgrade0" class="upgrade" onclick="upgrades.upgrade0.clicked()" onmouseover="upgrades.hovered('upgrade0')" onmouseout="upgrades.undoHover()"></div>
                 <div id="upgrade1" class="upgrade" onclick="upgrades.upgrade1.clicked()" onmouseover="upgrades.hovered('upgrade1')" onmouseout="upgrades.undoHover()"></div>
@@ -326,7 +328,7 @@
                 <div id="upgrade5" class="upgrade" onclick="upgrades.upgrade5.clicked()" onmouseover="upgrades.hovered('upgrade5')" onmouseout="upgrades.undoHover()"></div>
                 <div id="upgrade6" class="upgrade" onclick="upgrades.upgrade6.clicked()" onmouseover="upgrades.hovered('upgrade6')" onmouseout="upgrades.undoHover()"></div>
             </div>
-            <h3 class="buildingsMarker">Buildings</h3>
+            <h3 class="buildings-marker shadow">Buildings</h3>
             <div id="buildings" class="buildings">
                 <table>
                     <tr>
@@ -417,7 +419,7 @@
             </div>
         </div>
         <div class="absolute filter" id="filter"></div>
-        <div class="popup" id="simplePopup">
+        <div class="popup no-select" id="simplePopup">
             <img alt="popup image" style="display:none;" id="simplePopupImage">
             <h3 class="simple-popup-title" id="simplePopupTitle">title</h3>
             <p class="popup-content" id="simplePopupContent">null</p>
@@ -426,7 +428,7 @@
                 <button onclick="helper.popup.simpleClicked()" id="simplePopupButton" class="popup-button">OK</button>
             </div>
         </div>
-        <div class="popup" id="advancedPopup">
+        <div class="popup no-select" id="advancedPopup">
 
         </div>
     </body>

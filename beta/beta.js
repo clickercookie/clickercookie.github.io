@@ -1166,64 +1166,62 @@ dev.setDevMode = function(value) {
 }
 
 // toggle menu openness
-function toggleStats() {
-    switch (statsUp) {
-        case 0:
-            optionsUp = 0;
-            infoUp = 0;
-            statsUp = 1;
-                        
-            document.getElementById("infoMiddleText").style.display = "none";
-            document.getElementById("optionsMiddleText").style.display = "none";
-
-            document.getElementById("statsMiddleText").style.display = "block";
-            document.getElementById("middle").style.background = "black";
-            break;
-        case 1:
-            statsUp = 0;
-            document.getElementById("statsMiddleText").style.display = "none";
-            document.getElementById("middle").style.background = personalization.currentBackground;
-            break;
+function toggleMiddle(param) {
+    const statsMT = document.getElementById("statsMiddleText");
+    const infoMT = document.getElementById("infoMiddleText");
+    const optionsMT = document.getElementById("optionsMiddleText");
+    const middle = document.getElementById("middle");
+    const middleBackground = "radial-gradient(rgb(8, 8, 8), rgb(3, 3, 3), black)";
+    statsMT.style.display = "none";
+    infoMT.style.display = "none";
+    optionsMT.style.display = "none";
+    if (param == "stats") {
+        switch (statsUp) {
+            case 0:
+                optionsUp = 0;
+                infoUp = 0;
+                statsUp = 1;
+                statsMT.style.display = "block";
+                middle.style.background = middleBackground;
+                break;
+            case 1:
+                statsUp = 0;
+                optionsMT.style.display = "none";
+                middle.style.background = personalization.currentBackground;
+                break;
+        }
     }
-}
-function toggleInfo() {
-    switch (infoUp) {
-        case 0:
-            optionsUp = 0;
-            infoUp = 1;
-            statsUp = 0;
-
-            document.getElementById("optionsMiddleText").style.display = "none";
-            document.getElementById("statsMiddleText").style.display = "none";
-
-            document.getElementById("infoMiddleText").style.display = "block";
-            document.getElementById("middle").style.background = "black";
-            break;
-        case 1:
-            infoUp = 0;
-            document.getElementById("infoMiddleText").style.display = "none";
-            document.getElementById("middle").style.background = personalization.currentBackground;
-            break;
+    if (param == "info") {
+        switch (infoUp) {
+            case 0:
+                statsUp = 0;
+                optionsUp = 0;
+                infoUp = 1;
+                infoMT.style.display = "block";
+                middle.style.background = middleBackground;
+                break;
+            case 1:
+                infoUp = 0;
+                infoMT.style.display = "none";
+                middle.style.background = personalization.currentBackground;
+                break;
+        }
     }
-}
-function toggleOptions() {
-    switch (optionsUp) {
-        case 0:
-            optionsUp = 1;
-            infoUp = 0;
-            statsUp = 0;
-                        
-            document.getElementById("statsMiddleText").style.display = "none";
-            document.getElementById("infoMiddleText").style.display = "none";
-
-            document.getElementById("optionsMiddleText").style.display = "block";
-            document.getElementById("middle").style.background = "black";
-            break;
-        case 1:
-            optionsUp = 0;
-            document.getElementById("optionsMiddleText").style.display = "none";
-            document.getElementById("middle").style.background = personalization.currentBackground;
-            break;
+    if (param == "options") {
+        switch (optionsUp) {
+            case 0:
+                statsUp = 0;
+                infoUp = 0;
+                optionsUp = 1;
+                optionsMT.style.display = "block";
+                middle.style.background = middleBackground;
+                break;
+            case 1:
+                optionsUp = 0;
+                optionsMT.style.display = "none";
+                middle.style.background = personalization.currentBackground;
+                break;
+        }
     }
 }
 function closeMiddle() {
@@ -1748,7 +1746,7 @@ mods.addClicked = function() {
     helper.popup.createAdvanced(500,350,"<h3 class='simple-popup-title' style='display:block;'>Add Mod</h3> \
     <h5 class='popup-content' style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5> \
     <h5 class='popup-content' style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5> \
-    <h5 class='popup-content' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a onclick='saves.autoSave()' href='about:blank' class='blue'>read the documentation (not done!)</a></h5> \
+    <h5 class='popup-content' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a onclick='saves.autoSave()' href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue'>read the documentation</a>.</h5> \
     <form onsubmit='return false;' id='addModURLForm' style='margin-top:22px;'> \
         <label for='addModURL' class='popup-content'>From URL: </label> \
         <input id='addModURL' onchange='mods.loadURL(this.value)'> \

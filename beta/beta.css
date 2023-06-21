@@ -1,68 +1,30 @@
 /* basic basis for most html elements */
 body {
     margin: 0px;
-    display: -webkit-flex;
     display: flex;
     overflow: hidden;
     touch-action: manipulation;
     color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-touch-callout: none; /* yes its a mobile thing in the desktop version but its here anyway in case mobile breaks idk */
 }
 
-h1 {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 50px;
-    text-align: center;
-    margin: 3px;
-    color: white;
-    text-shadow: 0px 1px 4px black;
-    -webkit-touch-callout: none;
+h1 { /* all lines that have these no-select like properties are simply too relied on to be removed, i don't like it but i also don't have much of a choice if i value my time :shrug: */
     -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: -moz-none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
-
 h3 {
-    font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
-    color: white;
-    text-shadow: 0px 1px 4px black;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: -moz-none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
+    -webkit-user-select: none;
 }
-
 h4 {
-    font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
-    color: white;
-    -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: -moz-none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
-
 p {
-    font-family: Arial, Helvetica, sans-serif;
-    -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: -moz-none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
-    color: white;
 }
-
 a {
     font-weight: bold;
     color: white;
@@ -70,17 +32,12 @@ a {
 
 img {
     -webkit-user-drag: none;
+    -webkit-touch-callout: none;
     user-select: none;
-    -moz-user-select: none;
     -webkit-user-select: none;
-    -ms-user-select: none;
     display: block;
     margin-left: auto;
     margin-right: auto;
-}
-
-div {
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 ul {
@@ -89,16 +46,13 @@ ul {
 }
 
 small {
-    -webkit-user-drag: none;
     user-select: none;
-    -moz-user-select: none;
     -webkit-user-select: none;
-    -ms-user-select: none;
     margin-left: auto;
     margin-right: auto;
 }
 
-/* helper classes (in early development) */
+/* helper classes */
 .no-display {
     display: none;
 }
@@ -117,17 +71,18 @@ small {
 .absolute {
     position: absolute;
 }
-.no-select {
-    -webkit-user-drag: none;
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    margin-left: auto;
+.no-select { /* this contains a random list of properties that supposedly make thing not drag and stuff? It seems to work so yay? */
+    user-select: none; /* General all-browser solution for this */
+    -webkit-touch-callout: none; /* I think only images but I dont have an iPhone so idk */
+    -webkit-user-select: none; /* Still required on Safari? */
+    margin-left: auto; /* idk what on earth these do but i'm scared to remove them */
     margin-right: auto;
 }
 .no-margin {
     margin: 0px;
+}
+.shadow {
+    text-shadow: 0px 1px 4px black;
 }
 
 /* important things */
@@ -155,7 +110,6 @@ small {
 }
 
 .middle {
-    -webkit-flex: auto;
     flex: auto;
     height: 100vh;
     background: url(img/backgrounds/background-blue.png);
@@ -203,6 +157,7 @@ small {
     font-size: 18px;
     color: white;
     text-shadow: 0px 1px 4px black;
+    text-align: center;
 }
 
 .cookies-per-second-counter {
@@ -211,6 +166,7 @@ small {
     font-size: 14px;
     color: white;
     text-shadow: 0px 1px 4px black;
+    text-align: center;
 }
 
 .cookie-counter-wrapper {
@@ -234,13 +190,6 @@ small {
     top: 9.5px;
     margin: 0px;
     font-size: 20px;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: -moz-none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
     color: white;
     font-family: monospace;
     text-shadow: 0px 1px 4px black;
@@ -301,7 +250,6 @@ small {
     border-right-width: 0px;
     margin: 0px;
     display: none;
-    -webkit-flex: auto;
     flex: auto;
     background-color: rgb(255, 243, 209);
     position: absolute;
@@ -324,18 +272,23 @@ small {
 }
 
 /* random specific stuff */
-.upgradesMarker {
+.upgrades-marker {
     margin-top: 10px;
     margin-bottom: 3px;
+    text-align: center;
 }
 
-.buildingsMarker {
+.buildings-marker {
     margin-top: 5px;
     margin-bottom: 3px;
+    text-align: center;
 }
 
 .store-heading {
+    margin: 3px;
     margin-bottom: 0px;
+    font-size: 50px;
+    text-align: center;
 }
 
 .leftSidePush {
@@ -346,6 +299,7 @@ small {
     display: none;
     margin-top: 2px;
     margin-bottom: 6px;
+    text-align: center;
 }
 .filter {
     background-color: black;
@@ -534,7 +488,6 @@ small {
 .simple-popup-title {
     display: none;
     color: black;
-    text-shadow: 0px 0px 0px white;
     margin-top: 7px;
     margin-bottom: 7px;
     font-size: 17px;
@@ -575,6 +528,7 @@ small {
     text-decoration: underline;
     text-underline-offset: 0.15em;
     font-weight: bold;
+    text-align: center;
 }
 .middle-subtitle {
     font-size: 26px;
@@ -612,12 +566,7 @@ small {
 }
 .middle-ul {
     font-size: 14px;
-    -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: -moz-none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
 .middle-label {
@@ -631,12 +580,7 @@ small {
     margin-top: 6px;
     margin-bottom: 8px;
     margin-left: 9px;
-    -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: -moz-none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
 
