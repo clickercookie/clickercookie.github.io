@@ -12,7 +12,7 @@ function mobileInit() {
     document.getElementById("statsContent").style.height = availableScreenSpace + "px";
     document.getElementById("optionsContent").style.height = availableScreenSpace + "px";
 
-    document.getElementById("title").innerHTML = "CC Mobile Testing";
+    document.getElementById("title").innerHTML = "Clicker Cookie Mobile";
 }
 
 function sizeCheck() { // doesn't run if window size changes
@@ -102,7 +102,3 @@ function switchShopCategory(select) {
 }
 
 mobileInit();
-
-console.log("THERE WILL BE ERRORS IN THIS CONSOLE!!!!!");
-console.log("THERE WILL BE ERRORS IN THIS CONSOLE!!!!!");
-console.log("THERE WILL BE ERRORS IN THIS CONSOLE!!!!!");

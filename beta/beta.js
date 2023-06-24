@@ -216,9 +216,6 @@ core.initialization = function() {
     if (hasCheated == 1) {
         document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
     }
-    if (isModded && mobile == 0) {
-        document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
-    }
 
     // check for development special stuff
     if (inDevelopment == 1) {
@@ -344,6 +341,11 @@ core.initialization = function() {
         document.getElementById("upgrade2").style.backgroundImage = "url(../img/upgrades/ranch-upgrade1.png)";
         document.getElementById("upgrade3").style.backgroundImage = "url(../img/upgrades/tv-upgrade1.png)";
         document.getElementById("upgrade4").style.backgroundImage = "url(../img/upgrades/worker-upgrade1.png)";
+    }
+    
+    // this would go after data is loaded, but it requires the mobile variable to be assigned a value
+    if (isModded == 1 && mobile == 0) {
+        document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
     }
 }
 
@@ -1580,7 +1582,7 @@ saves.resetSave = function() {
     upgrades.destroy("upgrade5");
     upgrades.destroy("upgrade6");
 
-    document.getElementById("win").style.display = "block";
+    document.getElementById("win").style.display = "none";
 
     if (mobile) {
         navbarItemClicked("Cookie");

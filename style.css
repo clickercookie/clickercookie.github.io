@@ -1,67 +1,30 @@
 /* basic basis for most html elements */
 body {
     margin: 0px;
-    display: -webkit-flex;
     display: flex;
     overflow: hidden;
-    touch-action: manipulation
+    touch-action: manipulation;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-touch-callout: none; /* yes its a mobile thing in the desktop version but its here anyway in case mobile breaks idk */
 }
 
-h1 {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 50px;
-    text-align: center;
-    margin: 3px;
-    color: white;
-    text-shadow: 0px 1px 4px black;
-    -webkit-touch-callout: none;
+h1 { /* all lines that have these no-select like properties are simply too relied on to be removed, i don't like it but i also don't have much of a choice if i value my time :shrug: */
     -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: -moz-none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
-
 h3 {
-    font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
-    color: white;
-    text-shadow: 0px 1px 4px black;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: -moz-none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
+    -webkit-user-select: none;
 }
-
 h4 {
-    font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
-    color: white;
-    -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: -moz-none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
-
 p {
-    font-family: Arial, Helvetica, sans-serif;
-    -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: -moz-none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
-    color: white;
 }
-
 a {
     font-weight: bold;
     color: white;
@@ -69,17 +32,12 @@ a {
 
 img {
     -webkit-user-drag: none;
+    -webkit-touch-callout: none;
     user-select: none;
-    -moz-user-select: none;
     -webkit-user-select: none;
-    -ms-user-select: none;
     display: block;
     margin-left: auto;
     margin-right: auto;
-}
-
-div {
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 ul {
@@ -88,16 +46,13 @@ ul {
 }
 
 small {
-    -webkit-user-drag: none;
     user-select: none;
-    -moz-user-select: none;
     -webkit-user-select: none;
-    -ms-user-select: none;
     margin-left: auto;
     margin-right: auto;
 }
 
-/* helper classes (in early development) */
+/* helper classes */
 .no-display {
     display: none;
 }
@@ -110,17 +65,24 @@ small {
 .black {
     color: black;
 }
+.blue {
+    color: blue;
+}
 .absolute {
     position: absolute;
 }
-.no-select {
-    -webkit-user-drag: none;
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    margin-left: auto;
+.no-select { /* this contains a random list of properties that supposedly make thing not drag and stuff? It seems to work so yay? */
+    user-select: none; /* General all-browser solution for this */
+    -webkit-touch-callout: none; /* I think only images but I dont have an iPhone so idk */
+    -webkit-user-select: none; /* Still required on Safari? */
+    margin-left: auto; /* idk what on earth these do but i'm scared to remove them */
     margin-right: auto;
+}
+.no-margin {
+    margin: 0px;
+}
+.shadow {
+    text-shadow: 0px 1px 4px black;
 }
 
 /* important things */
@@ -148,7 +110,6 @@ small {
 }
 
 .middle {
-    -webkit-flex: auto;
     flex: auto;
     height: 100vh;
     background: url(img/backgrounds/background-blue.png);
@@ -196,6 +157,7 @@ small {
     font-size: 18px;
     color: white;
     text-shadow: 0px 1px 4px black;
+    text-align: center;
 }
 
 .cookies-per-second-counter {
@@ -204,6 +166,7 @@ small {
     font-size: 14px;
     color: white;
     text-shadow: 0px 1px 4px black;
+    text-align: center;
 }
 
 .cookie-counter-wrapper {
@@ -227,13 +190,6 @@ small {
     top: 9.5px;
     margin: 0px;
     font-size: 20px;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: -moz-none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
     color: white;
     font-family: monospace;
     text-shadow: 0px 1px 4px black;
@@ -250,6 +206,7 @@ small {
     left: 48px;
     font-size: 10px;
     background-color: rgb(255, 243, 209);
+    color: black;
 }
 
 
@@ -293,7 +250,6 @@ small {
     border-right-width: 0px;
     margin: 0px;
     display: none;
-    -webkit-flex: auto;
     flex: auto;
     background-color: rgb(255, 243, 209);
     position: absolute;
@@ -316,18 +272,23 @@ small {
 }
 
 /* random specific stuff */
-.upgradesMarker {
+.upgrades-marker {
     margin-top: 10px;
     margin-bottom: 3px;
+    text-align: center;
 }
 
-.buildingsMarker {
+.buildings-marker {
     margin-top: 5px;
     margin-bottom: 3px;
+    text-align: center;
 }
 
 .store-heading {
+    margin: 3px;
     margin-bottom: 0px;
+    font-size: 50px;
+    text-align: center;
 }
 
 .leftSidePush {
@@ -338,6 +299,7 @@ small {
     display: none;
     margin-top: 2px;
     margin-bottom: 6px;
+    text-align: center;
 }
 .filter {
     background-color: black;
@@ -406,11 +368,9 @@ small {
 
 .buildings-bought {
     font-size: 35px;
-    margin: 0px;
+    margin: 12px 10px 0px 0px;
     font-family: monospace;
     float: right;
-    margin-top: 12px;
-    margin-right: 10px;
 }
 
 .building-name {
@@ -468,15 +428,15 @@ small {
 
 /* building icon css */
 .keyboard-icon {
-    background: url(img/keyboard-icon.png);
+    background: url(img/keyboard.png);
 }
 
 .grandpa-icon {
-    background: url(img/grandpa-temp.png);
+    background: url(img/grandpa.png);
 }
 
 .ranch-icon {
-    background: url(img/ranch-icon.png);
+    background: url(img/ranch.png);
 }
 
 .tv-icon {
@@ -509,6 +469,8 @@ small {
     top:  50%;
     left: 50%;
     transform: translate(-50%,-50%);
+    flex-direction: column;
+    align-items: center;
 }
 .simple-popup-button-div {
     display: flex;
@@ -520,10 +482,12 @@ small {
     margin-right: 8px;
     color: black;
 }
+.popup-button {
+    width: min-content;
+}
 .simple-popup-title {
     display: none;
     color: black;
-    text-shadow: 0px 0px 0px white;
     margin-top: 7px;
     margin-bottom: 7px;
     font-size: 17px;
@@ -539,51 +503,6 @@ small {
     margin-left: auto;
     height: 50px;
 }
-
-/* Stats CSS */
-.stats-popup {
-    border-style: solid;
-    border-width: 3px;
-    border-color: black;
-    width: 90vw;
-    height: 85vh;
-    background-color: white;
-    text-align: center;
-    position: absolute;
-    top:  50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    display: none;
-}
-
-/* Middle Text CSS */
-.middle-title {
-    font-size: 35px;
-    font-family: monospace;
-    margin-top: 12px;
-    margin-bottom: 15px;
-    text-decoration: underline;
-    text-underline-offset: 0.15em;
-    font-weight: bold;
-}
-
-.middle-subtitle {
-    font-size: 26px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin-top: 12px;
-    margin-bottom: 15px;
-    margin-left: 9px;
-    font-weight: bold;
-    text-align: left;
-}
-
-.middle-text-main {
-    display: none;
-    color: white;
-    overflow-y: auto;
-    height: 86%;
-}
-
 .middle-button-name {
     margin: 0px;
     text-align: center;
@@ -594,14 +513,39 @@ small {
     text-shadow: 0px 1px 4px black;
 }
 
-.button-paragraph-text {
+/* Middle Text CSS */
+.middle-main {
+    display: none;
+    color: white;
+    overflow-y: auto;
+    height: 86%;
+}
+.middle-title {
+    font-size: 35px;
+    font-family: monospace;
+    margin-top: 12px;
+    margin-bottom: 15px;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    font-weight: bold;
+    text-align: center;
+}
+.middle-subtitle {
+    font-size: 26px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 12px;
+    margin-bottom: 15px;
+    margin-left: 9px;
+    font-weight: bold;
+    text-align: left;
+}
+.middle-text {
     margin-left: 9px;
     margin-bottom: 6px;
     margin-top: 6px;
     font-family: Arial, Helvetica, sans-serif;
 }
-
-.button-paragraph-text-gray {
+.middle-text-gray {
     margin-left: 7px;
     margin-bottom: 6px;
     margin-top: 6px;
@@ -610,18 +554,21 @@ small {
     letter-spacing: 1px;
     font-weight: bold;
 }
-
+.middle-x {
+    height: 48px;
+    width: 48px;
+    border: 2px solid white;
+    float: right;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+}
 .middle-ul {
     font-size: 14px;
-    -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: -moz-none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
-
 .middle-label {
     margin-left: 9px;
 }
@@ -633,12 +580,7 @@ small {
     margin-top: 6px;
     margin-bottom: 8px;
     margin-left: 9px;
-    -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: -moz-none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
 
@@ -658,6 +600,7 @@ small {
     height: 50px;
     margin-left: auto;
     background-color: rgb(255, 243, 209);
+    color: black; /* this wasn't nessesary until 6/3/23? idk why */
 }
 .info-button {
     border-top-width: 2px;
@@ -708,4 +651,24 @@ small {
     cursor: pointer;
     background-color: rgb(229,229,229);
     border-color: rgb(65,65,65);
+}
+
+/* Mods */
+.mods-list {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.mod-in-list {
+    height: 35px;
+    float: left;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background-color: rgb(215, 215, 215);
+}
+.mod-id {
+    font-style: italic;
+    color: gray;
 }
