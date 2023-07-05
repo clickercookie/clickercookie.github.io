@@ -366,11 +366,18 @@ small {
     margin-left: 4px;
 }
 
+.buildings-bought-wrapper {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    float: right;
+    margin-right: 10px;
+}
 .buildings-bought {
     font-size: 35px;
-    margin: 12px 10px 0px 0px;
     font-family: monospace;
     float: right;
+    margin: 0px
 }
 
 .building-name {

@@ -4,6 +4,7 @@
 const version = "0.5.2";
 const versionBranch = 1; // 0 is main, 1 is beta
 const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode! Recommended that versionBranch is 1 for easier saving if this is toggled.
+const desktop = false;
 
 // customization
 const personalization = {};
@@ -328,14 +329,14 @@ core.initialization = function() {
     }
 
     // set default upgrades
-    if (!mobile) {
+    if (!mobile || !desktop) {
         document.getElementById("upgrade0").style.backgroundImage = "url(img/upgrades/reinforced-keys.png)";
         document.getElementById("upgrade1").style.backgroundImage = "url(img/upgrades/hardwood-walking-stick.png)";
         document.getElementById("upgrade2").style.backgroundImage = "url(img/upgrades/ranch-upgrade1.png)";
         document.getElementById("upgrade3").style.backgroundImage = "url(img/upgrades/tv-upgrade1.png)";
         document.getElementById("upgrade4").style.backgroundImage = "url(img/upgrades/worker-upgrade1.png)";
     }
-    if (mobile) {
+    if (mobile || desktop) {
         document.getElementById("upgrade0").style.backgroundImage = "url(../img/upgrades/reinforced-keys.png)";
         document.getElementById("upgrade1").style.backgroundImage = "url(../img/upgrades/hardwood-walking-stick.png)";
         document.getElementById("upgrade2").style.backgroundImage = "url(../img/upgrades/ranch-upgrade1.png)";
@@ -690,7 +691,7 @@ upgrades.create = function(identifier,name,description,quote,price,img) {
             if (!mobile) {
                 document.getElementById("upgrade0").style.backgroundImage = "url(" + img + ")";
             }
-            if (mobile) {
+            if (mobile || desktop) {
                 document.getElementById("upgrade0").style.backgroundImage = "url(../" + img + ")";
             }
             break;
@@ -702,7 +703,7 @@ upgrades.create = function(identifier,name,description,quote,price,img) {
             if (!mobile) {
                 document.getElementById("upgrade1").style.backgroundImage = "url(" + img + ")";
             }
-            if (mobile) {
+            if (mobile || desktop) {
                 document.getElementById("upgrade1").style.backgroundImage = "url(../" + img + ")";
             }
             break;
@@ -714,7 +715,7 @@ upgrades.create = function(identifier,name,description,quote,price,img) {
             if (!mobile) {
                 document.getElementById("upgrade2").style.backgroundImage = "url(" + img + ")";
             }
-            if (mobile) {
+            if (mobile || desktop) {
                 document.getElementById("upgrade2").style.backgroundImage = "url(../" + img + ")";
             }
             break;
@@ -726,7 +727,7 @@ upgrades.create = function(identifier,name,description,quote,price,img) {
             if (!mobile) {
                 document.getElementById("upgrade3").style.backgroundImage = "url(" + img + ")";
             }
-            if (mobile) {
+            if (mobile || desktop) {
                 document.getElementById("upgrade3").style.backgroundImage = "url(../" + img + ")";
             }
             break;
@@ -738,7 +739,7 @@ upgrades.create = function(identifier,name,description,quote,price,img) {
             if (!mobile) {
                 document.getElementById("upgrade4").style.backgroundImage = "url(" + img + ")";
             }
-            if (mobile) {
+            if (mobile || desktop) {
                 document.getElementById("upgrade4").style.backgroundImage = "url(../" + img + ")";
             }
             break;
@@ -750,7 +751,7 @@ upgrades.create = function(identifier,name,description,quote,price,img) {
             if (!mobile) {
                 document.getElementById("upgrade5").style.backgroundImage = "url(" + img + ")";
             }
-            if (mobile) {
+            if (mobile || desktop) {
                 document.getElementById("upgrade5").style.backgroundImage = "url(../" + img + ")";
             }
             break;
@@ -762,7 +763,7 @@ upgrades.create = function(identifier,name,description,quote,price,img) {
             if (!mobile) {
                 document.getElementById("upgrade6").style.backgroundImage = "url(" + img + ")";
             }
-            if (mobile) {
+            if (mobile || desktop) {
                 document.getElementById("upgrade6").style.backgroundImage = "url(../" + img + ")";
             }
             break;
@@ -1097,7 +1098,7 @@ personalization.setBackground = function(color) {
     if (!mobile) {
         personalization.currentBackground = "url(img/backgrounds/background-" + color + ".png)";
     }
-    if (mobile) {
+    if (mobile || desktop) {
         personalization.currentBackground = "url(../img/backgrounds/background-" + color + ".png)";
     }
     if (!mobile) {
@@ -1118,7 +1119,7 @@ personalization.setCurrentClicked = function(value) {
             if (!mobile) {
                 document.getElementById("cookie").src = "img/cookie.png";
             }
-            if (mobile) {
+            if (mobile || desktop) {
                 document.getElementById("cookie").src = "../img/cookie.png";
             }
             personalization.currentClicked = "Cookie";
@@ -1130,7 +1131,7 @@ personalization.setCurrentClicked = function(value) {
             if (!mobile) {
                 document.getElementById("cookie").src = "img/potato.png";
             }
-            if (mobile) {
+            if (mobile || desktop) {
                 document.getElementById("cookie").src = "../img/potato.png";
             }
             personalization.currentClicked = "Potato";
@@ -1246,7 +1247,7 @@ core.grandmasArrival = function() {
             if (!mobile) {
                 document.getElementById("simplePopupImage").src = "img/grandma.png";
             }
-            if (mobile) {
+            if (mobile || desktop) {
                 document.getElementById("simplePopupImage").src = "../img/grandma.png";
             }
             document.getElementById("simplePopupImage").style.display = "block";
