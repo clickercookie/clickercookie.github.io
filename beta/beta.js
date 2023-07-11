@@ -1,7 +1,7 @@
 // ------------------------------------
 // Variable & Object Definitions
 // ------------------------------------
-const version = "0.5.2";
+const version = "0.6";
 const versionBranch = 1; // 0 is main, 1 is beta
 const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode! Recommended that versionBranch is 1 for easier saving if this is toggled.
 const desktop = false;
@@ -159,22 +159,23 @@ let mobile;
 const saves = {};
 saves.rawImportedData; // parsed data from the Import function but cannot be read
 saves.importedData; // Data from the Import function
-saves.allToSave = [core.cookies, core.totalCookies, core.cookiesPerSecond, // all additions to this variable MUST BE AT THE END, then reflected in getLocalSave()
-                buildings.keyboard.CPSGiven,buildings.grandpa.CPSGiven,buildings.ranch.CPSGiven,buildings.tv.CPSGiven,buildings.worker.CPSGiven,buildings.wallet.CPSGiven,buildings.church.CPSGiven,
-                buildings.keyboard.bought,buildings.grandpa.bought,buildings.ranch.bought,buildings.tv.bought,buildings.worker.bought,buildings.wallet.bought,buildings.church.bought,
-                buildings.keyboard.CPSGain,buildings.grandpa.CPSGain,buildings.ranch.CPSGain,buildings.tv.CPSGain,buildings.worker.CPSGain,buildings.wallet.CPSGain,buildings.church.CPSGain,
-                buildings.keyboard.upgradeCost,buildings.grandpa.upgradeCost,buildings.ranch.upgradeCost,buildings.tv.upgradeCost,buildings.worker.upgradeCost,buildings.wallet.upgradeCost,buildings.church.upgradeCost,
-                upgrades.upgrade0.bought,upgrades.upgrade1.bought,upgrades.upgrade2.bought,upgrades.upgrade3.bought,upgrades.upgrade4.bought,upgrades.upgrade5.bought,upgrades.upgrade6.bought,
-                core.cookiesPerClick,core.cookieBeenClickedTimes,core.buildingsOwned,grandmaPromptClicks,hasCheated,won,isModded,versionBranch];
-saves.defaultSavedValues = [ // matches order of allToSave
-    0,0,0,
-    0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,
-    0.1,1,8,47,260,1440,7800,
-    15,100,1100,12000,130000,1400000,20000000,
-    0,0,0,0,0,0,0,
-    1,0,0,0,0,0,0,0];
-saves.defaultSavedValues[45] = versionBranch;
+saves.allToSave = ["core.cookies", "core.totalCookies", "core.cookiesPerSecond", // List of every variable that should be saved, in no particular order.
+                "buildings.keyboard.CPSGiven","buildings.grandpa.CPSGiven","buildings.ranch.CPSGiven","buildings.tv.CPSGiven","buildings.worker.CPSGiven","buildings.wallet.CPSGiven","buildings.church.CPSGiven",
+                "buildings.keyboard.bought","buildings.grandpa.bought","buildings.ranch.bought","buildings.tv.bought","buildings.worker.bought","buildings.wallet.bought","buildings.church.bought",
+                "buildings.keyboard.CPSGain","buildings.grandpa.CPSGain","buildings.ranch.CPSGain","buildings.tv.CPSGain","buildings.worker.CPSGain","buildings.wallet.CPSGain","buildings.church.CPSGain",
+                "buildings.keyboard.upgradeCost","buildings.grandpa.upgradeCost","buildings.ranch.upgradeCost","buildings.tv.upgradeCost","buildings.worker.upgradeCost","buildings.wallet.upgradeCost","buildings.church.upgradeCost",
+                "upgrades.upgrade0.bought","upgrades.upgrade1.bought","upgrades.upgrade2.bought","upgrades.upgrade3.bought","upgrades.upgrade4.bought","upgrades.upgrade5.bought","upgrades.upgrade6.bought",
+                "core.cookiesPerClick","core.cookieBeenClickedTimes","core.buildingsOwned","grandmaPromptClicks","hasCheated","won","isModded","versionBranch"
+];
+saves.defaultSavedValues = { // Should be self-explanatory. Doesn't have to be ordered like allToSave, but I would appreciate if it was.
+    "core.cookies":0, "core.totalCookies":0, "core.cookiesPerSecond":0,
+    "buildings.keyboard.CPSGiven":0,"buildings.grandpa.CPSGiven":0,"buildings.ranch.CPSGiven":0,"buildings.tv.CPSGiven":0,"buildings.worker.CPSGiven":0,"buildings.wallet.CPSGiven":0,"buildings.church.CPSGiven":0,
+    "buildings.keyboard.bought":0,"buildings.grandpa.bought":0,"buildings.ranch.bought":0,"buildings.tv.bought":0,"buildings.worker.bought":0,"buildings.wallet.bought":0,"buildings.church.bought":0,
+    "buildings.keyboard.CPSGain":0.1,"buildings.grandpa.CPSGain":1,"buildings.ranch.CPSGain":8,"buildings.tv.CPSGain":47,"buildings.worker.CPSGain":260,"buildings.wallet.CPSGain":1440,"buildings.church.CPSGain":7800,
+    "buildings.keyboard.upgradeCost":15,"buildings.grandpa.upgradeCost":100,"buildings.ranch.upgradeCost":1100,"buildings.tv.upgradeCost":12000,"buildings.worker.upgradeCost":130000,"buildings.wallet.upgradeCost":1400000,"buildings.church.upgradeCost":20000000,
+    "upgrades.upgrade0.bought":0,"upgrades.upgrade1.bought":0,"upgrades.upgrade2.bought":0,"upgrades.upgrade3.bought":0,"upgrades.upgrade4.bought":0,"upgrades.upgrade5.bought":0,"upgrades.upgrade6.bought":0,
+    "core.cookiesPerClick":1,"core.cookieBeenClickedTimes":0,"core.buildingsOwned":0,"grandmaPromptClicks":0,"hasCheated":0,"won":0,"isModded":0,"versionBranch":versionBranch
+};
 saves.dataLoaded; // data from an auto-save (local storage)
 
 // view versions of variables (their main versions have long decimal points)
@@ -194,9 +195,11 @@ core.initialization = function() {
         saves.resetSave();
         console.log("Cookies were NaN and save was reset.");
     }
+
     if (localStorage.cookies >= 0) {
         helper.popup.createSimple(400,200,"You are using the old saving method. You will have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format.",false,"localStorage.clear()","Warning",false,false);
     }
+
     helper.reloadBuildingPrices();
     if (localStorage.getItem("save") == null) {
         localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
@@ -206,11 +209,17 @@ core.initialization = function() {
         localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
         console.log("betaSave was null and was automatically reset, if this is your first time playing this is an intended behavior.");
     }
-    if (localStorage.getItem("devSave") == null) {
-        localStorage.setItem("devSave",JSON.stringify(saves.defaultSavedValues));
-        console.log("devSave was null and was automatically reset, if this is your first time playing this is an intended behavior.");
-    }
     saves.loadAutoSave();
+    // if saves are old
+    if (localStorage.save[0] == "[" || localStorage.betaSave[0] == "[") {
+        helper.popup.createAdvanced(400,220,"<h3 class='simple-popup-title' style='display:block;'>oh no</h3> \
+        <p class='popup-content'>so bad news, your save is invalid. good news, it won't ever be invalidated again. so yeah, sorry about that...</p> \
+        <div style='display:flex;flex-direction:row;height:40px;'> \
+        <button onclick='saves.resetSave(true)' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>Reformat me!</button> \
+        </div>");
+        return "Save the save!";
+    }
+
     if (won == 1) {
         document.getElementById("win").style.display = "block";
     }
@@ -235,11 +244,6 @@ core.initialization = function() {
 
         const br1 = document.createElement("br");
         devDiv.appendChild(br1);
-
-        const devSaveButton = document.createElement("button");
-        devSaveButton.appendChild(document.createTextNode("Force Auto Save"));
-        devSaveButton.setAttribute("onclick","saves.autoSave()");
-        devDiv.appendChild(devSaveButton);
 
         const br2 = document.createElement("br");
         devDiv.appendChild(br2);
@@ -303,6 +307,87 @@ core.initialization = function() {
             document.getElementById("title").innerHTML = "Clicker Cookie Dev";
             break;
     }
+
+    // Changelog Entries, AKA the messiest place ever.
+    createChangelogEntry("0.6",undefined,
+    ["The saving system. Yes, 3rd time or something, but this time I GURANTEE it's going to stick.",
+    "All changelog entries are now created with Javascript to cut down on the HTML size."],
+    ["Centering of buildings bought was done stupidly, fixed now.",
+    "Previously created changelog entries are now grammatically correct."],"actual upgrades")
+
+    createChangelogEntry("0.5.2",["Mobile Support!",
+    "Mods!",
+    "Little X button in the middle area."],
+    ["Cleaned up CSS.",
+    "Saves from the main branch no longer are allowed in beta and vice versa to prevent corrupted saves.",
+    "Popups are now a flexbox.",
+    "Small gradient on middle text to make it slightly more nice to look at then solid black.",
+    "Better middle button function."],
+    ["Options middle text said \"Autosave Management\" when it was supposed to save \"Save Management\"."],"hold the phone","June 23rd")
+
+    createChangelogEntry("0.5.1",["Cookie Wobble!",
+    "Can create an advanced popup with pure HTML, contrary to the old way where everything was predetermined.",
+    "Credits button under Info."],
+    ["All variables and functions now are apart of an object.",
+    "Cleaned up Javascript in general.",
+    "Most numbers now have commas.",
+    "All versions from now on have a name and their version number assigned in changelogs.",
+    "Removed unused/unnessesary functions.",
+    "camelCase onclick attributes (onClick) have all been switched to lowercase (onclick).",
+    "Renamed some save-related variables to make more sense.",
+    "Initialization is now inside an object method and called at the bottom of Javascript."],
+    ["Hover infobox not updating when the mouse doesn't move.",
+    "Grandma showing in simple popups when she isn't supposed to be.",
+    "0.5 header having no date.",
+    "upgrade#Identifier is no longer used an has been deleted.",
+    "Options middle text was highlightable.",
+    "Middle text subtitles weren't lined up with other text.",
+    "Cookie was clickable in a box shape outside the actual visible cookie."],"Objects Everywhere","May 24th")
+
+    createChangelogEntry("0.5",["AUTO SAVING!!!",
+    "EXPORTING & IMPORTING DATA!!!",
+    "New temporary cookie!",
+    "Hovering over buildings gives a small infobox!",
+    "More backgrounds!",
+    "A familiar face...",
+    "Cursor changes type when hovering over certain elements.",
+    "Special development buttons for when in active development.",
+    "+ More!"],
+    ["Prices are now seperated from the building name.",
+    "Can now switch between middle button text by pressing another button opposed to pressing the active button and then button you want.",
+    "Version number now says if the game is in beta or not.",
+    "Extended popup functionality.",
+    "Upgrade hovering is more efficient."],
+    ["Double-tapping cookie zooming in on mobile devices.",
+    "These list items being highlightable."],undefined,"May 6th")
+
+    createChangelogEntry("0.4.1",["Color!",
+    "Buttons!",
+    "Keyboard Upgrade Chain final pixel art!",
+    "+ More!"],undefined,
+    ["Incorrect All Time Cookies & Cookie Clicked variable calculations.",
+    "Switched to let instead of var.",
+    "Positioning on some incorrect positions."],undefined,"March 24th");
+
+    createChangelogEntry("0.4",["Final major buildings (Wallet & Church).",
+    "Upgrades! Only first level upgrades are currently available, excluding the keyboard which has 2 upgrades.",
+    "Ability to switch to the beta branch by clicking the version number. The beta branch has code that visually works as expected, but may not have completed pixel art and some incorrect values that skipped me during testing."],
+    ["Layout of the body. This may break things so pleases report any issues that occur!"],
+    ["Everything."],undefined,"March 24th");
+
+    createChangelogEntry("0.2.2",["Borders to the left and right sides of the screen.",
+    "The capability to create a popup for usage later."],undefined,undefined,undefined,"March 16th");
+
+    createChangelogEntry("0.2.1",["Television!",
+    "Laborers!"],["Made CSS better."],undefined,undefined,"March 16th");
+
+    createChangelogEntry("0.2",["A Github page.",
+    "Version number."],undefined,undefined,undefined,"March 16th");
+
+    createChangelogEntry("0.1.1",["Ranches! Buyable for 1000 cookies for the time being.",
+    "Minor hover effect when hovering over buildings."],undefined,["totalCookies variable is fixed, but still unused (but not for long!)"],undefined,"March 9th");
+    
+    createChangelogEntry("0.1",["Existance."],undefined,undefined,undefined,"March 4th");
 
     if (navigator.userAgent.match(/Android/i) // stolen from https://www.tutorialspoint.com/How-to-detect-a-mobile-device-with-JavaScript (doesn't always work)
     || navigator.userAgent.match(/webOS/i)
@@ -1294,14 +1379,7 @@ saves.exportData = function() {
             dataJSON = JSON.stringify(localStorage.save);
             break;
         case 1:
-            switch (inDevelopment) {
-                case 0:
-                    dataJSON = JSON.stringify(localStorage.betaSave);
-                    break;
-                case 1:
-                    dataJSON = JSON.stringify(localStorage.devSave);
-                    break;
-            }
+            dataJSON = JSON.stringify(localStorage.betaSave);
             break;
     }
 
@@ -1329,7 +1407,6 @@ saves.importData = function() {
     var reader = new FileReader();
 
     reader.onload = function (e) {
-        console.log(e.target.result);
         saves.rawImportedData = JSON.parse(reader.result);
     }
     reader.onerror = (e) => alert("something broke, don't expect me to fix it :D");
@@ -1344,70 +1421,30 @@ saves.importReadData = function() {
     saves.importedData = JSON.parse(saves.rawImportedData);
 
     let versionBranchToDisplay;
-    switch (versionBranch) {
-        case 0:
-            versionBranchToDisplay = "main";
-            break;
-        case 1:
-            versionBranchToDisplay = "beta";
-            break;
+    if (!versionBranch) {
+        versionBranchToDisplay = "main";
+    } else {
+        versionBranchToDisplay = "beta";
     }
-    if (saves.importedData[45] != versionBranch) {
-        helper.popup.createSimple(300,150,`This is a save file from another version branch (${versionBranchToDisplay}). This is incompatible with this version. Please use a different file.`,false,"default","Alert",false,true);
-        return false;
-    }
+    const saveKeys = Object.keys(saves.importedData);
+    saveKeys.forEach((element,index) => { // checks if save's version matches current version
+        if (element == "versionBranch") {
+            if (saves.importedData[element] != versionBranch) { // i had to nest this because you can't break a forEach function
+                helper.popup.createSimple(300,150,`This is a save file from another version branch (${versionBranchToDisplay}). This is incompatible with this version. Please use a different file.`,false,"default","Alert",false,true);
+                return false;
+            }
+        }
+    });
 
-    core.cookies = saves.importedData[0];
-    core.totalCookies = saves.importedData[1];
-    core.cookiesPerSecond = saves.importedData[2];
-
-    buildings.keyboard.CPSGiven = saves.importedData[3];
-    buildings.grandpa.CPSGiven = saves.importedData[4];
-    buildings.ranch.CPSGiven = saves.importedData[5];
-    buildings.tv.CPSGiven = saves.importedData[6];
-    buildings.worker.CPSGiven = saves.importedData[7];
-    buildings.wallet.CPSGiven = saves.importedData[8];
-    buildings.church.CPSGiven = saves.importedData[9];
-
-    buildings.keyboard.bought = saves.importedData[10];
-    buildings.grandpa.bought = saves.importedData[11];
-    buildings.ranch.bought = saves.importedData[12];
-    buildings.tv.bought = saves.importedData[13];
-    buildings.worker.bought = saves.importedData[14];
-    buildings.wallet.bought = saves.importedData[15];
-    buildings.church.bought = saves.importedData[16];
-
-    buildings.keyboard.CPSGain = saves.importedData[17];
-    buildings.grandpa.CPSGain = saves.importedData[18];
-    buildings.ranch.CPSGain = saves.importedData[19];
-    buildings.tv.CPSGain = saves.importedData[20];
-    buildings.worker.CPSGain = saves.importedData[21];
-    buildings.wallet.CPSGain = saves.importedData[22];
-    buildings.church.CPSGain = saves.importedData[23];
-
-    buildings.keyboard.upgradeCost = saves.importedData[24];
-    buildings.grandpa.upgradeCost = saves.importedData[25];
-    buildings.ranch.upgradeCost = saves.importedData[26];
-    buildings.tv.upgradeCost = saves.importedData[27];
-    buildings.worker.upgradeCost = saves.importedData[28];
-    buildings.wallet.upgradeCost = saves.importedData[29];
-    buildings.church.upgradeCost = saves.importedData[30];
-
-    upgrades.upgrade0.bought = saves.importedData[31];
-    upgrades.upgrade1.bought = saves.importedData[32];
-    upgrades.upgrade2.bought = saves.importedData[33];
-    upgrades.upgrade3.bought = saves.importedData[34];
-    upgrades.upgrade4.bought = saves.importedData[35];
-    upgrades.upgrade5.bought = saves.importedData[36];
-    upgrades.upgrade6.bought = saves.importedData[37];
-
-    core.cookiesPerClick = saves.importedData[38];
-    core.cookieBeenClickedTimes = saves.importedData[39];
-    core.buildingsOwned = saves.importedData[40];
-    grandmaPromptClicks = saves.importedData[41];
-    hasCheated = saves.importedData[42];
-    won = saves.importedData[43];
-    isModded = saves.importedData[44];
+    saveKeys.forEach((element,index) => {
+        let variable = element;
+        
+        try {
+            eval(`${variable} = ${saves.importedData[element]}`); // YES, i know i shouldn't use this. I have no idea how to do this otherwise so yeah probably will stay.
+        } catch {
+            helper.consoleLogDev("Attempted to save to constant variable, probably just versionBranch...");
+        }
+    });
     helper.reloadBuildingPrices();
 
     helper.consoleLogDev("Imported save with " +core.cookies+ " cookies.");
@@ -1417,151 +1454,65 @@ saves.importReadData = function() {
     }
 }
 
-saves.autoSave = function() {
-    saves.allToSave = [core.cookies, core.totalCookies, core.cookiesPerSecond,
-        buildings.keyboard.CPSGiven,buildings.grandpa.CPSGiven,buildings.ranch.CPSGiven,buildings.tv.CPSGiven,buildings.worker.CPSGiven,buildings.wallet.CPSGiven,buildings.church.CPSGiven,
-        buildings.keyboard.bought,buildings.grandpa.bought,buildings.ranch.bought,buildings.tv.bought,buildings.worker.bought,buildings.wallet.bought,buildings.church.bought,
-        buildings.keyboard.CPSGain,buildings.grandpa.CPSGain,buildings.ranch.CPSGain,buildings.tv.CPSGain,buildings.worker.CPSGain,buildings.wallet.CPSGain,buildings.church.CPSGain,
-        buildings.keyboard.upgradeCost,buildings.grandpa.upgradeCost,buildings.ranch.upgradeCost,buildings.tv.upgradeCost,buildings.worker.upgradeCost,buildings.wallet.upgradeCost,buildings.church.upgradeCost,
-        upgrades.upgrade0.bought,upgrades.upgrade1.bought,upgrades.upgrade2.bought,upgrades.upgrade3.bought,upgrades.upgrade4.bought,upgrades.upgrade5.bought,upgrades.upgrade6.bought,
-        core.cookiesPerClick,core.cookieBeenClickedTimes,core.buildingsOwned,grandmaPromptClicks,hasCheated,won,isModded,versionBranch];
- 
-    const valuesToCheck = saves.allToSave.length; // check if any values are null, if they are set them to their default. this is useful if new values are added because due to execution order they will ususally always be saved as null.
-    let valuesRemaining = valuesToCheck - 1;
-    while (valuesRemaining >= 0) {
-        if (saves.allToSave[valuesRemaining] == null) {
-            saves.allToSave[valuesRemaining] = saves.defaultSavedValues[valuesRemaining];
-            console.log("A value in localstorage was null, is this a new update?");
-            valuesRemaining -= 1;
-        }
-        else {
-            valuesRemaining -= 1;
-        }
+saves.autoSave = function() { // yes if you are wondering i totally 100% without a doubt wrote this code
+    const save = {};
+  
+    for (let i = 0; i < this.allToSave.length; i++) {
+        const variable = this.allToSave[i];
+    
+        // Get the name of the variable/property
+        const name = typeof variable === 'object' ? variable.name : variable;
+    
+        // Get the value of the variable/property
+        const value = typeof variable === 'object' ? variable.value : eval(variable); // YES, i know i shouldn't use this. This will be changed once 0.6 enters beta.
+    
+        // Add the variable/property to the object
+        save[name] = value;
     }
+
     switch (versionBranch) {
         case 0:
-            localStorage.save = JSON.stringify(saves.allToSave);
+            localStorage.setItem("save",JSON.stringify(save));
             break;
         case 1:
-            switch (inDevelopment) {
-                case 0:   
-                    localStorage.betaSave = JSON.stringify(saves.allToSave);
-                    break;
-                case 1:
-                    localStorage.devSave = JSON.stringify(saves.allToSave);
-                    break;
-            }
-            break;
-        default:
-            alert("Version branch is invalid and auto-saving is not functional!");
+            localStorage.setItem("betaSave",JSON.stringify(save));
             break;
     }
+    if (inDevelopment) {console.log(save)}
 }
 
 saves.loadAutoSave = function() {
-    switch (versionBranch) {
-        case 0:
-            saves.getLocalSave("save");
-            break;
-        case 1:
-            switch (inDevelopment) {
-                case 0:
-                    saves.getLocalSave("betaSave");
-                    break;
-                case 1:
-                    saves.getLocalSave("devSave");
-                    break;
-            }
-            break;
+    let loadedSave;
+    if (!versionBranch) {
+        loadedSave = JSON.parse(localStorage.getItem("save"));
+    } else {
+        loadedSave = JSON.parse(localStorage.getItem("betaSave"));
     }
-} // merge two later (idk why they are seperate things)
-saves.getLocalSave = function(localStorageSave) {
-    switch (localStorageSave) {
-        case "save":
-            saves.dataLoaded = JSON.parse(localStorage.save);
-            break;
-        case "betaSave":
-            saves.dataLoaded = JSON.parse(localStorage.betaSave);
-            break;
-        case "devSave":
-            saves.dataLoaded = JSON.parse(localStorage.devSave);
-            break;
-        default:
-            alert("Loading auto-saving is not functional because versionBranch or inDevelopment is invalid!");
-            break;
-    }
-    core.cookies = saves.dataLoaded[0];
-    core.totalCookies = saves.dataLoaded[1];
-    core.cookiesPerSecond = saves.dataLoaded[2];
 
-    buildings.keyboard.CPSGiven = saves.dataLoaded[3];
-    buildings.grandpa.CPSGiven = saves.dataLoaded[4];
-    buildings.ranch.CPSGiven = saves.dataLoaded[5];
-    buildings.tv.CPSGiven = saves.dataLoaded[6];
-    buildings.worker.CPSGiven = saves.dataLoaded[7];
-    buildings.wallet.CPSGiven = saves.dataLoaded[8];
-    buildings.church.CPSGiven = saves.dataLoaded[9];
-
-    buildings.keyboard.bought = saves.dataLoaded[10];
-    buildings.grandpa.bought = saves.dataLoaded[11];
-    buildings.ranch.bought = saves.dataLoaded[12];
-    buildings.tv.bought = saves.dataLoaded[13];
-    buildings.worker.bought = saves.dataLoaded[14];
-    buildings.wallet.bought = saves.dataLoaded[15];
-    buildings.church.bought = saves.dataLoaded[16];
-
-    buildings.keyboard.CPSGain = saves.dataLoaded[17];
-    buildings.grandpa.CPSGain = saves.dataLoaded[18];
-    buildings.ranch.CPSGain = saves.dataLoaded[19];
-    buildings.tv.CPSGain = saves.dataLoaded[20];
-    buildings.worker.CPSGain = saves.dataLoaded[21];
-    buildings.wallet.CPSGain = saves.dataLoaded[22];
-    buildings.church.CPSGain = saves.dataLoaded[23];
-
-    buildings.keyboard.upgradeCost = saves.dataLoaded[24];
-    buildings.grandpa.upgradeCost = saves.dataLoaded[25];
-    buildings.ranch.upgradeCost = saves.dataLoaded[26];
-    buildings.tv.upgradeCost = saves.dataLoaded[27];
-    buildings.worker.upgradeCost = saves.dataLoaded[28];
-    buildings.wallet.upgradeCost = saves.dataLoaded[29];
-    buildings.church.upgradeCost = saves.dataLoaded[30];
-
-    upgrades.upgrade0.bought = saves.dataLoaded[31];
-    upgrades.upgrade1.bought = saves.dataLoaded[32];
-    upgrades.upgrade2.bought = saves.dataLoaded[33];
-    upgrades.upgrade3.bought = saves.dataLoaded[34];
-    upgrades.upgrade4.bought = saves.dataLoaded[35];
-    upgrades.upgrade5.bought = saves.dataLoaded[36];
-    upgrades.upgrade6.bought = saves.dataLoaded[37];
-
-    core.cookiesPerClick = saves.dataLoaded[38];
-    core.cookieBeenClickedTimes = saves.dataLoaded[39];
-    core.buildingsOwned = saves.dataLoaded[40];
-    grandmaPromptClicks = saves.dataLoaded[41];
-    hasCheated = saves.dataLoaded[42];
-    won = saves.dataLoaded[43];
-    isModded = saves.dataLoaded[44];
+    const saveKeys = Object.keys(loadedSave);
+    saveKeys.forEach((element,index) => {
+        let variable = element;
+        
+        try {
+            eval(`${variable} = ${loadedSave[element]}`); // YES, i know i shouldn't use this. I have no idea how to do this otherwise so yeah probably will stay.
+        } catch {
+            helper.consoleLogDev("Attempted to save to constant variable, probably just versionBranch...");
+        }
+    });
 
     helper.reloadBuildingPrices();
 }
 
-saves.resetSave = function() {
+saves.resetSave = function(fromInit=false) {
     switch (versionBranch) {
         case 0:
             localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
             break;
         case 1:
-            switch (inDevelopment) {
-                case 0:
-                    localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
-                    break;
-                case 1:
-                    localStorage.setItem("devSave",JSON.stringify(saves.defaultSavedValues));
-                    break;
-            }
+            localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
             break;
         default:
-            alert("Resetting save is not functional because versionBranch or inDevelopment is invalid!");
+            alert("Resetting save is not functional because versionBranch is invalid!");
             break;
     }
     saves.loadAutoSave();
@@ -1587,6 +1538,13 @@ saves.resetSave = function() {
 
     if (mobile) {
         navbarItemClicked("Cookie");
+    }
+
+    if (fromInit) {
+        localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
+        localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
+        localStorage.removeItem("devSave");
+        location.reload();
     }
 }
 
@@ -1773,6 +1731,79 @@ mods.listClicked = function() {
 
 mods.reloadModsLoadedText = function() {
     document.getElementById("modsNumberLoaded").innerHTML = "You have " + mods.numberLoaded + " mods loaded!";
+}
+
+function print() {
+    helper.popup.createSimple(250,150,"it's console.log",false,"default","dum dum",false,true)
+}
+
+// Changelog Entries
+function createChangelogEntry(version,added=undefined,changed=undefined,fixed=undefined,name=undefined,release="???") {
+    const changelog = document.querySelector(".changelog-wrapper");
+
+    const newChangelogEntry = document.createElement("div");
+    newChangelogEntry.setAttribute("name","version"+version);
+    newChangelogEntry.setAttribute("class","changelog");
+
+    const versionHeader = document.createElement("h5");
+    versionHeader.setAttribute("class","changelog-version-heading");
+    if (name === undefined) {
+        versionHeader.appendChild(document.createTextNode(`Version ${version} - ${release}`));
+    } else {
+        versionHeader.appendChild(document.createTextNode(`Version ${version}: ${name} - ${release}`));
+    }
+    newChangelogEntry.appendChild(versionHeader)
+
+    if (added !== undefined) {
+        const addedHeader = document.createElement("p");
+        addedHeader.setAttribute("class","middle-text");
+        addedHeader.appendChild(document.createTextNode("Added:"));
+        newChangelogEntry.appendChild(addedHeader);
+
+        const addedList = document.createElement("ul");
+        addedList.setAttribute("class","middle-ul");
+        newChangelogEntry.appendChild(addedList);
+
+        for (i = 0; i < added.length; i++) {
+            const addedListItem = document.createElement('li');
+            addedListItem.innerText = added[i];
+            addedList.appendChild(addedListItem);
+        }
+    }
+    if (changed !== undefined) {
+        const changedHeader = document.createElement("p");
+        changedHeader.setAttribute("class","middle-text");
+        changedHeader.appendChild(document.createTextNode("Changed:"));
+        newChangelogEntry.appendChild(changedHeader);
+
+        const changedList = document.createElement("ul");
+        changedList.setAttribute("class","middle-ul");
+        newChangelogEntry.appendChild(changedList);
+
+        for (i = 0; i < changed.length; i++) {
+            const changedListItem = document.createElement('li');
+            changedListItem.innerText = changed[i];
+            changedList.appendChild(changedListItem);
+        }
+    }
+    if (fixed !== undefined) {
+        const fixedHeader = document.createElement("p");
+        fixedHeader.setAttribute("class","middle-text");
+        fixedHeader.appendChild(document.createTextNode("Fixed:"));
+        newChangelogEntry.appendChild(fixedHeader);
+
+        const fixedList = document.createElement("ul");
+        fixedList.setAttribute("class","middle-ul");
+        newChangelogEntry.appendChild(fixedList);
+
+        for (i = 0; i < fixed.length; i++) {
+            const fixedListItem = document.createElement('li');
+            fixedListItem.innerText = fixed[i];
+            fixedList.appendChild(fixedListItem);
+        }
+    }
+
+    changelog.appendChild(newChangelogEntry)
 }
 
 console.log("what are you doing here? well... as long as its productive.");
