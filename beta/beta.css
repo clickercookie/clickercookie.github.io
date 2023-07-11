@@ -218,11 +218,18 @@ small {
     justify-content: center;
 }
 
+.upgrade {
+    width: 64px;
+    height: 64px;
+    background-image: url(img/unknown-64-64.png);
+    margin: 0px;
+    display: inline-block;
+    cursor: pointer;
+}
 .upgrades-holder {
     width: 338px;
     height: 64px;
 }
-
 .upgrade-name {
     margin: 2px;
     color: black;
@@ -260,15 +267,6 @@ small {
 .upgrade-viewer-content {
     display: block;
     color: black;
-}
-
-.upgrade {
-    width: 64px;
-    height: 64px;
-    background-image: url(img/unknown-64-64.png);
-    margin: 0px;
-    display: none;
-    cursor: pointer;
 }
 
 /* random specific stuff */

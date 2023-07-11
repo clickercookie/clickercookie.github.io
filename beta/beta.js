@@ -28,50 +28,64 @@ core.buildingsOwned = 0;
 // upgrades
 const upgrades = {};
 
-upgrades.upgrade0 = {}, upgrades.upgrade1 = {}, upgrades.upgrade2 = {}, upgrades.upgrade3 = {}, upgrades.upgrade4 = {}, upgrades.upgrade5 = {}, upgrades.upgrade6 = {};
+// tad bit complex, documentation on this is coming
+upgrades.unlocked = [
+    0,0,0,0,0,
+    0,0,0,0,0,
+    0,0,0,0,0,
+    0,0,0,0,0,
+    0,0,0,0,0,
+    0,0,0,0,0,
+    0,0,0,0,0,
+];
+upgrades.bought = [
+    0,0,0,0,0,
+    0,0,0,0,0,
+    0,0,0,0,0,
+    0,0,0,0,0,
+    0,0,0,0,0,
+    0,0,0,0,0,
+    0,0,0,0,0,
+];
+upgrades.prices = [
+    100,500,10000,100000,10000000, // keyboard
+    1000,5000,50000,5000000,500000000, // grandpa
+    11000,55000,550000,55000000,5500000000, // ranch
+    120000,600000,6000000,600000000,60000000000, // television
+    1300000,6500000,65000000,6500000000,650000000000, // worker
+    14000000,70000000,700000000,70000000000,7000000000000, // wallet
+    200000000,1000000000,10000000000,1000000000000,100000000000000 // church
+];
+upgrades.names = [
+    "Reinforced Keys","Obsidian Keys","Osmium Keys","10 finger typing","keyboard5", // keyboard
+    "Hardwood Walking Stick","grandpa2","grandpa3","grandpa4","grandpa5", // grandpa
+    "Pig Slop","ranch2","ranch3","ranch4","ranch5", // ranch
+    "LED Display","television2","television3","television4","television5", // television
+    "Medkits","worker2","worker3","worker4","worker5", // worker
+    "200 dollar bills","wallet2","wallet3","wallet4","wallet5", // wallet
+    "church1","church2","church3","church4","church5", // church
+];
+upgrades.quotes = [
+    "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","temp", // keyboard
+    "nonna dat softwood junk","temp","temp","temp","temp", // grandpa
+    "Wait, what have we been feeding them before now?","temp","temp","temp","temp", // ranch
+    "World's greatest leap in digital technology","temp","temp","temp","temp", // television
+    "Constant supply of Band-Aids in case of emergency","temp","temp","temp","temp", // worker
+    "I'm sure the federal reserve will be okay with this...","temp","temp","temp","temp", // wallet
+    "temp","temp","temp","temp","temp", // church
+];
+upgrades.descriptions = ["Multiplys Keyboard and clicking cookie production by 2","Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
 
-upgrades.upgrade0.bought = 0;
-upgrades.upgrade1.bought = 0;
-upgrades.upgrade2.bought = 0;
-upgrades.upgrade3.bought = 0;
-upgrades.upgrade4.bought = 0;
-upgrades.upgrade5.bought = 0;
-upgrades.upgrade6.bought = 0;
+upgrades.upgradesBought = 0;
 
-upgrades.upgrade0.price = 100;
-upgrades.upgrade1.price = 1000;
-upgrades.upgrade2.price = 11000;
-upgrades.upgrade3.price = 120000;
-upgrades.upgrade4.price = 1300000;
-upgrades.upgrade5.price = 14000000;
-upgrades.upgrade6.price = 100;
-
-upgrades.info = {};
-upgrades.info.upgrade0 = {}, upgrades.info.upgrade1 = {}, upgrades.info.upgrade2 = {}, upgrades.info.upgrade3 = {}, upgrades.info.upgrade4 = {}, upgrades.info.upgrade5 = {}, upgrades.info.upgrade6 = {};
-
-upgrades.info.upgrade0.name = "Reinforced Keys";
-upgrades.info.upgrade1.name = "Hardwood Walking Stick";
-upgrades.info.upgrade2.name = "Pig Slop";
-upgrades.info.upgrade3.name = "LED Display";
-upgrades.info.upgrade4.name = "Medkits";
-upgrades.info.upgrade5.name = "200 dollar bills";
-upgrades.info.upgrade6.name = "null";
-upgrades.info.upgrade0.description = "Multiplys Keyboard and clicking cookie production by 2" + "<br>" + "<i>\"" + "press harder" + "\"</i>";
-upgrades.info.upgrade1.description = "Multiplys Grandpa production by 2" + "<br>" + "<i>\"" + "nonna dat softwood junk" + "\"</i>";
-upgrades.info.upgrade2.description = "Multiplys Ranch production by 2" + "<br>" + "<i>\"" + "Wait, what have we been feeding them before now?" + "\"</i>";
-upgrades.info.upgrade3.description = "Multiplys TV production by 2" + "<br>" + "<i>\"" + "World's greatest leap in digital technology" + "\"</i>";
-upgrades.info.upgrade4.description = "Multiplys Worker production by 2" + "<br>" + "<i>\"" + "Constant supply of Band-Aids in case of emergency" + "\"</i>";
-upgrades.info.upgrade5.description = "Multiplys Wallet production by 2" + "<br>" + "<i>\"" + "Don't know how the goverment is going to take to this currency" + "\"</i>";
-upgrades.info.upgrade6.description = "null";
+// buildings
+const buildings = {};
 
 let buildingInfoName = "Name";
 let buildingInfoPrice = 0;
 let buildingInfoQuote = "Quote";
 let buildingInfoProduces = 0;
 let buildingInfoProducing = 0;
-
-// buildings
-const buildings = {};
 
 // keyboards
 buildings.keyboard = {
@@ -154,6 +168,7 @@ let buttonDoWhat = "default";
 let hasCheated = 0;
 let won = 0;
 let mobile;
+let savingAllowed = true;
 
 // save stuff
 const saves = {};
@@ -164,7 +179,7 @@ saves.allToSave = ["core.cookies", "core.totalCookies", "core.cookiesPerSecond",
                 "buildings.keyboard.bought","buildings.grandpa.bought","buildings.ranch.bought","buildings.tv.bought","buildings.worker.bought","buildings.wallet.bought","buildings.church.bought",
                 "buildings.keyboard.CPSGain","buildings.grandpa.CPSGain","buildings.ranch.CPSGain","buildings.tv.CPSGain","buildings.worker.CPSGain","buildings.wallet.CPSGain","buildings.church.CPSGain",
                 "buildings.keyboard.upgradeCost","buildings.grandpa.upgradeCost","buildings.ranch.upgradeCost","buildings.tv.upgradeCost","buildings.worker.upgradeCost","buildings.wallet.upgradeCost","buildings.church.upgradeCost",
-                "upgrades.upgrade0.bought","upgrades.upgrade1.bought","upgrades.upgrade2.bought","upgrades.upgrade3.bought","upgrades.upgrade4.bought","upgrades.upgrade5.bought","upgrades.upgrade6.bought",
+                "upgrades.unlocked","upgrades.bought","upgrades.upgradesBought",
                 "core.cookiesPerClick","core.cookieBeenClickedTimes","core.buildingsOwned","grandmaPromptClicks","hasCheated","won","isModded","versionBranch"
 ];
 saves.defaultSavedValues = { // Should be self-explanatory. Doesn't have to be ordered like allToSave, but I would appreciate if it was.
@@ -173,7 +188,7 @@ saves.defaultSavedValues = { // Should be self-explanatory. Doesn't have to be o
     "buildings.keyboard.bought":0,"buildings.grandpa.bought":0,"buildings.ranch.bought":0,"buildings.tv.bought":0,"buildings.worker.bought":0,"buildings.wallet.bought":0,"buildings.church.bought":0,
     "buildings.keyboard.CPSGain":0.1,"buildings.grandpa.CPSGain":1,"buildings.ranch.CPSGain":8,"buildings.tv.CPSGain":47,"buildings.worker.CPSGain":260,"buildings.wallet.CPSGain":1440,"buildings.church.CPSGain":7800,
     "buildings.keyboard.upgradeCost":15,"buildings.grandpa.upgradeCost":100,"buildings.ranch.upgradeCost":1100,"buildings.tv.upgradeCost":12000,"buildings.worker.upgradeCost":130000,"buildings.wallet.upgradeCost":1400000,"buildings.church.upgradeCost":20000000,
-    "upgrades.upgrade0.bought":0,"upgrades.upgrade1.bought":0,"upgrades.upgrade2.bought":0,"upgrades.upgrade3.bought":0,"upgrades.upgrade4.bought":0,"upgrades.upgrade5.bought":0,"upgrades.upgrade6.bought":0,
+    "upgrades.unlocked":upgrades.unlocked,"upgrades.bought":upgrades.bought,"upgrades.upgradesBought":0,
     "core.cookiesPerClick":1,"core.cookieBeenClickedTimes":0,"core.buildingsOwned":0,"grandmaPromptClicks":0,"hasCheated":0,"won":0,"isModded":0,"versionBranch":versionBranch
 };
 saves.dataLoaded; // data from an auto-save (local storage)
@@ -272,6 +287,21 @@ core.initialization = function() {
         mobileOnHyperlink.appendChild(mobileOn);
         devDiv.appendChild(mobileOnHyperlink);
 
+        const br5 = document.createElement("br");
+        devDiv.appendChild(br5);
+
+        const toggleSaving = document.createElement("button");
+        toggleSaving.appendChild(document.createTextNode("Toggle Auto-Saving"));
+        toggleSaving.setAttribute("id","mousePosDevText");
+        toggleSaving.setAttribute("onclick","dev.toggleSaving()");
+        toggleSaving.setAttribute("style","margin-bottom:0px;");
+        devDiv.appendChild(toggleSaving);
+        const currentSavingStatus = document.createElement("p");
+        currentSavingStatus.appendChild(document.createTextNode("saving: true"));
+        currentSavingStatus.setAttribute("id","currentSavingStatus");
+        currentSavingStatus.setAttribute("style","margin-bottom:0px;");
+        devDiv.appendChild(currentSavingStatus);
+
         document.getElementById("leftSide").insertBefore(devDiv, document.getElementById("leftSidePush"));
 
         // version change
@@ -309,7 +339,7 @@ core.initialization = function() {
     }
 
     // Changelog Entries, AKA the messiest place ever.
-    createChangelogEntry("0.6",undefined,
+    createChangelogEntry("0.6",["The long awaited 5 upgrades for every single building. No upgrades are planned beyond this."],
     ["The saving system. Yes, 3rd time or something, but this time I GURANTEE it's going to stick.",
     "All changelog entries are now created with Javascript to cut down on the HTML size."],
     ["Centering of buildings bought was done stupidly, fixed now.",
@@ -412,22 +442,6 @@ core.initialization = function() {
     else {
         mobile = 0;
     }
-
-    // set default upgrades
-    if (!mobile || !desktop) {
-        document.getElementById("upgrade0").style.backgroundImage = "url(img/upgrades/reinforced-keys.png)";
-        document.getElementById("upgrade1").style.backgroundImage = "url(img/upgrades/hardwood-walking-stick.png)";
-        document.getElementById("upgrade2").style.backgroundImage = "url(img/upgrades/ranch-upgrade1.png)";
-        document.getElementById("upgrade3").style.backgroundImage = "url(img/upgrades/tv-upgrade1.png)";
-        document.getElementById("upgrade4").style.backgroundImage = "url(img/upgrades/worker-upgrade1.png)";
-    }
-    if (mobile || desktop) {
-        document.getElementById("upgrade0").style.backgroundImage = "url(../img/upgrades/reinforced-keys.png)";
-        document.getElementById("upgrade1").style.backgroundImage = "url(../img/upgrades/hardwood-walking-stick.png)";
-        document.getElementById("upgrade2").style.backgroundImage = "url(../img/upgrades/ranch-upgrade1.png)";
-        document.getElementById("upgrade3").style.backgroundImage = "url(../img/upgrades/tv-upgrade1.png)";
-        document.getElementById("upgrade4").style.backgroundImage = "url(../img/upgrades/worker-upgrade1.png)";
-    }
     
     // this would go after data is loaded, but it requires the mobile variable to be assigned a value
     if (isModded == 1 && mobile == 0) {
@@ -449,11 +463,10 @@ window.addEventListener('mousemove', (event) => {
 
 let buildingInfoYPos = `${mousePos.y}` - 50;
 
-
 // timer things
 const intervalCPSU = setInterval(cookiesPerSecondUpdate, 1000);
 const perMillisecondUniversalVar = setInterval(perMillisecondUniversal, 1);
-const autoSaveInterval = setInterval(saves.autoSave, 60 * 1000);
+const autoSaveInterval = setInterval(autoSaveIntervalFunc, 60 * 1000);
 
 function perMillisecondUniversal() {
     variableView.cookiesView = Math.round(core.cookies * 10) / 10;
@@ -467,30 +480,7 @@ function perMillisecondUniversal() {
     helper.reloadCPSCounter();
     helper.reloadCookieCounter();
 
-    // Upgrade Unlocks (very long) (changes accepted) (create a github pull request)
-        // Keyboards
-        if (buildings.keyboard.bought >= 1 && upgrades.upgrade0.bought == 0) {
-            document.getElementById("upgrade0").style.display = "inline-block";
-        }
-        if (buildings.keyboard.bought >= 5 && upgrades.upgrade0.bought == 1) {
-            upgrades.create("upgrade0","Obsidian Keys","Multiplys keyboard and clicking " + personalization.currentClickedLowercasePlural + " by 2","so heavy they're always pressed",500,"img/upgrades/obsidian-keys.png");
-        }
-        // Grandpas
-        if (buildings.grandpa.bought >= 1 && upgrades.upgrade1.bought == 0) {
-            document.getElementById("upgrade1").style.display = "inline-block";
-        }
-        // Ranches
-        if (buildings.ranch.bought >= 1 && upgrades.upgrade2.bought == 0) {
-            document.getElementById("upgrade2").style.display = "inline-block";
-        }
-        // TVs
-        if (buildings.tv.bought >= 1 && upgrades.upgrade3.bought == 0) {
-            document.getElementById("upgrade3").style.display = "inline-block";
-        }
-        // Workers
-        if (buildings.worker.bought >= 1 && upgrades.upgrade4.bought == 0) {
-            document.getElementById("upgrade4").style.display = "inline-block";
-        }
+    upgrades.checkUpgradeAvailability();
 
     // building unlocks
     if (core.totalCookies >= 100) {
@@ -580,6 +570,7 @@ function perMillisecondUniversal() {
         document.getElementById("cookiesPerSecondStat").innerHTML = personalization.currentClickedPlural + " Per Second: " + helper.commaify(variableView.cookiesPerSecondView);
         document.getElementById("buildingsOwnedStat").innerHTML = "Buildings Owned: " + helper.commaify(core.buildingsOwned);
         document.getElementById("cookieBeenClickedTimesStat").innerHTML = "Total " + personalization.currentClicked + " Clicks: " + helper.commaify(core.cookieBeenClickedTimes); // move to cookieClicked() later
+        document.getElementById("upgradesBoughtStat").innerHTML = `Upgrades Bought: ${upgrades.upgradesBought}`;
     }
 
     // set number of bought to bought (not required unless number of bought is set in console)
@@ -598,6 +589,13 @@ function cookiesPerSecondUpdate() {
     core.cookies = core.cookies + core.cookiesPerSecond;
     core.totalCookies = core.totalCookies + core.cookiesPerSecond;
     helper.reloadCookieCounter();
+}
+
+function autoSaveIntervalFunc() { // Turns out this is required and that the game hasn't been auto-saving ever since Objects Everywhere...
+    if (!savingAllowed) {
+        return false;
+    }
+    saves.autoSave();
 }
 
 // ------------------------------------
@@ -621,7 +619,6 @@ dev.beginGrandma = function() {
         console.log("You need developer mode ON to run this command.");
     }
 }
-
 dev.ignoreGrandma = function() {
     if (dev.devMode == 1) {
         grandmaPromptClicks = 10;
@@ -632,7 +629,6 @@ dev.ignoreGrandma = function() {
         console.log("You need developer mode ON to run this command.");
     }
 }
-
 dev.setCookies = function(x) {
     if (dev.devMode == 1) {
         core.cookies = x;
@@ -646,7 +642,6 @@ dev.setCookies = function(x) {
         console.log("You need developer mode ON to run this command.");
     }
 }
-
 dev.setCPS = function(x) {
     if (dev.devMode == 1) {
         dev.CPSGiven = x;
@@ -657,6 +652,20 @@ dev.setCPS = function(x) {
         dev.ignoreGrandma();
     }
     else {
+        console.log("You need developer mode ON to run this command.");
+    }
+}
+dev.toggleSaving = function() {
+    if (this.devMode) {
+        if (savingAllowed) {
+            savingAllowed = false;
+        }
+        else {
+            savingAllowed = true;
+        }
+        if (!inDevelopment) {return;}
+        document.getElementById("currentSavingStatus").innerHTML = "saving: "+savingAllowed;
+    } else {
         console.log("You need developer mode ON to run this command.");
     }
 }
@@ -672,7 +681,9 @@ function versionSwitch() {
     }
 }
 
-// buildings
+// ------------------------------------
+// Buildings
+// ------------------------------------
 buildings.keyboard.buy = function() {
     if (core.cookies >= buildings.keyboard.upgradeCost) {
         core.cookies -= buildings.keyboard.upgradeCost;
@@ -765,251 +776,242 @@ buildings.church.buy = function() {
     }
 }
 
-// managing upgrades
-upgrades.create = function(identifier,name,description,quote,price,img) {
-    switch (identifier) {
-        case "upgrade0":
-            document.getElementById("upgrade0").style.display = "inline-block";
-            upgrades.info.upgrade0.name = name;
-            upgrades.info.upgrade0.description = description + "<br>" + "<i>\"" + quote + "\"</i>";
-            upgrades.upgrade0.price = price;
-            if (!mobile) {
-                document.getElementById("upgrade0").style.backgroundImage = "url(" + img + ")";
-            }
-            if (mobile || desktop) {
-                document.getElementById("upgrade0").style.backgroundImage = "url(../" + img + ")";
-            }
+buildings.hovered = function(building) {
+    switch (building) {
+        case "keyboard":
+            buildingInfoName = "Keyboard";
+            buildingInfoPrice = helper.commaify(buildings.keyboard.upgradeCost);
+            buildingInfoQuote = "type in cookies";
+            buildingInfoProduces = helper.commaify(buildings.keyboard.CPSGain);
+            buildingInfoProducing = helper.commaify(Math.round(buildings.keyboard.CPSGiven * 10) / 10);
             break;
-        case "upgrade1":
-            document.getElementById("upgrade1").style.display = "inline-block";
-            upgrades.info.upgrade1.name = name;
-            upgrades.info.upgrade1.description = description + "<br>" + "<i>\"" + quote + "\"</i>";
-            upgrades.upgrade1.price = price;
-            if (!mobile) {
-                document.getElementById("upgrade1").style.backgroundImage = "url(" + img + ")";
-            }
-            if (mobile || desktop) {
-                document.getElementById("upgrade1").style.backgroundImage = "url(../" + img + ")";
-            }
+        case "grandpa":
+            buildingInfoName = "Grandpa";
+            buildingInfoPrice = helper.commaify(buildings.grandpa.upgradeCost);
+            buildingInfoQuote = "as long as gramps gets a cut";
+            buildingInfoProduces = helper.commaify(buildings.grandpa.CPSGain);
+            buildingInfoProducing = helper.commaify(Math.round(buildings.grandpa.CPSGiven * 10) / 10);
             break;
-        case "upgrade2":
-            document.getElementById("upgrade2").style.display = "inline-block";
-            upgrades.info.upgrade2.name = name;
-            upgrades.info.upgrade2.description = description + "<br>" + "<i>\"" + quote + "\"</i>";
-            upgrades.upgrade2.price = price;
-            if (!mobile) {
-                document.getElementById("upgrade2").style.backgroundImage = "url(" + img + ")";
-            }
-            if (mobile || desktop) {
-                document.getElementById("upgrade2").style.backgroundImage = "url(../" + img + ")";
-            }
+        case "ranch":
+            buildingInfoName = "Ranch";
+            buildingInfoPrice = helper.commaify(buildings.ranch.upgradeCost);
+            buildingInfoQuote = "Not the dressing kind";
+            buildingInfoProduces = helper.commaify(buildings.ranch.CPSGain);
+            buildingInfoProducing = helper.commaify(Math.round(buildings.ranch.CPSGiven * 10) / 10);
             break;
-        case "upgrade3":
-            document.getElementById("upgrade3").style.display = "inline-block";
-            upgrades.info.upgrade3.name = name;
-            upgrades.info.upgrade3.description = description + "<br>" + "<i>\"" + quote + "\"</i>";
-            upgrades.upgrade3.price = price;
-            if (!mobile) {
-                document.getElementById("upgrade3").style.backgroundImage = "url(" + img + ")";
-            }
-            if (mobile || desktop) {
-                document.getElementById("upgrade3").style.backgroundImage = "url(../" + img + ")";
-            }
+        case "tv":
+            buildingInfoName = "Television";
+            buildingInfoPrice = helper.commaify(buildings.tv.upgradeCost);
+            buildingInfoQuote = "hold infomercials on your cookies";
+            buildingInfoProduces = helper.commaify(buildings.tv.CPSGain);
+            buildingInfoProducing = helper.commaify(Math.round(buildings.tv.CPSGiven * 10) / 10);
             break;
-        case "upgrade4":
-            document.getElementById("upgrade4").style.display = "inline-block";
-            upgrades.info.upgrade4.name = name;
-            upgrades.info.upgrade4.description = description + "<br>" + "<i>\"" + quote + "\"</i>";
-            upgrades.upgrade4.price = price;
-            if (!mobile) {
-                document.getElementById("upgrade4").style.backgroundImage = "url(" + img + ")";
-            }
-            if (mobile || desktop) {
-                document.getElementById("upgrade4").style.backgroundImage = "url(../" + img + ")";
-            }
+        case "worker":
+            buildingInfoName = "Worker";
+            buildingInfoPrice = helper.commaify(buildings.worker.upgradeCost);
+            buildingInfoQuote = "cookies via manual labor";
+            buildingInfoProduces = helper.commaify(buildings.worker.CPSGain);
+            buildingInfoProducing = helper.commaify(Math.round(buildings.worker.CPSGiven * 10) / 10);
             break;
-        case "upgrade5":
-            document.getElementById("upgrade5").style.display = "inline-block";
-            upgrades.info.upgrade5.name = name;
-            upgrades.info.upgrade5.description = description + "<br>" + "<i>\"" + quote + "\"</i>";
-            upgrades.upgrade5.price = price;
-            if (!mobile) {
-                document.getElementById("upgrade5").style.backgroundImage = "url(" + img + ")";
-            }
-            if (mobile || desktop) {
-                document.getElementById("upgrade5").style.backgroundImage = "url(../" + img + ")";
-            }
+        case "wallet":
+            buildingInfoName = "Wallet";
+            buildingInfoPrice = helper.commaify(buildings.wallet.upgradeCost);
+            buildingInfoQuote = "store cookies and make interest?"; // CHANGE ME
+            buildingInfoProduces = helper.commaify(buildings.wallet.CPSGain);
+            buildingInfoProducing = helper.commaify(Math.round(buildings.wallet.CPSGiven * 10) / 10);
             break;
-        case "upgrade6":
-            document.getElementById("upgrade6").style.display = "inline-block";
-            upgrades.info.upgrade6.name = name;
-            upgrades.info.upgrade6.description = description + "<br>" + "<i>\"" + quote + "\"</i>";
-            upgrades.upgrade6.price = price;
-            if (!mobile) {
-                document.getElementById("upgrade6").style.backgroundImage = "url(" + img + ")";
-            }
-            if (mobile || desktop) {
-                document.getElementById("upgrade6").style.backgroundImage = "url(../" + img + ")";
-            }
-            break;
-        default:
-            helper.popup.createSimple(300,150,"<i>huh, what just happened?</i> <br> A fatal error occured: upgrade identifier is invalid!<br>Please report this to the GitHub accessable in the bottom left corner",true,"default","",false,true);
+        case "church":
+            buildingInfoName = "Church";
+            buildingInfoPrice = helper.commaify(buildings.church.upgradeCost);
+            buildingInfoQuote = "pray to the almighty cookie gods";
+            buildingInfoProduces = helper.commaify(buildings.church.CPSGain);
+            buildingInfoProducing = helper.commaify(Math.round(buildings.church.CPSGiven * 10) / 10);
             break;
     }
+    if (!mobile) {
+        document.getElementById("buildingInfoName").innerHTML = buildingInfoName;
+        document.getElementById("buildingInfoPrice").innerHTML = "Price: " + buildingInfoPrice;
+        document.getElementById("buildingInfoQuote").innerHTML = "\""+buildingInfoQuote+"\"";
+        document.getElementById("buildingInfoProduces").innerHTML = "Produces: "+buildingInfoProduces+" CPS";
+        document.getElementById("buildingInfoProducing").innerHTML = "Producing: "+ buildingInfoProducing+" CPS";
+    }
+
+    document.getElementById("buildingInfo").style.display = "block";
 }
-upgrades.destroy = function(identifier) {
-    switch (identifier) {
-        case "upgrade0":
-            document.getElementById("upgrade0").style.display = "none";
-            break;
-        case "upgrade1":
-            document.getElementById("upgrade1").style.display = "none";
-            break;
-        case "upgrade2":
-            document.getElementById("upgrade2").style.display = "none";
-            break;
-        case "upgrade3":
-            document.getElementById("upgrade3").style.display = "none";
-            break;
-        case "upgrade4":
-            document.getElementById("upgrade4").style.display = "none";
-            break;
-        case "upgrade5":
-            document.getElementById("upgrade5").style.display = "none";
-            break;
-        case "upgrade6":
-            document.getElementById("upgrade6").style.display = "none";
-            break;
-        default:
-            helper.popup.createSimple(300,150,"<i>huh, what just happened?</i> <br> A fatal error occured: upgrade identifier is invalid for destroyed upgrade!<br>Please report this to the GitHub accessable in the bottom left corner",true,"default","",false,true);
-            break;
+buildings.undoHover = function() {
+    document.getElementById("buildingInfo").style.display = "none";
+}
+
+// ------------------------------------
+// Upgrades
+// ------------------------------------
+upgrades.create = function(id,icon) {
+    let building;
+    if (id >= 0) {
+        building = 0;
+    }
+    if (id >= 5) {
+        building = 1;
+    }
+    if (id >= 10) {
+        building = 2;
+    }
+    if (id >= 15) {
+        building = 3;
+    }
+    if (id >= 20) {
+        building = 4;
+    }
+    if (id >= 25) {
+        building = 5;
+    }
+    if (id >= 30) {
+        building = 6;
+    }
+
+    const upgrade = document.createElement("div");
+    upgrade.setAttribute("class","upgrade");
+    upgrade.setAttribute("id",`upgrade${id}`)
+    upgrade.setAttribute("onclick",`upgrades.clicked(${id},${building})`);
+    upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building})`);
+    upgrade.setAttribute("onmouseout","upgrades.undoHover()")
+    if (icon === undefined) {
+        if (!mobile) {
+            upgrade.style.backgroundImage = "url(img/unknown-64-64.png)";
+        }
+        if (mobile || desktop) {
+            upgrade.style.backgroundImage = "url(../img/unknown-64-64.png)";
+        }
+    } else {
+        if (!mobile) {
+            upgrade.style.backgroundImage = `url(img/upgrades/${icon})`;
+        }
+        if (mobile || desktop) {
+            upgrade.style.backgroundImage = `url(../img/upgrades/${icon})`;
+        }
+    }
+
+    document.getElementById("upgradesHolder").appendChild(upgrade);
+}
+
+upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
+    switch (building) {
+    case 0:
+        if (core.cookies >= upgrades.prices[id]) {
+            core.cookies -= upgrades.prices[id];
+            buildings.keyboard.CPSGiven *= 2;
+            buildings.keyboard.CPSGain *= 2;
+            core.cookiesPerClick *= 2;
+            upgrades.bought[id] = 1;
+            if (!mobile) {
+                upgrades.hovered(id,building);
+            }
+            upgrades.destroy(id);
+            upgrades.upgradesBought += 1;
+        }
+        break;
+    case 1:
+        if (core.cookies >= upgrades.prices[id]) {
+            core.cookies -= upgrades.prices[id];
+            buildings.grandpa.CPSGiven *= 2;
+            buildings.grandpa.CPSGain *= 2;
+            upgrades.bought[id] = 1;
+            if (!mobile) {
+                upgrades.hovered(id,building);
+            }
+            upgrades.destroy(id);
+            upgrades.upgradesBought += 1;
+        }
+        break;
+    case 2:
+        if (core.cookies >= upgrades.prices[id]) {
+            core.cookies -= upgrades.prices[id];
+            buildings.ranch.CPSGiven *= 2;
+            buildings.ranch.CPSGain *= 2;
+            upgrades.bought[id] = 1;
+            if (!mobile) {
+                upgrades.hovered(id,building);
+            }
+            upgrades.destroy(id);
+            upgrades.upgradesBought += 1;
+        }
+        break;
+    case 3:
+        if (core.cookies >= upgrades.prices[id]) {
+            core.cookies -= upgrades.prices[id];
+            buildings.tv.CPSGiven *= 2;
+            buildings.tv.CPSGain *= 2;
+            upgrades.bought[id] = 1;
+            if (!mobile) {
+                upgrades.hovered(id,building);
+            }
+            upgrades.destroy(id);
+            upgrades.upgradesBought += 1;
+        }
+        break;
+    case 4:
+        if (core.cookies >= upgrades.prices[id]) {
+            core.cookies -= upgrades.prices[id];
+            buildings.worker.CPSGiven *= 2;
+            buildings.worker.CPSGain *= 2;
+            upgrades.bought[id] = 1;
+            if (!mobile) {
+                upgrades.hovered(id,building);
+            }
+            upgrades.destroy(id);
+            upgrades.upgradesBought += 1;
+        }
+        break;
+    case 5:
+        if (core.cookies >= upgrades.prices[id]) {
+            core.cookies -= upgrades.prices[id];
+            buildings.wallet.CPSGiven *= 2;
+            buildings.wallet.CPSGain *= 2;
+            upgrades.bought[id] = 1;
+            if (!mobile) {
+                upgrades.hovered(id,building);
+            }
+            upgrades.destroy(id);
+            upgrades.upgradesBought += 1;
+        }
+        break;
+    case 6:
+        if (core.cookies >= upgrades.prices[id]) {
+            core.cookies -= upgrades.prices[id];
+            buildings.church.CPSGiven *= 2;
+            buildings.church.CPSGain *= 2;
+            upgrades.bought[id] = 1;
+            if (!mobile) {
+                upgrades.hovered(id,building);
+            }
+            upgrades.destroy(id);
+            upgrades.upgradesBought += 1;
+        }
+        break;
     }
 }
 
-upgrades.upgrade0.clicked = function() {
-    if (core.cookies >= upgrades.upgrade0.price) {
-        core.cookies -= upgrades.upgrade0.price;
-        buildings.keyboard.CPSGiven *= 2;
-        buildings.keyboard.CPSGain *= 2;
-        core.cookiesPerClick *= 2;
-        upgrades.upgrade0.bought += 1;
-        if (!mobile) {
-            upgrades.hovered("upgrade0");
-        }
-        upgrades.destroy("upgrade0");
+upgrades.destroy = function(id) {
+    document.getElementById(`upgrade${id}`).remove();
+    if (!mobile) {
+        upgrades.undoHover();
     }
 }
-upgrades.upgrade1.clicked = function() {
-    if (core.cookies >= upgrades.upgrade1.price) {
-        core.cookies -= upgrades.upgrade1.price;
-        buildings.grandpa.CPSGiven *= 2;
-        buildings.grandpa.CPSGain *= 2;
-        upgrades.upgrade1.bought += 1;
-        if (!mobile) {
-            upgrades.hovered("upgrade1");
+upgrades.destroyAll = function() {
+    for (i = 0; i < upgrades.unlocked.length; i++) {
+        try {
+            document.getElementById(`upgrade${i}`).remove();
+        } catch {
+            continue
         }
-        upgrades.destroy("upgrade1");
-    }
-}
-upgrades.upgrade2.clicked = function() {
-    if (core.cookies >= upgrades.upgrade2.price) {
-        core.cookies -= upgrades.upgrade2.price;
-        buildings.ranch.CPSGiven *= 2;
-        buildings.ranch.CPSGain *= 2;
-        upgrades.upgrade2.bought += 1;
-        if (!mobile) {
-            upgrades.hovered("upgrade1");
-        }
-        upgrades.destroy("upgrade2");
-    }
-}
-upgrades.upgrade3.clicked = function() {
-    if (core.cookies >= upgrades.upgrade3.price) {
-        core.cookies -= upgrades.upgrade3.price;
-        buildings.tv.CPSGiven *= 2;
-        buildings.tv.CPSGain *= 2;
-        upgrades.upgrade3.bought += 1;
-        if (!mobile) {
-            upgrades.hovered("upgrade3");
-        }
-        upgrades.destroy("upgrade3");
-    }
-}
-upgrades.upgrade4.clicked = function() {
-    if (core.cookies >= upgrades.upgrade4.price) {
-        core.cookies -= upgrades.upgrade4.price;
-        buildings.worker.CPSGiven *= 2;
-        buildings.worker.CPSGain *= 2;
-        upgrades.upgrade4.bought += 1;
-        if (!mobile) {
-            upgrades.hovered("upgrade4");
-        }
-        upgrades.destroy("upgrade4");
-    }
-}
-upgrades.upgrade5.clicked = function() {
-    if (core.cookies >= upgrades.upgrade5.price) {
-        core.cookies -= upgrades.upgrade5.price;
-        buildings.wallet.CPSGiven *= 2;
-        buildings.wallet.CPSGain *= 2;
-        upgrades.upgrade5.bought += 1;
-        if (!mobile) {
-            upgrades.hovered("upgrade5");
-        }
-        upgrades.destroy("upgrade5");
-    }
-}
-upgrades.upgrade6.clicked = function() {
-    if (core.cookies >= upgrades.upgrade6.price) {
-        core.cookies -= upgrades.upgrade6.price;
-        buildings.church.CPSGiven *= 2;
-        buildings.church.CPSGain *= 2;
-        upgrades.upgrade6.bought += 1;
-        if (!mobile) {
-            upgrades.hovered("upgrade6");
-        }
-        upgrades.destroy("upgrade6");
     }
 }
 
-upgrades.hovered = function(upgrade) {
-    switch (upgrade) {
-        case "upgrade0":
-            document.getElementById("upgradeName").innerHTML = "Name: " + upgrades.info.upgrade0.name;
-            document.getElementById("upgradePrice").innerHTML = "Price: " + helper.commaify(upgrades.upgrade0.price);
-            document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrades.info.upgrade0.description;
-            break;
-        case "upgrade1":
-            document.getElementById("upgradeName").innerHTML = "Name: " + upgrades.info.upgrade1.name;
-            document.getElementById("upgradePrice").innerHTML = "Price: " + helper.commaify(upgrades.upgrade1.price);
-            document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrades.info.upgrade1.description;
-            break;
-        case "upgrade2":
-            document.getElementById("upgradeName").innerHTML = "Name: " + upgrades.info.upgrade2.name;
-            document.getElementById("upgradePrice").innerHTML = "Price: " + helper.commaify(upgrades.upgrade2.price);
-            document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrades.info.upgrade2.description;
-            break;
-        case "upgrade3":
-            document.getElementById("upgradeName").innerHTML = "Name: " + upgrades.info.upgrade3.name;
-            document.getElementById("upgradePrice").innerHTML = "Price: " + helper.commaify(upgrades.upgrade3.price);
-            document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrades.info.upgrade3.description;
-            break;
-        case "upgrade4":
-            document.getElementById("upgradeName").innerHTML = "Name: " + upgrades.info.upgrade4.name;
-            document.getElementById("upgradePrice").innerHTML = "Price: " + helper.commaify(upgrades.upgrade4.price);
-            document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrades.info.upgrade4.description;
-            break;
-        case "upgrade5":
-            document.getElementById("upgradeName").innerHTML = "Name: " + upgrades.info.upgrade5.name;
-            document.getElementById("upgradePrice").innerHTML = "Price: " + helper.commaify(upgrades.upgrade5.price);
-            document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrades.info.upgrade5.description;
-            break;
-        case "upgrade6":
-            document.getElementById("upgradeName").innerHTML = "Name: " + upgrades.info.upgrade6.name;
-            document.getElementById("upgradePrice").innerHTML = "Price: " + helper.commaify(upgrades.upgrade6.price);
-            document.getElementById("upgradeDesc").innerHTML = "Description: " + upgrades.info.upgrade6.description;
-            break;
-    }
+upgrades.hovered = function(id,building) {
+    document.getElementById("upgradeName").innerHTML = "Name: " + upgrades.names[id];
+    document.getElementById("upgradePrice").innerHTML = "Price: " + helper.commaify(upgrades.prices[id])
+    document.getElementById("upgradeDesc").innerHTML = `Description: ${upgrades.descriptions[building]} <br> <i>\"${upgrades.quotes[id]}\"</i>`;
+
     document.getElementById("upgradeViewer").style.display = "block";
     document.getElementById("upgradeViewer").style.float = "right";
 }
@@ -1017,8 +1019,202 @@ upgrades.undoHover = function() {
     document.getElementById("upgradeName").innerHTML = "Name: ";
     document.getElementById("upgradePrice").innerHTML = "Price: ";
     document.getElementById("upgradeDesc").innerHTML = "Description: ";
+
     document.getElementById("upgradeViewer").style.display = "none";
     document.getElementById("upgradeViewer").style.float = "right";
+}
+upgrades.showUnlocked = function() { // yes it's terrible, don't judge me
+    // Keyboards
+    if (upgrades.unlocked[0] == 1 && upgrades.bought[0] != 1) {upgrades.create(0,"reinforced-keys.png");}
+    if (upgrades.unlocked[1] == 1 && upgrades.bought[1] != 1) {upgrades.create(1,"obsidian-keys.png");}
+    if (upgrades.unlocked[2] == 1 && upgrades.bought[2] != 1) {upgrades.create(2);}
+    if (upgrades.unlocked[3] == 1 && upgrades.bought[3] != 1) {upgrades.create(3);}
+    if (upgrades.unlocked[4] == 1 && upgrades.bought[4] != 1) {upgrades.create(4);}
+    // Grandpas
+    if (upgrades.unlocked[5] == 1 && upgrades.bought[5] != 1) {upgrades.create(5,"hardwood-walking-stick.png");}
+    if (upgrades.unlocked[6] == 1 && upgrades.bought[6] != 1) {upgrades.create(6);}
+    if (upgrades.unlocked[7] == 1 && upgrades.bought[7] != 1) {upgrades.create(7);}
+    if (upgrades.unlocked[8] == 1 && upgrades.bought[8] != 1) {upgrades.create(8);}
+    if (upgrades.unlocked[9] == 1 && upgrades.bought[9] != 1) {upgrades.create(9);}
+    // Ranches
+    if (upgrades.unlocked[10] == 1 && upgrades.bought[10] != 1) {upgrades.create(10,"ranch-upgrade1.png");}
+    if (upgrades.unlocked[11] == 1 && upgrades.bought[11] != 1) {upgrades.create(11);}
+    if (upgrades.unlocked[12] == 1 && upgrades.bought[12] != 1) {upgrades.create(12);}
+    if (upgrades.unlocked[13] == 1 && upgrades.bought[13] != 1) {upgrades.create(13);}
+    if (upgrades.unlocked[14] == 1 && upgrades.bought[14] != 1) {upgrades.create(14);}
+    // Televisions
+    if (upgrades.unlocked[15] == 1 && upgrades.bought[15] != 1) {upgrades.create(15,"tv-upgrade1.png");}
+    if (upgrades.unlocked[16] == 1 && upgrades.bought[16] != 1) {upgrades.create(16);}
+    if (upgrades.unlocked[17] == 1 && upgrades.bought[17] != 1) {upgrades.create(17);}
+    if (upgrades.unlocked[18] == 1 && upgrades.bought[18] != 1) {upgrades.create(18);}
+    if (upgrades.unlocked[19] == 1 && upgrades.bought[19] != 1) {upgrades.create(19);}
+    // Workers
+    if (upgrades.unlocked[20] == 1 && upgrades.bought[20] != 1) {upgrades.create(20,"worker-upgrade1.png");}
+    if (upgrades.unlocked[21] == 1 && upgrades.bought[21] != 1) {upgrades.create(21);}
+    if (upgrades.unlocked[22] == 1 && upgrades.bought[22] != 1) {upgrades.create(22);}
+    if (upgrades.unlocked[23] == 1 && upgrades.bought[23] != 1) {upgrades.create(23);}
+    if (upgrades.unlocked[24] == 1 && upgrades.bought[24] != 1) {upgrades.create(24);}
+    // Wallets
+    if (upgrades.unlocked[25] == 1 && upgrades.bought[25] != 1) {upgrades.create(25);}
+    if (upgrades.unlocked[26] == 1 && upgrades.bought[26] != 1) {upgrades.create(26);}
+    if (upgrades.unlocked[27] == 1 && upgrades.bought[27] != 1) {upgrades.create(27);}
+    if (upgrades.unlocked[28] == 1 && upgrades.bought[28] != 1) {upgrades.create(28);}
+    if (upgrades.unlocked[29] == 1 && upgrades.bought[29] != 1) {upgrades.create(29);}
+    // Churches
+    if (upgrades.unlocked[30] == 1 && upgrades.bought[30] != 1) {upgrades.create(30);}
+    if (upgrades.unlocked[31] == 1 && upgrades.bought[31] != 1) {upgrades.create(31);}
+    if (upgrades.unlocked[32] == 1 && upgrades.bought[32] != 1) {upgrades.create(32);}
+    if (upgrades.unlocked[33] == 1 && upgrades.bought[33] != 1) {upgrades.create(33);}
+    if (upgrades.unlocked[34] == 1 && upgrades.bought[34] != 1) {upgrades.create(34);}
+}
+upgrades.checkUpgradeAvailability = function() { // Upgrade Unlocks (very long, changes would be greatly appreciated!)
+    // Keyboards
+    if (buildings.keyboard.bought >= 1 && upgrades.unlocked[0] == 0) {
+        upgrades.unlocked[0] = 1;
+        upgrades.create(0,"reinforced-keys.png");
+    }
+    if (buildings.keyboard.bought >= 5 && upgrades.unlocked[1] == 0) {
+        upgrades.unlocked[1] = 1;
+        upgrades.create(1,"obsidian-keys.png");
+    }
+    if (buildings.keyboard.bought >= 10 && upgrades.unlocked[2] == 0) {
+        upgrades.unlocked[2] = 1;
+        upgrades.create(2);
+    }
+    if (buildings.keyboard.bought >= 25 && upgrades.unlocked[3] == 0) {
+        upgrades.unlocked[3] = 1;
+        upgrades.create(3);
+    }
+    if (buildings.keyboard.bought >= 50 && upgrades.unlocked[4] == 0) {
+        upgrades.unlocked[4] = 1;
+        upgrades.create(4);
+    }
+    // Grandpas
+    if (buildings.grandpa.bought >= 1 && upgrades.unlocked[5] == 0) {
+        upgrades.unlocked[5] = 1;
+        upgrades.create(5,"hardwood-walking-stick.png");
+    }
+    if (buildings.grandpa.bought >= 5 && upgrades.unlocked[6] == 0) {
+        upgrades.unlocked[6] = 1;
+        upgrades.create(6);
+    }
+    if (buildings.grandpa.bought >= 10 && upgrades.unlocked[7] == 0) {
+        upgrades.unlocked[7] = 1;
+        upgrades.create(7);
+    }
+    if (buildings.grandpa.bought >= 25 && upgrades.unlocked[8] == 0) {
+        upgrades.unlocked[8] = 1;
+        upgrades.create(8);
+    }
+    if (buildings.grandpa.bought >= 50 && upgrades.unlocked[9] == 0) {
+        upgrades.unlocked[9] = 1;
+        upgrades.create(9);
+    }
+    // Ranches
+    if (buildings.ranch.bought >= 1 && upgrades.unlocked[10] == 0) {
+        upgrades.unlocked[10] = 1;
+        upgrades.create(10,"ranch-upgrade1.png");
+    }
+    if (buildings.ranch.bought >= 5 && upgrades.unlocked[11] == 0) {
+        upgrades.unlocked[11] = 1;
+        upgrades.create(11);
+    }
+    if (buildings.ranch.bought >= 10 && upgrades.unlocked[12] == 0) {
+        upgrades.unlocked[12] = 1;
+        upgrades.create(12);
+    }
+    if (buildings.ranch.bought >= 25 && upgrades.unlocked[13] == 0) {
+        upgrades.unlocked[13] = 1;
+        upgrades.create(13);
+    }
+    if (buildings.ranch.bought >= 50 && upgrades.unlocked[14] == 0) {
+        upgrades.unlocked[14] = 1;
+        upgrades.create(14);
+    }
+    // TVs
+    if (buildings.tv.bought >= 1 && upgrades.unlocked[15] == 0) {
+        upgrades.unlocked[15] = 1;
+        upgrades.create(15,"tv-upgrade1.png");
+    }
+    if (buildings.tv.bought >= 5 && upgrades.unlocked[16] == 0) {
+        upgrades.unlocked[16] = 1;
+        upgrades.create(16);
+    }
+    if (buildings.tv.bought >= 10 && upgrades.unlocked[17] == 0) {
+        upgrades.unlocked[17] = 1;
+        upgrades.create(17);
+    }
+    if (buildings.tv.bought >= 25 && upgrades.unlocked[18] == 0) {
+        upgrades.unlocked[18] = 1;
+        upgrades.create(18);
+    }
+    if (buildings.tv.bought >= 50 && upgrades.unlocked[19] == 0) {
+        upgrades.unlocked[19] = 1;
+        upgrades.create(19);
+    }
+    // Workers
+    if (buildings.worker.bought >= 1 && upgrades.unlocked[20] == 0) {
+        upgrades.unlocked[20] = 1;
+        upgrades.create(20,"worker-upgrade1.png");
+    }
+    if (buildings.worker.bought >= 5 && upgrades.unlocked[21] == 0) {
+        upgrades.unlocked[21] = 1;
+        upgrades.create(21);
+    }
+    if (buildings.worker.bought >= 10 && upgrades.unlocked[22] == 0) {
+        upgrades.unlocked[22] = 1;
+        upgrades.create(22);
+    }
+    if (buildings.worker.bought >= 25 && upgrades.unlocked[23] == 0) {
+        upgrades.unlocked[23] = 1;
+        upgrades.create(23);
+    }
+    if (buildings.worker.bought >= 50 && upgrades.unlocked[24] == 0) {
+        upgrades.unlocked[24] = 1;
+        upgrades.create(24);
+    }
+    // Wallets
+    if (buildings.wallet.bought >= 1 && upgrades.unlocked[25] == 0) {
+        upgrades.unlocked[25] = 1;
+        upgrades.create(25);
+    }
+    if (buildings.wallet.bought >= 5 && upgrades.unlocked[26] == 0) {
+        upgrades.unlocked[26] = 1;
+        upgrades.create(26);
+    }
+    if (buildings.wallet.bought >= 10 && upgrades.unlocked[27] == 0) {
+        upgrades.unlocked[27] = 1;
+        upgrades.create(27);
+    }
+    if (buildings.wallet.bought >= 25 && upgrades.unlocked[28] == 0) {
+        upgrades.unlocked[28] = 1;
+        upgrades.create(28);
+    }
+    if (buildings.wallet.bought >= 50 && upgrades.unlocked[29] == 0) {
+        upgrades.unlocked[29] = 1;
+        upgrades.create(29);
+    }
+    // Churches
+    if (buildings.church.bought >= 1 && upgrades.unlocked[30] == 0) {
+        upgrades.unlocked[30] = 1;
+        upgrades.create(30);
+    }
+    if (buildings.church.bought >= 5 && upgrades.unlocked[31] == 0) {
+        upgrades.unlocked[31] = 1;
+        upgrades.create(31);
+    }
+    if (buildings.church.bought >= 10 && upgrades.unlocked[32] == 0) {
+        upgrades.unlocked[32] = 1;
+        upgrades.create(32);
+    }
+    if (buildings.church.bought >= 25 && upgrades.unlocked[33] == 0) {
+        upgrades.unlocked[33] = 1;
+        upgrades.create(33);
+    }
+    if (buildings.church.bought >= 50 && upgrades.unlocked[34] == 0) {
+        upgrades.unlocked[34] = 1;
+        upgrades.create(34);
+    }
 }
 
 function versionNumberMousedOver() {
@@ -1028,7 +1224,9 @@ function versionNumberMousedOverUndo() {
     document.getElementById("versionSwitchInfo").style.display = "none";
 }
 
-// helper functions
+// ------------------------------------
+// Helper Functions
+// ------------------------------------
 helper.reloadCookieCounter = function() {
     document.getElementById("cookieCounter").innerHTML = personalization.currentClickedPlural + ": " +variableView.cookiesView;
     if (mobile) {
@@ -1063,7 +1261,8 @@ helper.commaify = function(toComma) {
     let commaifyed = toComma.toLocaleString("en-US");
     return commaifyed;
 }
-// popups
+
+// Popups
 helper.popup = {};
 helper.popup.createSimpleAlertError = function(value) {
     switch (inDevelopment) {
@@ -1370,7 +1569,9 @@ core.grandmasArrival = function() {
     }
 }
 
-// saves
+// ------------------------------------
+// Saving
+// ------------------------------------
 saves.exportData = function() {
     saves.autoSave();
     let dataJSON;
@@ -1478,7 +1679,7 @@ saves.autoSave = function() { // yes if you are wondering i totally 100% without
             localStorage.setItem("betaSave",JSON.stringify(save));
             break;
     }
-    if (inDevelopment) {console.log(save)}
+    if (inDevelopment) {console.log("save object: "); console.log(save);}
 }
 
 saves.loadAutoSave = function() {
@@ -1492,15 +1693,26 @@ saves.loadAutoSave = function() {
     const saveKeys = Object.keys(loadedSave);
     saveKeys.forEach((element,index) => {
         let variable = element;
+        if (inDevelopment) {
+            console.log("loaded variable: " + variable);
+            console.log("loaded value: "+loadedSave[element]);
+        }
         
         try {
             eval(`${variable} = ${loadedSave[element]}`); // YES, i know i shouldn't use this. I have no idea how to do this otherwise so yeah probably will stay.
         } catch {
-            helper.consoleLogDev("Attempted to save to constant variable, probably just versionBranch...");
+            helper.consoleLogDev("Attempted to change value of constant variable in loading, probably just versionBranch...");
+        }
+        if (variable === "upgrades.unlocked") { // arrays don't work with eval???
+            upgrades.unlocked = loadedSave["upgrades.unlocked"];
+        }
+        if (variable === "upgrades.bought") {
+            upgrades.bought = loadedSave["upgrades.bought"];
         }
     });
 
     helper.reloadBuildingPrices();
+    upgrades.showUnlocked();
 }
 
 saves.resetSave = function(fromInit=false) {
@@ -1526,13 +1738,7 @@ saves.resetSave = function(fromInit=false) {
     buildings.church.unlocked = 0;
     document.getElementById("ifCheatedStat").innerHTML = "";
 
-    upgrades.destroy("upgrade0");
-    upgrades.destroy("upgrade1");
-    upgrades.destroy("upgrade2");
-    upgrades.destroy("upgrade3");
-    upgrades.destroy("upgrade4");
-    upgrades.destroy("upgrade5");
-    upgrades.destroy("upgrade6");
+    upgrades.destroyAll();
 
     document.getElementById("win").style.display = "none";
 
@@ -1548,73 +1754,9 @@ saves.resetSave = function(fromInit=false) {
     }
 }
 
-buildings.hovered = function(building) {
-    switch (building) {
-        case "keyboard":
-            buildingInfoName = "Keyboard";
-            buildingInfoPrice = helper.commaify(buildings.keyboard.upgradeCost);
-            buildingInfoQuote = "type in cookies";
-            buildingInfoProduces = helper.commaify(buildings.keyboard.CPSGain);
-            buildingInfoProducing = helper.commaify(Math.round(buildings.keyboard.CPSGiven * 10) / 10);
-            break;
-        case "grandpa":
-            buildingInfoName = "Grandpa";
-            buildingInfoPrice = helper.commaify(buildings.grandpa.upgradeCost);
-            buildingInfoQuote = "as long as gramps gets a cut";
-            buildingInfoProduces = helper.commaify(buildings.grandpa.CPSGain);
-            buildingInfoProducing = helper.commaify(Math.round(buildings.grandpa.CPSGiven * 10) / 10);
-            break;
-        case "ranch":
-            buildingInfoName = "Ranch";
-            buildingInfoPrice = helper.commaify(buildings.ranch.upgradeCost);
-            buildingInfoQuote = "Not the dressing kind";
-            buildingInfoProduces = helper.commaify(buildings.ranch.CPSGain);
-            buildingInfoProducing = helper.commaify(Math.round(buildings.ranch.CPSGiven * 10) / 10);
-            break;
-        case "tv":
-            buildingInfoName = "Television";
-            buildingInfoPrice = helper.commaify(buildings.tv.upgradeCost);
-            buildingInfoQuote = "hold infomercials on your cookies";
-            buildingInfoProduces = helper.commaify(buildings.tv.CPSGain);
-            buildingInfoProducing = helper.commaify(Math.round(buildings.tv.CPSGiven * 10) / 10);
-            break;
-        case "worker":
-            buildingInfoName = "Worker";
-            buildingInfoPrice = helper.commaify(buildings.worker.upgradeCost);
-            buildingInfoQuote = "cookies via manual labor";
-            buildingInfoProduces = helper.commaify(buildings.worker.CPSGain);
-            buildingInfoProducing = helper.commaify(Math.round(buildings.worker.CPSGiven * 10) / 10);
-            break;
-        case "wallet":
-            buildingInfoName = "Wallet";
-            buildingInfoPrice = helper.commaify(buildings.wallet.upgradeCost);
-            buildingInfoQuote = "store cookies and make interest?"; // CHANGE ME
-            buildingInfoProduces = helper.commaify(buildings.wallet.CPSGain);
-            buildingInfoProducing = helper.commaify(Math.round(buildings.wallet.CPSGiven * 10) / 10);
-            break;
-        case "church":
-            buildingInfoName = "Church";
-            buildingInfoPrice = helper.commaify(buildings.church.upgradeCost);
-            buildingInfoQuote = "pray to the almighty cookie gods";
-            buildingInfoProduces = helper.commaify(buildings.church.CPSGain);
-            buildingInfoProducing = helper.commaify(Math.round(buildings.church.CPSGiven * 10) / 10);
-            break;
-    }
-    if (!mobile) {
-        document.getElementById("buildingInfoName").innerHTML = buildingInfoName;
-        document.getElementById("buildingInfoPrice").innerHTML = "Price: " + buildingInfoPrice;
-        document.getElementById("buildingInfoQuote").innerHTML = "\""+buildingInfoQuote+"\"";
-        document.getElementById("buildingInfoProduces").innerHTML = "Produces: "+buildingInfoProduces+" CPS";
-        document.getElementById("buildingInfoProducing").innerHTML = "Producing: "+ buildingInfoProducing+" CPS";
-    }
-
-    document.getElementById("buildingInfo").style.display = "block";
-}
-buildings.undoHover = function() {
-    document.getElementById("buildingInfo").style.display = "none";
-}
-
-// Mods
+// ------------------------------------
+// Modding
+// ------------------------------------
 mods.loadURL = function(url) {
     const file = document.createElement("script");
     file.setAttribute("src",url);
