@@ -150,8 +150,10 @@
         <div id="rightSide" class="rightSide">
             <h1 class="store-heading shadow">Store</h1>
             <h3 class="upgrades-marker shadow">Upgrades</h3>
-            <div id="upgradesHolder" class="upgrades-holder">
+            <div class="upgrades-holder-background">
+                <div id="upgradesHolder" class="upgrades-holder" onmouseover="upgrades.expandUpgradesHolder()" onmouseout="upgrades.expandUpgradesHolder(true)">
                 
+                </div>
             </div>
             <h3 class="buildings-marker shadow">Buildings</h3>
             <div id="buildings" class="buildings">

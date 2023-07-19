@@ -77,6 +77,8 @@ upgrades.quotes = [
 upgrades.descriptions = ["Multiplys Keyboard and clicking cookie production by 2","Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
 
 upgrades.upgradesBought = 0;
+upgrades.currentlyShown = 0;
+upgrades.rowsOfUpgrades = 0;
 
 // buildings
 const buildings = {};
@@ -447,6 +449,9 @@ core.initialization = function() {
     if (isModded == 1 && mobile == 0) {
         document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
     }
+
+    // upgrades shown calculation
+    upgrades.rowsOfUpgrades = Math.floor(upgrades.currentlyShown / 5) + 1;
 }
 
 // mouse position stuff
@@ -892,6 +897,7 @@ upgrades.create = function(id,icon) {
     }
 
     document.getElementById("upgradesHolder").appendChild(upgrade);
+    upgrades.currentlyShown += 1;
 }
 
 upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
@@ -908,6 +914,7 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
             }
             upgrades.destroy(id);
             upgrades.upgradesBought += 1;
+            upgrades.currentlyShown -= 1;
         }
         break;
     case 1:
@@ -921,6 +928,7 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
             }
             upgrades.destroy(id);
             upgrades.upgradesBought += 1;
+            upgrades.currentlyShown -= 1;
         }
         break;
     case 2:
@@ -934,6 +942,7 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
             }
             upgrades.destroy(id);
             upgrades.upgradesBought += 1;
+            upgrades.currentlyShown -= 1;
         }
         break;
     case 3:
@@ -947,6 +956,7 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
             }
             upgrades.destroy(id);
             upgrades.upgradesBought += 1;
+            upgrades.currentlyShown -= 1;
         }
         break;
     case 4:
@@ -960,6 +970,7 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
             }
             upgrades.destroy(id);
             upgrades.upgradesBought += 1;
+            upgrades.currentlyShown -= 1;
         }
         break;
     case 5:
@@ -973,6 +984,7 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
             }
             upgrades.destroy(id);
             upgrades.upgradesBought += 1;
+            upgrades.currentlyShown -= 1;
         }
         break;
     case 6:
@@ -986,6 +998,7 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
             }
             upgrades.destroy(id);
             upgrades.upgradesBought += 1;
+            upgrades.currentlyShown -= 1;
         }
         break;
     }
@@ -1002,7 +1015,7 @@ upgrades.destroyAll = function() {
         try {
             document.getElementById(`upgrade${i}`).remove();
         } catch {
-            continue
+            continue;
         }
     }
 }
@@ -1022,6 +1035,15 @@ upgrades.undoHover = function() {
 
     document.getElementById("upgradeViewer").style.display = "none";
     document.getElementById("upgradeViewer").style.float = "right";
+}
+upgrades.expandUpgradesHolder = function(retract=false) {
+    const holder = document.getElementById("upgradesHolder");
+    if (retract) {
+        holder.style.height = "67.6px";
+        return;
+    }
+    size = 67.6 * upgrades.rowsOfUpgrades;
+    holder.style.height = `${size}px`;
 }
 upgrades.showUnlocked = function() { // yes it's terrible, don't judge me
     // Keyboards
