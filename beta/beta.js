@@ -75,6 +75,15 @@ upgrades.quotes = [
     "temp","temp","temp","temp","temp", // church
 ];
 upgrades.descriptions = ["Multiplys Keyboard and clicking cookie production by 2","Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
+upgrades.img = [
+    "reinforced-keys.png","obsidian-keys.png","osmium-keys.png",undefined,undefined,
+    "hardwood-walking-stick.png",undefined,undefined,undefined,undefined,
+    "ranch-upgrade1.png",undefined,undefined,undefined,undefined,
+    "tv-upgrade1.png",undefined,undefined,undefined,undefined,
+    "worker-upgrade1.png",undefined,undefined,undefined,undefined,
+    undefined,undefined,undefined,undefined,undefined,
+    undefined,undefined,undefined,undefined,undefined,
+]
 
 upgrades.upgradesBought = 0;
 upgrades.currentlyShown = 0;
@@ -342,7 +351,8 @@ core.initialization = function() {
 
     // Changelog Entries, AKA the messiest place ever.
     createChangelogEntry("0.6",["The long awaited 5 upgrades for every single building. No upgrades are planned beyond this."],
-    ["The saving system. Yes, 3rd time or something, but this time I GURANTEE it's going to stick.",
+    ["Upgrades to building and upgrade pixel art. For any artists willing to contribute, .ase files can be found in a seperate folder in the img folder on the GitHub.",
+    "The saving system. Yes, 3rd time or something, but this time I GURANTEE it's going to stick.",
     "All changelog entries are now created with Javascript to cut down on the HTML size."],
     ["Centering of buildings bought was done stupidly, fixed now.",
     "Previously created changelog entries are now grammatically correct."],"actual upgrades")
@@ -850,7 +860,7 @@ buildings.undoHover = function() {
 // ------------------------------------
 // Upgrades
 // ------------------------------------
-upgrades.create = function(id,icon) {
+upgrades.create = function(id) {
     let building;
     if (id >= 0) {
         building = 0;
@@ -879,7 +889,9 @@ upgrades.create = function(id,icon) {
     upgrade.setAttribute("id",`upgrade${id}`)
     upgrade.setAttribute("onclick",`upgrades.clicked(${id},${building})`);
     upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building})`);
-    upgrade.setAttribute("onmouseout","upgrades.undoHover()")
+    upgrade.setAttribute("onmouseout","upgrades.undoHover()");
+
+    icon = this.img[id];
     if (icon === undefined) {
         if (!mobile) {
             upgrade.style.backgroundImage = "url(img/unknown-64-64.png)";
@@ -1047,31 +1059,31 @@ upgrades.expandUpgradesHolder = function(retract=false) {
 }
 upgrades.showUnlocked = function() { // yes it's terrible, don't judge me
     // Keyboards
-    if (upgrades.unlocked[0] == 1 && upgrades.bought[0] != 1) {upgrades.create(0,"reinforced-keys.png");}
-    if (upgrades.unlocked[1] == 1 && upgrades.bought[1] != 1) {upgrades.create(1,"obsidian-keys.png");}
+    if (upgrades.unlocked[0] == 1 && upgrades.bought[0] != 1) {upgrades.create(0);}
+    if (upgrades.unlocked[1] == 1 && upgrades.bought[1] != 1) {upgrades.create(1);}
     if (upgrades.unlocked[2] == 1 && upgrades.bought[2] != 1) {upgrades.create(2);}
     if (upgrades.unlocked[3] == 1 && upgrades.bought[3] != 1) {upgrades.create(3);}
     if (upgrades.unlocked[4] == 1 && upgrades.bought[4] != 1) {upgrades.create(4);}
     // Grandpas
-    if (upgrades.unlocked[5] == 1 && upgrades.bought[5] != 1) {upgrades.create(5,"hardwood-walking-stick.png");}
+    if (upgrades.unlocked[5] == 1 && upgrades.bought[5] != 1) {upgrades.create(5);}
     if (upgrades.unlocked[6] == 1 && upgrades.bought[6] != 1) {upgrades.create(6);}
     if (upgrades.unlocked[7] == 1 && upgrades.bought[7] != 1) {upgrades.create(7);}
     if (upgrades.unlocked[8] == 1 && upgrades.bought[8] != 1) {upgrades.create(8);}
     if (upgrades.unlocked[9] == 1 && upgrades.bought[9] != 1) {upgrades.create(9);}
     // Ranches
-    if (upgrades.unlocked[10] == 1 && upgrades.bought[10] != 1) {upgrades.create(10,"ranch-upgrade1.png");}
+    if (upgrades.unlocked[10] == 1 && upgrades.bought[10] != 1) {upgrades.create(10);}
     if (upgrades.unlocked[11] == 1 && upgrades.bought[11] != 1) {upgrades.create(11);}
     if (upgrades.unlocked[12] == 1 && upgrades.bought[12] != 1) {upgrades.create(12);}
     if (upgrades.unlocked[13] == 1 && upgrades.bought[13] != 1) {upgrades.create(13);}
     if (upgrades.unlocked[14] == 1 && upgrades.bought[14] != 1) {upgrades.create(14);}
     // Televisions
-    if (upgrades.unlocked[15] == 1 && upgrades.bought[15] != 1) {upgrades.create(15,"tv-upgrade1.png");}
+    if (upgrades.unlocked[15] == 1 && upgrades.bought[15] != 1) {upgrades.create(15);}
     if (upgrades.unlocked[16] == 1 && upgrades.bought[16] != 1) {upgrades.create(16);}
     if (upgrades.unlocked[17] == 1 && upgrades.bought[17] != 1) {upgrades.create(17);}
     if (upgrades.unlocked[18] == 1 && upgrades.bought[18] != 1) {upgrades.create(18);}
     if (upgrades.unlocked[19] == 1 && upgrades.bought[19] != 1) {upgrades.create(19);}
     // Workers
-    if (upgrades.unlocked[20] == 1 && upgrades.bought[20] != 1) {upgrades.create(20,"worker-upgrade1.png");}
+    if (upgrades.unlocked[20] == 1 && upgrades.bought[20] != 1) {upgrades.create(20);}
     if (upgrades.unlocked[21] == 1 && upgrades.bought[21] != 1) {upgrades.create(21);}
     if (upgrades.unlocked[22] == 1 && upgrades.bought[22] != 1) {upgrades.create(22);}
     if (upgrades.unlocked[23] == 1 && upgrades.bought[23] != 1) {upgrades.create(23);}
@@ -1093,11 +1105,11 @@ upgrades.checkUpgradeAvailability = function() { // Upgrade Unlocks (very long, 
     // Keyboards
     if (buildings.keyboard.bought >= 1 && upgrades.unlocked[0] == 0) {
         upgrades.unlocked[0] = 1;
-        upgrades.create(0,"reinforced-keys.png");
+        upgrades.create(0);
     }
     if (buildings.keyboard.bought >= 5 && upgrades.unlocked[1] == 0) {
         upgrades.unlocked[1] = 1;
-        upgrades.create(1,"obsidian-keys.png");
+        upgrades.create(1);
     }
     if (buildings.keyboard.bought >= 10 && upgrades.unlocked[2] == 0) {
         upgrades.unlocked[2] = 1;
@@ -1114,7 +1126,7 @@ upgrades.checkUpgradeAvailability = function() { // Upgrade Unlocks (very long, 
     // Grandpas
     if (buildings.grandpa.bought >= 1 && upgrades.unlocked[5] == 0) {
         upgrades.unlocked[5] = 1;
-        upgrades.create(5,"hardwood-walking-stick.png");
+        upgrades.create(5);
     }
     if (buildings.grandpa.bought >= 5 && upgrades.unlocked[6] == 0) {
         upgrades.unlocked[6] = 1;
@@ -1135,7 +1147,7 @@ upgrades.checkUpgradeAvailability = function() { // Upgrade Unlocks (very long, 
     // Ranches
     if (buildings.ranch.bought >= 1 && upgrades.unlocked[10] == 0) {
         upgrades.unlocked[10] = 1;
-        upgrades.create(10,"ranch-upgrade1.png");
+        upgrades.create(10);
     }
     if (buildings.ranch.bought >= 5 && upgrades.unlocked[11] == 0) {
         upgrades.unlocked[11] = 1;
@@ -1156,7 +1168,7 @@ upgrades.checkUpgradeAvailability = function() { // Upgrade Unlocks (very long, 
     // TVs
     if (buildings.tv.bought >= 1 && upgrades.unlocked[15] == 0) {
         upgrades.unlocked[15] = 1;
-        upgrades.create(15,"tv-upgrade1.png");
+        upgrades.create(15);
     }
     if (buildings.tv.bought >= 5 && upgrades.unlocked[16] == 0) {
         upgrades.unlocked[16] = 1;
@@ -1177,7 +1189,7 @@ upgrades.checkUpgradeAvailability = function() { // Upgrade Unlocks (very long, 
     // Workers
     if (buildings.worker.bought >= 1 && upgrades.unlocked[20] == 0) {
         upgrades.unlocked[20] = 1;
-        upgrades.create(20,"worker-upgrade1.png");
+        upgrades.create(20);
     }
     if (buildings.worker.bought >= 5 && upgrades.unlocked[21] == 0) {
         upgrades.unlocked[21] = 1;
@@ -1458,6 +1470,7 @@ personalization.setCurrentClicked = function(value) {
             personalization.currentClickedLowercasePlural = "strawberries";
             break;
     }
+    upgrades.descriptions[0] = `Multiplys Keyboard and clicking ${this.currentClicked} production by 2`
 }
 
 dev.setDevMode = function(value) {
