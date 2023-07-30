@@ -350,7 +350,8 @@ core.initialization = function() {
     }
 
     // Changelog Entries, AKA the messiest place ever.
-    createChangelogEntry("0.6",["The long awaited 5 upgrades for every single building. No upgrades are planned beyond this."],
+    createChangelogEntry("0.6",["The long awaited 5 upgrades for every single building. No upgrades are planned beyond this.",
+    "Temporary notification in the bottom-left when the game saves."],
     ["Upgrades to building and upgrade pixel art. For any artists willing to contribute, .ase files can be found in a seperate folder in the img folder on the GitHub.",
     "The saving system. Yes, 3rd time or something, but this time I GURANTEE it's going to stick.",
     "All changelog entries are now created with Javascript to cut down on the HTML size."],
@@ -1715,6 +1716,14 @@ saves.autoSave = function() { // yes if you are wondering i totally 100% without
             break;
     }
     if (inDevelopment) {console.log("save object: "); console.log(save);}
+
+    // Update saving notification
+    const indicator = document.getElementById("savingIndicator");
+    indicator.classList.add("visible");
+
+    setTimeout(function () {
+        indicator.classList.remove("visible");
+    }, 1500);
 }
 
 saves.loadAutoSave = function() {
