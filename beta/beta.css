@@ -1,3 +1,9 @@
+/* variables (mainly for colors) */
+:root {
+    --brown-border: rgb(121, 77, 46);
+    --colored-container: rgb(255, 243, 209);
+}
+
 /* basic basis for most html elements */
 body {
     margin: 0px;
@@ -94,7 +100,7 @@ small {
     height: 100vh;
     border-style: solid;
     border-width: 0px 8px 0px 0px;
-    border-color: rgb(121, 77, 46);
+    border-color: var(--brown-border);
     display: flex;
     flex-direction: column;
     background-image: url(img/backgrounds/background-blue.png);
@@ -106,7 +112,7 @@ small {
     height: 100vh;
     border-style: solid;
     border-width: 0px 0px 0px 8px;
-    border-color: rgb(121, 77, 46);
+    border-color: var(--brown-border);
     display: flex;
     flex-direction: column;
     background-image: url(img/backgrounds/background-blue.png);
@@ -182,7 +188,7 @@ small {
     height: 100px;
     background-image: url(img/backgrounds/background-blue.png);
     border-style: solid;
-    border-color: rgb(121, 77, 46);
+    border-color: var(--brown-border);
     border-width: 0px;
     border-bottom-width: 8px;
 }
@@ -208,7 +214,7 @@ small {
     bottom: 30px;
     left: 48px;
     font-size: 10px;
-    background-color: rgb(255, 243, 209);
+    background-color: var(--colored-container);
     color: black;
 }
 
@@ -229,7 +235,7 @@ small {
     overflow: hidden;
     border: 6px solid;
     border-width: 6px 0px 8px 0px;
-    border-color: rgb(121, 77, 46);
+    border-color: var(--brown-border);
 }
 .upgrade {
     width: 59.6px;
@@ -268,29 +274,6 @@ small {
     color: black;
 }
 
-.upgrade-viewer {
-    display: block;
-    width: 248px;
-    height: 148px;
-    border-style: solid;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
-    border-right-width: 0px;
-    margin: 0px;
-    display: none;
-    flex: auto;
-    background-color: rgb(255, 243, 209);
-    position: absolute;
-    right: 346px;
-    color: black
-}
-
-.upgrade-viewer-content {
-    display: block;
-    color: black;
-}
-
 /* social links stuff */
 .social-links {
     position: absolute;
@@ -307,7 +290,7 @@ small {
 }
 
 /* universal building css */
-.building-already-unlock {
+.building-already-unlock { /* TODO for 0.6: make this crap less crappy */
     width: 324px;
     height: 64px;
     border-style: solid;
@@ -380,38 +363,42 @@ small {
 }
 
 /* Infobox when hovering over a building */
-.building-info {
-    width: 190px;
+.tooltip {
+    width: 248px;
     height: 110px;
     border-style: solid;
     border-color: black;
     border-right: 0px;
-    background-color: rgb(255, 243, 209);
+    background-color: var(--colored-container);
     right: 346px;
 }
-.building-info-name {
+.tooltip-content {
+    margin-left: 3px;
+}
+.tooltip-name {
     font-size: 15px;
     margin-top: 4px;
-    margin-left: 3px;
     margin-bottom: 0px;
 }
-.building-info-price {
+.tooltip-price {
     font-size: 15px;
     right: 0px;
     top: 0px;
     margin-top: 4px;
     margin-right: 3px;
 }
-.building-info-quote {
+.tooltip-quote {
     font-size: 12px;
     margin-top: 5px;
-    margin-left: 3px;
     overflow-y: hidden;
 }
-.building-info-stats {
+.tooltip-description {
+    font-size: 13px;
+    margin-left: 1px;
+}
+.tooltip-stats {
     font-size: 14px;
-    margin-top: 5px;
-    margin-left: 3px;
+    margin-top: 5px;s
     margin-bottom: 0px;
 }
 
@@ -588,7 +575,7 @@ small {
     width: 110px;
     height: 50px;
     margin-left: auto;
-    background-color: rgb(255, 243, 209);
+    background-color: var(--colored-container);
     color: black; /* this wasn't nessesary until 6/3/23? idk why */
 }
 .info-button {

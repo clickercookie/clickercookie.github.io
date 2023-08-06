@@ -3,7 +3,7 @@
 // ------------------------------------
 const version = "0.6";
 const versionBranch = 1; // 0 is main, 1 is beta
-const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode! Recommended that versionBranch is 1 for easier saving if this is toggled.
+const inDevelopment = 1; // toggle if developing actively. This is completely different than the builtin dev mode! Recommended that versionBranch is 1 for easier saving if this is toggled.
 const desktop = false;
 
 // customization
@@ -76,7 +76,7 @@ upgrades.quotes = [
 ];
 upgrades.descriptions = ["Multiplys Keyboard and clicking cookie production by 2","Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
 upgrades.img = [
-    "reinforced-keys.png","obsidian-keys.png","osmium-keys.png",undefined,undefined,
+    "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10FingerTyping.png",undefined,
     "hardwood-walking-stick.png",undefined,undefined,undefined,undefined,
     "ranch-upgrade1.png",undefined,undefined,undefined,undefined,
     "tv-upgrade1.png",undefined,undefined,undefined,undefined,
@@ -354,7 +354,8 @@ core.initialization = function() {
     "Temporary notification in the bottom-left when the game saves."],
     ["Upgrades to building and upgrade pixel art. For any artists willing to contribute, .ase files can be found in a seperate folder in the img folder on the GitHub.",
     "The saving system. Yes, 3rd time or something, but this time I GURANTEE it's going to stick.",
-    "All changelog entries are now created with Javascript to cut down on the HTML size."],
+    "All changelog entries are now created with Javascript to cut down on the HTML size.",
+    "Upgrade viewer and building info are now combined into one tooltip and sizes have been adjusted."],
     ["Centering of buildings bought was done stupidly, fixed now.",
     "Previously created changelog entries are now grammatically correct."],"actual upgrades")
 
@@ -465,19 +466,18 @@ core.initialization = function() {
     upgrades.rowsOfUpgrades = Math.floor(upgrades.currentlyShown / 5) + 1;
 }
 
-// mouse position stuff
+// Events
 let mousePos = { x: undefined, y: undefined };
-let mousePosY = `${mousePos.y}`;
 
 window.addEventListener('mousemove', (event) => {
     mousePos = { x: event.clientX, y: event.clientY };
     if (inDevelopment == 1) {
         document.getElementById("mousePosDevText").textContent = "Mouse Pos: " + `(${mousePos.x}, ${mousePos.y})`;
     }
-    mousePosY = `${mousePos.y}`;
-});
+    // set positions affected by mouse pos
+    document.getElementById("tooltip").style.top = (mousePos.y - 50) + "px";
 
-let buildingInfoYPos = `${mousePos.y}` - 50;
+});
 
 // timer things
 const intervalCPSU = setInterval(cookiesPerSecondUpdate, 1000);
@@ -567,10 +567,6 @@ function perMillisecondUniversal() {
     if (cookieProductionStopped == 1) {
         core.cookies = 0;
     }
-
-    // set buildingInfo y to ${mousePos.y}
-    buildingInfoYPos = `${mousePos.y}` - 50;
-    document.getElementById("buildingInfo").style.top = buildingInfoYPos + "px";
 
     // log to console in case of error
     if (core.cookies < 0) {
@@ -792,7 +788,11 @@ buildings.church.buy = function() {
     }
 }
 
-buildings.hovered = function(building) {
+buildings.hovered = function(building) { // TODO 0.6: Attempt to make this less of a disaster, maybe loops?
+    document.getElementById("tooltipDesc").style.display = "none";
+    document.getElementById("tooltipProduces").style.display = "block";
+    document.getElementById("tooltipProducing").style.display = "block";
+
     switch (building) {
         case "keyboard":
             buildingInfoName = "Keyboard";
@@ -845,17 +845,17 @@ buildings.hovered = function(building) {
             break;
     }
     if (!mobile) {
-        document.getElementById("buildingInfoName").innerHTML = buildingInfoName;
-        document.getElementById("buildingInfoPrice").innerHTML = "Price: " + buildingInfoPrice;
-        document.getElementById("buildingInfoQuote").innerHTML = "\""+buildingInfoQuote+"\"";
-        document.getElementById("buildingInfoProduces").innerHTML = "Produces: "+buildingInfoProduces+" CPS";
-        document.getElementById("buildingInfoProducing").innerHTML = "Producing: "+ buildingInfoProducing+" CPS";
+        document.getElementById("tooltipName").innerHTML = buildingInfoName;
+        document.getElementById("tooltipPrice").innerHTML = "Price: " + buildingInfoPrice;
+        document.getElementById("tooltipQuote").innerHTML = "\""+buildingInfoQuote+"\"";
+        document.getElementById("tooltipProduces").innerHTML = "Produces: "+buildingInfoProduces+" CPS";
+        document.getElementById("tooltipProducing").innerHTML = "Producing: "+ buildingInfoProducing+" CPS";
     }
 
-    document.getElementById("buildingInfo").style.display = "block";
+    document.getElementById("tooltip").style.display = "block";
 }
-buildings.undoHover = function() {
-    document.getElementById("buildingInfo").style.display = "none";
+function hideTooltip() { // ! REMOVE AND COMBINE INTO MAIN TOOLTIP
+    document.getElementById("tooltip").style.display = "none";
 }
 
 // ------------------------------------
@@ -890,7 +890,7 @@ upgrades.create = function(id) {
     upgrade.setAttribute("id",`upgrade${id}`)
     upgrade.setAttribute("onclick",`upgrades.clicked(${id},${building})`);
     upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building})`);
-    upgrade.setAttribute("onmouseout","upgrades.undoHover()");
+    upgrade.setAttribute("onmouseout","hideTooltip()");
 
     icon = this.img[id];
     if (icon === undefined) {
@@ -1020,7 +1020,7 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
 upgrades.destroy = function(id) {
     document.getElementById(`upgrade${id}`).remove();
     if (!mobile) {
-        upgrades.undoHover();
+        hideTooltip()
     }
 }
 upgrades.destroyAll = function() {
@@ -1034,20 +1034,16 @@ upgrades.destroyAll = function() {
 }
 
 upgrades.hovered = function(id,building) {
-    document.getElementById("upgradeName").innerHTML = "Name: " + upgrades.names[id];
-    document.getElementById("upgradePrice").innerHTML = "Price: " + helper.commaify(upgrades.prices[id])
-    document.getElementById("upgradeDesc").innerHTML = `Description: ${upgrades.descriptions[building]} <br> <i>\"${upgrades.quotes[id]}\"</i>`;
+    document.getElementById("tooltipProduces").style.display = "none";
+    document.getElementById("tooltipProducing").style.display = "none";
+    document.getElementById("tooltipDesc").style.display = "block";
 
-    document.getElementById("upgradeViewer").style.display = "block";
-    document.getElementById("upgradeViewer").style.float = "right";
-}
-upgrades.undoHover = function() {
-    document.getElementById("upgradeName").innerHTML = "Name: ";
-    document.getElementById("upgradePrice").innerHTML = "Price: ";
-    document.getElementById("upgradeDesc").innerHTML = "Description: ";
+    document.getElementById("tooltipName").innerHTML = upgrades.names[id];
+    document.getElementById("tooltipPrice").innerHTML = "Price: " + helper.commaify(upgrades.prices[id])
+    document.getElementById("tooltipDesc").innerHTML = `${upgrades.descriptions[building]}`;
+    document.getElementById("tooltipQuote").innerHTML = `<i>\"${upgrades.quotes[id]}\"</i>`;
 
-    document.getElementById("upgradeViewer").style.display = "none";
-    document.getElementById("upgradeViewer").style.float = "right";
+    document.getElementById("tooltip").style.display = "block";
 }
 upgrades.expandUpgradesHolder = function(retract=false) {
     const holder = document.getElementById("upgradesHolder");
@@ -1058,7 +1054,7 @@ upgrades.expandUpgradesHolder = function(retract=false) {
     size = 67.6 * upgrades.rowsOfUpgrades;
     holder.style.height = `${size}px`;
 }
-upgrades.showUnlocked = function() { // yes it's terrible, don't judge me
+upgrades.showUnlocked = function() { // ? note to self: can loops be introduced?
     // Keyboards
     if (upgrades.unlocked[0] == 1 && upgrades.bought[0] != 1) {upgrades.create(0);}
     if (upgrades.unlocked[1] == 1 && upgrades.bought[1] != 1) {upgrades.create(1);}

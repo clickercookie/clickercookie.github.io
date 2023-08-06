@@ -31,13 +31,6 @@
             </div>
         </div> <!-- end leftSide -->
         <div id="middle" class="middle">
-            <div id="upgradeViewer" class="upgrade-viewer">
-                <div id="upgradeViewerContent" class="upgrade-viewer-content">
-                    <p id="upgradeName" class="upgrade-name">Upgrade Name: </p>
-                    <p id="upgradePrice" class="upgrade-price">Upgrade Price: </p>
-                    <p id="upgradeDesc" class="upgrade-desc">Upgrade Description: </p>
-                </div>
-            </div>
             <div class="middle-buttons" id="middleButtons">
                 <div class="left-middle-buttons pointer">
                     <div id="statsButton" class="middle-button-base stats-button" onclick="toggleMiddle('stats')">
@@ -140,12 +133,15 @@
                     </select>
                 </form>
             </div>
-            <div class="building-info absolute no-display" id="buildingInfo">
-                <p class="building-info-name black" id="buildingInfoName">Name</p>
-                <p class="building-info-price absolute black" id="buildingInfoPrice">Price</p>
-                <p class="building-info-quote black" id="buildingInfoQuote">"Quote"</p>
-                <p class="building-info-stats black" id="buildingInfoProduces">Produces</p>
-                <p class="building-info-stats black" id="buildingInfoProducing">Producing</p>
+            <div class="tooltip absolute no-display" id="tooltip">
+                <div class="tooltip-content">
+                    <p class="tooltip-name black" id="tooltipName">Name</p>
+                    <p class="tooltip-price absolute black" id="tooltipPrice">Price</p>
+                    <p class="tooltip-description black" id="tooltipDesc">Description</p> <!-- Hidden when buildings are hovered since they have no description -->
+                    <p class="tooltip-quote black" id="tooltipQuote">"Quote"</p>
+                    <p class="tooltip-stats black" id="tooltipProduces">Produces</p><!-- Hidden when upgrades are hovered since they have no produces/producing -->
+                    <p class="tooltip-stats black" id="tooltipProducing">Producing</p>
+                </div>
             </div>
         </div> <!-- end middle -->
         <div id="rightSide" class="rightSide">
@@ -161,7 +157,7 @@
                 <table>
                     <tr>
                         <td>
-                            <div id="building0" class="building-already-unlock" onclick="buildings.keyboard.buy()" onmouseover="buildings.hovered('keyboard')" onmouseout="buildings.undoHover()">
+                            <div id="building0" class="building-already-unlock" onclick="buildings.keyboard.buy()" onmouseover="buildings.hovered('keyboard')" onmouseout="hideTooltip()">
                                 <div class="building-icon keyboard-icon"></div>
                                 <div class="building-content">
                                     <div class="buildings-bought-wrapper">
@@ -175,7 +171,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building1" class="building-need-unlock" onclick="buildings.grandpa.buy()" onmouseover="buildings.hovered('grandpa')" onmouseout="buildings.undoHover()">
+                            <div id="building1" class="building-need-unlock" onclick="buildings.grandpa.buy()" onmouseover="buildings.hovered('grandpa')" onmouseout="hideTooltip()">
                                 <div class="building-icon grandpa-icon"></div>
                                 <div class="building-content">
                                     <div class="buildings-bought-wrapper">
@@ -189,7 +185,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building2" class="building-need-unlock" onclick="buildings.ranch.buy()" onmouseover="buildings.hovered('ranch')" onmouseout="buildings.undoHover()">
+                            <div id="building2" class="building-need-unlock" onclick="buildings.ranch.buy()" onmouseover="buildings.hovered('ranch')" onmouseout="hideTooltip()">
                                 <div class="building-icon ranch-icon"></div>
                                 <div class="building-content">
                                     <div class="buildings-bought-wrapper">
@@ -203,7 +199,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building3" class="building-need-unlock" onclick="buildings.tv.buy()" onmouseover="buildings.hovered('tv')" onmouseout="buildings.undoHover()">
+                            <div id="building3" class="building-need-unlock" onclick="buildings.tv.buy()" onmouseover="buildings.hovered('tv')" onmouseout="hideTooltip()">
                                 <div class="building-icon tv-icon"></div>
                                 <div class="building-content">
                                     <div class="buildings-bought-wrapper">
@@ -217,7 +213,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building4" class="building-need-unlock" onclick="buildings.worker.buy()" onmouseover="buildings.hovered('worker')" onmouseout="buildings.undoHover()">
+                            <div id="building4" class="building-need-unlock" onclick="buildings.worker.buy()" onmouseover="buildings.hovered('worker')" onmouseout="hideTooltip()">
                                 <div class="building-icon worker-icon"></div>
                                 <div class="building-content">
                                     <div class="buildings-bought-wrapper">
@@ -231,7 +227,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building5" class="building-need-unlock" onclick="buildings.wallet.buy()" onmouseover="buildings.hovered('wallet')" onmouseout="buildings.undoHover()">
+                            <div id="building5" class="building-need-unlock" onclick="buildings.wallet.buy()" onmouseover="buildings.hovered('wallet')" onmouseout="hideTooltip()">
                                 <div class="building-icon wallet-icon"></div>
                                 <div class="building-content">
                                     <div class="buildings-bought-wrapper">
@@ -245,7 +241,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building6" class="building-need-unlock" onclick="buildings.church.buy()" onmouseover="buildings.hovered('church')" onmouseout="buildings.undoHover()">
+                            <div id="building6" class="building-need-unlock" onclick="buildings.church.buy()" onmouseover="buildings.hovered('church')" onmouseout="hideTooltip()">
                                 <div class="building-icon church-icon"></div>
                                 <div class="building-content">
                                     <div class="buildings-bought-wrapper">
