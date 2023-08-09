@@ -1501,6 +1501,8 @@ saves.importData = function() {
 }
 saves.importReadData = function() {
     saves.importedData = JSON.parse(saves.rawImportedData);
+    helper.consoleLogDev("imported data: ");
+    helper.consoleLogDev(saves.importedData);
 
     let versionBranchToDisplay;
     if (!versionBranch) {
@@ -1520,14 +1522,20 @@ saves.importReadData = function() {
 
     saveKeys.forEach((element,index) => {
         let variable = element;
-        
+        helper.consoleLogDev(`IMPORT: variable: ${variable}, data: ${saves.importedData[element]}, element: ${element}`);
         try {
-            eval(`${variable} = ${saves.importedData[element]}`); // YES, i know i shouldn't use this. I have no idea how to do this otherwise so yeah probably will stay.
+            if (element == "upgrades.bought" || element == "upgrades.unlocked") { // i have no idea why but arrays are missing their brackets in imports, idk how to fix it so this is my solution. it's not perminant but i dont think there will be many other saved arrays
+                eval(`${variable} = [${saves.importedData[element]}]`);
+            } else {
+                eval(`${variable} = ${saves.importedData[element]}`); // YES, i know i shouldn't use this. I have no idea how to do this otherwise so yeah probably will stay.
+            }
         } catch {
-            helper.consoleLogDev("Attempted to save to constant variable, probably just versionBranch...");
+            helper.consoleLogDev(`Attempted to save to constant variable ${variable}`);
         }
     });
     helper.reloadBuildingPrices();
+
+    upgrades.showUnlocked();
 
     helper.consoleLogDev("Imported save with " +core.cookies+ " cookies.");
 
@@ -1590,7 +1598,7 @@ saves.loadAutoSave = function() {
         try {
             eval(`${variable} = ${loadedSave[element]}`); // YES, i know i shouldn't use this. I have no idea how to do this otherwise so yeah probably will stay.
         } catch {
-            helper.consoleLogDev("Attempted to change value of constant variable in loading, probably just versionBranch...");
+            helper.consoleLogDev(`Attempted to load variable: ${variable}`);
         }
         if (variable === "upgrades.unlocked") { // arrays don't work with eval???
             upgrades.unlocked = loadedSave["upgrades.unlocked"];
