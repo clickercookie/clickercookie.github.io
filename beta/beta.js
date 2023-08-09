@@ -357,6 +357,7 @@ core.initialization = function() {
     "All changelog entries are now created with Javascript to cut down on the HTML size.",
     "Upgrade viewer and building info are now combined into one tooltip and sizes have been adjusted."],
     ["Centering of buildings bought was done stupidly, fixed now.",
+    "Advanced popups had no filter.",
     "Previously created changelog entries are now grammatically correct."],"actual upgrades")
 
     createChangelogEntry("0.5.2",["Mobile Support!",
@@ -461,9 +462,6 @@ core.initialization = function() {
     if (isModded == 1 && mobile == 0) {
         document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
     }
-
-    // upgrades shown calculation
-    upgrades.rowsOfUpgrades = Math.floor(upgrades.currentlyShown / 5) + 1;
 }
 
 // Events
@@ -593,6 +591,9 @@ function perMillisecondUniversal() {
     document.getElementById("workersBought").innerHTML = +buildings.worker.bought;
     document.getElementById("walletsBought").innerHTML = +buildings.wallet.bought;
     document.getElementById("churchesBought").innerHTML = +buildings.church.bought;
+    
+    // upgrades shown calculation
+    upgrades.rowsOfUpgrades = Math.floor(upgrades.currentlyShown / 5) + 1;
 
     core.cookiesPerSecond = buildings.keyboard.CPSGiven+buildings.grandpa.CPSGiven+buildings.ranch.CPSGiven+buildings.tv.CPSGiven+buildings.worker.CPSGiven+buildings.wallet.CPSGiven+buildings.church.CPSGiven+dev.CPSGiven;
 }
@@ -1054,205 +1055,86 @@ upgrades.expandUpgradesHolder = function(retract=false) {
     size = 67.6 * upgrades.rowsOfUpgrades;
     holder.style.height = `${size}px`;
 }
-upgrades.showUnlocked = function() { // ? note to self: can loops be introduced?
-    // Keyboards
-    if (upgrades.unlocked[0] == 1 && upgrades.bought[0] != 1) {upgrades.create(0);}
-    if (upgrades.unlocked[1] == 1 && upgrades.bought[1] != 1) {upgrades.create(1);}
-    if (upgrades.unlocked[2] == 1 && upgrades.bought[2] != 1) {upgrades.create(2);}
-    if (upgrades.unlocked[3] == 1 && upgrades.bought[3] != 1) {upgrades.create(3);}
-    if (upgrades.unlocked[4] == 1 && upgrades.bought[4] != 1) {upgrades.create(4);}
-    // Grandpas
-    if (upgrades.unlocked[5] == 1 && upgrades.bought[5] != 1) {upgrades.create(5);}
-    if (upgrades.unlocked[6] == 1 && upgrades.bought[6] != 1) {upgrades.create(6);}
-    if (upgrades.unlocked[7] == 1 && upgrades.bought[7] != 1) {upgrades.create(7);}
-    if (upgrades.unlocked[8] == 1 && upgrades.bought[8] != 1) {upgrades.create(8);}
-    if (upgrades.unlocked[9] == 1 && upgrades.bought[9] != 1) {upgrades.create(9);}
-    // Ranches
-    if (upgrades.unlocked[10] == 1 && upgrades.bought[10] != 1) {upgrades.create(10);}
-    if (upgrades.unlocked[11] == 1 && upgrades.bought[11] != 1) {upgrades.create(11);}
-    if (upgrades.unlocked[12] == 1 && upgrades.bought[12] != 1) {upgrades.create(12);}
-    if (upgrades.unlocked[13] == 1 && upgrades.bought[13] != 1) {upgrades.create(13);}
-    if (upgrades.unlocked[14] == 1 && upgrades.bought[14] != 1) {upgrades.create(14);}
-    // Televisions
-    if (upgrades.unlocked[15] == 1 && upgrades.bought[15] != 1) {upgrades.create(15);}
-    if (upgrades.unlocked[16] == 1 && upgrades.bought[16] != 1) {upgrades.create(16);}
-    if (upgrades.unlocked[17] == 1 && upgrades.bought[17] != 1) {upgrades.create(17);}
-    if (upgrades.unlocked[18] == 1 && upgrades.bought[18] != 1) {upgrades.create(18);}
-    if (upgrades.unlocked[19] == 1 && upgrades.bought[19] != 1) {upgrades.create(19);}
-    // Workers
-    if (upgrades.unlocked[20] == 1 && upgrades.bought[20] != 1) {upgrades.create(20);}
-    if (upgrades.unlocked[21] == 1 && upgrades.bought[21] != 1) {upgrades.create(21);}
-    if (upgrades.unlocked[22] == 1 && upgrades.bought[22] != 1) {upgrades.create(22);}
-    if (upgrades.unlocked[23] == 1 && upgrades.bought[23] != 1) {upgrades.create(23);}
-    if (upgrades.unlocked[24] == 1 && upgrades.bought[24] != 1) {upgrades.create(24);}
-    // Wallets
-    if (upgrades.unlocked[25] == 1 && upgrades.bought[25] != 1) {upgrades.create(25);}
-    if (upgrades.unlocked[26] == 1 && upgrades.bought[26] != 1) {upgrades.create(26);}
-    if (upgrades.unlocked[27] == 1 && upgrades.bought[27] != 1) {upgrades.create(27);}
-    if (upgrades.unlocked[28] == 1 && upgrades.bought[28] != 1) {upgrades.create(28);}
-    if (upgrades.unlocked[29] == 1 && upgrades.bought[29] != 1) {upgrades.create(29);}
-    // Churches
-    if (upgrades.unlocked[30] == 1 && upgrades.bought[30] != 1) {upgrades.create(30);}
-    if (upgrades.unlocked[31] == 1 && upgrades.bought[31] != 1) {upgrades.create(31);}
-    if (upgrades.unlocked[32] == 1 && upgrades.bought[32] != 1) {upgrades.create(32);}
-    if (upgrades.unlocked[33] == 1 && upgrades.bought[33] != 1) {upgrades.create(33);}
-    if (upgrades.unlocked[34] == 1 && upgrades.bought[34] != 1) {upgrades.create(34);}
+upgrades.showUnlocked = function() {
+    for (i = 0; i < upgrades.unlocked.length; i++) {
+        if (upgrades.unlocked[i] == 1 && upgrades.bought[i] != 1) {upgrades.create(i);}
+    }
 }
-upgrades.checkUpgradeAvailability = function() { // Upgrade Unlocks (very long, changes would be greatly appreciated!)
+upgrades.checkUpgradeAvailability = function() {
+    let runThroughTimes = 0; // buildings.building.bought needs for boughtUnlockRequirements indicies
+    const boughtUnlockRequirements = [ // number of buildings bought required to unlock an upgrade, in chronological order
+        1,5,10,25,50
+    ];
     // Keyboards
-    if (buildings.keyboard.bought >= 1 && upgrades.unlocked[0] == 0) {
-        upgrades.unlocked[0] = 1;
-        upgrades.create(0);
-    }
-    if (buildings.keyboard.bought >= 5 && upgrades.unlocked[1] == 0) {
-        upgrades.unlocked[1] = 1;
-        upgrades.create(1);
-    }
-    if (buildings.keyboard.bought >= 10 && upgrades.unlocked[2] == 0) {
-        upgrades.unlocked[2] = 1;
-        upgrades.create(2);
-    }
-    if (buildings.keyboard.bought >= 25 && upgrades.unlocked[3] == 0) {
-        upgrades.unlocked[3] = 1;
-        upgrades.create(3);
-    }
-    if (buildings.keyboard.bought >= 50 && upgrades.unlocked[4] == 0) {
-        upgrades.unlocked[4] = 1;
-        upgrades.create(4);
+    for (i = 0; i <= 5; i++) {
+        if (buildings.keyboard.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+            upgrades.unlocked[i] = 1;
+            upgrades.create(i);
+        }
+        runThroughTimes++;
     }
     // Grandpas
-    if (buildings.grandpa.bought >= 1 && upgrades.unlocked[5] == 0) {
-        upgrades.unlocked[5] = 1;
-        upgrades.create(5);
-    }
-    if (buildings.grandpa.bought >= 5 && upgrades.unlocked[6] == 0) {
-        upgrades.unlocked[6] = 1;
-        upgrades.create(6);
-    }
-    if (buildings.grandpa.bought >= 10 && upgrades.unlocked[7] == 0) {
-        upgrades.unlocked[7] = 1;
-        upgrades.create(7);
-    }
-    if (buildings.grandpa.bought >= 25 && upgrades.unlocked[8] == 0) {
-        upgrades.unlocked[8] = 1;
-        upgrades.create(8);
-    }
-    if (buildings.grandpa.bought >= 50 && upgrades.unlocked[9] == 0) {
-        upgrades.unlocked[9] = 1;
-        upgrades.create(9);
+    runThroughTimes = 0;
+    for (i = 4; i <= 9; i++) {
+        if (buildings.grandpa.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+            upgrades.unlocked[i] = 1;
+            upgrades.create(i);
+        }
+        runThroughTimes++;
     }
     // Ranches
-    if (buildings.ranch.bought >= 1 && upgrades.unlocked[10] == 0) {
-        upgrades.unlocked[10] = 1;
-        upgrades.create(10);
-    }
-    if (buildings.ranch.bought >= 5 && upgrades.unlocked[11] == 0) {
-        upgrades.unlocked[11] = 1;
-        upgrades.create(11);
-    }
-    if (buildings.ranch.bought >= 10 && upgrades.unlocked[12] == 0) {
-        upgrades.unlocked[12] = 1;
-        upgrades.create(12);
-    }
-    if (buildings.ranch.bought >= 25 && upgrades.unlocked[13] == 0) {
-        upgrades.unlocked[13] = 1;
-        upgrades.create(13);
-    }
-    if (buildings.ranch.bought >= 50 && upgrades.unlocked[14] == 0) {
-        upgrades.unlocked[14] = 1;
-        upgrades.create(14);
+    runThroughTimes = 0;
+    for (i = 10; i <= 14; i++) {
+        if (buildings.ranch.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+            upgrades.unlocked[i] = 1;
+            upgrades.create(i);
+        }
+        runThroughTimes++;
     }
     // TVs
-    if (buildings.tv.bought >= 1 && upgrades.unlocked[15] == 0) {
-        upgrades.unlocked[15] = 1;
-        upgrades.create(15);
-    }
-    if (buildings.tv.bought >= 5 && upgrades.unlocked[16] == 0) {
-        upgrades.unlocked[16] = 1;
-        upgrades.create(16);
-    }
-    if (buildings.tv.bought >= 10 && upgrades.unlocked[17] == 0) {
-        upgrades.unlocked[17] = 1;
-        upgrades.create(17);
-    }
-    if (buildings.tv.bought >= 25 && upgrades.unlocked[18] == 0) {
-        upgrades.unlocked[18] = 1;
-        upgrades.create(18);
-    }
-    if (buildings.tv.bought >= 50 && upgrades.unlocked[19] == 0) {
-        upgrades.unlocked[19] = 1;
-        upgrades.create(19);
+    runThroughTimes = 0;
+    for (i = 15; i <= 19; i++) {
+        if (buildings.tv.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+            upgrades.unlocked[i] = 1;
+            upgrades.create(i);
+        }
+        runThroughTimes++;
     }
     // Workers
-    if (buildings.worker.bought >= 1 && upgrades.unlocked[20] == 0) {
-        upgrades.unlocked[20] = 1;
-        upgrades.create(20);
-    }
-    if (buildings.worker.bought >= 5 && upgrades.unlocked[21] == 0) {
-        upgrades.unlocked[21] = 1;
-        upgrades.create(21);
-    }
-    if (buildings.worker.bought >= 10 && upgrades.unlocked[22] == 0) {
-        upgrades.unlocked[22] = 1;
-        upgrades.create(22);
-    }
-    if (buildings.worker.bought >= 25 && upgrades.unlocked[23] == 0) {
-        upgrades.unlocked[23] = 1;
-        upgrades.create(23);
-    }
-    if (buildings.worker.bought >= 50 && upgrades.unlocked[24] == 0) {
-        upgrades.unlocked[24] = 1;
-        upgrades.create(24);
+    runThroughTimes = 0;
+    for (i = 20; i <= 24; i++) {
+        if (buildings.worker.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+            upgrades.unlocked[i] = 1;
+            upgrades.create(i);
+        }
+        runThroughTimes++;
     }
     // Wallets
-    if (buildings.wallet.bought >= 1 && upgrades.unlocked[25] == 0) {
-        upgrades.unlocked[25] = 1;
-        upgrades.create(25);
-    }
-    if (buildings.wallet.bought >= 5 && upgrades.unlocked[26] == 0) {
-        upgrades.unlocked[26] = 1;
-        upgrades.create(26);
-    }
-    if (buildings.wallet.bought >= 10 && upgrades.unlocked[27] == 0) {
-        upgrades.unlocked[27] = 1;
-        upgrades.create(27);
-    }
-    if (buildings.wallet.bought >= 25 && upgrades.unlocked[28] == 0) {
-        upgrades.unlocked[28] = 1;
-        upgrades.create(28);
-    }
-    if (buildings.wallet.bought >= 50 && upgrades.unlocked[29] == 0) {
-        upgrades.unlocked[29] = 1;
-        upgrades.create(29);
+    runThroughTimes = 0;
+    for (i = 25; i <= 29; i++) {
+        if (buildings.wallet.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+            upgrades.unlocked[i] = 1;
+            upgrades.create(i);
+        }
+        runThroughTimes++;
     }
     // Churches
-    if (buildings.church.bought >= 1 && upgrades.unlocked[30] == 0) {
-        upgrades.unlocked[30] = 1;
-        upgrades.create(30);
-    }
-    if (buildings.church.bought >= 5 && upgrades.unlocked[31] == 0) {
-        upgrades.unlocked[31] = 1;
-        upgrades.create(31);
-    }
-    if (buildings.church.bought >= 10 && upgrades.unlocked[32] == 0) {
-        upgrades.unlocked[32] = 1;
-        upgrades.create(32);
-    }
-    if (buildings.church.bought >= 25 && upgrades.unlocked[33] == 0) {
-        upgrades.unlocked[33] = 1;
-        upgrades.create(33);
-    }
-    if (buildings.church.bought >= 50 && upgrades.unlocked[34] == 0) {
-        upgrades.unlocked[34] = 1;
-        upgrades.create(34);
+    runThroughTimes = 0;
+    for (i = 30; i <= 34; i++) {
+        if (buildings.church.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+            upgrades.unlocked[i] = 1;
+            upgrades.create(i);
+        }
+        runThroughTimes++;
     }
 }
 
-function versionNumberMousedOver() {
+function versionNumberMousedOver(undo=false) {
+    if (!undo) {
     document.getElementById("versionSwitchInfo").style.display = "block";
-}
-function versionNumberMousedOverUndo() {
-    document.getElementById("versionSwitchInfo").style.display = "none";
+    } else {
+        document.getElementById("versionSwitchInfo").style.display = "none";
+    }
 }
 
 // ------------------------------------
@@ -1295,77 +1177,41 @@ helper.commaify = function(toComma) {
 
 // Popups
 helper.popup = {};
-helper.popup.createSimpleAlertError = function(value) {
-    switch (inDevelopment) {
-        case 0:
-            alert("An error occured: helper.popup.createSimple() has no " + value + " value. Please report this to the GitHub.");
-            break;
-        case 1:
-            if (value == "title") {
-                alert("helper.popup.createSimple() needs a "+value+" value. Use \"\" for a blank title");
-            }
-            else {
-                alert("helper.popup.createSimple() needs a "+value+" value.");
-            }
-            break;
-    }
-}
-helper.popup.createSimple = function(x,y,text,noButton,doWhat,title,backButton,isError) {
+helper.popup.createSimple = function(x,y,text,noButton=false,doWhat="default",title="",backButton=false,isError=false) {
     document.getElementById("simplePopup").style.display = "flex";
     document.getElementById("simplePopupContent").innerHTML = text;
     document.getElementById("simplePopup").style.width = x + "px";
     document.getElementById("simplePopupButtonDiv").style.width = x + "px";
     document.getElementById("simplePopup").style.height = y + "px";
-    switch (title) {
-        case "":
-            document.getElementById("simplePopupTitle").style.display = "none";
-            break;
-        case "undefined":
-            helper.popup.createSimpleAlertError("title");
-            break;
-        default:
-            document.getElementById("simplePopupTitle").style.display = "block";
-            document.getElementById("simplePopupTitle").innerHTML = title;
-            break;
+    if (title == "") {
+        document.getElementById("simplePopupTitle").style.display = "none";
+    } else {
+        document.getElementById("simplePopupTitle").style.display = "block";
+        document.getElementById("simplePopupTitle").innerHTML = title;
     }
-    switch (noButton) {
-        case true:
-            document.getElementById("simplePopupButton").style.display = "none";
-            break;
-        case false:
-            document.getElementById("simplePopupButton").style.display = "inline-block";
-            break;
-        default:
-            helper.popup.createSimpleAlertError(noButton);
-            break;
+
+    if (noButton) {
+        document.getElementById("simplePopupButton").style.display = "none";
+    } else {
+        document.getElementById("simplePopupButton").style.display = "inline-block";
     }
-    switch (backButton) {
-        case true:
-            document.getElementById("simplePopupBackButton").style.display = "inline-block";
-            break;
-        case false:
-            document.getElementById("simplePopupBackButton").style.display = "none";
-            break;
-        default:
-            helper.popup.createSimpleAlertError("backButton");
-            break;
+
+    if (backButton) {
+        document.getElementById("simplePopupBackButton").style.display = "inline-block";
+    } else {
+        document.getElementById("simplePopupBackButton").style.display = "none";
     }
-    switch (isError) {
-        case true:
-            document.getElementById("simplePopup").style.borderColor = "red";
-            break;
-        case false:
-            document.getElementById("simplePopup").style.borderColor = "black";
-            break;
-        default:
-            helper.popup.createSimpleAlertError("isError");
-            break;
+
+    if (isError) {
+        document.getElementById("simplePopup").style.borderColor = "red";
+    } else {
+        document.getElementById("simplePopup").style.borderColor = "black";
     }
 
     const filter = document.getElementById("filter");
     filter.style.display = "block";
 
-    popupButtonDo = doWhat;
+    popupButtonDo = doWhat; // TODO 0.6.1: what even is this?
 }
 helper.popup.destroySimple = function() {
     document.getElementById("simplePopup").style.display = "none";
@@ -1395,17 +1241,20 @@ helper.popup.simpleClicked = function() {
         core.cookies = 0;
     }
 }
-helper.popup.createAdvanced = function(x,y,html) {
+helper.popup.createAdvanced = function(x,y,html,filter=true) { // i would recommend only adding filter if the popup is clickable, but not all are so it can be toggled
     const advancedPopup = document.getElementById("advancedPopup");
 
     advancedPopup.style.display = "flex";
     advancedPopup.style.width = x+"px";
     advancedPopup.style.height = y+"px";
 
+    if (filter) { document.getElementById("filter").style.display = "block"; }
+
     advancedPopup.innerHTML = html;
 }
 helper.popup.destroyAdvanced = function() {
     document.getElementById("advancedPopup").style.display = "none";
+    document.getElementById("filter").style.display = "none";
 }
 
 // set areas to different things
@@ -1779,6 +1628,7 @@ saves.resetSave = function(fromInit=false) {
     document.getElementById("ifCheatedStat").innerHTML = "";
 
     upgrades.destroyAll();
+    upgrades.currentlyShown = 0;
 
     document.getElementById("win").style.display = "none";
 
