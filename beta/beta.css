@@ -220,7 +220,7 @@ small {
 
 
 /* divs */
-.buildings {
+.buildings-wrapper {
     float: right;
     margin-top: 6px;
     display: flex;
@@ -290,7 +290,7 @@ small {
 }
 
 /* universal building css */
-.building-already-unlock { /* TODO for 0.6: make this crap less crappy */
+.building {
     width: 324px;
     height: 64px;
     border-style: solid;
@@ -300,24 +300,7 @@ small {
     background-color: rgb(217, 215, 165);
     cursor: pointer;
 }
-.building-already-unlock:hover {
-    border-style: solid;
-    border-color: rgb(249, 255, 164);
-    border-width: 3px;
-}
-
-.building-need-unlock {
-    width: 324px;
-    height: 64px;
-    border-style: solid;
-    border-color: rgb(248, 255, 198);
-    border-width: 3px;
-    display: none;
-    transition: 0.3s;
-    background-color: rgb(217, 215, 165);
-    cursor: pointer;
-}
-.building-need-unlock:hover {
+.building:hover {
     border-style: solid;
     border-color: rgb(249, 255, 164);
     border-width: 3px;

@@ -17,7 +17,7 @@
                 <h3 id="cookieCounter" class="cookie-counter shadow">Cookies: 0</h3>
                 <h4 id="cookiesPerSecondCounter" class="cookies-per-second-counter">Cookies Per Second: 0</h4>
             </div>
-            <h3 class="win shadow" id="win">you win.</h3>
+            <!-- <h3 class="win shadow" id="win">you win.</h3> -->
             <span class="leftSidePush" id="leftSidePush"></span>
             <p class="saving-indicator" id="savingIndicator">Saved!</p>
             <div class="social-links">
@@ -153,11 +153,11 @@
                 </div>
             </div>
             <h3 class="buildings-marker shadow">Buildings</h3>
-            <div id="buildings" class="buildings">
+            <div class="buildings-wrapper">
                 <table>
                     <tr>
                         <td>
-                            <div id="building0" class="building-already-unlock" onclick="buildings.keyboard.buy()" onmouseover="buildings.hovered('keyboard')" onmouseout="hideTooltip()">
+                            <div id="building0" class="building" onclick="buildings.keyboard.buy()" onmouseover="buildings.hovered('keyboard')" onmouseout="hideTooltip()">
                                 <div class="building-icon keyboard-icon"></div>
                                 <div class="building-content">
                                     <div class="buildings-bought-wrapper">
@@ -171,7 +171,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building1" class="building-need-unlock" onclick="buildings.grandpa.buy()" onmouseover="buildings.hovered('grandpa')" onmouseout="hideTooltip()">
+                            <div id="building1" class="building no-display" onclick="buildings.grandpa.buy()" onmouseover="buildings.hovered('grandpa')" onmouseout="hideTooltip()">
                                 <div class="building-icon grandpa-icon"></div>
                                 <div class="building-content">
                                     <div class="buildings-bought-wrapper">
@@ -185,7 +185,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building2" class="building-need-unlock" onclick="buildings.ranch.buy()" onmouseover="buildings.hovered('ranch')" onmouseout="hideTooltip()">
+                            <div id="building2" class="building no-display" onclick="buildings.ranch.buy()" onmouseover="buildings.hovered('ranch')" onmouseout="hideTooltip()">
                                 <div class="building-icon ranch-icon"></div>
                                 <div class="building-content">
                                     <div class="buildings-bought-wrapper">
@@ -199,7 +199,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building3" class="building-need-unlock" onclick="buildings.tv.buy()" onmouseover="buildings.hovered('tv')" onmouseout="hideTooltip()">
+                            <div id="building3" class="building no-display" onclick="buildings.tv.buy()" onmouseover="buildings.hovered('tv')" onmouseout="hideTooltip()">
                                 <div class="building-icon tv-icon"></div>
                                 <div class="building-content">
                                     <div class="buildings-bought-wrapper">
@@ -213,7 +213,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building4" class="building-need-unlock" onclick="buildings.worker.buy()" onmouseover="buildings.hovered('worker')" onmouseout="hideTooltip()">
+                            <div id="building4" class="building no-display" onclick="buildings.worker.buy()" onmouseover="buildings.hovered('worker')" onmouseout="hideTooltip()">
                                 <div class="building-icon worker-icon"></div>
                                 <div class="building-content">
                                     <div class="buildings-bought-wrapper">
@@ -227,7 +227,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building5" class="building-need-unlock" onclick="buildings.wallet.buy()" onmouseover="buildings.hovered('wallet')" onmouseout="hideTooltip()">
+                            <div id="building5" class="building no-display" onclick="buildings.wallet.buy()" onmouseover="buildings.hovered('wallet')" onmouseout="hideTooltip()">
                                 <div class="building-icon wallet-icon"></div>
                                 <div class="building-content">
                                     <div class="buildings-bought-wrapper">
@@ -241,7 +241,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="building6" class="building-need-unlock" onclick="buildings.church.buy()" onmouseover="buildings.hovered('church')" onmouseout="hideTooltip()">
+                            <div id="building6" class="building no-display" onclick="buildings.church.buy()" onmouseover="buildings.hovered('church')" onmouseout="hideTooltip()">
                                 <div class="building-icon church-icon"></div>
                                 <div class="building-content">
                                     <div class="buildings-bought-wrapper">

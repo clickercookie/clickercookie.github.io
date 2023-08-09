@@ -58,7 +58,7 @@ upgrades.prices = [
 ];
 upgrades.names = [
     "Reinforced Keys","Obsidian Keys","Osmium Keys","10 finger typing","keyboard5", // keyboard
-    "Hardwood Walking Stick","grandpa2","grandpa3","grandpa4","grandpa5", // grandpa
+    "Hardwood Walking Stick","Rocking Chair","grandpa3","grandpa4","grandpa5", // grandpa
     "Pig Slop","ranch2","ranch3","ranch4","ranch5", // ranch
     "LED Display","television2","television3","television4","television5", // television
     "Medkits","worker2","worker3","worker4","worker5", // worker
@@ -67,13 +67,14 @@ upgrades.names = [
 ];
 upgrades.quotes = [
     "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","temp", // keyboard
-    "nonna dat softwood junk","temp","temp","temp","temp", // grandpa
+    "nonna dat softwood junk","newest addition to the porch*","temp","temp","temp", // grandpa
     "Wait, what have we been feeding them before now?","temp","temp","temp","temp", // ranch
     "World's greatest leap in digital technology","temp","temp","temp","temp", // television
     "Constant supply of Band-Aids in case of emergency","temp","temp","temp","temp", // worker
     "I'm sure the federal reserve will be okay with this...","temp","temp","temp","temp", // wallet
     "temp","temp","temp","temp","temp", // church
 ];
+// anything with an asterisk needs to be redone.
 upgrades.descriptions = ["Multiplys Keyboard and clicking cookie production by 2","Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
 upgrades.img = [
     "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10FingerTyping.png",undefined,
@@ -173,7 +174,6 @@ let infoUp = 0;
 let optionsUp = 0;
 
 // misc
-let grandmaPromptClicks = 0;
 let cookieProductionStopped = 0;
 let buttonDoWhat = "default";
 let hasCheated = 0;
@@ -191,7 +191,7 @@ saves.allToSave = ["core.cookies", "core.totalCookies", "core.cookiesPerSecond",
                 "buildings.keyboard.CPSGain","buildings.grandpa.CPSGain","buildings.ranch.CPSGain","buildings.tv.CPSGain","buildings.worker.CPSGain","buildings.wallet.CPSGain","buildings.church.CPSGain",
                 "buildings.keyboard.upgradeCost","buildings.grandpa.upgradeCost","buildings.ranch.upgradeCost","buildings.tv.upgradeCost","buildings.worker.upgradeCost","buildings.wallet.upgradeCost","buildings.church.upgradeCost",
                 "upgrades.unlocked","upgrades.bought","upgrades.upgradesBought",
-                "core.cookiesPerClick","core.cookieBeenClickedTimes","core.buildingsOwned","grandmaPromptClicks","hasCheated","won","isModded","versionBranch"
+                "core.cookiesPerClick","core.cookieBeenClickedTimes","core.buildingsOwned","hasCheated","won","isModded","versionBranch"
 ];
 saves.defaultSavedValues = { // Should be self-explanatory. Doesn't have to be ordered like allToSave, but I would appreciate if it was.
     "core.cookies":0, "core.totalCookies":0, "core.cookiesPerSecond":0,
@@ -200,7 +200,7 @@ saves.defaultSavedValues = { // Should be self-explanatory. Doesn't have to be o
     "buildings.keyboard.CPSGain":0.1,"buildings.grandpa.CPSGain":1,"buildings.ranch.CPSGain":8,"buildings.tv.CPSGain":47,"buildings.worker.CPSGain":260,"buildings.wallet.CPSGain":1440,"buildings.church.CPSGain":7800,
     "buildings.keyboard.upgradeCost":15,"buildings.grandpa.upgradeCost":100,"buildings.ranch.upgradeCost":1100,"buildings.tv.upgradeCost":12000,"buildings.worker.upgradeCost":130000,"buildings.wallet.upgradeCost":1400000,"buildings.church.upgradeCost":20000000,
     "upgrades.unlocked":upgrades.unlocked,"upgrades.bought":upgrades.bought,"upgrades.upgradesBought":0,
-    "core.cookiesPerClick":1,"core.cookieBeenClickedTimes":0,"core.buildingsOwned":0,"grandmaPromptClicks":0,"hasCheated":0,"won":0,"isModded":0,"versionBranch":versionBranch
+    "core.cookiesPerClick":1,"core.cookieBeenClickedTimes":0,"core.buildingsOwned":0,"hasCheated":0,"won":0,"isModded":0,"versionBranch":versionBranch
 };
 saves.dataLoaded; // data from an auto-save (local storage)
 
@@ -237,17 +237,20 @@ core.initialization = function() {
     }
     saves.loadAutoSave();
     // if saves are old
-    if (localStorage.save[0] == "[" || localStorage.betaSave[0] == "[") {
+    if (localStorage.betaSave[0] == "[") {
+        localStorage.setItem("betaSaveOld",localStorage.betaSave);
         helper.popup.createAdvanced(400,220,"<h3 class='simple-popup-title' style='display:block;'>oh no</h3> \
-        <p class='popup-content'>so bad news, your save is invalid. good news, it won't ever be invalidated again. so yeah, sorry about that...</p> \
+        <p class='popup-content'>so bad news, your save is invalid. if you need it for anything, it can be accessed under local storage key \"betaSaveOld\".</p> \
         <div style='display:flex;flex-direction:row;height:40px;'> \
         <button onclick='saves.resetSave(true)' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>Reformat me!</button> \
         </div>");
         return "Save the save!";
+    } else if (localStorage.save[0] == "[") {
+        // TODO 0.6: MUST ADD save SUPPORT HERE BEFORE RELEASE!!!
     }
 
     if (won == 1) {
-        document.getElementById("win").style.display = "block";
+        // document.getElementById("win").style.display = "block";
     }
     if (hasCheated == 1) {
         document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
@@ -323,23 +326,20 @@ core.initialization = function() {
     }
 
     // change version branch specific stuff
-    switch (versionBranch) {
-        case 0:
-            // change title
-            document.getElementById("title").innerHTML = "Clicker Cookie";
-            // change version displayed
-            document.getElementById("versionNumber").innerHTML = "Version: " +version;
-            document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the beta branch";
-            break;
-        case 1:
-            // change title
-            document.getElementById("title").innerHTML = "Clicker Cookie Beta";
-            // change version displayed
-            document.getElementById("versionNumber").innerHTML = "Version: " +version+ " Beta";
-            document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the main branch";
-            // show the developer mode switch
-            document.getElementById("devForm").style.display = "block";
-            break;
+    if (!versionBranch) {
+        // change title
+        document.getElementById("title").innerHTML = "Clicker Cookie";
+        // change version displayed
+        document.getElementById("versionNumber").innerHTML = "Version: " +version;
+        document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the beta branch";
+    } else {
+        // change title
+        document.getElementById("title").innerHTML = "Clicker Cookie Beta";
+        // change version displayed
+        document.getElementById("versionNumber").innerHTML = "Version: " +version+ " Beta";
+        document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the main branch";
+        // show the developer mode switch
+        document.getElementById("devForm").style.display = "block";
     }
     switch (inDevelopment) {
         case 0:
@@ -351,9 +351,10 @@ core.initialization = function() {
 
     // Changelog Entries, AKA the messiest place ever.
     createChangelogEntry("0.6",["The long awaited 5 upgrades for every single building. No upgrades are planned beyond this.",
-    "Temporary notification in the bottom-left when the game saves."],
+    "Temporary notification in the bottom-left corner when the game saves."],
     ["Upgrades to building and upgrade pixel art. For any artists willing to contribute, .ase files can be found in a seperate folder in the img folder on the GitHub.",
     "The saving system. Yes, 3rd time or something, but this time I GURANTEE it's going to stick.",
+    "Grandma has been removed due to addition of upgrades and needing to rebalance when the player \"wins\". Also because i'm scared of copyright issues :)",
     "All changelog entries are now created with Javascript to cut down on the HTML size.",
     "Upgrade viewer and building info are now combined into one tooltip and sizes have been adjusted."],
     ["Centering of buildings bought was done stupidly, fixed now.",
@@ -444,13 +445,10 @@ core.initialization = function() {
         mobile = 1;
         personalization.currentBackground = "url(../img/backgrounds/background-blue.png)";
         if (location.pathname == "/" || location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") {
-            switch (versionBranch) {
-                case 0:
-                    location.href = "mobile/mobile.html";
-                    break;
-                case 1:
-                    location.href = "../mobile/mobile.html";
-                    break;
+            if (!versionBranch) {
+                location.href = "mobile/mobile.html";
+            } else {
+                location.href = "../mobile/mobile.html";
             }
         }
     }
@@ -556,11 +554,6 @@ function perMillisecondUniversal() {
         document.getElementById("building6").style.display = "none";
     }
 
-    // check for grandma's visit
-    if (core.totalCookies >= 1000000000) {
-        core.grandmasArrival();
-    }
-
     // check for stopped cookie production
     if (cookieProductionStopped == 1) {
         core.cookies = 0;
@@ -621,27 +614,6 @@ core.cookieClicked = function() {
     helper.reloadCookieCounter();
 }
 // dev commands
-dev.beginGrandma = function() {
-    if (dev.devMode == 1) {
-        dev.setCookies(1000000000);
-        document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
-        hasCheated = 1;
-        grandmaPromptClicks = 0;
-    }
-    else {
-        console.log("You need developer mode ON to run this command.");
-    }
-}
-dev.ignoreGrandma = function() {
-    if (dev.devMode == 1) {
-        grandmaPromptClicks = 10;
-        document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
-        hasCheated = 1;
-    }
-    else {
-        console.log("You need developer mode ON to run this command.");
-    }
-}
 dev.setCookies = function(x) {
     if (dev.devMode == 1) {
         core.cookies = x;
@@ -649,7 +621,6 @@ dev.setCookies = function(x) {
         hasCheated = 1;
         helper.reloadCookieCounter();
         document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
-        dev.ignoreGrandma();
     }
     else {
         console.log("You need developer mode ON to run this command.");
@@ -662,7 +633,6 @@ dev.setCPS = function(x) {
         variableView.cookiesPerSecondView = Math.round(core.cookiesPerSecond * 10) / 10;
         helper.reloadCPSCounter();
         document.getElementById("ifCheatedStat").innerHTML = "<b>You have cheated on this playthrough!</b>";
-        dev.ignoreGrandma();
     }
     else {
         console.log("You need developer mode ON to run this command.");
@@ -684,13 +654,10 @@ dev.toggleSaving = function() {
 }
 
 function versionSwitch() {
-    switch (versionBranch) {
-        case 0:
-            window.location.href = "/beta/beta.html";
-            break;
-        case 1:
-            window.location.href = "/";
-            break;
+    if (!versionBranch) {
+        window.location.href = "/";
+    } else {
+        window.location.href = "/beta/beta.html";
     }
 }
 
@@ -833,7 +800,7 @@ buildings.hovered = function(building) { // TODO 0.6: Attempt to make this less 
         case "wallet":
             buildingInfoName = "Wallet";
             buildingInfoPrice = helper.commaify(buildings.wallet.upgradeCost);
-            buildingInfoQuote = "store cookies and make interest?"; // CHANGE ME
+            buildingInfoQuote = `more storage space for your vast amount of ${personalization.currentClickedLowercase}`; // ! CHANGE ME
             buildingInfoProduces = helper.commaify(buildings.wallet.CPSGain);
             buildingInfoProducing = helper.commaify(Math.round(buildings.wallet.CPSGiven * 10) / 10);
             break;
@@ -855,7 +822,7 @@ buildings.hovered = function(building) { // TODO 0.6: Attempt to make this less 
 
     document.getElementById("tooltip").style.display = "block";
 }
-function hideTooltip() { // ! REMOVE AND COMBINE INTO MAIN TOOLTIP
+function hideTooltip() {
     document.getElementById("tooltip").style.display = "none";
 }
 
@@ -1224,9 +1191,6 @@ helper.popup.simpleClicked = function() {
         case "default":
             helper.popup.destroySimple();
             break;
-        case "grandmaPromptClicks":
-            grandmaPromptClicks = grandmaPromptClicks + 1;
-            break;
         case "resetSave()":
             saves.resetSave();
             helper.popup.destroySimple();
@@ -1403,66 +1367,16 @@ function closeMiddle() {
     document.getElementById("middle").style.background = personalization.currentBackground;
 }
 
-core.grandmasArrival = function() {
-    switch (grandmaPromptClicks) {
-        case 0:
-            helper.popup.createSimple(300,150,"a familiar face appears...",false,"grandmaPromptClicks","",false,false);
-            break;
-        case 1:
-            if (!mobile) {
-                document.getElementById("simplePopupImage").src = "img/grandma.png";
-            }
-            if (mobile || desktop) {
-                document.getElementById("simplePopupImage").src = "../img/grandma.png";
-            }
-            document.getElementById("simplePopupImage").style.display = "block";
-            helper.popup.createSimple(300,150,"hello...",false,"grandmaPromptClicks","",false,false);
-            break;
-        case 2:
-            helper.popup.createSimple(300,150,"how long have you done this for?",false,"grandmaPromptClicks","",false,false);
-            break;
-        case 3:
-            helper.popup.createSimple(300,150,"oh my...",false,"grandmaPromptClicks","",false,false);
-            break;
-        case 4:
-            helper.popup.createSimple(300,150,"well i suppose you must know this:",false,"grandmaPromptClicks","",false,false);
-            break;
-        case 5:
-            helper.popup.createSimple(300,150,"<i>there is nothing else to do here</i>",false,"grandmaPromptClicks","",false,false);
-            break;
-        case 6:
-            helper.popup.createSimple(300,150,"you win.",false,"grandmaPromptClicks","",false,false);
-            document.getElementById("win").style.display = "block";
-            won = 1;
-            break;
-        case 7:
-            helper.popup.createSimple(300,150,"you may keep going...",false,"grandmaPromptClicks","",false,false);
-            break;
-        case 8:
-            helper.popup.createSimple(300,150,"but you will be wasting your time.",false,"grandmaPromptClicks","",false,false);
-            break;
-        case 9:
-            helper.popup.destroySimple();
-            document.getElementById("simplePopupImage").src = "";
-            document.getElementById("simplePopupImage").style.display = "none";
-            grandmaPromptClicks = grandmaPromptClicks + 1;
-            break;
-    }
-}
-
 // ------------------------------------
 // Saving
 // ------------------------------------
 saves.exportData = function() {
     saves.autoSave();
     let dataJSON;
-    switch (versionBranch) {
-        case 0:
-            dataJSON = JSON.stringify(localStorage.save);
-            break;
-        case 1:
-            dataJSON = JSON.stringify(localStorage.betaSave);
-            break;
+    if (!versionBranch) {
+        dataJSON = JSON.stringify(localStorage.save);
+    } else {
+        dataJSON = JSON.stringify(localStorage.betaSave);
     }
 
     const textToBLOB = new Blob([dataJSON], { type: 'text/plain' });
@@ -1524,7 +1438,7 @@ saves.importReadData = function() {
         let variable = element;
         helper.consoleLogDev(`IMPORT: variable: ${variable}, data: ${saves.importedData[element]}, element: ${element}`);
         try {
-            if (element == "upgrades.bought" || element == "upgrades.unlocked") { // i have no idea why but arrays are missing their brackets in imports, idk how to fix it so this is my solution. it's not perminant but i dont think there will be many other saved arrays
+            if (element == "upgrades.bought" || element == "upgrades.unlocked") { // arrays don't work without inserting brackets when using eval
                 eval(`${variable} = [${saves.importedData[element]}]`);
             } else {
                 eval(`${variable} = ${saves.importedData[element]}`); // YES, i know i shouldn't use this. I have no idea how to do this otherwise so yeah probably will stay.
@@ -1535,6 +1449,7 @@ saves.importReadData = function() {
     });
     helper.reloadBuildingPrices();
 
+    upgrades.destroyAll();
     upgrades.showUnlocked();
 
     helper.consoleLogDev("Imported save with " +core.cookies+ " cookies.");
@@ -1560,13 +1475,10 @@ saves.autoSave = function() { // yes if you are wondering i totally 100% without
         save[name] = value;
     }
 
-    switch (versionBranch) {
-        case 0:
-            localStorage.setItem("save",JSON.stringify(save));
-            break;
-        case 1:
-            localStorage.setItem("betaSave",JSON.stringify(save));
-            break;
+    if (!versionBranch) {
+        localStorage.setItem("save",JSON.stringify(save));
+    } else {
+        localStorage.setItem("betaSave",JSON.stringify(save));
     }
     if (inDevelopment) {console.log("save object: "); console.log(save);}
 
@@ -1609,24 +1521,20 @@ saves.loadAutoSave = function() {
     });
 
     helper.reloadBuildingPrices();
+
+    upgrades.destroyAll();
     upgrades.showUnlocked();
 }
 
 saves.resetSave = function(fromInit=false) {
-    switch (versionBranch) {
-        case 0:
-            localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
-            break;
-        case 1:
-            localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
-            break;
-        default:
-            alert("Resetting save is not functional because versionBranch is invalid!");
-            break;
+    if (!versionBranch) {
+        localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
+    } else {
+        localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
     }
     saves.loadAutoSave();
     helper.reloadBuildingPrices();
-    // set unlocked for all to false because im a idiot and forgot to save it
+    
     buildings.grandpa.unlocked = 0;
     buildings.ranch.unlocked = 0;
     buildings.tv.unlocked = 0;
@@ -1638,7 +1546,7 @@ saves.resetSave = function(fromInit=false) {
     upgrades.destroyAll();
     upgrades.currentlyShown = 0;
 
-    document.getElementById("win").style.display = "none";
+    // document.getElementById("win").style.display = "none";
 
     if (mobile) {
         navbarItemClicked("Cookie");
