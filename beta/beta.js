@@ -11,7 +11,7 @@ const personalization = {};
 
 personalization.currentBackground = "url(img/backgrounds/background-blue.png)";
 
-personalization.currentClicked = "Cookie";
+personalization.currentClicked = "Cookie"; // TODO 0.6: I don't need to explain this
 personalization.currentClickedPlural = "Cookies";
 personalization.currentClickedLowercase = "cookie";
 personalization.currentClickedLowercasePlural = "cookies";
@@ -319,7 +319,7 @@ core.initialization = function() {
         document.getElementById("leftSide").insertBefore(devDiv, document.getElementById("leftSidePush"));
 
         // version change
-        document.getElementById("versionNumber").innerHTML = "Version: " + version + " Dev";
+        document.getElementById("versionNumber").innerHTML = `Version: ${version} Dev`;
 
         dev.setDevMode("on");
         document.getElementById("offSelectionDev").innerHTML = "Overwritten";
@@ -330,13 +330,13 @@ core.initialization = function() {
         // change title
         document.getElementById("title").innerHTML = "Clicker Cookie";
         // change version displayed
-        document.getElementById("versionNumber").innerHTML = "Version: " +version;
+        document.getElementById("versionNumber").innerHTML = `Version: ${version}`;
         document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the beta branch";
     } else {
         // change title
         document.getElementById("title").innerHTML = "Clicker Cookie Beta";
         // change version displayed
-        document.getElementById("versionNumber").innerHTML = "Version: " +version+ " Beta";
+        document.getElementById("versionNumber").innerHTML = `Version: ${version} Beta`;
         document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the main branch";
         // show the developer mode switch
         document.getElementById("devForm").style.display = "block";
@@ -356,7 +356,9 @@ core.initialization = function() {
     "The saving system. Yes, 3rd time or something, but this time I GURANTEE it's going to stick.",
     "Grandma has been removed due to addition of upgrades and needing to rebalance when the player \"wins\". Also because i'm scared of copyright issues :)",
     "All changelog entries are now created with Javascript to cut down on the HTML size.",
-    "Upgrade viewer and building info are now combined into one tooltip and sizes have been adjusted."],
+    "Upgrade viewer and building info are now combined into one tooltip and sizes have been adjusted.",
+    "Most logic based variable assignments now use ternary operators.",
+    "All remaining ancient plus sign string concatenation now use template literals."],
     ["Centering of buildings bought was done stupidly, fixed now.",
     "Advanced popups had no filter.",
     "Previously created changelog entries are now grammatically correct."],"actual upgrades")
@@ -468,10 +470,10 @@ let mousePos = { x: undefined, y: undefined };
 window.addEventListener('mousemove', (event) => {
     mousePos = { x: event.clientX, y: event.clientY };
     if (inDevelopment == 1) {
-        document.getElementById("mousePosDevText").textContent = "Mouse Pos: " + `(${mousePos.x}, ${mousePos.y})`;
+        document.getElementById("mousePosDevText").textContent = `Mouse Pos: (${mousePos.x}, ${mousePos.y})`;
     }
     // set positions affected by mouse pos
-    document.getElementById("tooltip").style.top = (mousePos.y - 50) + "px";
+    document.getElementById("tooltip").style.top = `${mousePos.y - 50}px`;
 
 });
 
@@ -561,29 +563,29 @@ function perMillisecondUniversal() {
 
     // log to console in case of error
     if (core.cookies < 0) {
-        helper.popup.createSimple(300,150,"<i>huh, what just happened?</i> <br> An error occured: " + personalization.currentClickedPlural + " are in negative!<br>Please report this to the GitHub accessable in the bottom left corner",false,"default","",false,true);
+        helper.popup.createSimple(300,150,`<i>huh, what just happened?</i> <br> An error occured: ${personalization.currentClickedPlural} are in negative!<br>Please report this to the GitHub accessable in the bottom left corner`,false,"default","",false,true);
     }
     // stats that need to be updated beforehand
     core.buildingsOwned = buildings.keyboard.bought + buildings.grandpa.bought + buildings.ranch.bought + buildings.tv.bought + buildings.worker.bought + buildings.wallet.bought + buildings.church.bought;
     
     // set statistic page statistics
-    if (statsUp == 1) {
-        document.getElementById("cookiesStat").innerHTML = personalization.currentClickedPlural + ": " + helper.commaify(variableView.cookiesView);
-        document.getElementById("allTimeCookies").innerHTML = "All Time " + personalization.currentClickedPlural + ": " + helper.commaify(variableView.totalCookiesView);
-        document.getElementById("cookiesPerSecondStat").innerHTML = personalization.currentClickedPlural + " Per Second: " + helper.commaify(variableView.cookiesPerSecondView);
-        document.getElementById("buildingsOwnedStat").innerHTML = "Buildings Owned: " + helper.commaify(core.buildingsOwned);
-        document.getElementById("cookieBeenClickedTimesStat").innerHTML = "Total " + personalization.currentClicked + " Clicks: " + helper.commaify(core.cookieBeenClickedTimes); // move to cookieClicked() later
+    if (statsUp) {
+        document.getElementById("cookiesStat").innerHTML = `${personalization.currentClickedPlural}: ${helper.commaify(variableView.cookiesView)}`;
+        document.getElementById("allTimeCookies").innerHTML = `All Time ${personalization.currentClickedPlural}: ${helper.commaify(variableView.totalCookiesView)}`;
+        document.getElementById("cookiesPerSecondStat").innerHTML = `${personalization.currentClickedPlural} Per Second: ${helper.commaify(variableView.cookiesPerSecondView)}`;
+        document.getElementById("buildingsOwnedStat").innerHTML = `Buildings Owned: ${helper.commaify(core.buildingsOwned)}`;
+        document.getElementById("cookieBeenClickedTimesStat").innerHTML = `Total ${personalization.currentClicked} Clicks: ${helper.commaify(core.cookieBeenClickedTimes)}`; // move to cookieClicked() later
         document.getElementById("upgradesBoughtStat").innerHTML = `Upgrades Bought: ${upgrades.upgradesBought}`;
     }
 
     // set number of bought to bought (not required unless number of bought is set in console)
-    document.getElementById("keyboardsBought").innerHTML = +buildings.keyboard.bought;
-    document.getElementById("grandpasBought").innerHTML = +buildings.grandpa.bought;
-    document.getElementById("ranchesBought").innerHTML = +buildings.ranch.bought;
-    document.getElementById("tvsBought").innerHTML = +buildings.tv.bought;
-    document.getElementById("workersBought").innerHTML = +buildings.worker.bought;
-    document.getElementById("walletsBought").innerHTML = +buildings.wallet.bought;
-    document.getElementById("churchesBought").innerHTML = +buildings.church.bought;
+    document.getElementById("keyboardsBought").innerHTML = buildings.keyboard.bought;
+    document.getElementById("grandpasBought").innerHTML = buildings.grandpa.bought;
+    document.getElementById("ranchesBought").innerHTML = buildings.ranch.bought;
+    document.getElementById("tvsBought").innerHTML = buildings.tv.bought;
+    document.getElementById("workersBought").innerHTML = buildings.worker.bought;
+    document.getElementById("walletsBought").innerHTML = buildings.wallet.bought;
+    document.getElementById("churchesBought").innerHTML = buildings.church.bought;
     
     // upgrades shown calculation
     upgrades.rowsOfUpgrades = Math.floor(upgrades.currentlyShown / 5) + 1;
@@ -647,7 +649,7 @@ dev.toggleSaving = function() {
             savingAllowed = true;
         }
         if (!inDevelopment) {return;}
-        document.getElementById("currentSavingStatus").innerHTML = "saving: "+savingAllowed;
+        document.getElementById("currentSavingStatus").innerHTML = `saving: ${savingAllowed}`;
     } else {
         console.log("You need developer mode ON to run this command.");
     }
@@ -800,7 +802,7 @@ buildings.hovered = function(building) { // TODO 0.6: Attempt to make this less 
         case "wallet":
             buildingInfoName = "Wallet";
             buildingInfoPrice = helper.commaify(buildings.wallet.upgradeCost);
-            buildingInfoQuote = `more storage space for your vast amount of ${personalization.currentClickedLowercase}`; // ! CHANGE ME
+            buildingInfoQuote = `more storage space for your vast amount of ${personalization.currentClickedLowercasePlural}`; // ! CHANGE ME
             buildingInfoProduces = helper.commaify(buildings.wallet.CPSGain);
             buildingInfoProducing = helper.commaify(Math.round(buildings.wallet.CPSGiven * 10) / 10);
             break;
@@ -814,10 +816,10 @@ buildings.hovered = function(building) { // TODO 0.6: Attempt to make this less 
     }
     if (!mobile) {
         document.getElementById("tooltipName").innerHTML = buildingInfoName;
-        document.getElementById("tooltipPrice").innerHTML = "Price: " + buildingInfoPrice;
-        document.getElementById("tooltipQuote").innerHTML = "\""+buildingInfoQuote+"\"";
-        document.getElementById("tooltipProduces").innerHTML = "Produces: "+buildingInfoProduces+" CPS";
-        document.getElementById("tooltipProducing").innerHTML = "Producing: "+ buildingInfoProducing+" CPS";
+        document.getElementById("tooltipPrice").innerHTML = `Price: ${buildingInfoPrice}`;
+        document.getElementById("tooltipQuote").innerHTML = `\"${buildingInfoQuote}\"`;
+        document.getElementById("tooltipProduces").innerHTML = `Produces: ${buildingInfoProduces} CPS`;
+        document.getElementById("tooltipProducing").innerHTML = `Producing: ${buildingInfoProducing} CPS`;
     }
 
     document.getElementById("tooltip").style.display = "block";
@@ -1007,7 +1009,7 @@ upgrades.hovered = function(id,building) {
     document.getElementById("tooltipDesc").style.display = "block";
 
     document.getElementById("tooltipName").innerHTML = upgrades.names[id];
-    document.getElementById("tooltipPrice").innerHTML = "Price: " + helper.commaify(upgrades.prices[id])
+    document.getElementById("tooltipPrice").innerHTML = `Price: ${helper.commaify(upgrades.prices[id])}`;
     document.getElementById("tooltipDesc").innerHTML = `${upgrades.descriptions[building]}`;
     document.getElementById("tooltipQuote").innerHTML = `<i>\"${upgrades.quotes[id]}\"</i>`;
 
@@ -1098,7 +1100,7 @@ upgrades.checkUpgradeAvailability = function() {
 
 function versionNumberMousedOver(undo=false) {
     if (!undo) {
-    document.getElementById("versionSwitchInfo").style.display = "block";
+        document.getElementById("versionSwitchInfo").style.display = "block";
     } else {
         document.getElementById("versionSwitchInfo").style.display = "none";
     }
@@ -1108,19 +1110,19 @@ function versionNumberMousedOver(undo=false) {
 // Helper Functions
 // ------------------------------------
 helper.reloadCookieCounter = function() {
-    document.getElementById("cookieCounter").innerHTML = personalization.currentClickedPlural + ": " +variableView.cookiesView;
+    document.getElementById("cookieCounter").innerHTML = `${personalization.currentClickedPlural}: ${variableView.cookiesView}`;
     if (mobile) {
-        document.getElementById("cookieCounterStore").innerHTML = personalization.currentClickedPlural + ": " +variableView.cookiesView;
-        document.getElementById("cookieCounterStats").innerHTML = personalization.currentClickedPlural + ": " +variableView.cookiesView;
-        document.getElementById("cookieCounterOptions").innerHTML = personalization.currentClickedPlural + ": " +variableView.cookiesView;
+        document.getElementById("cookieCounterStore").innerHTML = `${personalization.currentClickedPlural}: ${variableView.cookiesView}`;
+        document.getElementById("cookieCounterStats").innerHTML = `${personalization.currentClickedPlural}: ${variableView.cookiesView}`;
+        document.getElementById("cookieCounterOptions").innerHTML = `${personalization.currentClickedPlural}: ${variableView.cookiesView}`;
     }
 }
 helper.reloadCPSCounter = function() {
-    document.getElementById("cookiesPerSecondCounter").innerHTML = personalization.currentClickedPlural + " Per Second: " +variableView.cookiesPerSecondView;
+    document.getElementById("cookiesPerSecondCounter").innerHTML = `${personalization.currentClickedPlural} Per Second: ${variableView.cookiesPerSecondView}`;
     if (mobile) {
-        document.getElementById("cookiesPerSecondCounterStore").innerHTML = personalization.currentClickedPlural + " Per Second: " +variableView.cookiesPerSecondView;
-        document.getElementById("cookiesPerSecondCounterStats").innerHTML = personalization.currentClickedPlural + " Per Second: " +variableView.cookiesPerSecondView;
-        document.getElementById("cookiesPerSecondCounterOptions").innerHTML = personalization.currentClickedPlural + " Per Second: " +variableView.cookiesPerSecondView;
+        document.getElementById("cookiesPerSecondCounterStore").innerHTML = `${personalization.currentClickedPlural} Per Second: ${variableView.cookiesPerSecondView}`;
+        document.getElementById("cookiesPerSecondCounterStats").innerHTML = `${personalization.currentClickedPlural} Per Second: ${variableView.cookiesPerSecondView}`;
+        document.getElementById("cookiesPerSecondCounterOptions").innerHTML = `${personalization.currentClickedPlural} Per Second: ${variableView.cookiesPerSecondView}`;
     }
 }
 helper.reloadBuildingPrices = function() {
@@ -1147,9 +1149,9 @@ helper.popup = {};
 helper.popup.createSimple = function(x,y,text,noButton=false,doWhat="default",title="",backButton=false,isError=false) {
     document.getElementById("simplePopup").style.display = "flex";
     document.getElementById("simplePopupContent").innerHTML = text;
-    document.getElementById("simplePopup").style.width = x + "px";
-    document.getElementById("simplePopupButtonDiv").style.width = x + "px";
-    document.getElementById("simplePopup").style.height = y + "px";
+    document.getElementById("simplePopup").style.width = `${x}px`;
+    document.getElementById("simplePopupButtonDiv").style.width = `${x}px`;
+    document.getElementById("simplePopup").style.height = `${y}px`;
     if (title == "") {
         document.getElementById("simplePopupTitle").style.display = "none";
     } else {
@@ -1178,7 +1180,7 @@ helper.popup.createSimple = function(x,y,text,noButton=false,doWhat="default",ti
     const filter = document.getElementById("filter");
     filter.style.display = "block";
 
-    popupButtonDo = doWhat; // TODO 0.6.1: what even is this?
+    popupButtonDo = doWhat; // TODO 0.6: what even is this?
 }
 helper.popup.destroySimple = function() {
     document.getElementById("simplePopup").style.display = "none";
@@ -1209,8 +1211,8 @@ helper.popup.createAdvanced = function(x,y,html,filter=true) { // i would recomm
     const advancedPopup = document.getElementById("advancedPopup");
 
     advancedPopup.style.display = "flex";
-    advancedPopup.style.width = x+"px";
-    advancedPopup.style.height = y+"px";
+    advancedPopup.style.width = `${x}px`;
+    advancedPopup.style.height = `${y}px`;
 
     if (filter) { document.getElementById("filter").style.display = "block"; }
 
@@ -1224,10 +1226,10 @@ helper.popup.destroyAdvanced = function() {
 // set areas to different things
 personalization.setBackground = function(color) {
     if (!mobile) {
-        personalization.currentBackground = "url(img/backgrounds/background-" + color + ".png)";
+        personalization.currentBackground = `url(img/backgrounds/background-${color}.png)`;
     }
     if (mobile || desktop) {
-        personalization.currentBackground = "url(../img/backgrounds/background-" + color + ".png)";
+        personalization.currentBackground = `url(../img/backgrounds/background-${color}.png)`;
     }
     if (!mobile) {
         document.getElementById("leftSide").style.background = personalization.currentBackground;
@@ -1235,10 +1237,10 @@ personalization.setBackground = function(color) {
         document.getElementById("rightSide").style.background = personalization.currentBackground;
     }
     else {
-        document.querySelector(".content").style.background = "linear-gradient(to right, rgba(0,0,0,0.2), rgba(0,0,0,0.2)), "+ personalization.currentBackground;
+        document.querySelector(".content").style.background = `linear-gradient(to right, rgba(0,0,0,0.2), rgba(0,0,0,0.2)), ${personalization.currentBackground}`;
     }
 
-    helper.consoleLogDev("Background color set to: " + color);
+    helper.consoleLogDev(`Background color set to: ${color}`);
 }
 
 personalization.setCurrentClicked = function(value) {
@@ -1372,12 +1374,7 @@ function closeMiddle() {
 // ------------------------------------
 saves.exportData = function() {
     saves.autoSave();
-    let dataJSON;
-    if (!versionBranch) {
-        dataJSON = JSON.stringify(localStorage.save);
-    } else {
-        dataJSON = JSON.stringify(localStorage.betaSave);
-    }
+    const dataJSON = !versionBranch ? JSON.stringify(localStorage.save) : JSON.stringify(localStorage.betaSave);
 
     const textToBLOB = new Blob([dataJSON], { type: 'text/plain' });
     const sFileName = 'save.ccsave';
@@ -1418,12 +1415,7 @@ saves.importReadData = function() {
     helper.consoleLogDev("imported data: ");
     helper.consoleLogDev(saves.importedData);
 
-    let versionBranchToDisplay;
-    if (!versionBranch) {
-        versionBranchToDisplay = "main";
-    } else {
-        versionBranchToDisplay = "beta";
-    }
+    const versionBranchToDisplay = !versionBranch ? "main" : "beta";
     const saveKeys = Object.keys(saves.importedData);
     saveKeys.forEach((element,index) => { // checks if save's version matches current version
         if (element == "versionBranch") {
@@ -1452,7 +1444,7 @@ saves.importReadData = function() {
     upgrades.destroyAll();
     upgrades.showUnlocked();
 
-    helper.consoleLogDev("Imported save with " +core.cookies+ " cookies.");
+    helper.consoleLogDev(`Imported save with ${core.cookies} cookies.`);
 
     if (mobile) {
         navbarItemClicked("Cookie");
@@ -1492,19 +1484,14 @@ saves.autoSave = function() { // yes if you are wondering i totally 100% without
 }
 
 saves.loadAutoSave = function() {
-    let loadedSave;
-    if (!versionBranch) {
-        loadedSave = JSON.parse(localStorage.getItem("save"));
-    } else {
-        loadedSave = JSON.parse(localStorage.getItem("betaSave"));
-    }
+    const loadedSave = !versionBranch ? JSON.parse(localStorage.getItem("save")) : JSON.parse(localStorage.getItem("betaSave"));
 
     const saveKeys = Object.keys(loadedSave);
     saveKeys.forEach((element,index) => {
         let variable = element;
         if (inDevelopment) {
-            console.log("loaded variable: " + variable);
-            console.log("loaded value: "+loadedSave[element]);
+            console.log(`loaded variable: ${variable}`);
+            console.log(`loaded value: ${loadedSave[element]}`);
         }
         
         try {
@@ -1568,7 +1555,7 @@ mods.loadURL = function(url) {
     file.setAttribute("src",url);
     file.setAttribute("type","text/javascript");
     const modId = mods.numberLoaded + 1;
-    file.setAttribute("id","mod" + modId);
+    file.setAttribute("id",`mod${modId}`);
 
     document.head.appendChild(file);
 
@@ -1616,10 +1603,10 @@ mods.list = function() {
     while (listLeft > 0) {
         const newModItem = document.createElement("div");
         newModItem.setAttribute("class","popup-content mod-in-list");
-        newModItem.setAttribute("id","modList" + listLeft);
+        newModItem.setAttribute("id",`modList${listLeft}`);
 
         const newModID = document.createElement("small");
-        newModID.appendChild(document.createTextNode("#" + listLeft));
+        newModID.appendChild(document.createTextNode(`#${listLeft}`));
         newModID.setAttribute("class","mod-id popup-content");
         newModItem.appendChild(newModID);
 
@@ -1678,7 +1665,7 @@ mods.listClicked = function() {
 }
 
 mods.reloadModsLoadedText = function() {
-    document.getElementById("modsNumberLoaded").innerHTML = "You have " + mods.numberLoaded + " mods loaded!";
+    document.getElementById("modsNumberLoaded").innerHTML = `You have ${mods.numberLoaded} mods loaded!`;
 }
 
 function print() {
@@ -1690,7 +1677,7 @@ function createChangelogEntry(version,added=undefined,changed=undefined,fixed=un
     const changelog = document.querySelector(".changelog-wrapper");
 
     const newChangelogEntry = document.createElement("div");
-    newChangelogEntry.setAttribute("name","version"+version);
+    newChangelogEntry.setAttribute("name",`version${version}`);
     newChangelogEntry.setAttribute("class","changelog");
 
     const versionHeader = document.createElement("h5");
