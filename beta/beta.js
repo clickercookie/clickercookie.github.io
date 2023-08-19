@@ -11,10 +11,8 @@ const personalization = {};
 
 personalization.currentBackground = "url(img/backgrounds/background-blue.png)";
 
-personalization.currentClicked = "Cookie"; // TODO 0.6: I don't need to explain this
-personalization.currentClickedPlural = "Cookies";
-personalization.currentClickedLowercase = "cookie";
-personalization.currentClickedLowercasePlural = "cookies";
+personalization.currentClicked = "Cookie";
+personalization.currentClickedPlural = "Cookies"; // some words have plural "es" at the end so for grammatical safety this is staying
 
 // cookies
 const core = {};
@@ -249,15 +247,15 @@ core.initialization = function() {
         // TODO 0.6: MUST ADD save SUPPORT HERE BEFORE RELEASE!!!
     }
 
-    if (won == 1) {
+    if (won) {
         // document.getElementById("win").style.display = "block";
     }
-    if (hasCheated == 1) {
+    if (hasCheated) {
         document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
     }
 
     // check for development special stuff
-    if (inDevelopment == 1) {
+    if (inDevelopment) {
         // quick buttons
         const devDiv = document.createElement("div");
         
@@ -459,7 +457,7 @@ core.initialization = function() {
     }
     
     // this would go after data is loaded, but it requires the mobile variable to be assigned a value
-    if (isModded == 1 && mobile == 0) {
+    if (isModded && !mobile) {
         document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
     }
 }
@@ -469,12 +467,11 @@ let mousePos = { x: undefined, y: undefined };
 
 window.addEventListener('mousemove', (event) => {
     mousePos = { x: event.clientX, y: event.clientY };
-    if (inDevelopment == 1) {
+    if (inDevelopment) {
         document.getElementById("mousePosDevText").textContent = `Mouse Pos: (${mousePos.x}, ${mousePos.y})`;
     }
     // set positions affected by mouse pos
     document.getElementById("tooltip").style.top = `${mousePos.y - 50}px`;
-
 });
 
 // timer things
@@ -516,7 +513,7 @@ function perMillisecondUniversal() {
         buildings.church.unlocked = 1;
     }
 
-    // these 2 could be combined, but would make manually unlocking buildings more difficult
+    // TODO 0.6: why is this here and how can it be safely removed
 
     // keep unlocked
     if (buildings.grandpa.unlocked == 1) {
@@ -557,7 +554,7 @@ function perMillisecondUniversal() {
     }
 
     // check for stopped cookie production
-    if (cookieProductionStopped == 1) {
+    if (cookieProductionStopped) {
         core.cookies = 0;
     }
 
@@ -617,7 +614,7 @@ core.cookieClicked = function() {
 }
 // dev commands
 dev.setCookies = function(x) {
-    if (dev.devMode == 1) {
+    if (dev.devMode) {
         core.cookies = x;
         core.totalCookies = core.totalCookies + x;
         hasCheated = 1;
@@ -629,7 +626,7 @@ dev.setCookies = function(x) {
     }
 }
 dev.setCPS = function(x) {
-    if (dev.devMode == 1) {
+    if (dev.devMode) {
         dev.CPSGiven = x;
         hasCheated = 1;
         variableView.cookiesPerSecondView = Math.round(core.cookiesPerSecond * 10) / 10;
@@ -802,7 +799,7 @@ buildings.hovered = function(building) { // TODO 0.6: Attempt to make this less 
         case "wallet":
             buildingInfoName = "Wallet";
             buildingInfoPrice = helper.commaify(buildings.wallet.upgradeCost);
-            buildingInfoQuote = `more storage space for your vast amount of ${personalization.currentClickedLowercasePlural}`; // ! CHANGE ME
+            buildingInfoQuote = `more storage space for your vast amount of ${personalization.currentClickedPlural.toLowerCase()}`; // ! CHANGE ME
             buildingInfoProduces = helper.commaify(buildings.wallet.CPSGain);
             buildingInfoProducing = helper.commaify(Math.round(buildings.wallet.CPSGiven * 10) / 10);
             break;
@@ -1135,7 +1132,7 @@ helper.reloadBuildingPrices = function() {
     document.getElementById("churchUpgrade").innerHTML = helper.commaify(buildings.church.upgradeCost);
 }
 helper.consoleLogDev = function(str) {
-    if (dev.devMode == 1) {
+    if (dev.devMode) {
         console.log(str);
     }
 }
@@ -1235,8 +1232,7 @@ personalization.setBackground = function(color) {
         document.getElementById("leftSide").style.background = personalization.currentBackground;
         document.getElementById("middleButtons").style.background = personalization.currentBackground;
         document.getElementById("rightSide").style.background = personalization.currentBackground;
-    }
-    else {
+    } else {
         document.querySelector(".content").style.background = `linear-gradient(to right, rgba(0,0,0,0.2), rgba(0,0,0,0.2)), ${personalization.currentBackground}`;
     }
 
@@ -1254,8 +1250,6 @@ personalization.setCurrentClicked = function(value) {
             }
             personalization.currentClicked = "Cookie";
             personalization.currentClickedPlural = "Cookies";
-            personalization.currentClickedLowercase = "cookie";
-            personalization.currentClickedLowercasePlural = "cookies";
             break;
         case "potato":
             if (!mobile) {
@@ -1266,8 +1260,6 @@ personalization.setCurrentClicked = function(value) {
             }
             personalization.currentClicked = "Potato";
             personalization.currentClickedPlural = "Potatoes";
-            personalization.currentClickedLowercase = "potato";
-            personalization.currentClickedLowercasePlural = "potatoes";
             break;
         case "strawberry":
             if (!mobile) {
@@ -1278,8 +1270,6 @@ personalization.setCurrentClicked = function(value) {
             }
             personalization.currentClicked = "Strawberry";
             personalization.currentClickedPlural = "Strawberries";
-            personalization.currentClickedLowercase = "strawberry";
-            personalization.currentClickedLowercasePlural = "strawberries";
             break;
     }
     upgrades.descriptions[0] = `Multiplys Keyboard and clicking ${this.currentClicked} production by 2`
@@ -1619,7 +1609,7 @@ mods.list = function() {
         listLeft -= 1;
     }
 
-    if (numberToList == 0) {document.getElementById("noModsMessage").style.display = "block";}
+    if (numberToList === 0) {document.getElementById("noModsMessage").style.display = "block";}
     if (numberToList > 0) {document.getElementById("removeModsMessage").style.display = "block";}
 }
 
