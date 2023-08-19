@@ -26,7 +26,8 @@ core.buildingsOwned = 0;
 // upgrades
 const upgrades = {};
 
-// tad bit complex, documentation on this is coming
+// tad bit complex, documentation can be found here: https://github.com/clickercookie/clickercookie.github.io/wiki/Upgrades
+// anything with an asterisk needs to be redone.
 upgrades.unlocked = [
     0,0,0,0,0,
     0,0,0,0,0,
@@ -55,7 +56,7 @@ upgrades.prices = [
     200000000,1000000000,10000000000,1000000000000,100000000000000 // church
 ];
 upgrades.names = [
-    "Reinforced Keys","Obsidian Keys","Osmium Keys","10 finger typing","keyboard5", // keyboard
+    "Reinforced Keys","Obsidian Keys","Osmium Keys","10 finger typing","Macros", // keyboard
     "Hardwood Walking Stick","Rocking Chair","grandpa3","grandpa4","grandpa5", // grandpa
     "Pig Slop","ranch2","ranch3","ranch4","ranch5", // ranch
     "LED Display","television2","television3","television4","television5", // television
@@ -64,18 +65,17 @@ upgrades.names = [
     "church1","church2","church3","church4","church5", // church
 ];
 upgrades.quotes = [
-    "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","temp", // keyboard
+    "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","Why press when you don't have to?", // keyboard
     "nonna dat softwood junk","newest addition to the porch*","temp","temp","temp", // grandpa
     "Wait, what have we been feeding them before now?","temp","temp","temp","temp", // ranch
-    "World's greatest leap in digital technology","temp","temp","temp","temp", // television
+    "World's greatest leap in digital technology*","temp","temp","temp","temp", // television
     "Constant supply of Band-Aids in case of emergency","temp","temp","temp","temp", // worker
-    "I'm sure the federal reserve will be okay with this...","temp","temp","temp","temp", // wallet
+    "I'm sure the federal reserve will be okay with this...*","temp","temp","temp","temp", // wallet
     "temp","temp","temp","temp","temp", // church
 ];
-// anything with an asterisk needs to be redone.
 upgrades.descriptions = ["Multiplys Keyboard and clicking cookie production by 2","Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
 upgrades.img = [
-    "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10FingerTyping.png",undefined,
+    "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png",undefined,
     "hardwood-walking-stick.png",undefined,undefined,undefined,undefined,
     "ranch-upgrade1.png",undefined,undefined,undefined,undefined,
     "tv-upgrade1.png",undefined,undefined,undefined,undefined,
@@ -1589,7 +1589,7 @@ mods.loadFile = function() { // add check if mod is valid
 mods.list = function() {
     const numberToList = mods.allMods.length;
 
-    let listLeft = numberToList;
+    let listLeft = numberToList; // TODO 0.6: for loops because i did this for some reason
     while (listLeft > 0) {
         const newModItem = document.createElement("div");
         newModItem.setAttribute("class","popup-content mod-in-list");
