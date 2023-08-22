@@ -3,7 +3,7 @@
 // ------------------------------------
 const version = "0.6";
 const versionBranch = 1; // 0 is main, 1 is beta
-const inDevelopment = 1; // toggle if developing actively. This is completely different than the builtin dev mode! Recommended that versionBranch is 1 for easier saving if this is toggled.
+const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode! Recommended that versionBranch is 1 for easier saving if this is toggled.
 const desktop = false;
 
 // customization
@@ -551,7 +551,7 @@ function perMillisecondUniversal() {
     document.getElementById("churchesBought").innerHTML = buildings.church.bought;
     
     // upgrades shown calculation
-    upgrades.rowsOfUpgrades = Math.floor(upgrades.currentlyShown / 5) + 1;
+    upgrades.rowsOfUpgrades = Math.ceil(upgrades.currentlyShown / 5);
 
     core.cookiesPerSecond = buildings.keyboard.CPSGiven+buildings.grandpa.CPSGiven+buildings.ranch.CPSGiven+buildings.tv.CPSGiven+buildings.worker.CPSGiven+buildings.wallet.CPSGiven+buildings.church.CPSGiven+dev.CPSGiven;
 }
@@ -948,12 +948,13 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
         }
         break;
     }
+    upgrades.expandUpgradesHolder(); // sometimes the upgrade holder has one too many rows because of weird onmouseover behavior, this prevents that
 }
 
 upgrades.destroy = function(id) {
     document.getElementById(`upgrade${id}`).remove();
     if (!mobile) {
-        hideTooltip()
+        hideTooltip();
     }
 }
 upgrades.destroyAll = function() {
@@ -964,6 +965,7 @@ upgrades.destroyAll = function() {
             continue;
         }
     }
+    upgrades.currentlyShown = 0;
 }
 
 upgrades.hovered = function(id,building) {
@@ -979,12 +981,14 @@ upgrades.hovered = function(id,building) {
     document.getElementById("tooltip").style.display = "block";
 }
 upgrades.expandUpgradesHolder = function(retract=false) {
+    upgrades.rowsOfUpgrades = Math.ceil(upgrades.currentlyShown / 5);
+
     const holder = document.getElementById("upgradesHolder");
     if (retract) {
         holder.style.height = "67.6px";
         return;
     }
-    size = 67.6 * upgrades.rowsOfUpgrades;
+    const size = (upgrades.rowsOfUpgrades === 0) ? 67.6 : 67.6 * upgrades.rowsOfUpgrades;
     holder.style.height = `${size}px`;
 }
 upgrades.showUnlocked = function() {
@@ -1487,7 +1491,6 @@ saves.resetSave = function(fromInit=false) {
     document.getElementById("ifCheatedStat").innerHTML = "";
 
     upgrades.destroyAll();
-    upgrades.currentlyShown = 0;
 
     // document.getElementById("win").style.display = "none";
 

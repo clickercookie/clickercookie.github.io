@@ -347,7 +347,7 @@ small {
 
 /* Infobox when hovering over a building */
 .tooltip {
-    width: 248px;
+    width: 258px;
     height: 110px;
     border-style: solid;
     border-color: black;
