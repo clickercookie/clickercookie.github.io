@@ -184,12 +184,12 @@ const saves = {};
 saves.rawImportedData; // parsed data from the Import function but cannot be read
 saves.importedData; // Data from the Import function
 saves.allToSave = ["core.cookies", "core.totalCookies", "core.cookiesPerSecond", // List of every variable that should be saved, in no particular order.
-                "buildings.keyboard.CPSGiven","buildings.grandpa.CPSGiven","buildings.ranch.CPSGiven","buildings.tv.CPSGiven","buildings.worker.CPSGiven","buildings.wallet.CPSGiven","buildings.church.CPSGiven",
-                "buildings.keyboard.bought","buildings.grandpa.bought","buildings.ranch.bought","buildings.tv.bought","buildings.worker.bought","buildings.wallet.bought","buildings.church.bought",
-                "buildings.keyboard.CPSGain","buildings.grandpa.CPSGain","buildings.ranch.CPSGain","buildings.tv.CPSGain","buildings.worker.CPSGain","buildings.wallet.CPSGain","buildings.church.CPSGain",
-                "buildings.keyboard.upgradeCost","buildings.grandpa.upgradeCost","buildings.ranch.upgradeCost","buildings.tv.upgradeCost","buildings.worker.upgradeCost","buildings.wallet.upgradeCost","buildings.church.upgradeCost",
-                "upgrades.unlocked","upgrades.bought","upgrades.upgradesBought",
-                "core.cookiesPerClick","core.cookieBeenClickedTimes","core.buildingsOwned","hasCheated","won","isModded","versionBranch"
+    "buildings.keyboard.CPSGiven","buildings.grandpa.CPSGiven","buildings.ranch.CPSGiven","buildings.tv.CPSGiven","buildings.worker.CPSGiven","buildings.wallet.CPSGiven","buildings.church.CPSGiven",
+    "buildings.keyboard.bought","buildings.grandpa.bought","buildings.ranch.bought","buildings.tv.bought","buildings.worker.bought","buildings.wallet.bought","buildings.church.bought",
+    "buildings.keyboard.CPSGain","buildings.grandpa.CPSGain","buildings.ranch.CPSGain","buildings.tv.CPSGain","buildings.worker.CPSGain","buildings.wallet.CPSGain","buildings.church.CPSGain",
+    "buildings.keyboard.upgradeCost","buildings.grandpa.upgradeCost","buildings.ranch.upgradeCost","buildings.tv.upgradeCost","buildings.worker.upgradeCost","buildings.wallet.upgradeCost","buildings.church.upgradeCost",
+    "upgrades.unlocked","upgrades.bought","upgrades.upgradesBought",
+    "core.cookiesPerClick","core.cookieBeenClickedTimes","core.buildingsOwned","hasCheated","won","isModded","versionBranch"
 ];
 saves.defaultSavedValues = { // Should be self-explanatory. Doesn't have to be ordered like allToSave, but I would appreciate if it was.
     "core.cookies":0, "core.totalCookies":0, "core.cookiesPerSecond":0,
@@ -496,61 +496,27 @@ function perMillisecondUniversal() {
     // building unlocks
     if (core.totalCookies >= 100) {
         buildings.grandpa.unlocked = 1;
+        document.getElementById("building1").style.display = "block";
     }
     if (core.totalCookies >= 700) {
         buildings.ranch.unlocked = 1;
+        document.getElementById("building2").style.display = "block";
     }
     if (core.totalCookies >= 8000) {
         buildings.tv.unlocked = 1;
+        document.getElementById("building3").style.display = "block";
     }
     if (core.totalCookies >= 80000) {
         buildings.worker.unlocked = 1;
+        document.getElementById("building4").style.display = "block";
     }
     if (core.totalCookies >= 700000) {
         buildings.wallet.unlocked = 1;
+        document.getElementById("building5").style.display = "block";
     }
     if (core.totalCookies >= 15000000) {
         buildings.church.unlocked = 1;
-    }
-
-    // TODO 0.6: why is this here and how can it be safely removed
-
-    // keep unlocked
-    if (buildings.grandpa.unlocked == 1) {
-        document.getElementById("building1").style.display = "block";
-    }
-    else {
-        document.getElementById("building1").style.display = "none";
-    }
-    if (buildings.ranch.unlocked == 1) {
-        document.getElementById("building2").style.display = "block";
-    }
-    else {
-        document.getElementById("building2").style.display = "none";
-    }
-    if (buildings.tv.unlocked == 1) {
-        document.getElementById("building3").style.display = "block";
-    }
-    else {
-        document.getElementById("building3").style.display = "none";
-    }
-    if (buildings.worker.unlocked == 1) {
-        document.getElementById("building4").style.display = "block";
-    }
-    else {
-        document.getElementById("building4").style.display = "none";
-    }
-    if (buildings.wallet.unlocked == 1) {
-        document.getElementById("building5").style.display = "block";
-    }
-    else {
-        document.getElementById("building5").style.display = "none";
-    }
-    if (buildings.church.unlocked == 1) {
         document.getElementById("building6").style.display = "block";
-    }
-    else {
-        document.getElementById("building6").style.display = "none";
     }
 
     // check for stopped cookie production
@@ -1525,6 +1491,13 @@ saves.resetSave = function(fromInit=false) {
 
     // document.getElementById("win").style.display = "none";
 
+    document.getElementById("building1").style.display = "none";
+    document.getElementById("building2").style.display = "none";
+    document.getElementById("building3").style.display = "none";
+    document.getElementById("building4").style.display = "none";
+    document.getElementById("building5").style.display = "none";
+    document.getElementById("building6").style.display = "none";
+
     if (mobile) {
         navbarItemClicked("Cookie");
     }
@@ -1589,24 +1562,22 @@ mods.loadFile = function() { // add check if mod is valid
 mods.list = function() {
     const numberToList = mods.allMods.length;
 
-    let listLeft = numberToList; // TODO 0.6: for loops because i did this for some reason
-    while (listLeft > 0) {
+    for (i = 0; i < numberToList; i++) {
         const newModItem = document.createElement("div");
         newModItem.setAttribute("class","popup-content mod-in-list");
-        newModItem.setAttribute("id",`modList${listLeft}`);
+        newModItem.setAttribute("id",`modList${i}`);
 
         const newModID = document.createElement("small");
-        newModID.appendChild(document.createTextNode(`#${listLeft}`));
+        newModID.appendChild(document.createTextNode(`#${i}`));
         newModID.setAttribute("class","mod-id popup-content");
         newModItem.appendChild(newModID);
 
         const newModName = document.createElement("p");
-        newModName.appendChild(document.createTextNode(JSON.stringify(mods.allMods[listLeft - 1])));
+        newModName.appendChild(document.createTextNode(JSON.stringify(mods.allMods[i])));
         newModName.setAttribute("class","popup-content");
         newModItem.appendChild(newModName);
 
         document.getElementById("modsList").appendChild(newModItem);
-        listLeft -= 1;
     }
 
     if (numberToList === 0) {document.getElementById("noModsMessage").style.display = "block";}
@@ -1619,6 +1590,8 @@ mods.addModData = function(id,data) { // yes i basically stole and renamed this 
         helper.popup.createAdvanced(400,200,"<h3 class='simple-popup-title' style='display:block;'>Error</h3> \
         <p class='popup-content'>This mod's ID is already present!</p> \
         <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>");
+        mods.numberLoaded -= 1;
+        mods.reloadModsLoadedText();
         return false;
     }
     mods.allMods.push(id);
