@@ -173,7 +173,6 @@ let optionsUp = 0;
 
 // misc
 let cookieProductionStopped = 0;
-let buttonDoWhat = "default";
 let hasCheated = 0;
 let won = 0;
 let mobile;
@@ -1147,7 +1146,11 @@ helper.popup.createSimple = function(x,y,text,noButton=false,doWhat="default",ti
     const filter = document.getElementById("filter");
     filter.style.display = "block";
 
-    popupButtonDo = doWhat; // TODO 0.6: what even is this?
+    if (doWhat !== "default") {
+        document.getElementById("simplePopupButton").setAttribute("onclick",`helper.popup.simpleClicked(\"${doWhat}\")`);
+    } else {
+        document.getElementById("simplePopupButton").setAttribute("onclick","helper.popup.simpleClicked()");
+    }
 }
 helper.popup.destroySimple = function() {
     document.getElementById("simplePopup").style.display = "none";
@@ -1155,8 +1158,8 @@ helper.popup.destroySimple = function() {
     document.getElementById("simplePopupButton").style.display = "none";
     document.getElementById("filter").style.display = "none";
 }
-helper.popup.simpleClicked = function() {
-    switch (popupButtonDo) {
+helper.popup.simpleClicked = function(doWhat="default") {
+    switch (doWhat) {
         case "default":
             helper.popup.destroySimple();
             break;
@@ -1169,6 +1172,9 @@ helper.popup.simpleClicked = function() {
             helper.popup.destroySimple();
             location.reload();
             break;
+        default:
+            alert(`Simple Popup doWhat is invalid, value is: ${doWhat} \nPlease report this to the GitHub accessable in the bottom left corner`)
+            this.destroySimple();
     }
     if (core.cookies < 0) {
         core.cookies = 0;
@@ -1242,7 +1248,7 @@ personalization.setCurrentClicked = function(value) {
             personalization.currentClickedPlural = "Strawberries";
             break;
     }
-    upgrades.descriptions[0] = `Multiplys Keyboard and clicking ${this.currentClicked} production by 2`
+    upgrades.descriptions[0] = `Multiplys Keyboard and clicking ${this.currentClicked} production by 2`;
 }
 
 dev.setDevMode = function(value) {
