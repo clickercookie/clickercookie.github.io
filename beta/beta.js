@@ -1011,7 +1011,7 @@ upgrades.checkUpgradeAvailability = function() {
     }
     // Grandpas
     runThroughTimes = 0;
-    for (i = 4; i <= 9; i++) {
+    for (i = 5; i <= 9; i++) {
         if (buildings.grandpa.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
             upgrades.unlocked[i] = 1;
             upgrades.create(i);
