@@ -80,9 +80,9 @@ upgrades.img = [
     "ranch-upgrade1.png",undefined,undefined,undefined,undefined,
     "tv-upgrade1.png",undefined,undefined,undefined,undefined,
     "worker-upgrade1.png",undefined,undefined,undefined,undefined,
+    "200-dollar-bill.png",undefined,undefined,undefined,undefined,
     undefined,undefined,undefined,undefined,undefined,
-    undefined,undefined,undefined,undefined,undefined,
-]
+];
 
 upgrades.upgradesBought = 0;
 upgrades.currentlyShown = 0;
@@ -235,15 +235,23 @@ core.initialization = function() {
     saves.loadAutoSave();
     // if saves are old
     if (localStorage.betaSave[0] == "[") {
-        localStorage.setItem("betaSaveOld",localStorage.betaSave);
-        helper.popup.createAdvanced(400,220,"<h3 class='simple-popup-title' style='display:block;'>oh no</h3> \
-        <p class='popup-content'>so bad news, your save is invalid. if you need it for anything, it can be accessed under local storage key \"betaSaveOld\".</p> \
-        <div style='display:flex;flex-direction:row;height:40px;'> \
-        <button onclick='saves.resetSave(true)' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>Reformat me!</button> \
-        </div>");
+        helper.popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3>
+        <p class='popup-content'>so bad news, your save is invalid. good news, press the button below and it will be transfered to the new format.</p>
+        <div style='display:flex;flex-direction:row;height:40px;'>
+        <button onclick='saves.convert05Save(true)' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>Reformat me!</button>
+        </div>`);
         return "Save the save!";
     } else if (localStorage.save[0] == "[") {
         // TODO 0.6: MUST ADD save SUPPORT HERE BEFORE RELEASE!!!
+    }
+
+    if (localStorage.getItem("betaSaveOld") != null) { // TODO 0.6: remove this check for full release
+        helper.popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3> 
+        <p class='popup-content'>so i kinda lied when i said your save is invalid, i can get it back if you want</p> 
+        <div style='display:flex;flex-direction:row;height:40px;'> 
+        <button onclick='localStorage.removeItem("betaSaveOld")'>i don't want it</button>
+        <button onclick='saves.convert05Save(true,true); localStorage.removeItem("betaSaveOld")' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>gimme it back</button> 
+        </div>`);
     }
 
     if (won) {
@@ -578,6 +586,19 @@ core.cookieClicked = function() {
     helper.reloadCookieCounter();
 }
 // dev commands
+dev.setDevMode = function(value) {
+    switch (value) {
+        case "off":
+            dev.devMode = 0;
+            break;
+        case "on":
+            dev.devMode = 1;
+            console.log("Developer Mode activated.");
+            document.getElementById("devModeSelect").disabled = true;
+            document.getElementById("whiteBackground").style.display = "block";
+            break;
+    }
+}
 dev.setCookies = function(x) {
     if (dev.devMode) {
         core.cookies = x;
@@ -614,14 +635,6 @@ dev.toggleSaving = function() {
         document.getElementById("currentSavingStatus").innerHTML = `saving: ${savingAllowed}`;
     } else {
         console.log("You need developer mode ON to run this command.");
-    }
-}
-
-function versionSwitch() {
-    if (!versionBranch) {
-        window.location.href = "/";
-    } else {
-        window.location.href = "/beta/beta.html";
     }
 }
 
@@ -1064,14 +1077,6 @@ upgrades.checkUpgradeAvailability = function() {
     }
 }
 
-function versionNumberMousedOver(undo=false) {
-    if (!undo) {
-        document.getElementById("versionSwitchInfo").style.display = "block";
-    } else {
-        document.getElementById("versionSwitchInfo").style.display = "none";
-    }
-}
-
 // ------------------------------------
 // Helper Functions
 // ------------------------------------
@@ -1176,7 +1181,7 @@ helper.popup.simpleClicked = function(doWhat="default") {
             alert(`Simple Popup doWhat is invalid, value is: ${doWhat} \nPlease report this to the GitHub accessable in the bottom left corner`)
             this.destroySimple();
     }
-    if (core.cookies < 0) {
+    if (core.cookies < 0) { // TODO 0.6: investigate
         core.cookies = 0;
     }
 }
@@ -1251,21 +1256,9 @@ personalization.setCurrentClicked = function(value) {
     upgrades.descriptions[0] = `Multiplys Keyboard and clicking ${this.currentClicked} production by 2`;
 }
 
-dev.setDevMode = function(value) {
-    switch (value) {
-        case "off":
-            dev.devMode = 0;
-            break;
-        case "on":
-            dev.devMode = 1;
-            console.log("Developer Mode activated.");
-            document.getElementById("devModeSelect").disabled = true;
-            document.getElementById("whiteBackground").style.display = "block";
-            break;
-    }
-}
-
-// toggle menu openness
+// ------------------------------------
+// Random Functions
+// ------------------------------------
 function toggleMiddle(param) {
     const statsMT = document.getElementById("statsMiddleText");
     const infoMT = document.getElementById("infoMiddleText");
@@ -1333,6 +1326,20 @@ function closeMiddle() {
     document.getElementById("statsMiddleText").style.display = "none";
     document.getElementById("infoMiddleText").style.display = "none";
     document.getElementById("middle").style.background = personalization.currentBackground;
+}
+function versionNumberMousedOver(undo=false) {
+    if (!undo) {
+        document.getElementById("versionSwitchInfo").style.display = "block";
+    } else {
+        document.getElementById("versionSwitchInfo").style.display = "none";
+    }
+}
+function versionSwitch() {
+    if (versionBranch) {
+        window.location.href = "/";
+    } else {
+        window.location.href = "/beta/beta.html";
+    }
 }
 
 // ------------------------------------
@@ -1479,7 +1486,7 @@ saves.loadAutoSave = function() {
     upgrades.showUnlocked();
 }
 
-saves.resetSave = function(fromInit=false) {
+saves.resetSave = function() {
     if (!versionBranch) {
         localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
     } else {
@@ -1495,6 +1502,7 @@ saves.resetSave = function(fromInit=false) {
     buildings.wallet.unlocked = 0;
     buildings.church.unlocked = 0;
     document.getElementById("ifCheatedStat").innerHTML = "";
+    document.getElementById("ifModdedStat").innerHTML = "";
 
     upgrades.destroyAll();
 
@@ -1510,13 +1518,114 @@ saves.resetSave = function(fromInit=false) {
     if (mobile) {
         navbarItemClicked("Cookie");
     }
+}
 
-    if (fromInit) {
-        localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
-        localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
-        localStorage.removeItem("devSave");
-        location.reload();
+saves.convert05Save = function(isBeta=false, isBetaSaveOld=false) { // ! this is remaining only for the lifespan of 0.6 and will be removed in the next major update or after a certain time gap, also why this function is a nightmare to understand
+    const oldSave = isBeta ? isBetaSaveOld ? JSON.parse(localStorage.getItem("betaSaveOld")) : JSON.parse(localStorage.getItem("betaSave")) : JSON.parse(localStorage.getItem("save"));
+
+    core.cookies = oldSave[0];
+    core.totalCookies = oldSave[1];
+    core.cookiesPerSecond = oldSave[2];
+
+    buildings.keyboard.CPSGiven = oldSave[3];
+    buildings.grandpa.CPSGiven = oldSave[4];
+    buildings.ranch.CPSGiven = oldSave[5];
+    buildings.tv.CPSGiven = oldSave[6]
+    buildings.worker.CPSGiven = oldSave[7];
+    buildings.wallet.CPSGiven = oldSave[8];
+    buildings.church.CPSGiven = oldSave[9];
+
+    buildings.keyboard.bought = oldSave[10];
+    buildings.grandpa.bought = oldSave[11];
+    buildings.ranch.bought = oldSave[12];
+    buildings.tv.bought = oldSave[13];
+    buildings.worker.bought = oldSave[14];
+    buildings.wallet.bought = oldSave[15];
+    buildings.church.bought = oldSave[16];
+
+    buildings.keyboard.CPSGain = oldSave[17];
+    buildings.grandpa.CPSGain = oldSave[18];
+    buildings.ranch.CPSGain = oldSave[19];
+    buildings.tv.CPSGain = oldSave[20];
+    buildings.worker.CPSGain = oldSave[21];
+    buildings.wallet.CPSGain = oldSave[22];
+    buildings.church.CPSGain = oldSave[23];
+
+    buildings.keyboard.upgradeCost = oldSave[24];
+    buildings.grandpa.upgradeCost = oldSave[25];
+    buildings.ranch.upgradeCost = oldSave[26];
+    buildings.tv.upgradeCost = oldSave[27];
+    buildings.worker.upgradeCost = oldSave[28];
+    buildings.wallet.upgradeCost = oldSave[29];
+    buildings.church.upgradeCost = oldSave[30];
+
+    // no more upgrades bought crap
+
+    core.cookiesPerClick = oldSave[38];
+    core.cookieBeenClickedTimes = oldSave[39];
+    core.buildingsOwned = oldSave[40];
+    // no grandma prompt clicks
+    hasCheated = oldSave[42];
+    // no won
+    isModded = oldSave[44];
+    // obviously no version branch
+
+    upgrades.unlocked = this.defaultSavedValues["upgrades.unlocked"];
+    upgrades.bought = this.defaultSavedValues["upgrades.bought"];
+
+    saves.autoSave();
+
+    buildings.grandpa.unlocked = 0;
+    buildings.ranch.unlocked = 0;
+    buildings.tv.unlocked = 0;
+    buildings.worker.unlocked = 0;
+    buildings.wallet.unlocked = 0;
+    buildings.church.unlocked = 0;
+    document.getElementById("ifCheatedStat").innerHTML = "";
+    document.getElementById("ifModdedStat").innerHTML = "";
+
+    upgrades.destroyAll();
+
+    // document.getElementById("win").style.display = "none";
+
+    if (oldSave[11] >= 1) {
+        document.getElementById("building1").style.display = "block";
+    } else {
+        document.getElementById("building1").style.display = "none";
     }
+    if (oldSave[12] >= 1) {
+        document.getElementById("building2").style.display = "block";
+    } else {
+        document.getElementById("building2").style.display = "none";
+    }
+    if (oldSave[13] >= 1) {
+        document.getElementById("building3").style.display = "block";
+    } else {
+        document.getElementById("building3").style.display = "none";
+    }
+    if (oldSave[14] >= 1) {
+        document.getElementById("building4").style.display = "block";
+    } else {
+        document.getElementById("building4").style.display = "none";
+    }
+    if (oldSave[15] >= 1) {
+        document.getElementById("building5").style.display = "block";
+    } else {
+        document.getElementById("building5").style.display = "none";
+    }
+    if (oldSave[16] >= 1) {
+        document.getElementById("building6").style.display = "block";
+    } else {
+        document.getElementById("building6").style.display = "none";
+    }
+    
+    if (localStorage.getItem("devSave") != null) {
+        localStorage.removeItem("devSave");
+    }
+    if (isBetaSaveOld) {
+        localStorage.removeItem("betaSaveOld");
+    }
+    location.reload();
 }
 
 // ------------------------------------
