@@ -183,19 +183,19 @@ const saves = {};
 saves.rawImportedData; // parsed data from the Import function but cannot be read
 saves.importedData; // Data from the Import function
 saves.allToSave = ["core.cookies", "core.totalCookies", "core.cookiesPerSecond", // List of every variable that should be saved, in no particular order.
-    "buildings.keyboard.CPSGiven","buildings.grandpa.CPSGiven","buildings.ranch.CPSGiven","buildings.tv.CPSGiven","buildings.worker.CPSGiven","buildings.wallet.CPSGiven","buildings.church.CPSGiven",
-    "buildings.keyboard.bought","buildings.grandpa.bought","buildings.ranch.bought","buildings.tv.bought","buildings.worker.bought","buildings.wallet.bought","buildings.church.bought",
-    "buildings.keyboard.CPSGain","buildings.grandpa.CPSGain","buildings.ranch.CPSGain","buildings.tv.CPSGain","buildings.worker.CPSGain","buildings.wallet.CPSGain","buildings.church.CPSGain",
-    "buildings.keyboard.upgradeCost","buildings.grandpa.upgradeCost","buildings.ranch.upgradeCost","buildings.tv.upgradeCost","buildings.worker.upgradeCost","buildings.wallet.upgradeCost","buildings.church.upgradeCost",
+    "keyboard.CPSGiven","grandpa.CPSGiven","ranch.CPSGiven","television.CPSGiven","worker.CPSGiven","wallet.CPSGiven","church.CPSGiven",
+    "keyboard.bought","grandpa.bought","ranch.bought","television.bought","worker.bought","wallet.bought","church.bought",
+    "keyboard.CPSGain","grandpa.CPSGain","ranch.CPSGain","television.CPSGain","worker.CPSGain","wallet.CPSGain","church.CPSGain",
+    "keyboard.upgradeCost","grandpa.upgradeCost","ranch.upgradeCost","television.upgradeCost","worker.upgradeCost","wallet.upgradeCost","church.upgradeCost",
     "upgrades.unlocked","upgrades.bought","upgrades.upgradesBought",
     "core.cookiesPerClick","core.cookieBeenClickedTimes","core.buildingsOwned","hasCheated","won","isModded","versionBranch"
 ];
 saves.defaultSavedValues = { // Should be self-explanatory. Doesn't have to be ordered like allToSave, but I would appreciate if it was.
     "core.cookies":0, "core.totalCookies":0, "core.cookiesPerSecond":0,
-    "buildings.keyboard.CPSGiven":0,"buildings.grandpa.CPSGiven":0,"buildings.ranch.CPSGiven":0,"buildings.tv.CPSGiven":0,"buildings.worker.CPSGiven":0,"buildings.wallet.CPSGiven":0,"buildings.church.CPSGiven":0,
-    "buildings.keyboard.bought":0,"buildings.grandpa.bought":0,"buildings.ranch.bought":0,"buildings.tv.bought":0,"buildings.worker.bought":0,"buildings.wallet.bought":0,"buildings.church.bought":0,
-    "buildings.keyboard.CPSGain":0.1,"buildings.grandpa.CPSGain":1,"buildings.ranch.CPSGain":8,"buildings.tv.CPSGain":47,"buildings.worker.CPSGain":260,"buildings.wallet.CPSGain":1440,"buildings.church.CPSGain":7800,
-    "buildings.keyboard.upgradeCost":15,"buildings.grandpa.upgradeCost":100,"buildings.ranch.upgradeCost":1100,"buildings.tv.upgradeCost":12000,"buildings.worker.upgradeCost":130000,"buildings.wallet.upgradeCost":1400000,"buildings.church.upgradeCost":20000000,
+    "keyboard.CPSGiven":0,"grandpa.CPSGiven":0,"ranch.CPSGiven":0,"television.CPSGiven":0,"worker.CPSGiven":0,"wallet.CPSGiven":0,"church.CPSGiven":0,
+    "keyboard.bought":0,"grandpa.bought":0,"ranch.bought":0,"television.bought":0,"worker.bought":0,"wallet.bought":0,"church.bought":0,
+    "keyboard.CPSGain":0.1,"grandpa.CPSGain":1,"ranch.CPSGain":8,"television.CPSGain":47,"worker.CPSGain":260,"wallet.CPSGain":1440,"church.CPSGain":7800,
+    "keyboard.upgradeCost":15,"grandpa.upgradeCost":100,"ranch.upgradeCost":1100,"television.upgradeCost":12000,"worker.upgradeCost":130000,"wallet.upgradeCost":1400000,"church.upgradeCost":20000000,
     "upgrades.unlocked":upgrades.unlocked,"upgrades.bought":upgrades.bought,"upgrades.upgradesBought":0,
     "core.cookiesPerClick":1,"core.cookieBeenClickedTimes":0,"core.buildingsOwned":0,"hasCheated":0,"won":0,"isModded":0,"versionBranch":versionBranch
 };
@@ -232,11 +232,13 @@ core.initialization = function() {
         localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
         console.log("betaSave was null and was automatically reset, if this is your first time playing this is an intended behavior.");
     }
+
     saves.loadAutoSave();
+
     // if saves are old
     if (localStorage.betaSave[0] == "[") {
         helper.popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3>
-        <p class='popup-content'>so bad news, your save is invalid. good news, press the button below and it will be transfered to the new format.</p>
+        <p class='popup-content'>so we changed the saving system again, good news, press the button below and it will be transfered to the new format.</p>
         <div style='display:flex;flex-direction:row;height:40px;'>
         <button onclick='saves.convert05Save(true)' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>Reformat me!</button>
         </div>`);
@@ -346,18 +348,15 @@ core.initialization = function() {
         // show the developer mode switch
         document.getElementById("devForm").style.display = "block";
     }
-    switch (inDevelopment) {
-        case 0:
-            break;
-        case 1:
-            document.getElementById("title").innerHTML = "Clicker Cookie Dev";
-            break;
+    if (inDevelopment) {
+        document.getElementById("title").innerHTML = "Clicker Cookie Dev";
     }
 
     // Changelog Entries, AKA the messiest place ever.
     createChangelogEntry("0.6",["The long awaited 5 upgrades for every single building. No upgrades are planned beyond this.",
     "Temporary notification in the bottom-left corner when the game saves."],
     ["Upgrades to building and upgrade pixel art. For any artists willing to contribute, .ase files can be found in a seperate folder in the img folder on the GitHub.",
+    "All buildings are now apart of a class so mod developers can have an easier time creating them.",
     "The saving system. Yes, 3rd time or something, but this time I GURANTEE it's going to stick.",
     "Grandma has been removed due to addition of upgrades and needing to rebalance when the player \"wins\". Also because i'm scared of copyright issues :)",
     "All changelog entries are now created with Javascript to cut down on the HTML size.",
@@ -502,28 +501,28 @@ function perMillisecondUniversal() {
 
     // building unlocks
     if (core.totalCookies >= 100) {
-        buildings.grandpa.unlocked = 1;
-        document.getElementById("building1").style.display = "block";
+        grandpa.unlocked = 1;
+        grandpa.setVisibility(true);
     }
     if (core.totalCookies >= 700) {
-        buildings.ranch.unlocked = 1;
-        document.getElementById("building2").style.display = "block";
+        ranch.unlocked = 1;
+        ranch.setVisibility(true);
     }
     if (core.totalCookies >= 8000) {
-        buildings.tv.unlocked = 1;
-        document.getElementById("building3").style.display = "block";
+        television.unlocked = 1;
+        television.setVisibility(true);
     }
     if (core.totalCookies >= 80000) {
-        buildings.worker.unlocked = 1;
-        document.getElementById("building4").style.display = "block";
+        worker.unlocked = 1;
+        worker.setVisibility(true);
     }
     if (core.totalCookies >= 700000) {
-        buildings.wallet.unlocked = 1;
-        document.getElementById("building5").style.display = "block";
+        wallet.unlocked = 1;
+        wallet.setVisibility(true);
     }
     if (core.totalCookies >= 15000000) {
-        buildings.church.unlocked = 1;
-        document.getElementById("building6").style.display = "block";
+        church.unlocked = 1;
+        church.setVisibility(true);
     }
 
     // check for stopped cookie production
@@ -536,7 +535,7 @@ function perMillisecondUniversal() {
         helper.popup.createSimple(300,150,`<i>huh, what just happened?</i> <br> An error occured: ${personalization.currentClickedPlural} are in negative!<br>Please report this to the GitHub accessable in the bottom left corner`,false,"default","",false,true);
     }
     // stats that need to be updated beforehand
-    core.buildingsOwned = buildings.keyboard.bought + buildings.grandpa.bought + buildings.ranch.bought + buildings.tv.bought + buildings.worker.bought + buildings.wallet.bought + buildings.church.bought;
+    core.buildingsOwned = keyboard.bought + grandpa.bought + ranch.bought + television.bought + worker.bought + wallet.bought + church.bought;
     
     // set statistic page statistics
     if (statsUp) {
@@ -549,18 +548,18 @@ function perMillisecondUniversal() {
     }
 
     // set number of bought to bought (not required unless number of bought is set in console)
-    document.getElementById("keyboardsBought").innerHTML = buildings.keyboard.bought;
-    document.getElementById("grandpasBought").innerHTML = buildings.grandpa.bought;
-    document.getElementById("ranchesBought").innerHTML = buildings.ranch.bought;
-    document.getElementById("tvsBought").innerHTML = buildings.tv.bought;
-    document.getElementById("workersBought").innerHTML = buildings.worker.bought;
-    document.getElementById("walletsBought").innerHTML = buildings.wallet.bought;
-    document.getElementById("churchesBought").innerHTML = buildings.church.bought;
+    document.getElementById("keyboardsBought").innerHTML = keyboard.bought;
+    document.getElementById("grandpasBought").innerHTML = grandpa.bought;
+    document.getElementById("ranchesBought").innerHTML = ranch.bought;
+    document.getElementById("televisionsBought").innerHTML = television.bought;
+    document.getElementById("workersBought").innerHTML = worker.bought;
+    document.getElementById("walletsBought").innerHTML = wallet.bought;
+    document.getElementById("churchesBought").innerHTML = church.bought;
     
     // upgrades shown calculation
     upgrades.rowsOfUpgrades = Math.ceil(upgrades.currentlyShown / 5);
 
-    core.cookiesPerSecond = buildings.keyboard.CPSGiven+buildings.grandpa.CPSGiven+buildings.ranch.CPSGiven+buildings.tv.CPSGiven+buildings.worker.CPSGiven+buildings.wallet.CPSGiven+buildings.church.CPSGiven+dev.CPSGiven;
+    core.cookiesPerSecond = keyboard.CPSGiven+grandpa.CPSGiven+ranch.CPSGiven+television.CPSGiven+worker.CPSGiven+wallet.CPSGiven+church.CPSGiven+dev.CPSGiven;
 }
 
 function cookiesPerSecondUpdate() {
@@ -641,166 +640,126 @@ dev.toggleSaving = function() {
 // ------------------------------------
 // Buildings
 // ------------------------------------
-buildings.keyboard.buy = function() {
-    if (core.cookies >= buildings.keyboard.upgradeCost) {
-        core.cookies -= buildings.keyboard.upgradeCost;
-        buildings.keyboard.upgradeCost *= 1.15;
-        buildings.keyboard.upgradeCost = Math.floor(buildings.keyboard.upgradeCost);
-        buildings.keyboard.bought += 1;
-        buildings.keyboard.CPSGiven += buildings.keyboard.CPSGain;
-        helper.reloadCookieCounter();
-        document.getElementById("keyboardUpgrade").innerHTML = helper.commaify(buildings.keyboard.upgradeCost);
-        document.getElementById("keyboardsBought").innerHTML = buildings.keyboard.bought;
-        buildings.hovered("keyboard");
-    }
-}
-buildings.grandpa.buy = function() {
-    if (core.cookies >= buildings.grandpa.upgradeCost) {
-        core.cookies -= buildings.grandpa.upgradeCost;
-        buildings.grandpa.upgradeCost *= 1.15;
-        buildings.grandpa.upgradeCost = Math.floor(buildings.grandpa.upgradeCost);
-        buildings.grandpa.bought += 1;
-        buildings.grandpa.CPSGiven += buildings.grandpa.CPSGain;
-        helper.reloadCookieCounter();
-        document.getElementById("grandpaUpgrade").innerHTML = helper.commaify(buildings.grandpa.upgradeCost);
-        document.getElementById("grandpasBought").innerHTML = buildings.grandpa.bought;
-        buildings.hovered("grandpa");
-    }
-}
-buildings.ranch.buy = function() {
-    if (core.cookies >= buildings.ranch.upgradeCost) {
-        core.cookies -= buildings.ranch.upgradeCost;
-        buildings.ranch.upgradeCost *= 1.15;
-        buildings.ranch.upgradeCost = Math.floor(buildings.ranch.upgradeCost);
-        buildings.ranch.bought += 1;
-        buildings.ranch.CPSGiven += buildings.ranch.CPSGain;
-        helper.reloadCookieCounter();
-        document.getElementById("ranchUpgrade").innerHTML = helper.commaify(buildings.ranch.upgradeCost);
-        document.getElementById("ranchesBought").innerHTML = buildings.ranch.bought;
-        buildings.hovered("ranch");
-    }
-}
-buildings.tv.buy = function() {
-    if (core.cookies >= buildings.tv.upgradeCost) {
-        core.cookies -= buildings.tv.upgradeCost;
-        buildings.tv.upgradeCost *= 1.15;
-        buildings.tv.upgradeCost = Math.floor(buildings.tv.upgradeCost);
-        buildings.tv.bought += 1;
-        buildings.tv.CPSGiven += buildings.tv.CPSGain;
-        helper.reloadCookieCounter();
-        document.getElementById("tvUpgrade").innerHTML = helper.commaify(buildings.tv.upgradeCost);
-        document.getElementById("tvsBought").innerHTML = buildings.tv.bought;
-        buildings.hovered("tv");
-    }
-}
-buildings.worker.buy = function() {
-    if (core.cookies >= buildings.worker.upgradeCost) {
-        core.cookies -= buildings.worker.upgradeCost;
-        buildings.worker.upgradeCost *= 1.15;
-        buildings.worker.upgradeCost = Math.floor(buildings.worker.upgradeCost);
-        buildings.worker.bought += 1;
-        buildings.worker.CPSGiven += buildings.worker.CPSGain;
-        helper.reloadCookieCounter();
-        document.getElementById("workerUpgrade").innerHTML = helper.commaify(buildings.worker.upgradeCost);
-        document.getElementById("workersBought").innerHTML = buildings.worker.bought;
-        buildings.hovered("worker");
-    }
-}
-buildings.wallet.buy = function() {
-    if (core.cookies >= buildings.wallet.upgradeCost) {
-        core.cookies -= buildings.wallet.upgradeCost;
-        buildings.wallet.upgradeCost *= 1.15;
-        buildings.wallet.upgradeCost = Math.floor(buildings.wallet.upgradeCost);
-        buildings.wallet.bought += 1;
-        buildings.wallet.CPSGiven += buildings.wallet.CPSGain;
-        helper.reloadCookieCounter();
-        document.getElementById("walletUpgrade").innerHTML = helper.commaify(buildings.wallet.upgradeCost);
-        document.getElementById("walletsBought").innerHTML = buildings.wallet.bought;
-        buildings.hovered("wallet");
-    }
-}
-buildings.church.buy = function() {
-    if (core.cookies >= buildings.church.upgradeCost) {
-        core.cookies -= buildings.church.upgradeCost;
-        buildings.church.upgradeCost *= 1.15;
-        buildings.church.upgradeCost = Math.floor(buildings.church.upgradeCost);
-        buildings.church.bought += 1;
-        buildings.church.CPSGiven += buildings.church.CPSGain;
-        helper.reloadCookieCounter();
-        document.getElementById("churchUpgrade").innerHTML = helper.commaify(buildings.church.upgradeCost);
-        document.getElementById("churchesBought").innerHTML = buildings.church.bought;
-        buildings.hovered("church");
-    }
-}
+class Building {
+    static instances = [];
 
-buildings.hovered = function(building) { // TODO 0.6: Attempt to make this less of a disaster, maybe loops?
-    document.getElementById("tooltipDesc").style.display = "none";
-    document.getElementById("tooltipProduces").style.display = "block";
-    document.getElementById("tooltipProducing").style.display = "block";
+    constructor(name,quote,upgradeCost,CPSGain,id,iconImg="unknown.png",esPlural=false) {
+        if (document.getElementById(`building${id}`) != null) {
+            helper.popup.createSimple(300,150,`<i>huh, what just happened?</i> <br> An error occured: Tried to create a building that already exists (id ${id}).`,true,"default","Error",false,true);
+            return;
+        }
 
-    switch (building) {
-        case "keyboard":
-            buildingInfoName = "Keyboard";
-            buildingInfoPrice = helper.commaify(buildings.keyboard.upgradeCost);
-            buildingInfoQuote = "type in cookies";
-            buildingInfoProduces = helper.commaify(buildings.keyboard.CPSGain);
-            buildingInfoProducing = helper.commaify(Math.round(buildings.keyboard.CPSGiven * 10) / 10);
-            break;
-        case "grandpa":
-            buildingInfoName = "Grandpa";
-            buildingInfoPrice = helper.commaify(buildings.grandpa.upgradeCost);
-            buildingInfoQuote = "as long as gramps gets a cut";
-            buildingInfoProduces = helper.commaify(buildings.grandpa.CPSGain);
-            buildingInfoProducing = helper.commaify(Math.round(buildings.grandpa.CPSGiven * 10) / 10);
-            break;
-        case "ranch":
-            buildingInfoName = "Ranch";
-            buildingInfoPrice = helper.commaify(buildings.ranch.upgradeCost);
-            buildingInfoQuote = "Not the dressing kind";
-            buildingInfoProduces = helper.commaify(buildings.ranch.CPSGain);
-            buildingInfoProducing = helper.commaify(Math.round(buildings.ranch.CPSGiven * 10) / 10);
-            break;
-        case "tv":
-            buildingInfoName = "Television";
-            buildingInfoPrice = helper.commaify(buildings.tv.upgradeCost);
-            buildingInfoQuote = "hold infomercials on your cookies";
-            buildingInfoProduces = helper.commaify(buildings.tv.CPSGain);
-            buildingInfoProducing = helper.commaify(Math.round(buildings.tv.CPSGiven * 10) / 10);
-            break;
-        case "worker":
-            buildingInfoName = "Worker";
-            buildingInfoPrice = helper.commaify(buildings.worker.upgradeCost);
-            buildingInfoQuote = "cookies via manual labor";
-            buildingInfoProduces = helper.commaify(buildings.worker.CPSGain);
-            buildingInfoProducing = helper.commaify(Math.round(buildings.worker.CPSGiven * 10) / 10);
-            break;
-        case "wallet":
-            buildingInfoName = "Wallet";
-            buildingInfoPrice = helper.commaify(buildings.wallet.upgradeCost);
-            buildingInfoQuote = `more storage space for your vast amount of ${personalization.currentClickedPlural.toLowerCase()}`; // ! CHANGE ME
-            buildingInfoProduces = helper.commaify(buildings.wallet.CPSGain);
-            buildingInfoProducing = helper.commaify(Math.round(buildings.wallet.CPSGiven * 10) / 10);
-            break;
-        case "church":
-            buildingInfoName = "Church";
-            buildingInfoPrice = helper.commaify(buildings.church.upgradeCost);
-            buildingInfoQuote = "pray to the almighty cookie gods";
-            buildingInfoProduces = helper.commaify(buildings.church.CPSGain);
-            buildingInfoProducing = helper.commaify(Math.round(buildings.church.CPSGiven * 10) / 10);
-            break;
-    }
-    if (!mobile) {
-        document.getElementById("tooltipName").innerHTML = buildingInfoName;
-        document.getElementById("tooltipPrice").innerHTML = `Price: ${buildingInfoPrice}`;
-        document.getElementById("tooltipQuote").innerHTML = `\"${buildingInfoQuote}\"`;
-        document.getElementById("tooltipProduces").innerHTML = `Produces: ${buildingInfoProduces} CPS`;
-        document.getElementById("tooltipProducing").innerHTML = `Producing: ${buildingInfoProducing} CPS`;
+        this.name = name; // SHOULD BE SAME AS OBJECT INSTANCE NAME, might change this requirement but how to do that is currently beyond my knowledge
+        this.quote = quote;
+        this.upgradeCost = upgradeCost;
+        this.CPSGiven = 0;
+        this.CPSGain = CPSGain;
+        this.id = id
+
+        this.bought = 0;
+        this.unlocked = 0;
+        if (esPlural) { this.plural = "es"; } 
+        else { this.plural = "s"; }
+
+        Building.instances.push(this.name);
+
+        // setup HTML (uses indentation to show structure)
+        this.building = document.createElement("div");
+        this.building.setAttribute("id",`building${this.id}`);
+        this.building.setAttribute("class","building");
+        this.building.setAttribute("onclick",`${this.name}.buy()`); // this is why names must be the instance name
+        this.building.setAttribute("onmouseover",`${this.name}.hovered()`); // this is why names must be the instance name
+        this.building.setAttribute("onmouseout","hideTooltip()");
+
+            const icon = document.createElement("img");
+            icon.setAttribute("class","building-icon");
+            icon.setAttribute("src",`img/${iconImg}`);
+            icon.setAttribute("alt",`${this.name} icon`);
+            this.building.appendChild(icon);
+
+            const buildingContent = document.createElement("div");
+            buildingContent.setAttribute("class","building-content");
+
+                const buildingsBoughtWrapper = document.createElement("div");
+                buildingsBoughtWrapper.setAttribute("class","buildings-bought-wrapper");
+
+                    const buildingsBought = document.createElement("p");
+                    buildingsBought.setAttribute("class","buildings-bought");
+                    buildingsBought.setAttribute("id",`${this.name}${this.plural}Bought`);
+                    buildingsBought.innerHTML = "0";
+                    buildingsBoughtWrapper.appendChild(buildingsBought);
+                
+                buildingContent.appendChild(buildingsBoughtWrapper);
+            
+                const buildingName = document.createElement("p");
+                buildingName.setAttribute("class","building-name");
+                buildingName.innerHTML = `${capitalize(this.name)}`; // ? THIS IS ERROR
+                buildingContent.appendChild(buildingName);
+
+                const buildingPrice = document.createElement("p");
+                buildingPrice.setAttribute("class","building-price");
+                buildingPrice.setAttribute("id",`${this.name}Cost`);
+                buildingPrice.innerHTML = this.upgradeCost;
+                buildingContent.appendChild(buildingPrice);
+
+            this.building.appendChild(buildingContent);
+
+        document.getElementById("buildingsWrapper").appendChild(this.building);
+        // end setup HTML
     }
 
-    document.getElementById("tooltip").style.display = "block";
-}
-function hideTooltip() {
-    document.getElementById("tooltip").style.display = "none";
+    buy() {
+        if (core.cookies >= this.upgradeCost) {
+            core.cookies -= this.upgradeCost;
+            this.upgradeCost *= 1.15;
+            this.upgradeCost = Math.floor(this.upgradeCost);
+            this.bought += 1;
+            this.CPSGiven += this.CPSGain;
+            helper.reloadCookieCounter();
+            document.getElementById(`${this.name}Cost`).innerHTML = helper.commaify(this.upgradeCost);
+            document.getElementById(`${this.name}${this.plural}Bought`).innerHTML = this.bought;
+            this.hovered();
+        }
+    }
+
+    hovered() {
+        document.getElementById("tooltipDesc").style.display = "none";
+        document.getElementById("tooltipProduces").style.display = "block";
+        document.getElementById("tooltipProducing").style.display = "block";
+
+        buildingInfoName = this.name.capitalize();
+        buildingInfoPrice = helper.commaify(this.upgradeCost);
+        buildingInfoQuote = this.quote;
+        buildingInfoProduces = helper.commaify(this.CPSGain);
+        buildingInfoProducing = helper.commaify(Math.round(this.CPSGiven * 10) / 10);
+
+        if (!mobile) {
+            document.getElementById("tooltipName").innerHTML = buildingInfoName;
+            document.getElementById("tooltipPrice").innerHTML = `Price: ${buildingInfoPrice}`;
+            document.getElementById("tooltipQuote").innerHTML = `\"${buildingInfoQuote}\"`;
+            document.getElementById("tooltipProduces").innerHTML = `Produces: ${buildingInfoProduces} CPS`;
+            document.getElementById("tooltipProducing").innerHTML = `Producing: ${buildingInfoProducing} CPS`;
+        }
+    
+        document.getElementById("tooltip").style.display = "block";
+    }
+
+    setVisibility(bool) {
+        if (bool) {
+            this.building.style.display = "block";
+        } else {
+            this.building.style.display = "none";
+        }
+    }
+
+    reloadPrice() {
+        document.getElementById(`${this.name}Cost`).innerHTML = helper.commaify(this.upgradeCost);
+    }
+
+    destroy() {
+        delete Building.instances[this.name];
+        document.getElementById(`building${this.id}`).remove();
+    }
 }
 
 // ------------------------------------
@@ -863,8 +822,8 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
     case 0:
         if (core.cookies >= upgrades.prices[id]) {
             core.cookies -= upgrades.prices[id];
-            buildings.keyboard.CPSGiven *= 2;
-            buildings.keyboard.CPSGain *= 2;
+            keyboard.CPSGiven *= 2;
+            keyboard.CPSGain *= 2;
             core.cookiesPerClick *= 2;
             upgrades.bought[id] = 1;
             if (!mobile) {
@@ -878,8 +837,8 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
     case 1:
         if (core.cookies >= upgrades.prices[id]) {
             core.cookies -= upgrades.prices[id];
-            buildings.grandpa.CPSGiven *= 2;
-            buildings.grandpa.CPSGain *= 2;
+            grandpa.CPSGiven *= 2;
+            grandpa.CPSGain *= 2;
             upgrades.bought[id] = 1;
             if (!mobile) {
                 upgrades.hovered(id,building);
@@ -892,8 +851,8 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
     case 2:
         if (core.cookies >= upgrades.prices[id]) {
             core.cookies -= upgrades.prices[id];
-            buildings.ranch.CPSGiven *= 2;
-            buildings.ranch.CPSGain *= 2;
+            ranch.CPSGiven *= 2;
+            ranch.CPSGain *= 2;
             upgrades.bought[id] = 1;
             if (!mobile) {
                 upgrades.hovered(id,building);
@@ -906,8 +865,8 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
     case 3:
         if (core.cookies >= upgrades.prices[id]) {
             core.cookies -= upgrades.prices[id];
-            buildings.tv.CPSGiven *= 2;
-            buildings.tv.CPSGain *= 2;
+            television.CPSGiven *= 2;
+            television.CPSGain *= 2;
             upgrades.bought[id] = 1;
             if (!mobile) {
                 upgrades.hovered(id,building);
@@ -920,8 +879,8 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
     case 4:
         if (core.cookies >= upgrades.prices[id]) {
             core.cookies -= upgrades.prices[id];
-            buildings.worker.CPSGiven *= 2;
-            buildings.worker.CPSGain *= 2;
+            worker.CPSGiven *= 2;
+            worker.CPSGain *= 2;
             upgrades.bought[id] = 1;
             if (!mobile) {
                 upgrades.hovered(id,building);
@@ -934,8 +893,8 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
     case 5:
         if (core.cookies >= upgrades.prices[id]) {
             core.cookies -= upgrades.prices[id];
-            buildings.wallet.CPSGiven *= 2;
-            buildings.wallet.CPSGain *= 2;
+            wallet.CPSGiven *= 2;
+            wallet.CPSGain *= 2;
             upgrades.bought[id] = 1;
             if (!mobile) {
                 upgrades.hovered(id,building);
@@ -948,8 +907,8 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
     case 6:
         if (core.cookies >= upgrades.prices[id]) {
             core.cookies -= upgrades.prices[id];
-            buildings.church.CPSGiven *= 2;
-            buildings.church.CPSGain *= 2;
+            church.CPSGiven *= 2;
+            church.CPSGain *= 2;
             upgrades.bought[id] = 1;
             if (!mobile) {
                 upgrades.hovered(id,building);
@@ -1015,7 +974,7 @@ upgrades.checkUpgradeAvailability = function() {
     ];
     // Keyboards
     for (i = 0; i <= 5; i++) {
-        if (buildings.keyboard.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+        if (keyboard.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
             upgrades.unlocked[i] = 1;
             upgrades.create(i);
         }
@@ -1024,7 +983,7 @@ upgrades.checkUpgradeAvailability = function() {
     // Grandpas
     runThroughTimes = 0;
     for (i = 5; i <= 9; i++) {
-        if (buildings.grandpa.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+        if (grandpa.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
             upgrades.unlocked[i] = 1;
             upgrades.create(i);
         }
@@ -1033,7 +992,7 @@ upgrades.checkUpgradeAvailability = function() {
     // Ranches
     runThroughTimes = 0;
     for (i = 10; i <= 14; i++) {
-        if (buildings.ranch.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+        if (ranch.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
             upgrades.unlocked[i] = 1;
             upgrades.create(i);
         }
@@ -1042,7 +1001,7 @@ upgrades.checkUpgradeAvailability = function() {
     // TVs
     runThroughTimes = 0;
     for (i = 15; i <= 19; i++) {
-        if (buildings.tv.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+        if (television.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
             upgrades.unlocked[i] = 1;
             upgrades.create(i);
         }
@@ -1051,7 +1010,7 @@ upgrades.checkUpgradeAvailability = function() {
     // Workers
     runThroughTimes = 0;
     for (i = 20; i <= 24; i++) {
-        if (buildings.worker.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+        if (worker.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
             upgrades.unlocked[i] = 1;
             upgrades.create(i);
         }
@@ -1060,7 +1019,7 @@ upgrades.checkUpgradeAvailability = function() {
     // Wallets
     runThroughTimes = 0;
     for (i = 25; i <= 29; i++) {
-        if (buildings.wallet.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+        if (wallet.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
             upgrades.unlocked[i] = 1;
             upgrades.create(i);
         }
@@ -1069,7 +1028,7 @@ upgrades.checkUpgradeAvailability = function() {
     // Churches
     runThroughTimes = 0;
     for (i = 30; i <= 34; i++) {
-        if (buildings.church.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+        if (church.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
             upgrades.unlocked[i] = 1;
             upgrades.create(i);
         }
@@ -1096,14 +1055,14 @@ helper.reloadCPSCounter = function() {
         document.getElementById("cookiesPerSecondCounterOptions").innerHTML = `${personalization.currentClickedPlural} Per Second: ${variableView.cookiesPerSecondView}`;
     }
 }
-helper.reloadBuildingPrices = function() {
-    document.getElementById("keyboardUpgrade").innerHTML = helper.commaify(buildings.keyboard.upgradeCost);
-    document.getElementById("grandpaUpgrade").innerHTML = helper.commaify(buildings.grandpa.upgradeCost);
-    document.getElementById("ranchUpgrade").innerHTML = helper.commaify(buildings.ranch.upgradeCost);
-    document.getElementById("tvUpgrade").innerHTML = helper.commaify(buildings.tv.upgradeCost);
-    document.getElementById("workerUpgrade").innerHTML = helper.commaify(buildings.worker.upgradeCost);
-    document.getElementById("walletUpgrade").innerHTML = helper.commaify(buildings.wallet.upgradeCost);
-    document.getElementById("churchUpgrade").innerHTML = helper.commaify(buildings.church.upgradeCost);
+helper.reloadBuildingPrices = function() { // doesn't account for modded buildings, figuring that out is the work of the developer (sorry!)
+    keyboard.reloadPrice();
+    grandpa.reloadPrice();
+    ranch.reloadPrice();
+    television.reloadPrice();
+    worker.reloadPrice();
+    wallet.reloadPrice();
+    church.reloadPrice();
 }
 helper.consoleLogDev = function(str) {
     if (dev.devMode) {
@@ -1114,6 +1073,19 @@ helper.commaify = function(toComma) {
     let commaifyed = toComma.toLocaleString("en-US");
     return commaifyed;
 }
+function hideTooltip() {
+    document.getElementById("tooltip").style.display = "none";
+}
+function capitalize(str) {
+    if (!str) {str = this;}
+
+    const capitalized =
+        str.charAt(0).toUpperCase()
+        + str.slice(1);
+
+    return capitalized;
+}
+String.prototype.capitalize = capitalize;
 
 // Popups
 helper.popup = {};
@@ -1495,12 +1467,12 @@ saves.resetSave = function() {
     saves.loadAutoSave();
     helper.reloadBuildingPrices();
     
-    buildings.grandpa.unlocked = 0;
-    buildings.ranch.unlocked = 0;
-    buildings.tv.unlocked = 0;
-    buildings.worker.unlocked = 0;
-    buildings.wallet.unlocked = 0;
-    buildings.church.unlocked = 0;
+    grandpa.unlocked = 0;
+    ranch.unlocked = 0;
+    television.unlocked = 0;
+    worker.unlocked = 0;
+    wallet.unlocked = 0;
+    church.unlocked = 0;
     document.getElementById("ifCheatedStat").innerHTML = "";
     document.getElementById("ifModdedStat").innerHTML = "";
 
@@ -1527,37 +1499,37 @@ saves.convert05Save = function(isBeta=false, isBetaSaveOld=false) { // ! this is
     core.totalCookies = oldSave[1];
     core.cookiesPerSecond = oldSave[2];
 
-    buildings.keyboard.CPSGiven = oldSave[3];
-    buildings.grandpa.CPSGiven = oldSave[4];
-    buildings.ranch.CPSGiven = oldSave[5];
-    buildings.tv.CPSGiven = oldSave[6]
-    buildings.worker.CPSGiven = oldSave[7];
-    buildings.wallet.CPSGiven = oldSave[8];
-    buildings.church.CPSGiven = oldSave[9];
+    keyboard.CPSGiven = oldSave[3];
+    grandpa.CPSGiven = oldSave[4];
+    ranch.CPSGiven = oldSave[5];
+    television.CPSGiven = oldSave[6]
+    worker.CPSGiven = oldSave[7];
+    wallet.CPSGiven = oldSave[8];
+    church.CPSGiven = oldSave[9];
 
-    buildings.keyboard.bought = oldSave[10];
-    buildings.grandpa.bought = oldSave[11];
-    buildings.ranch.bought = oldSave[12];
-    buildings.tv.bought = oldSave[13];
-    buildings.worker.bought = oldSave[14];
-    buildings.wallet.bought = oldSave[15];
-    buildings.church.bought = oldSave[16];
+    keyboard.bought = oldSave[10];
+    grandpa.bought = oldSave[11];
+    ranch.bought = oldSave[12];
+    television.bought = oldSave[13];
+    worker.bought = oldSave[14];
+    wallet.bought = oldSave[15];
+    church.bought = oldSave[16];
 
-    buildings.keyboard.CPSGain = oldSave[17];
-    buildings.grandpa.CPSGain = oldSave[18];
-    buildings.ranch.CPSGain = oldSave[19];
-    buildings.tv.CPSGain = oldSave[20];
-    buildings.worker.CPSGain = oldSave[21];
-    buildings.wallet.CPSGain = oldSave[22];
-    buildings.church.CPSGain = oldSave[23];
+    keyboard.CPSGain = oldSave[17];
+    grandpa.CPSGain = oldSave[18];
+    ranch.CPSGain = oldSave[19];
+    television.CPSGain = oldSave[20];
+    worker.CPSGain = oldSave[21];
+    wallet.CPSGain = oldSave[22];
+    church.CPSGain = oldSave[23];
 
-    buildings.keyboard.upgradeCost = oldSave[24];
-    buildings.grandpa.upgradeCost = oldSave[25];
-    buildings.ranch.upgradeCost = oldSave[26];
-    buildings.tv.upgradeCost = oldSave[27];
-    buildings.worker.upgradeCost = oldSave[28];
-    buildings.wallet.upgradeCost = oldSave[29];
-    buildings.church.upgradeCost = oldSave[30];
+    keyboard.upgradeCost = oldSave[24];
+    grandpa.upgradeCost = oldSave[25];
+    ranch.upgradeCost = oldSave[26];
+    television.upgradeCost = oldSave[27];
+    worker.upgradeCost = oldSave[28];
+    wallet.upgradeCost = oldSave[29];
+    church.upgradeCost = oldSave[30];
 
     // no more upgrades bought crap
 
@@ -1575,12 +1547,12 @@ saves.convert05Save = function(isBeta=false, isBetaSaveOld=false) { // ! this is
 
     saves.autoSave();
 
-    buildings.grandpa.unlocked = 0;
-    buildings.ranch.unlocked = 0;
-    buildings.tv.unlocked = 0;
-    buildings.worker.unlocked = 0;
-    buildings.wallet.unlocked = 0;
-    buildings.church.unlocked = 0;
+    grandpa.unlocked = 0;
+    ranch.unlocked = 0;
+    television.unlocked = 0;
+    worker.unlocked = 0;
+    wallet.unlocked = 0;
+    church.unlocked = 0;
     document.getElementById("ifCheatedStat").innerHTML = "";
     document.getElementById("ifModdedStat").innerHTML = "";
 
@@ -1823,5 +1795,21 @@ function createChangelogEntry(version,added=undefined,changed=undefined,fixed=un
 }
 
 console.log("what are you doing here? well... as long as its productive.");
+
+// buildings have to be made here instead of init because of scope
+const keyboard = new Building("keyboard","type in cookies",15,0.1,0,"keyboard.png");
+keyboard.unlocked = 1;
+const grandpa = new Building("grandpa","as long as gramps gets a cut",100,1,1,"grandpa.png");
+grandpa.setVisibility(false);
+const ranch = new Building("ranch","not the dressing kind",1100,8,2,"ranch.png",true);
+ranch.setVisibility(false);
+const television = new Building("television","hold infomercials on your cookies",12000,47,3,"tv.png");
+television.setVisibility(false);
+const worker = new Building("worker","cookies via manual labor",130000,260,4,"worker.png");
+worker.setVisibility(false);
+const wallet = new Building("wallet","more storage space for your vast amount of cookie income",1400000,1440,5,"wallet.png");
+wallet.setVisibility(false);
+const church = new Building("church","pray to the almighty cookie gods",20000000,7800,6,"church.png",true);
+church.setVisibility(false);
 
 core.initialization();

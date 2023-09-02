@@ -224,7 +224,8 @@ small {
     float: right;
     margin-top: 6px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* UPGRADES */
@@ -299,6 +300,7 @@ small {
     transition: 0.3s;
     background-color: rgb(217, 215, 165);
     cursor: pointer;
+    margin-bottom: 4px;
 }
 .building:hover {
     border-style: solid;

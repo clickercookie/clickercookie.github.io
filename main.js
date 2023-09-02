@@ -201,10 +201,11 @@ core.initialization = function() {
         localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
         console.log("save was null and was automatically reset, if this is your first time playing this is an intended behavior.");
     }
-    if (localStorage.getItem("betaSave") == null) {
-        localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
-        console.log("betaSave was null and was automatically reset, if this is your first time playing this is an intended behavior.");
-    }
+    // this fixes new players seeing a "your save is old" message when they are first playing.
+    // if (localStorage.getItem("betaSave") == null) {
+    //     localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
+    //     console.log("betaSave was null and was automatically reset, if this is your first time playing this is an intended behavior.");
+    // }
     if (localStorage.getItem("devSave") == null) {
         localStorage.setItem("devSave",JSON.stringify(saves.defaultSavedValues));
         console.log("devSave was null and was automatically reset, if this is your first time playing this is an intended behavior.");
