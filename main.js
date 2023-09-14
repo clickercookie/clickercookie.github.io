@@ -368,7 +368,7 @@ let buildingInfoYPos = `${mousePos.y}` - 50;
 // timer things
 const intervalCPSU = setInterval(cookiesPerSecondUpdate, 1000);
 const perMillisecondUniversalVar = setInterval(perMillisecondUniversal, 1);
-const autoSaveInterval = setInterval(saves.autoSave, 60 * 1000);
+const autoSaveInterval = setInterval(autoSaveIntervalFunc, 60 * 1000);
 
 function perMillisecondUniversal() {
     variableView.cookiesView = Math.round(core.cookies * 10) / 10;
@@ -513,6 +513,10 @@ function cookiesPerSecondUpdate() {
     core.cookies = core.cookies + core.cookiesPerSecond;
     core.totalCookies = core.totalCookies + core.cookiesPerSecond;
     helper.reloadCookieCounter();
+}
+
+function autoSaveIntervalFunc() { // setInterval doesn't like object methods so here we are
+    saves.autoSave();
 }
 
 // ------------------------------------

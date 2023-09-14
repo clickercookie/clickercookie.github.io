@@ -235,7 +235,7 @@ small {
     height: 67.6px;
     overflow: hidden;
     border: 6px solid;
-    border-width: 6px 0px 8px 0px;
+    border-width: 6px 0px 6px 0px;
     border-color: var(--brown-border);
 }
 .upgrade {

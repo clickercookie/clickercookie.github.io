@@ -97,62 +97,6 @@ let buildingInfoQuote = "Quote";
 let buildingInfoProduces = 0;
 let buildingInfoProducing = 0;
 
-// keyboards
-buildings.keyboard = {
-    bought: 0,
-    CPSGain: 0.1,
-    CPSGiven: 0,
-    upgradeCost: 15
-};
-// grandpas
-buildings.grandpa = {
-    bought: 0,
-    CPSGain: 1,
-    CPSGiven: 0,
-    upgradeCost: 100,
-    unlocked: 0
-};
-// ranches
-buildings.ranch = {
-    bought: 0,
-    CPSGain: 8,
-    CPSGiven: 0,
-    upgradeCost: 1100,
-    unlocked: 0
-};
-// televisions
-buildings.tv = {
-    bought: 0,
-    CPSGain: 47,
-    CPSGiven: 0,
-    upgradeCost: 12000,
-    unlocked: 0
-};
-// workers
-buildings.worker = {
-    bought: 0,
-    CPSGain: 260,
-    CPSGiven: 0,
-    upgradeCost: 130000,
-    unlocked: 0
-};
-// wallets
-buildings.wallet = {
-    bought: 0,
-    CPSGain: 1440,
-    CPSGiven: 0,
-    upgradeCost: 1400000,
-    unlocked: 0
-};
-// churches
-buildings.church = {
-    bought: 0,
-    CPSGain: 7800,
-    CPSGiven: 0,
-    upgradeCost: 20000000,
-    unlocked: 0
-};
-
 // dev variables
 const dev = {
     devMode: 0,
@@ -1557,6 +1501,13 @@ saves.convert05Save = function(isBeta=false, isBetaSaveOld=false) { // ! this is
     document.getElementById("ifModdedStat").innerHTML = "";
 
     upgrades.destroyAll();
+    keyboard.CPSGain = 0.1;
+    grandpa.CPSGain = 1;
+    ranch.CPSGain = 8;
+    television.CPSGain = 47;
+    worker.CPSGain = 260;
+    wallet.CPSGain = 1440;
+    church.CPSGain = 7800;
 
     // document.getElementById("win").style.display = "none";
 
