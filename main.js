@@ -2,7 +2,7 @@
 // Variable & Object Definitions
 // ------------------------------------
 const version = "0.5.2";
-const versionBranch = 0; // 0 is main, 1 is beta
+const versionBranch = location.pathname == "/beta/beta" ? 1 : 0; // 0 is main, 1 is beta
 const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode! Recommended that versionBranch is 1 for easier saving if this is toggled.
 
 // customization

@@ -2,7 +2,7 @@
 // Variable & Object Definitions
 // ------------------------------------
 const version = "0.6";
-const versionBranch = 1; // 0 is main, 1 is beta
+const versionBranch = location.pathname == "/beta/beta" ? 1 : 0; // 0 is main, 1 is beta
 const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode! Recommended that versionBranch is 1 for easier saving if this is toggled.
 const desktop = false;
 
@@ -76,7 +76,7 @@ upgrades.quotes = [
 upgrades.descriptions = ["Multiplys Keyboard and clicking cookie production by 2","Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
 upgrades.img = [
     "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png",undefined,
-    "hardwood-walking-stick.png",undefined,undefined,undefined,undefined,
+    "hardwood-walking-stick.png","rocking-chair.png",undefined,undefined,undefined,
     "ranch-upgrade1.png",undefined,undefined,undefined,undefined,
     "tv-upgrade1.png",undefined,undefined,undefined,undefined,
     "worker-upgrade1.png",undefined,undefined,undefined,undefined,
