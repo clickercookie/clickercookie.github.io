@@ -73,7 +73,7 @@ upgrades.quotes = [
     "I'm sure the federal reserve will be okay with this...*","temp","temp","you can keep your cookies even <b>safe</b>r!! (todo: finish icon)","temp", // wallet
     "temp","temp","temp","temp","temp", // church
 ];
-upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.currentClickedPlural.toLowerCase()} production by 2`,"Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
+upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.currentClicked.toLowerCase()} production by 2`,"Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
 upgrades.img = [
     "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png",undefined,
     "hardwood-walking-stick.png","rocking-chair.png",undefined,undefined,undefined,
@@ -111,9 +111,9 @@ mods.allMods = [];
 let isModded = 0;
 
 // middle other occupiers
-let statsUp = 0;
-let infoUp = 0;
-let optionsUp = 0;
+let statsUp = false;
+let infoUp = false;
+let optionsUp = false;
 
 // misc
 let cookieProductionStopped = 0;
@@ -236,15 +236,6 @@ core.initialization = function() {
         const br3 = document.createElement("br");
         devDiv.appendChild(br3);
 
-        const mousePos = document.createElement("p");
-        mousePos.appendChild(document.createTextNode("Mouse Pos: (?, ?)"));
-        mousePos.setAttribute("id","mousePosDevText");
-        mousePos.setAttribute("style","margin-bottom:0px;");
-        devDiv.appendChild(mousePos);
-
-        const br4 = document.createElement("br");
-        devDiv.appendChild(br4);
-
         const mobileOn = document.createElement("button");
         mobileOn.appendChild(document.createTextNode("Goto Mobile Mode"));
         const mobileOnHyperlink = document.createElement("a");
@@ -252,8 +243,8 @@ core.initialization = function() {
         mobileOnHyperlink.appendChild(mobileOn);
         devDiv.appendChild(mobileOnHyperlink);
 
-        const br5 = document.createElement("br");
-        devDiv.appendChild(br5);
+        const br4 = document.createElement("br");
+        devDiv.appendChild(br4);
 
         const toggleSaving = document.createElement("button");
         toggleSaving.appendChild(document.createTextNode("Toggle Auto-Saving"));
@@ -272,7 +263,7 @@ core.initialization = function() {
         // version change
         document.getElementById("versionNumber").innerHTML = `Version: ${version} Dev`;
 
-        dev.setDevMode("on");
+        dev.setDevMode(true);
         document.getElementById("offSelectionDev").innerHTML = "Overwritten";
     }
 
@@ -401,8 +392,7 @@ core.initialization = function() {
                 location.href = "../mobile/mobile.html";
             }
         }
-    }
-    else {
+    } else {
         mobile = 0;
     }
     
@@ -417,9 +407,6 @@ let mousePos = { x: undefined, y: undefined };
 
 window.addEventListener('mousemove', (event) => {
     mousePos = { x: event.clientX, y: event.clientY };
-    if (inDevelopment) {
-        document.getElementById("mousePosDevText").textContent = `Mouse Pos: (${mousePos.x}, ${mousePos.y})`;
-    }
     // set positions affected by mouse pos
     document.getElementById("tooltip").style.top = `${mousePos.y - 50}px`;
 });
@@ -530,55 +517,43 @@ core.cookieClicked = function() {
 }
 // dev commands
 dev.setDevMode = function(value) {
-    switch (value) {
-        case "off":
-            dev.devMode = 0;
-            break;
-        case "on":
-            dev.devMode = 1;
-            console.log("Developer Mode activated.");
-            document.getElementById("devModeSelect").disabled = true;
-            document.getElementById("whiteBackground").style.display = "block";
-            break;
+    if (value == "on") value = true;
+    if (value == "off") value = false;
+
+    if (value) {
+        dev.devMode = true;
+        console.log("Developer Mode activated.");
+        document.getElementById("devModeSelect").disabled = true;
+        document.getElementById("whiteBackground").style.display = "block";
+    } else {
+        dev.devMode = false;
     }
 }
 dev.setCookies = function(x) {
-    if (dev.devMode) {
-        core.cookies = x;
-        core.totalCookies = core.totalCookies + x;
-        hasCheated = 1;
-        helper.reloadCookieCounter();
-        document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
-    }
-    else {
-        console.log("You need developer mode ON to run this command.");
-    }
+    if (!dev.devMode) return "You need developer mode ON to run this command.";
+
+    core.cookies = x;
+    core.totalCookies = core.totalCookies + x;
+    hasCheated = 1;
+    helper.reloadCookieCounter();
+    document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
 }
 dev.setCPS = function(x) {
-    if (dev.devMode) {
-        dev.CPSGiven = x;
-        hasCheated = 1;
-        variableView.cookiesPerSecondView = Math.round(core.cookiesPerSecond * 10) / 10;
-        helper.reloadCPSCounter();
-        document.getElementById("ifCheatedStat").innerHTML = "<b>You have cheated on this playthrough!</b>";
-    }
-    else {
-        console.log("You need developer mode ON to run this command.");
-    }
+    if (!dev.devMode) return "You need developer mode ON to run this command.";
+
+    dev.CPSGiven = x;
+    hasCheated = 1;
+    variableView.cookiesPerSecondView = Math.round(core.cookiesPerSecond * 10) / 10;
+    helper.reloadCPSCounter();
+    document.getElementById("ifCheatedStat").innerHTML = "<b>You have cheated on this playthrough!</b>";
 }
-dev.toggleSaving = function() {
-    if (this.devMode) {
-        if (savingAllowed) {
-            savingAllowed = false;
-        }
-        else {
-            savingAllowed = true;
-        }
-        if (!inDevelopment) {return;}
-        document.getElementById("currentSavingStatus").innerHTML = `saving: ${savingAllowed}`;
-    } else {
-        console.log("You need developer mode ON to run this command.");
-    }
+dev.toggleSaving = function() { // TODO 0.6: this should be a toggle without dev mode
+    if (!this.devMode) return "You need developer mode ON to run this command.";
+
+    savingAllowed = savingAllowed ? false : true
+
+    if (!inDevelopment) return;
+    document.getElementById("currentSavingStatus").innerHTML = `saving: ${savingAllowed}`;
 }
 
 // ------------------------------------
@@ -711,7 +686,7 @@ class Building {
 // ------------------------------------
 upgrades.create = function(id) {
     let building;
-    if (id >= 0) {
+    if (id >= 0) { // TODO 0.6: i can do this better i'm sure
         building = 0;
     }
     if (id >= 5) {
@@ -741,7 +716,7 @@ upgrades.create = function(id) {
     upgrade.setAttribute("onmouseout","hideTooltip()");
 
     icon = this.img[id];
-    if (icon === undefined) {
+    if (icon === undefined) { // TODO 0.6: make this better
         if (!mobile) {
             upgrade.style.backgroundImage = "url(img/unknown-64-64.png)";
         }
@@ -868,9 +843,7 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
 
 upgrades.destroy = function(id) {
     document.getElementById(`upgrade${id}`).remove();
-    if (!mobile) {
-        hideTooltip();
-    }
+    if (!mobile) hideTooltip();
 }
 upgrades.destroyAll = function() {
     for (i = 0; i < upgrades.unlocked.length; i++) {
@@ -908,7 +881,7 @@ upgrades.expandUpgradesHolder = function(retract=false) {
 }
 upgrades.showUnlocked = function() {
     for (i = 0; i < upgrades.unlocked.length; i++) {
-        if (upgrades.unlocked[i] == 1 && upgrades.bought[i] != 1) {upgrades.create(i);}
+        if (upgrades.unlocked[i] == 1 && upgrades.bought[i] != 1) upgrades.create(i);
     }
 }
 upgrades.checkUpgradeAvailability = function() {
@@ -1009,9 +982,7 @@ helper.reloadBuildingPrices = function() { // doesn't account for modded buildin
     church.reloadPrice();
 }
 helper.consoleLogDev = function(str) {
-    if (dev.devMode) {
-        console.log(str);
-    }
+    if (dev.devMode) console.log(str);
 }
 helper.commaify = function(toComma) {
     let commaifyed = toComma.toLocaleString("en-US");
@@ -1021,7 +992,7 @@ function hideTooltip() {
     document.getElementById("tooltip").style.display = "none";
 }
 function capitalize(str) {
-    if (!str) {str = this;}
+    if (!str) str = this;
 
     const capitalized =
         str.charAt(0).toUpperCase()
@@ -1039,7 +1010,7 @@ helper.popup.createSimple = function(x,y,text,noButton=false,doWhat="default",ti
     document.getElementById("simplePopup").style.width = `${x}px`;
     document.getElementById("simplePopupButtonDiv").style.width = `${x}px`;
     document.getElementById("simplePopup").style.height = `${y}px`;
-    if (title == "") {
+    if (title === "") {
         document.getElementById("simplePopupTitle").style.display = "none";
     } else {
         document.getElementById("simplePopupTitle").style.display = "block";
@@ -1108,7 +1079,7 @@ helper.popup.createAdvanced = function(x,y,html,filter=true) { // i would recomm
     advancedPopup.style.width = `${x}px`;
     advancedPopup.style.height = `${y}px`;
 
-    if (filter) { document.getElementById("filter").style.display = "block"; }
+    if (filter) document.getElementById("filter").style.display = "block";
 
     advancedPopup.innerHTML = html;
 }
@@ -1138,36 +1109,36 @@ personalization.setBackground = function(color) {
 
 personalization.setCurrentClicked = function(value) {
     switch (value) {
-        case "cookie":
-            if (!mobile) {
-                document.getElementById("cookie").src = "img/cookie.png";
-            }
-            if (mobile || desktop) {
-                document.getElementById("cookie").src = "../img/cookie.png";
-            }
-            personalization.currentClicked = "Cookie";
-            personalization.currentClickedPlural = "Cookies";
-            break;
-        case "potato":
-            if (!mobile) {
-                document.getElementById("cookie").src = "img/potato.png";
-            }
-            if (mobile || desktop) {
-                document.getElementById("cookie").src = "../img/potato.png";
-            }
-            personalization.currentClicked = "Potato";
-            personalization.currentClickedPlural = "Potatoes";
-            break;
-        case "strawberry":
-            if (!mobile) {
-                document.getElementById("cookie").src = "img/strawberry.png";
-            }
-            if (mobile) {
-                document.getElementById("cookie").src = "../img/strawberry.png";
-            }
-            personalization.currentClicked = "Strawberry";
-            personalization.currentClickedPlural = "Strawberries";
-            break;
+    case "cookie":
+        if (!mobile) {
+            document.getElementById("cookie").src = "img/cookie.png";
+        }
+        if (mobile || desktop) {
+            document.getElementById("cookie").src = "../img/cookie.png";
+        }
+        personalization.currentClicked = "Cookie";
+        personalization.currentClickedPlural = "Cookies";
+        break;
+    case "potato":
+        if (!mobile) {
+            document.getElementById("cookie").src = "img/potato.png";
+        }
+        if (mobile || desktop) {
+            document.getElementById("cookie").src = "../img/potato.png";
+        }
+        personalization.currentClicked = "Potato";
+        personalization.currentClickedPlural = "Potatoes";
+        break;
+    case "strawberry":
+        if (!mobile) {
+            document.getElementById("cookie").src = "img/strawberry.png";
+        }
+        if (mobile) {
+            document.getElementById("cookie").src = "../img/strawberry.png";
+        }
+        personalization.currentClicked = "Strawberry";
+        personalization.currentClickedPlural = "Strawberries";
+        break;
     }
     upgrades.descriptions[0] = `Multiplys Keyboard and clicking ${this.currentClicked} production by 2`;
 }
@@ -1175,7 +1146,7 @@ personalization.setCurrentClicked = function(value) {
 // ------------------------------------
 // Random Functions
 // ------------------------------------
-function toggleMiddle(param) {
+function toggleMiddle(param) { // TODO 0.6: eliminate unnessesary switch statements and general code
     const statsMT = document.getElementById("statsMiddleText");
     const infoMT = document.getElementById("infoMiddleText");
     const optionsMT = document.getElementById("optionsMiddleText");
@@ -1186,57 +1157,57 @@ function toggleMiddle(param) {
     optionsMT.style.display = "none";
     if (param == "stats") {
         switch (statsUp) {
-            case 0:
-                optionsUp = 0;
-                infoUp = 0;
-                statsUp = 1;
-                statsMT.style.display = "block";
-                middle.style.background = middleBackground;
-                break;
-            case 1:
-                statsUp = 0;
-                optionsMT.style.display = "none";
-                middle.style.background = personalization.currentBackground;
-                break;
+        case false:
+            optionsUp = false;
+            infoUp = false;
+            statsUp = true;
+            statsMT.style.display = "block";
+            middle.style.background = middleBackground;
+            break;
+        case true:
+            statsUp = false;
+            optionsMT.style.display = "none";
+            middle.style.background = personalization.currentBackground;
+            break;
         }
     }
     if (param == "info") {
         switch (infoUp) {
-            case 0:
-                statsUp = 0;
-                optionsUp = 0;
-                infoUp = 1;
-                infoMT.style.display = "block";
-                middle.style.background = middleBackground;
-                break;
-            case 1:
-                infoUp = 0;
-                infoMT.style.display = "none";
-                middle.style.background = personalization.currentBackground;
-                break;
+        case false:
+            statsUp = false;
+            optionsUp = false;
+            infoUp = true;
+            infoMT.style.display = "block";
+            middle.style.background = middleBackground;
+            break;
+        case true:
+            infoUp = false;
+            infoMT.style.display = "none";
+            middle.style.background = personalization.currentBackground;
+            break;
         }
     }
     if (param == "options") {
         switch (optionsUp) {
-            case 0:
-                statsUp = 0;
-                infoUp = 0;
-                optionsUp = 1;
-                optionsMT.style.display = "block";
-                middle.style.background = middleBackground;
-                break;
-            case 1:
-                optionsUp = 0;
-                optionsMT.style.display = "none";
-                middle.style.background = personalization.currentBackground;
-                break;
+        case false:
+            statsUp = false;
+            infoUp = false;
+            optionsUp = true;
+            optionsMT.style.display = "block";
+            middle.style.background = middleBackground;
+            break;
+        case true:
+            optionsUp = false;
+            optionsMT.style.display = "none";
+            middle.style.background = personalization.currentBackground;
+            break;
         }
     }
 }
 function closeMiddle() {
-    optionsUp = 0;
-    infoUp = 0;
-    statsUp = 0;
+    optionsUp = false;
+    infoUp = false;
+    statsUp = false;
 
     document.getElementById("optionsMiddleText").style.display = "none";
     document.getElementById("statsMiddleText").style.display = "none";
@@ -1273,8 +1244,7 @@ saves.exportData = function() {
 
     if (window.webkitURL != null) {
         newLink.href = window.webkitURL.createObjectURL(textToBLOB);
-    }
-    else {
+    } else {
         newLink.href = window.URL.createObjectURL(textToBLOB);
         newLink.style.display = "none";
         document.body.appendChild(newLink);
@@ -1350,7 +1320,7 @@ saves.autoSave = function() { // yes if you are wondering i totally 100% without
         const name = typeof variable === 'object' ? variable.name : variable;
     
         // Get the value of the variable/property
-        const value = typeof variable === 'object' ? variable.value : eval(variable); // YES, i know i shouldn't use this. This will be changed once 0.6 enters beta.
+        const value = typeof variable === 'object' ? variable.value : eval(variable); // YES, i know i shouldn't use this. This will be changed once 0.6 enters beta. Maybe. Probably not.
     
         // Add the variable/property to the object
         save[name] = value;
@@ -1388,7 +1358,7 @@ saves.loadAutoSave = function() {
         } catch {
             helper.consoleLogDev(`Attempted to load variable: ${variable}`);
         }
-        if (variable === "upgrades.unlocked") { // arrays don't work with eval???
+        if (variable === "upgrades.unlocked") { // ? arrays don't work with eval???
             upgrades.unlocked = loadedSave["upgrades.unlocked"];
         }
         if (variable === "upgrades.bought") {
@@ -1436,7 +1406,7 @@ saves.resetSave = function() {
     }
 }
 
-saves.convert05Save = function(isBeta=false, isBetaSaveOld=false) { // ! this is remaining only for the lifespan of 0.6 and will be removed in the next major update or after a certain time gap, also why this function is a nightmare to understand
+saves.convert05Save = function(isBeta=false, isBetaSaveOld=false) { // ! this is remaining only for the lifespan of 0.6 and will be removed in the next major update or after a certain time gap, that's why this function is a nightmare to understand
     const oldSave = isBeta ? isBetaSaveOld ? JSON.parse(localStorage.getItem("betaSaveOld")) : JSON.parse(localStorage.getItem("betaSave")) : JSON.parse(localStorage.getItem("save"));
 
     core.cookies = oldSave[0];
@@ -1575,7 +1545,7 @@ mods.loadFile = function() { // add check if mod is valid
     var file = document.getElementById("addModFile").files[0];
     var reader = new FileReader();
 
-    reader.onerror = (e) => alert("something broke, don't expect me to fix it :D");
+    reader.onerror = (e) => alert(`something broke, don't expect me to fix it :D \nerror: ${e}`);
 
     reader.readAsText(file);
     
@@ -1621,8 +1591,8 @@ mods.list = function() {
         document.getElementById("modsList").appendChild(newModItem);
     }
 
-    if (numberToList === 0) {document.getElementById("noModsMessage").style.display = "block";}
-    if (numberToList > 0) {document.getElementById("removeModsMessage").style.display = "block";}
+    if (numberToList === 0) document.getElementById("noModsMessage").style.display = "block";
+    if (numberToList > 0) document.getElementById("removeModsMessage").style.display = "block";
 }
 
 mods.addModData = function(id,data) { // yes i basically stole and renamed this entire function from cookie clicker's Game.registerMod orteil did it better okay i might seem smart but i'm really not.
@@ -1643,27 +1613,27 @@ mods.addModData = function(id,data) { // yes i basically stole and renamed this 
 }
 
 mods.addClicked = function() {
-    helper.popup.createAdvanced(500,350,"<h3 class='simple-popup-title' style='display:block;'>Add Mod</h3> \
-    <h5 class='popup-content' style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5> \
-    <h5 class='popup-content' style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5> \
-    <h5 class='popup-content' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a onclick='saves.autoSave()' href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue'>read the documentation</a>.</h5> \
-    <form onsubmit='return false;' id='addModURLForm' style='margin-top:22px;'> \
-        <label for='addModURL' class='popup-content'>From URL: </label> \
-        <input id='addModURL' onchange='mods.loadURL(this.value)'> \
-    </form> \
-    <form> \
-        <label for='addModFile' class='popup-content' style='margin-right:0px;'>From File: </label> \
-        <input type='file' id='addModFile' onchange='mods.loadFile(this.value)' class='popup-content' style='width:86px;'> \
-    </form> \
-    <p class='popup-content no-display' id='importedMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>Imported!</p> \
-    <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>");
+    helper.popup.createAdvanced(500,350,`<h3 class='simple-popup-title' style='display:block;'>Add Mod</h3>
+    <h5 class='popup-content' style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5>
+    <h5 class='popup-content' style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5>
+    <h5 class='popup-content' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a onclick='saves.autoSave()' href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue'>read the documentation</a>.</h5>
+    <form onsubmit='return false;' id='addModURLForm' style='margin-top:22px;'>
+        <label for='addModURL' class='popup-content'>From URL: </label>
+        <input id='addModURL' onchange='mods.loadURL(this.value)'>
+    </form>
+    <form>
+        <label for='addModFile' class='popup-content' style='margin-right:0px;'>From File: </label>
+        <input type='file' id='addModFile' onchange='mods.loadFile(this.value)' class='popup-content' style='width:86px;'>
+    </form>
+    <p class='popup-content no-display' id='importedMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>Imported!</p>
+    <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
 }
 mods.listClicked = function() {
-    helper.popup.createAdvanced(300,350,"<h3 class='simple-popup-title' style='display:block;'>All Mods</h3> \
-    <p class='popup-content no-display' id='noModsMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>You have no mods installed!</p> \
-    <div id='modsList' class='mods-list'></div> \
-    <small class='popup-content no-display' id='removeModsMessage' style='margin-top:3px;'>To remove mods, refresh your page. (make sure to save!)</small> \
-    <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>");
+    helper.popup.createAdvanced(300,350,`<h3 class='simple-popup-title' style='display:block;'>All Mods</h3>
+    <p class='popup-content no-display' id='noModsMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>You have no mods installed!</p>
+    <div id='modsList' class='mods-list'></div>
+    <small class='popup-content no-display' id='removeModsMessage' style='margin-top:3px;'>To remove mods, refresh your page. (make sure to save!)</small>
+    <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
 
     mods.list();
 }
