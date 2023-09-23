@@ -57,30 +57,30 @@ upgrades.prices = [
 ];
 upgrades.names = [
     "Reinforced Keys","Obsidian Keys","Osmium Keys","10 finger typing","Macros", // keyboard
-    "Hardwood Walking Stick","Rocking Chair","grandpa3","grandpa4","grandpa5", // grandpa
+    "Hardwood Walking Stick","Rocking Chair","grandpa3","grandpa4","shotgun", // grandpa
     "Pig Slop","ranch2","ranch3","ranch4","ranch5", // ranch
     "LED Display","television2","television3","television4","television5", // television
     "Medkits","worker2","worker3","worker4","worker5", // worker
-    "200 dollar bills","wallet2","wallet3","wallet4","wallet5", // wallet
-    "church1","church2","church3","church4","church5", // church
+    "200 dollar bills","wallet2","wallet3","safe","wallet5", // wallet
+    "the pope","church2","church3","church4","church5", // church
 ];
 upgrades.quotes = [
-    "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","Why press when you don't have to?", // keyboard
-    "nonna dat softwood junk","newest addition to the porch*","temp","temp","temp", // grandpa
+    "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","why press when you don't have to?", // keyboard
+    "nonna dat softwood junk","newest addition to the porch*","temp","temp","grandpa's precious*", // grandpa
     "Wait, what have we been feeding them before now?","temp","temp","temp","temp", // ranch
     "World's greatest leap in digital technology*","temp","temp","temp","temp", // television
     "Constant supply of Band-Aids in case of emergency","temp","temp","temp","temp", // worker
-    "I'm sure the federal reserve will be okay with this...*","temp","temp","temp","temp", // wallet
+    "I'm sure the federal reserve will be okay with this...*","temp","temp","you can keep your cookies even <b>safe</b>r!! (todo: finish icon)","temp", // wallet
     "temp","temp","temp","temp","temp", // church
 ];
-upgrades.descriptions = ["Multiplys Keyboard and clicking cookie production by 2","Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
+upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.currentClickedPlural.toLowerCase()} production by 2`,"Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
 upgrades.img = [
     "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png",undefined,
     "hardwood-walking-stick.png","rocking-chair.png",undefined,undefined,undefined,
     "ranch-upgrade1.png",undefined,undefined,undefined,undefined,
     "tv-upgrade1.png",undefined,undefined,undefined,undefined,
     "worker-upgrade1.png",undefined,undefined,undefined,undefined,
-    "200-dollar-bill.png",undefined,undefined,undefined,undefined,
+    "200-dollar-bill.png",undefined,undefined,"safe.png",undefined,
     undefined,undefined,undefined,undefined,undefined,
 ];
 
