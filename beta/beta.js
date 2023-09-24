@@ -3,7 +3,7 @@
 // ------------------------------------
 const version = "0.6";
 const versionBranch = location.pathname == "/beta/beta" ? 1 : 0; // 0 is main, 1 is beta
-const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode! Recommended that versionBranch is 1 for easier saving if this is toggled.
+const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode!
 const desktop = false;
 
 // customization
@@ -108,7 +108,7 @@ const mods = {};
 
 mods.numberLoaded = 0;
 mods.allMods = [];
-let isModded = 0;
+let isModded = false;
 
 // middle other occupiers
 let statsUp = false;
@@ -116,10 +116,10 @@ let infoUp = false;
 let optionsUp = false;
 
 // misc
-let cookieProductionStopped = 0;
-let hasCheated = 0;
+let cookieProductionStopped = false;
+let hasCheated = false;
 let won = 0;
-let mobile;
+let mobile; // defined in initialization
 let savingAllowed = true;
 
 // save stuff
@@ -141,7 +141,7 @@ saves.defaultSavedValues = { // Should be self-explanatory. Doesn't have to be o
     "keyboard.CPSGain":0.1,"grandpa.CPSGain":1,"ranch.CPSGain":8,"television.CPSGain":47,"worker.CPSGain":260,"wallet.CPSGain":1440,"church.CPSGain":7800,
     "keyboard.upgradeCost":15,"grandpa.upgradeCost":100,"ranch.upgradeCost":1100,"television.upgradeCost":12000,"worker.upgradeCost":130000,"wallet.upgradeCost":1400000,"church.upgradeCost":20000000,
     "upgrades.unlocked":upgrades.unlocked,"upgrades.bought":upgrades.bought,"upgrades.upgradesBought":0,
-    "core.cookiesPerClick":1,"core.cookieBeenClickedTimes":0,"core.buildingsOwned":0,"hasCheated":0,"won":0,"isModded":0,"versionBranch":versionBranch
+    "core.cookiesPerClick":1,"core.cookieBeenClickedTimes":0,"core.buildingsOwned":0,"hasCheated":false,"won":0,"isModded":false,"versionBranch":versionBranch
 };
 saves.dataLoaded; // data from an auto-save (local storage)
 
@@ -296,6 +296,9 @@ core.initialization = function() {
     "Grandma has been removed due to addition of upgrades and needing to rebalance when the player \"wins\". Also because i'm scared of copyright issues :)",
     "All changelog entries are now created with Javascript to cut down on the HTML size.",
     "Upgrade viewer and building info are now combined into one tooltip and sizes have been adjusted.",
+    "Popups now use dialog boxes, which has an unintended side effect of making their contents look sharper (yay!)",
+    "Using the Github button now opens a new tab.",
+    "All boolean variables that used numbers (1 and 0) now use actual booleans (true and false).",
     "Most logic based variable assignments now use ternary operators.",
     "All remaining ancient plus sign string concatenation now use template literals."],
     ["Centering of buildings bought was done stupidly, fixed now.",
@@ -383,7 +386,7 @@ core.initialization = function() {
     || navigator.userAgent.match(/iPod/i)
     || navigator.userAgent.match(/BlackBerry/i)
     || navigator.userAgent.match(/Windows Phone/i)) {
-        mobile = 1;
+        mobile = true;
         personalization.currentBackground = "url(../img/backgrounds/background-blue.png)";
         if (location.pathname == "/" || location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") {
             if (!versionBranch) {
@@ -393,7 +396,7 @@ core.initialization = function() {
             }
         }
     } else {
-        mobile = 0;
+        mobile = false;
     }
     
     // this would go after data is loaded, but it requires the mobile variable to be assigned a value
@@ -432,27 +435,27 @@ function perMillisecondUniversal() {
 
     // building unlocks
     if (core.totalCookies >= 100) {
-        grandpa.unlocked = 1;
+        grandpa.unlocked = true;
         grandpa.setVisibility(true);
     }
     if (core.totalCookies >= 700) {
-        ranch.unlocked = 1;
+        ranch.unlocked = true;
         ranch.setVisibility(true);
     }
     if (core.totalCookies >= 8000) {
-        television.unlocked = 1;
+        television.unlocked = true;
         television.setVisibility(true);
     }
     if (core.totalCookies >= 80000) {
-        worker.unlocked = 1;
+        worker.unlocked = true;
         worker.setVisibility(true);
     }
     if (core.totalCookies >= 700000) {
-        wallet.unlocked = 1;
+        wallet.unlocked = true;
         wallet.setVisibility(true);
     }
     if (core.totalCookies >= 15000000) {
-        church.unlocked = 1;
+        church.unlocked = true;
         church.setVisibility(true);
     }
 
@@ -517,8 +520,8 @@ core.cookieClicked = function() {
 }
 // dev commands
 dev.setDevMode = function(value) {
-    if (value == "on") value = true;
-    if (value == "off") value = false;
+    if (value === "on") value = true;
+    if (value === "off") value = false;
 
     if (value) {
         dev.devMode = true;
@@ -534,7 +537,7 @@ dev.setCookies = function(x) {
 
     core.cookies = x;
     core.totalCookies = core.totalCookies + x;
-    hasCheated = 1;
+    hasCheated = true;
     helper.reloadCookieCounter();
     document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
 }
@@ -542,7 +545,7 @@ dev.setCPS = function(x) {
     if (!dev.devMode) return "You need developer mode ON to run this command.";
 
     dev.CPSGiven = x;
-    hasCheated = 1;
+    hasCheated = true;
     variableView.cookiesPerSecondView = Math.round(core.cookiesPerSecond * 10) / 10;
     helper.reloadCPSCounter();
     document.getElementById("ifCheatedStat").innerHTML = "<b>You have cheated on this playthrough!</b>";
@@ -576,7 +579,7 @@ class Building {
         this.id = id
 
         this.bought = 0;
-        this.unlocked = 0;
+        this.unlocked = false;
         if (esPlural) { this.plural = "es"; } 
         else { this.plural = "s"; }
 
@@ -685,28 +688,7 @@ class Building {
 // Upgrades
 // ------------------------------------
 upgrades.create = function(id) {
-    let building;
-    if (id >= 0) { // TODO 0.6: i can do this better i'm sure
-        building = 0;
-    }
-    if (id >= 5) {
-        building = 1;
-    }
-    if (id >= 10) {
-        building = 2;
-    }
-    if (id >= 15) {
-        building = 3;
-    }
-    if (id >= 20) {
-        building = 4;
-    }
-    if (id >= 25) {
-        building = 5;
-    }
-    if (id >= 30) {
-        building = 6;
-    }
+    let building = Math.floor(id / 5);
 
     const upgrade = document.createElement("div");
     upgrade.setAttribute("class","upgrade");
@@ -1005,11 +987,16 @@ String.prototype.capitalize = capitalize;
 // Popups
 helper.popup = {};
 helper.popup.createSimple = function(x,y,text,noButton=false,doWhat="default",title="",backButton=false,isError=false) {
-    document.getElementById("simplePopup").style.display = "flex";
+    const popup = document.getElementById("simplePopup");
+
+    popup.style.display = "flex";
+    popup.showModal();
+    popup.style.width = `${x}px`;
+    popup.style.height = `${y}px`;
+
     document.getElementById("simplePopupContent").innerHTML = text;
-    document.getElementById("simplePopup").style.width = `${x}px`;
     document.getElementById("simplePopupButtonDiv").style.width = `${x}px`;
-    document.getElementById("simplePopup").style.height = `${y}px`;
+    
     if (title === "") {
         document.getElementById("simplePopupTitle").style.display = "none";
     } else {
@@ -1030,13 +1017,10 @@ helper.popup.createSimple = function(x,y,text,noButton=false,doWhat="default",ti
     }
 
     if (isError) {
-        document.getElementById("simplePopup").style.borderColor = "red";
+        popup.style.borderColor = "red";
     } else {
-        document.getElementById("simplePopup").style.borderColor = "black";
+        popup.style.borderColor = "black";
     }
-
-    const filter = document.getElementById("filter");
-    filter.style.display = "block";
 
     if (doWhat !== "default") {
         document.getElementById("simplePopupButton").setAttribute("onclick",`helper.popup.simpleClicked(\"${doWhat}\")`);
@@ -1045,47 +1029,48 @@ helper.popup.createSimple = function(x,y,text,noButton=false,doWhat="default",ti
     }
 }
 helper.popup.destroySimple = function() {
-    document.getElementById("simplePopup").style.display = "none";
+    const popup = document.getElementById("simplePopup");
+    popup.style.display = "none";
+    popup.close();
+
     document.getElementById("simplePopupContent").innerHTML = "null";
     document.getElementById("simplePopupButton").style.display = "none";
-    document.getElementById("filter").style.display = "none";
 }
 helper.popup.simpleClicked = function(doWhat="default") {
     switch (doWhat) {
-        case "default":
-            helper.popup.destroySimple();
-            break;
-        case "resetSave()":
-            saves.resetSave();
-            helper.popup.destroySimple();
-            break;
-        case "localStorage.clear()":
-            localStorage.clear();
-            helper.popup.destroySimple();
-            location.reload();
-            break;
-        default:
-            alert(`Simple Popup doWhat is invalid, value is: ${doWhat} \nPlease report this to the GitHub accessable in the bottom left corner`)
-            this.destroySimple();
+    case "default":
+        helper.popup.destroySimple();
+        break;
+    case "resetSave()":
+        saves.resetSave();
+        helper.popup.destroySimple();
+        break;
+    case "localStorage.clear()":
+        localStorage.clear();
+        helper.popup.destroySimple();
+        location.reload();
+        break;
+    default:
+        alert(`Simple Popup doWhat is invalid, value is: ${doWhat} \nPlease report this to the GitHub accessable in the bottom left corner`);
+        this.destroySimple();
     }
     if (core.cookies < 0) { // TODO 0.6: investigate
         core.cookies = 0;
     }
 }
-helper.popup.createAdvanced = function(x,y,html,filter=true) { // i would recommend only adding filter if the popup is clickable, but not all are so it can be toggled
+helper.popup.createAdvanced = function(x,y,html) { // TODO anytime: reimpliment filter toggling
     const advancedPopup = document.getElementById("advancedPopup");
 
     advancedPopup.style.display = "flex";
+    advancedPopup.showModal();
     advancedPopup.style.width = `${x}px`;
     advancedPopup.style.height = `${y}px`;
-
-    if (filter) document.getElementById("filter").style.display = "block";
 
     advancedPopup.innerHTML = html;
 }
 helper.popup.destroyAdvanced = function() {
+    document.getElementById("advancedPopup").close();
     document.getElementById("advancedPopup").style.display = "none";
-    document.getElementById("filter").style.display = "none";
 }
 
 // set areas to different things
@@ -1255,20 +1240,21 @@ saves.exportData = function() {
 
 saves.importData = function() {
     saves.autoSave();
-    var file = document.getElementById("importDataInput").files[0];
-    var reader = new FileReader();
+    const file = document.getElementById("importDataInput").files[0];
+    const reader = new FileReader();
 
     reader.onload = function (e) {
         saves.rawImportedData = JSON.parse(reader.result);
     }
-    reader.onerror = (e) => alert("something broke, don't expect me to fix it :D");
+    reader.onerror = (e) => alert(`something broke, don't expect me to fix it :D \nerror: ${e}`);
 
     reader.readAsText(file);
     
     reader.onloadend = () => {
         saves.importReadData();
     };
-}
+} 
+// TODO at some point: why are these seperate? what is rawImportedData for?
 saves.importReadData = function() {
     saves.importedData = JSON.parse(saves.rawImportedData);
     helper.consoleLogDev("imported data: ");
@@ -1381,12 +1367,12 @@ saves.resetSave = function() {
     saves.loadAutoSave();
     helper.reloadBuildingPrices();
     
-    grandpa.unlocked = 0;
-    ranch.unlocked = 0;
-    television.unlocked = 0;
-    worker.unlocked = 0;
-    wallet.unlocked = 0;
-    church.unlocked = 0;
+    grandpa.unlocked = false;
+    ranch.unlocked = false;
+    television.unlocked = false;
+    worker.unlocked = false;
+    wallet.unlocked = false;
+    church.unlocked = false;
     document.getElementById("ifCheatedStat").innerHTML = "";
     document.getElementById("ifModdedStat").innerHTML = "";
 
@@ -1461,12 +1447,12 @@ saves.convert05Save = function(isBeta=false, isBetaSaveOld=false) { // ! this is
 
     saves.autoSave();
 
-    grandpa.unlocked = 0;
-    ranch.unlocked = 0;
-    television.unlocked = 0;
-    worker.unlocked = 0;
-    wallet.unlocked = 0;
-    church.unlocked = 0;
+    grandpa.unlocked = false;
+    ranch.unlocked = false;
+    television.unlocked = false;
+    worker.unlocked = false;
+    wallet.unlocked = false;
+    church.unlocked = false;
     document.getElementById("ifCheatedStat").innerHTML = "";
     document.getElementById("ifModdedStat").innerHTML = "";
 
@@ -1537,13 +1523,13 @@ mods.loadURL = function(url) {
     document.getElementById("importedMessage").style.display = "block";
 
     mods.numberLoaded += 1;
-    isModded = 1;
+    isModded = true;
     document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
     mods.reloadModsLoadedText();
 }
 mods.loadFile = function() { // add check if mod is valid
-    var file = document.getElementById("addModFile").files[0];
-    var reader = new FileReader();
+    const file = document.getElementById("addModFile").files[0];
+    const reader = new FileReader();
 
     reader.onerror = (e) => alert(`something broke, don't expect me to fix it :D \nerror: ${e}`);
 
@@ -1564,7 +1550,7 @@ mods.loadFile = function() { // add check if mod is valid
         document.getElementById("importedMessage").style.display = "block";
 
         mods.numberLoaded += 1;
-        isModded = 1;
+        isModded = true;
         document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
         mods.reloadModsLoadedText();
     };
@@ -1607,7 +1593,7 @@ mods.addModData = function(id,data) { // yes i basically stole and renamed this 
     }
     mods.allMods.push(id);
     document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
-    isModded = 1;
+    isModded = true;
     data.initialization();
     console.log(`Loaded mod ${id}`);
 }
@@ -1616,7 +1602,7 @@ mods.addClicked = function() {
     helper.popup.createAdvanced(500,350,`<h3 class='simple-popup-title' style='display:block;'>Add Mod</h3>
     <h5 class='popup-content' style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5>
     <h5 class='popup-content' style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5>
-    <h5 class='popup-content' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a onclick='saves.autoSave()' href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue'>read the documentation</a>.</h5>
+    <h5 class='popup-content' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a onclick='saves.autoSave()' href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue' target="_blank">read the documentation</a>.</h5>
     <form onsubmit='return false;' id='addModURLForm' style='margin-top:22px;'>
         <label for='addModURL' class='popup-content'>From URL: </label>
         <input id='addModURL' onchange='mods.loadURL(this.value)'>
@@ -1719,7 +1705,7 @@ console.log("what are you doing here? well... as long as its productive.");
 
 // buildings have to be made here instead of init because of scope
 const keyboard = new Building("keyboard","type in cookies",15,0.1,0,"keyboard.png");
-keyboard.unlocked = 1;
+keyboard.unlocked = true;
 const grandpa = new Building("grandpa","as long as gramps gets a cut",100,1,1,"grandpa.png");
 grandpa.setVisibility(false);
 const ranch = new Building("ranch","not the dressing kind",1100,8,2,"ranch.png",true);

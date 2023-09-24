@@ -416,22 +416,20 @@ small {
     background-image: url(img/church.png);
 }
 
-/* Simple Popup CSS */
+/* Popup CSS */
 .popup {
-    border-style: solid;
-    border-width: 3px;
-    border-color: black;
+    display: none;
+    padding: 0px; /* dialog boxes have padding by default */
     width: 128px;
     height: 96px;
     background-color: white;
     text-align: center;
-    display: none;
-    position: absolute;
-    top:  50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
     flex-direction: column;
     align-items: center;
+}
+dialog::backdrop {
+    background-color: black;
+    opacity: 50%;
 }
 .simple-popup-button-div {
     display: flex;
@@ -663,13 +661,6 @@ small {
     margin-top: 2px;
     margin-bottom: 6px;
     text-align: center;
-}
-.filter {
-    background-color: black;
-    opacity: 50%;
-    width: 100vw;
-    height: 100vh;
-    display: none;
 }
 .saving-indicator {
     position: absolute;

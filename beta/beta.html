@@ -21,7 +21,7 @@
             <span class="leftSidePush" id="leftSidePush"></span>
             <p class="saving-indicator" id="savingIndicator">Saved!</p>
             <div class="social-links">
-                <a onclick="saves.autoSave()" href="https://github.com/clickercookie/clickercookie.github.io">
+                <a onclick="saves.autoSave()" href="https://github.com/clickercookie/clickercookie.github.io" target="_blank">
                     <img class="github" src="img/github-mark.svg" alt="github">
                 </a>
                 <h5 id="versionNumber" class="version-number pointer no-select" onclick="versionSwitch()" onmouseover="versionNumberMousedOver()" onmouseout="versionNumberMousedOver(true)">Version: null</h5>
@@ -157,8 +157,7 @@
                 
             </div>
         </div> <!-- end rightSide -->
-        <div class="absolute filter" id="filter"></div>
-        <div class="popup no-select" id="simplePopup">
+        <dialog class="popup no-select" id="simplePopup">
             <img alt="popup image" style="display:none;" id="simplePopupImage">
             <h3 class="simple-popup-title" id="simplePopupTitle">title</h3>
             <p class="popup-content" id="simplePopupContent">null</p>
@@ -166,9 +165,9 @@
                 <button onclick="helper.popup.destroySimple()" id="simplePopupBackButton" class="popup-button no-display" style="margin-right:3px;">Back</button>
                 <button onclick="helper.popup.simpleClicked()" id="simplePopupButton" class="popup-button">OK</button>
             </div>
-        </div>
-        <div class="popup no-select" id="advancedPopup">
+        </dialog>
+        <dialog class="popup no-select" id="advancedPopup">
 
-        </div>
+        </dialog>
     </body>
 </html>
