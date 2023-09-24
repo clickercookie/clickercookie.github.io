@@ -2,7 +2,7 @@
 // Variable & Object Definitions
 // ------------------------------------
 const version = "0.6";
-const versionBranch = location.pathname == "/beta/beta" ? 1 : 0; // 0 is main, 1 is beta
+const versionBranch = (location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") ? 1 : 0; // 0 is main, 1 is beta
 const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode!
 const desktop = false;
 
