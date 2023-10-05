@@ -275,6 +275,18 @@ small {
     color: black;
 }
 
+.upgrades-bought-stats-holder {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0px 3px 6px 3px;
+}
+.upgrade-stats {
+    width: 56px;
+    height: 56px;
+    margin: 3px;
+    background-size: 56px;
+}
+
 /* social links stuff */
 .social-links {
     position: absolute;

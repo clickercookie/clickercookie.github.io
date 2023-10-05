@@ -76,7 +76,7 @@ upgrades.quotes = [
 upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.currentClicked.toLowerCase()} production by 2`,"Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
 upgrades.img = [
     "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png",undefined,
-    "hardwood-walking-stick.png","rocking-chair.png",undefined,undefined,undefined,
+    "hardwood-walking-stick.png","rocking-chair.png",undefined,undefined,"shotgun.png",
     "ranch-upgrade1.png",undefined,undefined,undefined,undefined,
     "tv-upgrade1.png",undefined,undefined,undefined,undefined,
     "worker-upgrade1.png",undefined,undefined,undefined,undefined,
@@ -406,12 +406,12 @@ core.initialization = function() {
 }
 
 // Events
-let mousePos = { x: undefined, y: undefined };
-
+let mousePos = {x: undefined, y: undefined};
 window.addEventListener('mousemove', (event) => {
-    mousePos = { x: event.clientX, y: event.clientY };
-    // set positions affected by mouse pos
-    document.getElementById("tooltip").style.top = `${mousePos.y - 50}px`;
+    mousePos = {
+        x: event.clientX,
+        y: event.clientY 
+    };
 });
 
 // timer things
@@ -466,7 +466,7 @@ function perMillisecondUniversal() {
 
     // log to console in case of error
     if (core.cookies < 0) {
-        helper.popup.createSimple(300,150,`<i>huh, what just happened?</i> <br> An error occured: ${personalization.currentClickedPlural} are in negative!<br>Please report this to the GitHub accessable in the bottom left corner`,false,"default","",false,true);
+        helper.popup.createSimple(300,150,`<i>huh, what just happened?</i> <br> An error occured: ${personalization.currentClickedPlural} are in negative!<br>Please report this to the GitHub accessable in the bottom left corner`,false,"reset cookies","",false,true);
     }
     // stats that need to be updated beforehand
     core.buildingsOwned = keyboard.bought + grandpa.bought + ranch.bought + television.bought + worker.bought + wallet.bought + church.bought;
@@ -503,9 +503,8 @@ function cookiesPerSecondUpdate() {
 }
 
 function autoSaveIntervalFunc() { // Turns out this is required and that the game hasn't been auto-saving ever since Objects Everywhere...
-    if (!savingAllowed) {
-        return false;
-    }
+    if (!savingAllowed) return false;
+
     saves.autoSave();
 }
 
@@ -514,7 +513,7 @@ function autoSaveIntervalFunc() { // Turns out this is required and that the gam
 // ------------------------------------
 core.cookieClicked = function() {
     core.cookies += core.cookiesPerClick;
-    core.cookieBeenClickedTimes += 1;
+    core.cookieBeenClickedTimes++;
     core.totalCookies += core.cookiesPerClick;
     helper.reloadCookieCounter();
 }
@@ -523,14 +522,15 @@ dev.setDevMode = function(value) {
     if (value === "on") value = true;
     if (value === "off") value = false;
 
-    if (value) {
-        dev.devMode = true;
-        console.log("Developer Mode activated.");
-        document.getElementById("devModeSelect").disabled = true;
-        document.getElementById("whiteBackground").style.display = "block";
-    } else {
+    if (!value) {
         dev.devMode = false;
+        return;
     }
+
+    dev.devMode = true;
+    console.log("Developer Mode activated.");
+    document.getElementById("devModeSelect").disabled = true;
+    document.getElementById("whiteBackground").style.display = "block";
 }
 dev.setCookies = function(x) {
     if (!dev.devMode) return "You need developer mode ON to run this command.";
@@ -635,7 +635,7 @@ class Building {
             core.cookies -= this.upgradeCost;
             this.upgradeCost *= 1.15;
             this.upgradeCost = Math.floor(this.upgradeCost);
-            this.bought += 1;
+            this.bought++;
             this.CPSGiven += this.CPSGain;
             helper.reloadCookieCounter();
             document.getElementById(`${this.name}Cost`).innerHTML = helper.commaify(this.upgradeCost);
@@ -687,16 +687,25 @@ class Building {
 // ------------------------------------
 // Upgrades
 // ------------------------------------
-upgrades.create = function(id) {
+upgrades.create = function(id,statistic=false) { // statistic is for creating it in the statistics page
     let building = Math.floor(id / 5);
 
     const upgrade = document.createElement("div");
     upgrade.setAttribute("class","upgrade");
-    upgrade.setAttribute("id",`upgrade${id}`)
-    upgrade.setAttribute("onclick",`upgrades.clicked(${id},${building})`);
-    upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building})`);
-    upgrade.setAttribute("onmouseout","hideTooltip()");
+    if (statistic) {
+        upgrade.setAttribute("id",`upgrade${id}Stats`);
+        upgrade.setAttribute("class","upgrade-stats");
+        upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building},true)`);
+        upgrade.setAttribute("onmouseout","hideTooltip()");
+    }
 
+    if (!statistic) {
+        upgrade.setAttribute("id",`upgrade${id}`);
+        upgrade.setAttribute("onclick",`upgrades.clicked(${id},${building})`);
+        upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building})`);
+        upgrade.setAttribute("onmouseout","hideTooltip()");
+    }
+    
     icon = this.img[id];
     if (icon === undefined) { // TODO 0.6: make this better
         if (!mobile) {
@@ -714,8 +723,13 @@ upgrades.create = function(id) {
         }
     }
 
-    document.getElementById("upgradesHolder").appendChild(upgrade);
-    upgrades.currentlyShown += 1;
+    if (!statistic)
+        document.getElementById("upgradesHolder").appendChild(upgrade);
+    else
+        document.getElementById("upgradesBoughtStatsHolder").appendChild(upgrade);
+    
+    if (!statistic)
+        upgrades.currentlyShown++;
 }
 
 upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
@@ -731,8 +745,8 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
                 upgrades.hovered(id,building);
             }
             upgrades.destroy(id);
-            upgrades.upgradesBought += 1;
-            upgrades.currentlyShown -= 1;
+            upgrades.upgradesBought++;
+            upgrades.currentlyShown--;
         }
         break;
     case 1:
@@ -745,8 +759,8 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
                 upgrades.hovered(id,building);
             }
             upgrades.destroy(id);
-            upgrades.upgradesBought += 1;
-            upgrades.currentlyShown -= 1;
+            upgrades.upgradesBought++;
+            upgrades.currentlyShown--;
         }
         break;
     case 2:
@@ -759,8 +773,8 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
                 upgrades.hovered(id,building);
             }
             upgrades.destroy(id);
-            upgrades.upgradesBought += 1;
-            upgrades.currentlyShown -= 1;
+            upgrades.upgradesBought++;
+            upgrades.currentlyShown--;
         }
         break;
     case 3:
@@ -773,8 +787,8 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
                 upgrades.hovered(id,building);
             }
             upgrades.destroy(id);
-            upgrades.upgradesBought += 1;
-            upgrades.currentlyShown -= 1;
+            upgrades.upgradesBought++;
+            upgrades.currentlyShown--;
         }
         break;
     case 4:
@@ -787,8 +801,8 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
                 upgrades.hovered(id,building);
             }
             upgrades.destroy(id);
-            upgrades.upgradesBought += 1;
-            upgrades.currentlyShown -= 1;
+            upgrades.upgradesBought++;
+            upgrades.currentlyShown--;
         }
         break;
     case 5:
@@ -801,8 +815,8 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
                 upgrades.hovered(id,building);
             }
             upgrades.destroy(id);
-            upgrades.upgradesBought += 1;
-            upgrades.currentlyShown -= 1;
+            upgrades.upgradesBought++;
+            upgrades.currentlyShown--;
         }
         break;
     case 6:
@@ -815,30 +829,33 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
                 upgrades.hovered(id,building);
             }
             upgrades.destroy(id);
-            upgrades.upgradesBought += 1;
-            upgrades.currentlyShown -= 1;
+            upgrades.upgradesBought++;
+            upgrades.currentlyShown--;
         }
         break;
     }
     upgrades.expandUpgradesHolder(); // sometimes the upgrade holder has one too many rows because of weird onmouseover behavior, this prevents that
+    this.updateBoughtStatistic();
 }
-
 upgrades.destroy = function(id) {
     document.getElementById(`upgrade${id}`).remove();
     if (!mobile) hideTooltip();
 }
-upgrades.destroyAll = function() {
+upgrades.destroyAll = function(statistic=false) {
+    let idToGet;
     for (i = 0; i < upgrades.unlocked.length; i++) {
-        try {
-            document.getElementById(`upgrade${i}`).remove();
+        idToGet = (!statistic) ? `upgrade${i}` : `upgrade${i}Stats`
+        try { // since the element may not exist, this just ignores the error that occurs when it can't find it
+            document.getElementById(idToGet).remove();
         } catch {
             continue;
         }
     }
     upgrades.currentlyShown = 0;
 }
+upgrades.hovered = function(id,building,statistic=false) {
+    const tooltip = document.getElementById("tooltip");
 
-upgrades.hovered = function(id,building) {
     document.getElementById("tooltipProduces").style.display = "none";
     document.getElementById("tooltipProducing").style.display = "none";
     document.getElementById("tooltipDesc").style.display = "block";
@@ -848,8 +865,17 @@ upgrades.hovered = function(id,building) {
     document.getElementById("tooltipDesc").innerHTML = `${upgrades.descriptions[building]}`;
     document.getElementById("tooltipQuote").innerHTML = `<i>\"${upgrades.quotes[id]}\"</i>`;
 
-    document.getElementById("tooltip").style.display = "block";
+    tooltip.style.display = "block";
+    setInterval( () => {
+        if (statistic === true) {
+            tooltip.style.left = mousePos.x;
+            tooltip.style.top = `${mousePos.y - 50}px`;  
+        } else {
+            tooltip.style.right = "346px";
+        }
+    },0);
 }
+
 upgrades.expandUpgradesHolder = function(retract=false) {
     upgrades.rowsOfUpgrades = Math.ceil(upgrades.currentlyShown / 5);
 
@@ -861,14 +887,24 @@ upgrades.expandUpgradesHolder = function(retract=false) {
     const size = (upgrades.rowsOfUpgrades === 0) ? 67.6 : 67.6 * upgrades.rowsOfUpgrades;
     holder.style.height = `${size}px`;
 }
+
 upgrades.showUnlocked = function() {
     for (i = 0; i < upgrades.unlocked.length; i++) {
         if (upgrades.unlocked[i] == 1 && upgrades.bought[i] != 1) upgrades.create(i);
     }
 }
+upgrades.updateBoughtStatistic = function() {
+    this.destroyAll(true); // would create duplicates of the same upgrade without this
+    for (i = 0; i < upgrades.bought.length; i++) {
+        if (upgrades.bought[i] != 1) continue
+
+        upgrades.create(i,true);
+    }
+}
+
 upgrades.checkUpgradeAvailability = function() {
     let runThroughTimes = 0; // buildings.building.bought needs for boughtUnlockRequirements indicies
-    const boughtUnlockRequirements = [ // number of buildings bought required to unlock an upgrade, in chronological order
+    const boughtUnlockRequirements = [ // number of buildings bought required to unlock an upgrade in chronological order
         1,5,10,25,50
     ];
     // Keyboards
@@ -1050,12 +1086,12 @@ helper.popup.simpleClicked = function(doWhat="default") {
         helper.popup.destroySimple();
         location.reload();
         break;
+    case "reset cookies":
+        core.cookies = 0;
+        break;
     default:
         alert(`Simple Popup doWhat is invalid, value is: ${doWhat} \nPlease report this to the GitHub accessable in the bottom left corner`);
         this.destroySimple();
-    }
-    if (core.cookies < 0) { // TODO 0.6: investigate
-        core.cookies = 0;
     }
 }
 helper.popup.createAdvanced = function(x,y,html) { // TODO anytime: reimpliment filter toggling
@@ -1091,7 +1127,6 @@ personalization.setBackground = function(color) {
 
     helper.consoleLogDev(`Background color set to: ${color}`);
 }
-
 personalization.setCurrentClicked = function(value) {
     switch (value) {
     case "cookie":
@@ -1380,12 +1415,12 @@ saves.resetSave = function() {
 
     // document.getElementById("win").style.display = "none";
 
-    document.getElementById("building1").style.display = "none";
-    document.getElementById("building2").style.display = "none";
-    document.getElementById("building3").style.display = "none";
-    document.getElementById("building4").style.display = "none";
-    document.getElementById("building5").style.display = "none";
-    document.getElementById("building6").style.display = "none";
+    grandpa.setVisibility(false);
+    ranch.setVisibility(false);
+    television.setVisibility(false);
+    worker.setVisibility(false);
+    wallet.setVisibility(false);
+    church.setVisibility(false);
 
     if (mobile) {
         navbarItemClicked("Cookie");
@@ -1468,34 +1503,34 @@ saves.convert05Save = function(isBeta=false, isBetaSaveOld=false) { // ! this is
     // document.getElementById("win").style.display = "none";
 
     if (oldSave[11] >= 1) {
-        document.getElementById("building1").style.display = "block";
+        grandpa.setVisibility(true);
     } else {
-        document.getElementById("building1").style.display = "none";
+        grandpa.setVisibility(false);
     }
     if (oldSave[12] >= 1) {
-        document.getElementById("building2").style.display = "block";
+        ranch.setVisibility(true);
     } else {
-        document.getElementById("building2").style.display = "none";
+        ranch.setVisibility(false);
     }
     if (oldSave[13] >= 1) {
-        document.getElementById("building3").style.display = "block";
+        television.setVisibility(true);
     } else {
-        document.getElementById("building3").style.display = "none";
+        television.setVisibility(false);
     }
     if (oldSave[14] >= 1) {
-        document.getElementById("building4").style.display = "block";
+        worker.setVisibility(true);
     } else {
-        document.getElementById("building4").style.display = "none";
+        worker.setVisibility(false);
     }
     if (oldSave[15] >= 1) {
-        document.getElementById("building5").style.display = "block";
+        wallet.setVisibility(true);
     } else {
-        document.getElementById("building5").style.display = "none";
+        wallet.setVisibility(false);
     }
     if (oldSave[16] >= 1) {
-        document.getElementById("building6").style.display = "block";
+        church.setVisibility(true);
     } else {
-        document.getElementById("building6").style.display = "none";
+        church.setVisibility(false);
     }
     
     if (localStorage.getItem("devSave") != null) {
@@ -1522,7 +1557,7 @@ mods.loadURL = function(url) {
     document.getElementById("addModURLForm").reset();
     document.getElementById("importedMessage").style.display = "block";
 
-    mods.numberLoaded += 1;
+    mods.numberLoaded++;
     isModded = true;
     document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
     mods.reloadModsLoadedText();
@@ -1549,7 +1584,7 @@ mods.loadFile = function() { // add check if mod is valid
         document.getElementById("addModURLForm").reset();
         document.getElementById("importedMessage").style.display = "block";
 
-        mods.numberLoaded += 1;
+        mods.numberLoaded++;
         isModded = true;
         document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
         mods.reloadModsLoadedText();
@@ -1587,7 +1622,7 @@ mods.addModData = function(id,data) { // yes i basically stole and renamed this 
         helper.popup.createAdvanced(400,200,"<h3 class='simple-popup-title' style='display:block;'>Error</h3> \
         <p class='popup-content'>This mod's ID is already present!</p> \
         <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>");
-        mods.numberLoaded -= 1;
+        mods.numberLoaded--;
         mods.reloadModsLoadedText();
         return false;
     }
