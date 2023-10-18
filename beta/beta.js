@@ -389,11 +389,7 @@ core.initialization = function() {
         mobile = true;
         personalization.currentBackground = "url(../img/backgrounds/background-blue.png)";
         if (location.pathname == "/" || location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") {
-            if (!versionBranch) {
-                location.href = "mobile/mobile.html";
-            } else {
-                location.href = "../mobile/mobile.html";
-            }
+            location.href = (versionBranch) ? "../mobile/mobile.html" : "mobile/mobile.html";
         }
     } else {
         mobile = false;
@@ -415,9 +411,9 @@ window.addEventListener('mousemove', (event) => {
 });
 
 // timer things
-const intervalCPSU = setInterval(cookiesPerSecondUpdate, 1000);
-const perMillisecondUniversalVar = setInterval(perMillisecondUniversal, 1);
-const autoSaveInterval = setInterval(autoSaveIntervalFunc, 60 * 1000);
+setInterval(cookiesPerSecondUpdate, 1000);
+setInterval(perMillisecondUniversal, 1);
+setInterval(autoSaveIntervalFunc, 60 * 1000);
 
 function perMillisecondUniversal() {
     variableView.cookiesView = Math.round(core.cookies * 10) / 10;
@@ -460,9 +456,8 @@ function perMillisecondUniversal() {
     }
 
     // check for stopped cookie production
-    if (cookieProductionStopped) {
+    if (cookieProductionStopped)
         core.cookies = 0;
-    }
 
     // log to console in case of error
     if (core.cookies < 0) {
@@ -553,7 +548,7 @@ dev.setCPS = function(x) {
 dev.toggleSaving = function() { // TODO 0.6: this should be a toggle without dev mode
     if (!this.devMode) return "You need developer mode ON to run this command.";
 
-    savingAllowed = savingAllowed ? false : true
+    savingAllowed = !savingAllowed
 
     if (!inDevelopment) return;
     document.getElementById("currentSavingStatus").innerHTML = `saving: ${savingAllowed}`;
@@ -615,7 +610,7 @@ class Building {
             
                 const buildingName = document.createElement("p");
                 buildingName.setAttribute("class","building-name");
-                buildingName.innerHTML = `${capitalize(this.name)}`; // ? THIS IS ERROR
+                buildingName.innerHTML = `${capitalize(this.name)}`;
                 buildingContent.appendChild(buildingName);
 
                 const buildingPrice = document.createElement("p");
@@ -733,105 +728,46 @@ upgrades.create = function(id,statistic=false) { // statistic is for creating it
 }
 
 upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
+    if (core.cookies < upgrades.prices[id]) return
+
+    core.cookies -= upgrades.prices[id];
+    upgrades.bought[id] = 1;
+    if (!mobile) {
+        upgrades.hovered(id,building);
+    }
+    upgrades.destroy(id);
+    upgrades.upgradesBought++;
+    upgrades.currentlyShown--;
+
     switch (building) {
     case 0:
-        if (core.cookies >= upgrades.prices[id]) {
-            core.cookies -= upgrades.prices[id];
-            keyboard.CPSGiven *= 2;
-            keyboard.CPSGain *= 2;
-            core.cookiesPerClick *= 2;
-            upgrades.bought[id] = 1;
-            if (!mobile) {
-                upgrades.hovered(id,building);
-            }
-            upgrades.destroy(id);
-            upgrades.upgradesBought++;
-            upgrades.currentlyShown--;
-        }
+        keyboard.CPSGiven *= 2;
+        keyboard.CPSGain *= 2;
+        core.cookiesPerClick *= 2;
         break;
     case 1:
-        if (core.cookies >= upgrades.prices[id]) {
-            core.cookies -= upgrades.prices[id];
-            grandpa.CPSGiven *= 2;
-            grandpa.CPSGain *= 2;
-            upgrades.bought[id] = 1;
-            if (!mobile) {
-                upgrades.hovered(id,building);
-            }
-            upgrades.destroy(id);
-            upgrades.upgradesBought++;
-            upgrades.currentlyShown--;
-        }
+        grandpa.CPSGiven *= 2;
+        grandpa.CPSGain *= 2;
         break;
     case 2:
-        if (core.cookies >= upgrades.prices[id]) {
-            core.cookies -= upgrades.prices[id];
-            ranch.CPSGiven *= 2;
-            ranch.CPSGain *= 2;
-            upgrades.bought[id] = 1;
-            if (!mobile) {
-                upgrades.hovered(id,building);
-            }
-            upgrades.destroy(id);
-            upgrades.upgradesBought++;
-            upgrades.currentlyShown--;
-        }
+        ranch.CPSGiven *= 2;
+        ranch.CPSGain *= 2;
         break;
     case 3:
-        if (core.cookies >= upgrades.prices[id]) {
-            core.cookies -= upgrades.prices[id];
-            television.CPSGiven *= 2;
-            television.CPSGain *= 2;
-            upgrades.bought[id] = 1;
-            if (!mobile) {
-                upgrades.hovered(id,building);
-            }
-            upgrades.destroy(id);
-            upgrades.upgradesBought++;
-            upgrades.currentlyShown--;
-        }
+        television.CPSGiven *= 2;
+        television.CPSGain *= 2;
         break;
     case 4:
-        if (core.cookies >= upgrades.prices[id]) {
-            core.cookies -= upgrades.prices[id];
-            worker.CPSGiven *= 2;
-            worker.CPSGain *= 2;
-            upgrades.bought[id] = 1;
-            if (!mobile) {
-                upgrades.hovered(id,building);
-            }
-            upgrades.destroy(id);
-            upgrades.upgradesBought++;
-            upgrades.currentlyShown--;
-        }
+        worker.CPSGiven *= 2;
+        worker.CPSGain *= 2;
         break;
     case 5:
-        if (core.cookies >= upgrades.prices[id]) {
-            core.cookies -= upgrades.prices[id];
-            wallet.CPSGiven *= 2;
-            wallet.CPSGain *= 2;
-            upgrades.bought[id] = 1;
-            if (!mobile) {
-                upgrades.hovered(id,building);
-            }
-            upgrades.destroy(id);
-            upgrades.upgradesBought++;
-            upgrades.currentlyShown--;
-        }
+        wallet.CPSGiven *= 2;
+        wallet.CPSGain *= 2;
         break;
     case 6:
-        if (core.cookies >= upgrades.prices[id]) {
-            core.cookies -= upgrades.prices[id];
-            church.CPSGiven *= 2;
-            church.CPSGain *= 2;
-            upgrades.bought[id] = 1;
-            if (!mobile) {
-                upgrades.hovered(id,building);
-            }
-            upgrades.destroy(id);
-            upgrades.upgradesBought++;
-            upgrades.currentlyShown--;
-        }
+        church.CPSGiven *= 2;
+        church.CPSGain *= 2;
         break;
     }
     upgrades.expandUpgradesHolder(); // sometimes the upgrade holder has one too many rows because of weird onmouseover behavior, this prevents that
@@ -844,7 +780,7 @@ upgrades.destroy = function(id) {
 upgrades.destroyAll = function(statistic=false) {
     let idToGet;
     for (i = 0; i < upgrades.unlocked.length; i++) {
-        idToGet = (!statistic) ? `upgrade${i}` : `upgrade${i}Stats`
+        idToGet = (!statistic) ? `upgrade${i}` : `upgrade${i}Stats` // this eliminates some unnessesary nesting
         try { // since the element may not exist, this just ignores the error that occurs when it can't find it
             document.getElementById(idToGet).remove();
         } catch {
@@ -1242,11 +1178,7 @@ function versionNumberMousedOver(undo=false) {
     }
 }
 function versionSwitch() {
-    if (versionBranch) {
-        window.location.href = "/";
-    } else {
-        window.location.href = "/beta/beta.html";
-    }
+    window.location.href = (versionBranch) ? "/" : "/beta/beta.html";
 }
 
 // ------------------------------------
@@ -1352,7 +1284,7 @@ saves.autoSave = function() { // yes if you are wondering i totally 100% without
     } else {
         localStorage.setItem("betaSave",JSON.stringify(save));
     }
-    if (inDevelopment) {console.log("save object: "); console.log(save);}
+    if (inDevelopment) { console.log("save object: "); console.log(save); }
 
     // Update saving notification
     const indicator = document.getElementById("savingIndicator");
