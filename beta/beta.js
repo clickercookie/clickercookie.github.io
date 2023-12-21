@@ -566,15 +566,13 @@ dev.toggleSaving = function() { // TODO 0.6: this should be a toggle without dev
 // Buildings
 // ------------------------------------
 class Building {
-    static instances = [];
-
     constructor(name,quote,upgradeCost,CPSGain,id,iconImg="unknown.png",esPlural=false) {
         if (document.getElementById(`building${id}`) != null) {
             helper.popup.createSimple(300,150,`<i>huh, what just happened?</i> <br> An error occured: Tried to create a building that already exists (id ${id}).`,true,"default","Error",false,true);
             return;
         }
 
-        this.name = name; // SHOULD BE SAME AS OBJECT INSTANCE NAME, might change this requirement but how to do that is currently beyond my knowledge
+        this.name = name; // ! SHOULD BE SAME AS OBJECT INSTANCE NAME, will be changed in 0.7!!!
         this.quote = quote;
         this.upgradeCost = upgradeCost;
         this.CPSGiven = 0;
@@ -586,14 +584,13 @@ class Building {
         if (esPlural) { this.plural = "es"; } 
         else { this.plural = "s"; }
 
-        Building.instances.push(this.name);
-
         // setup HTML (uses indentation to show structure)
         this.building = document.createElement("div");
         this.building.setAttribute("id",`building${this.id}`);
         this.building.setAttribute("class","building");
+        // todo 0.7: update on the whole instance name thing, event listeners can fix this super easy
         this.building.setAttribute("onclick",`${this.name}.buy()`); // this is why names must be the instance name
-        this.building.setAttribute("onmouseover",`${this.name}.hovered()`); // this is why names must be the instance name
+        this.building.setAttribute("onmousemove",`${this.name}.hovered()`); // this is why names must be the instance name
         this.building.setAttribute("onmouseout","hideTooltip()");
 
             const icon = document.createElement("img");
@@ -687,7 +684,6 @@ class Building {
     }
 
     destroy() {
-        delete Building.instances[this.name];
         document.getElementById(`building${this.id}`).remove();
     }
 }
@@ -703,33 +699,22 @@ upgrades.create = function(id,statistic=false) { // statistic is for creating it
     if (statistic) {
         upgrade.setAttribute("id",`upgrade${id}Stats`);
         upgrade.setAttribute("class","upgrade-stats");
-        upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building},true)`);
+        upgrade.setAttribute("onmousemove",`upgrades.hovered(${id},${building},true)`);
         upgrade.setAttribute("onmouseout","hideTooltip()");
     }
 
     if (!statistic) {
         upgrade.setAttribute("id",`upgrade${id}`);
         upgrade.setAttribute("onclick",`upgrades.clicked(${id},${building})`);
-        upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building})`);
+        upgrade.setAttribute("onmousemove",`upgrades.hovered(${id},${building})`);
         upgrade.setAttribute("onmouseout","hideTooltip()");
     }
     
     const icon = this.img[id];
-    if (icon === undefined) { // TODO 0.6: make this better
-        if (!mobile) {
-            upgrade.style.backgroundImage = "url(img/unknown-64-64.png)";
-        }
-        if (mobile || desktop) {
-            upgrade.style.backgroundImage = "url(../img/unknown-64-64.png)";
-        }
-    } else {
-        if (!mobile) {
-            upgrade.style.backgroundImage = `url(img/upgrades/${icon})`;
-        }
-        if (mobile || desktop) {
-            upgrade.style.backgroundImage = `url(../img/upgrades/${icon})`;
-        }
-    }
+    if (icon === undefined)
+        upgrade.style.backgroundImage = getFile("img/unknown-64-64.png");
+    else
+        upgrade.style.backgroundImage = getFile(`img/upgrades/${icon}`);
 
     if (!statistic)
         document.getElementById("upgradesHolder").appendChild(upgrade);
@@ -783,7 +768,7 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
         church.CPSGain *= 2;
         break;
     }
-    upgrades.expandUpgradesHolder(); // sometimes the upgrade holder has one too many rows because of weird onmouseover behavior, this prevents that
+    upgrades.expandUpgradesHolder(); // sometimes the upgrade holder has one too many rows because of weird onmousemove behavior, this prevents that
     this.updateBoughtStatistic();
 }
 upgrades.destroy = function(id) {
@@ -1610,6 +1595,15 @@ mods.reloadModsLoadedText = function() {
 
 function print() {
     helper.popup.createSimple(250,150,"it's console.log",false,"default","dum dum",false,true);
+}
+
+// because of the difference in file locations on the mobile version, this is the new way that files should be accessed in other locations
+// so DON'T USE url() when making new HTML!!! Use this!!!
+function getFile(location) {
+    if (mobile || desktop)
+        return `url(../${location})`;
+    if (!mobile)
+        return `url(${location})`;
 }
 
 // Changelog Entries
