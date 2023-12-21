@@ -3,7 +3,7 @@
 // ------------------------------------
 const version = "0.6";
 const versionBranch = (location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") ? 1 : 0; // 0 is main, 1 is beta
-const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode!
+const inDevelopment = 1; // toggle if developing actively. This is completely different than the builtin dev mode!
 const desktop = false;
 
 // customization
@@ -225,6 +225,12 @@ core.initialization = function() {
         const br1 = document.createElement("br");
         devDiv.appendChild(br1);
 
+        const mousePos = document.createElement("p");
+        mousePos.appendChild(document.createTextNode("Mouse Pos: (?, ?)"));
+        mousePos.setAttribute("id","mousePosDevText");
+        mousePos.setAttribute("style","margin-bottom:0px;");
+        devDiv.appendChild(mousePos);
+
         const br2 = document.createElement("br");
         devDiv.appendChild(br2);
 
@@ -408,6 +414,8 @@ window.addEventListener('mousemove', (event) => {
         x: event.clientX,
         y: event.clientY 
     };
+    if (inDevelopment == 1)
+        document.getElementById("mousePosDevText").textContent = `Mouse Pos: (${mousePos.x}, ${mousePos.y})`;
 });
 
 // timer things
@@ -640,6 +648,8 @@ class Building {
     }
 
     hovered() {
+        const tooltip = document.getElementById("tooltip");
+
         document.getElementById("tooltipDesc").style.display = "none";
         document.getElementById("tooltipProduces").style.display = "block";
         document.getElementById("tooltipProducing").style.display = "block";
@@ -651,6 +661,9 @@ class Building {
         buildingInfoProducing = helper.commaify(Math.round(this.CPSGiven * 10) / 10);
 
         if (!mobile) {
+            tooltip.style.top = `${mousePos.y - 50}px`;  
+            tooltip.style.right = "346px";
+
             document.getElementById("tooltipName").innerHTML = buildingInfoName;
             document.getElementById("tooltipPrice").innerHTML = `Price: ${buildingInfoPrice}`;
             document.getElementById("tooltipQuote").innerHTML = `\"${buildingInfoQuote}\"`;
@@ -658,7 +671,7 @@ class Building {
             document.getElementById("tooltipProducing").innerHTML = `Producing: ${buildingInfoProducing} CPS`;
         }
     
-        document.getElementById("tooltip").style.display = "block";
+        tooltip.style.display = "block";
     }
 
     setVisibility(bool) {
@@ -701,7 +714,7 @@ upgrades.create = function(id,statistic=false) { // statistic is for creating it
         upgrade.setAttribute("onmouseout","hideTooltip()");
     }
     
-    icon = this.img[id];
+    const icon = this.img[id];
     if (icon === undefined) { // TODO 0.6: make this better
         if (!mobile) {
             upgrade.style.backgroundImage = "url(img/unknown-64-64.png)";
@@ -802,14 +815,13 @@ upgrades.hovered = function(id,building,statistic=false) {
     document.getElementById("tooltipQuote").innerHTML = `<i>\"${upgrades.quotes[id]}\"</i>`;
 
     tooltip.style.display = "block";
-    setInterval( () => {
-        if (statistic === true) {
-            tooltip.style.left = mousePos.x;
-            tooltip.style.top = `${mousePos.y - 50}px`;  
-        } else {
-            tooltip.style.right = "346px";
-        }
-    },0);
+    if (statistic === true) {
+        tooltip.style.left = mousePos.x+"px";
+        tooltip.style.top = `${mousePos.y - 50}px`;  
+    } else {
+        tooltip.style.right = "346px";
+        tooltip.style.top = `${mousePos.y - 50}px`; 
+    }
 }
 
 upgrades.expandUpgradesHolder = function(retract=false) {
@@ -954,7 +966,7 @@ function capitalize(str) {
 
     return capitalized;
 }
-String.prototype.capitalize = capitalize;
+String.prototype.capitalize = capitalize; // this can probably be removed
 
 // Popups
 helper.popup = {};
@@ -1030,7 +1042,7 @@ helper.popup.simpleClicked = function(doWhat="default") {
         this.destroySimple();
     }
 }
-helper.popup.createAdvanced = function(x,y,html) { // TODO anytime: reimpliment filter toggling
+helper.popup.createAdvanced = function(x,y,html) { // TODO anytime: reimpliment filter toggling, just in case (defo not high priority)
     const advancedPopup = document.getElementById("advancedPopup");
 
     advancedPopup.style.display = "flex";
@@ -1112,7 +1124,7 @@ function toggleMiddle(param) { // TODO 0.6: eliminate unnessesary switch stateme
     infoMT.style.display = "none";
     optionsMT.style.display = "none";
     if (param == "stats") {
-        switch (statsUp) {
+        switch (statsUp) { // this should be changed
         case false:
             optionsUp = false;
             infoUp = false;
@@ -1232,6 +1244,7 @@ saves.importReadData = function() {
     saveKeys.forEach((element,index) => { // checks if save's version matches current version
         if (element == "versionBranch") {
             if (saves.importedData[element] != versionBranch) { // i had to nest this because you can't break a forEach function
+                // TODO: figure out what my logic was on the above line and any reason i can't use &&
                 helper.popup.createSimple(300,150,`This is a save file from another version branch (${versionBranchToDisplay}). This is incompatible with this version. Please use a different file.`,false,"default","Alert",false,true);
                 return false;
             }
@@ -1596,7 +1609,7 @@ mods.reloadModsLoadedText = function() {
 }
 
 function print() {
-    helper.popup.createSimple(250,150,"it's console.log",false,"default","dum dum",false,true)
+    helper.popup.createSimple(250,150,"it's console.log",false,"default","dum dum",false,true);
 }
 
 // Changelog Entries
@@ -1668,7 +1681,18 @@ function createChangelogEntry(version,added=undefined,changed=undefined,fixed=un
     changelog.appendChild(newChangelogEntry)
 }
 
-console.log("what are you doing here? well... as long as its productive.");
+//
+// Tooltip stuffs
+//
+const tooltip = {
+    html: document.getElementById("tooltip")
+};
+
+tooltip.create = function(x,y,content) {
+    // this isn't used yet, but 0.6.1 has plans to upgrade the tooltip system, and this will hopefully have functionality
+}
+
+console.log("you seem smart, how 'bout you contribute to the project? https://github.com/clickercookie/clickercookie.github.io");
 
 // buildings have to be made here instead of init because of scope
 const keyboard = new Building("keyboard","type in cookies",15,0.1,0,"keyboard.png");
