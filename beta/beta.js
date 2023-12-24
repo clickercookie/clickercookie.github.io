@@ -801,10 +801,12 @@ upgrades.hovered = function(id,building,statistic=false) {
 
     tooltip.style.display = "block";
     if (statistic === true) {
-        tooltip.style.left = mousePos.x+"px";
-        tooltip.style.top = `${mousePos.y - 50}px`;  
+        tooltip.style.left = `${mousePos.x}px`;
+        tooltip.style.top = `${mousePos.y - 113}px`; // it's minus 113 because the size of the tooltip is 110 with a 3px border and we don't want the cursor touching the tooltip
+        tooltip.style.borderRight = "3px";
     } else {
         tooltip.style.right = "346px";
+        tooltip.style.left = "auto"; // when tooltip is a statistic it sets the left style because it won't work properly with right, this resets that
         tooltip.style.top = `${mousePos.y - 50}px`; 
     }
 }
@@ -1044,12 +1046,7 @@ helper.popup.destroyAdvanced = function() {
 
 // set areas to different things
 personalization.setBackground = function(color) {
-    if (!mobile) {
-        personalization.currentBackground = `url(img/backgrounds/background-${color}.png)`;
-    }
-    if (mobile || desktop) {
-        personalization.currentBackground = `url(../img/backgrounds/background-${color}.png)`;
-    }
+    personalization.currentBackground = getFile(`img/backgrounds/background-${color}.png`);
     if (!mobile) {
         document.getElementById("leftSide").style.background = personalization.currentBackground;
         document.getElementById("middleButtons").style.background = personalization.currentBackground;
@@ -1683,7 +1680,7 @@ const tooltip = {
 };
 
 tooltip.create = function(x,y,content) {
-    // this isn't used yet, but 0.6.1 has plans to upgrade the tooltip system, and this will hopefully have functionality
+    return "this isn't used yet, but 0.6.1 has plans to upgrade the tooltip system, and this will hopefully have functionality";
 }
 
 console.log("you seem smart, how 'bout you contribute to the project? https://github.com/clickercookie/clickercookie.github.io");

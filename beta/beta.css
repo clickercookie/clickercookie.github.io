@@ -363,10 +363,10 @@ small {
 .tooltip {
     width: 258px;
     height: 110px;
-    border-style: solid;
-    border-color: black;
+    border: solid 3px black;
     border-right: 0px;
     background-color: var(--colored-container);
+    pointer-events: none; /* if it's hovered over it won't do the flickering thing */
     right: 346px;
 }
 .tooltip-content {
