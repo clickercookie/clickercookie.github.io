@@ -1153,7 +1153,7 @@ function toggleMiddle(param) { // TODO 0.6: eliminate unnessesary switch stateme
             infoUp = false;
             optionsUp = true;
             optionsMT.style.display = "block";
-            middle.style.background = middleBackground;
+            middle.style = middleBackground;
             break;
         case true:
             optionsUp = false;
