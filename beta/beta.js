@@ -57,7 +57,7 @@ upgrades.prices = [
 ];
 upgrades.names = [
     "Reinforced Keys","Obsidian Keys","Osmium Keys","10 finger typing","Macros", // keyboard
-    "Hardwood Walking Stick","Rocking Chair","grandpa3","grandpa4","shotgun", // grandpa
+    "Hardwood Walking Stick","Rocking Chair","Reading Glasses","Dementia Pills","shotgun", // grandpa
     "Pig Slop","ranch2","ranch3","ranch4","ranch5", // ranch
     "LED Display","television2","television3","television4","television5", // television
     "Medkits","worker2","worker3","worker4","worker5", // worker
@@ -66,20 +66,23 @@ upgrades.names = [
 ];
 upgrades.quotes = [
     "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","why press when you don't have to?", // keyboard
-    "nonna dat softwood junk","newest addition to the porch*","temp","temp","grandpa's precious*", // grandpa
+    "nonna dat softwood junk","newest addition to the porch*","helps with precise chocolate chip placement","what was i doing again?","grandpa's precious*", // grandpa
     "Wait, what have we been feeding them before now?","temp","temp","temp","temp", // ranch
     "World's greatest leap in digital technology*","temp","temp","temp","temp", // television
     "Constant supply of Band-Aids in case of emergency","temp","temp","temp","temp", // worker
-    "I'm sure the federal reserve will be okay with this...*","temp","temp","you can keep your cookies even <b>safe</b>r!! (todo: finish icon)","temp", // wallet
+    "I'm sure the federal reserve will be okay with this...*","temp","temp","you can keep your cookies even <b>safe</b>r!!","temp", // wallet
     "temp","temp","temp","temp","temp", // church
 ];
 upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.currentClicked.toLowerCase()} production by 2`,"Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
+// image notes
+// wallet4 (safe) could use a visual upgrade, maybe to the side thingies
+// grandpa4 (dementia pills) is extremely bland
 upgrades.img = [
     "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png",undefined,
-    "hardwood-walking-stick.png","rocking-chair.png",undefined,undefined,"shotgun.png",
+    "hardwood-walking-stick.png","rocking-chair.png",undefined,"dementia-pills.png","shotgun.png",
     "ranch-upgrade1.png",undefined,undefined,undefined,undefined,
     "tv-upgrade1.png",undefined,undefined,undefined,undefined,
-    "worker-upgrade1.png",undefined,undefined,undefined,undefined,
+    "medkits.png",undefined,undefined,undefined,undefined,
     "200-dollar-bill.png",undefined,undefined,"safe.png",undefined,
     undefined,undefined,undefined,undefined,undefined,
 ];
@@ -276,13 +279,13 @@ core.initialization = function() {
     // change version branch specific stuff
     if (!versionBranch) {
         // change title
-        document.getElementById("title").innerHTML = "Clicker Cookie";
+        document.title = "Clicker Cookie";
         // change version displayed
         document.getElementById("versionNumber").innerHTML = `Version: ${version}`;
         document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the beta branch";
     } else {
         // change title
-        document.getElementById("title").innerHTML = "Clicker Cookie Beta";
+        document.title = "Clicker Cookie Beta";
         // change version displayed
         document.getElementById("versionNumber").innerHTML = `Version: ${version} Beta`;
         document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the main branch";
@@ -290,11 +293,12 @@ core.initialization = function() {
         document.getElementById("devForm").style.display = "block";
     }
     if (inDevelopment) {
-        document.getElementById("title").innerHTML = "Clicker Cookie Dev";
+        document.title = "Clicker Cookie Dev";
     }
 
     // Changelog Entries, AKA the messiest place ever.
     createChangelogEntry("0.6",["The long awaited 5 upgrades for every single building. No upgrades are planned beyond this.",
+    "A list of bought upgrades in the Statistics menu, hovering over them will show info related to the upgrade.",
     "Temporary notification in the bottom-left corner when the game saves."],
     ["Upgrades to building and upgrade pixel art. For any artists willing to contribute, .ase files can be found in a seperate folder in the img folder on the GitHub.",
     "All buildings are now apart of a class so mod developers can have an easier time creating them.",
@@ -306,7 +310,8 @@ core.initialization = function() {
     "Using the Github button now opens a new tab.",
     "All boolean variables that used numbers (1 and 0) now use actual booleans (true and false).",
     "Most logic based variable assignments now use ternary operators.",
-    "All remaining ancient plus sign string concatenation now use template literals."],
+    "All remaining ancient plus sign string concatenation now use template literals.",
+    "Changing the document title now uses document.title instead of assigning an ID to the title element."],
     ["Centering of buildings bought was done stupidly, fixed now.",
     "Advanced popups had no filter.",
     "Previously created changelog entries are now grammatically correct."],"actual upgrades")
@@ -1096,12 +1101,16 @@ personalization.setCurrentClicked = function(value) {
 // ------------------------------------
 // Random Functions
 // ------------------------------------
-function toggleMiddle(param) { // TODO 0.6: eliminate unnessesary switch statements and general code
+function toggleMiddle(param) { // TODO 0.6: eliminate unnessesary switch statements and general code, ternary statements might work nice but i'm spitballing here
     const statsMT = document.getElementById("statsMiddleText");
     const infoMT = document.getElementById("infoMiddleText");
     const optionsMT = document.getElementById("optionsMiddleText");
     const middle = document.getElementById("middle");
-    const middleBackground = "radial-gradient(rgb(8, 8, 8), rgb(3, 3, 3), black)";
+    // todo 0.6: middleBackground is mostly stolen from Orteil (besides dark noise, that I made myself) and should be modified to use less of his styles.
+    const middleBackground = `background: #000 url(img/dark-noise.png);
+    background-image: url(https://orteil.dashnet.org/cookieclicker/img/shadedBorders.png),url(img/dark-noise.png);
+    background-size: 100% 100%,auto;
+    background-color: #000;`;
     statsMT.style.display = "none";
     infoMT.style.display = "none";
     optionsMT.style.display = "none";
@@ -1112,12 +1121,12 @@ function toggleMiddle(param) { // TODO 0.6: eliminate unnessesary switch stateme
             infoUp = false;
             statsUp = true;
             statsMT.style.display = "block";
-            middle.style.background = middleBackground;
+            middle.style = middleBackground;
             break;
         case true:
             statsUp = false;
             optionsMT.style.display = "none";
-            middle.style.background = personalization.currentBackground;
+            middle.style = personalization.currentBackground;
             break;
         }
     }
@@ -1128,7 +1137,7 @@ function toggleMiddle(param) { // TODO 0.6: eliminate unnessesary switch stateme
             optionsUp = false;
             infoUp = true;
             infoMT.style.display = "block";
-            middle.style.background = middleBackground;
+            middle.style = middleBackground;
             break;
         case true:
             infoUp = false;
@@ -1232,6 +1241,13 @@ saves.importReadData = function() {
             }
         }
     });
+
+    grandpa.setVisibility(false);
+    ranch.setVisibility(false);
+    television.setVisibility(false);
+    worker.setVisibility(false);
+    wallet.setVisibility(false);
+    church.setVisibility(false);
 
     saveKeys.forEach((element,index) => {
         let variable = element;

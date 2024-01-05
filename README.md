@@ -8,7 +8,7 @@ Great!
 Featuring 7 original buildings, semi-functional Javascript, and temporary pixel art images, Clicker Cookie is an uncompleted masterpiece!
 
 ## Getting Started
-The game is available at [clickercookie.github.io](https://clickercookie.github.io), and can be played with no setup necessary. If you discover a bug (you probably will), please create a new issue.
+The game is available at [clickercookie.github.io](https://clickercookie.github.io), and can be played with no setup necessary. If you discover a bug (you probably will), please create a new issue. To play on the beta version, click the version number in the bottom left of the window.
 
 ## Contributing
 ### Dependencies
