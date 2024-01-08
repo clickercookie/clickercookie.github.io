@@ -299,6 +299,7 @@ core.initialization = function() {
     // Changelog Entries, AKA the messiest place ever.
     createChangelogEntry("0.6",["The long awaited 5 upgrades for every single building. No upgrades are planned beyond this.",
     "A list of bought upgrades in the Statistics menu, hovering over them will show info related to the upgrade.",
+    "A gray \"dark noise\" has been added to middle text menus so that blacks will more easily stick out.",
     "Temporary notification in the bottom-left corner when the game saves."],
     ["Upgrades to building and upgrade pixel art. For any artists willing to contribute, .ase files can be found in a seperate folder in the img folder on the GitHub.",
     "All buildings are now apart of a class so mod developers can have an easier time creating them.",
@@ -314,7 +315,8 @@ core.initialization = function() {
     "Changing the document title now uses document.title instead of assigning an ID to the title element."],
     ["Centering of buildings bought was done stupidly, fixed now.",
     "Advanced popups had no filter.",
-    "Previously created changelog entries are now grammatically correct."],"actual upgrades")
+    "Previously created changelog entries are now grammatically correct.",
+    "Accessing the beta version by going to clickercookie.github.io/beta would result in a 404."],"actual upgrades")
 
     createChangelogEntry("0.5.2",["Mobile Support!",
     "Mods!",
@@ -336,7 +338,7 @@ core.initialization = function() {
     "Removed unused/unnessesary functions.",
     "camelCase onclick attributes (onClick) have all been switched to lowercase (onclick).",
     "Renamed some save-related variables to make more sense.",
-    "Initialization is now inside an object method and called at the bottom of Javascript."],
+    "Initialization is now inside an object method and called at the bottom of main.js."],
     ["Hover infobox not updating when the mouse doesn't move.",
     "Grandma showing in simple popups when she isn't supposed to be.",
     "0.5 header having no date.",
@@ -703,7 +705,7 @@ upgrades.create = function(id,statistic=false) { // statistic is for creating it
     upgrade.setAttribute("class","upgrade");
     if (statistic) {
         upgrade.setAttribute("id",`upgrade${id}Stats`);
-        upgrade.setAttribute("class","upgrade-stats");
+        upgrade.setAttribute("class","upgrade-stats pointer");
         upgrade.setAttribute("onmousemove",`upgrades.hovered(${id},${building},true)`);
         upgrade.setAttribute("onmouseout","hideTooltip()");
     }
@@ -1106,11 +1108,6 @@ function toggleMiddle(param) { // TODO 0.6: eliminate unnessesary switch stateme
     const infoMT = document.getElementById("infoMiddleText");
     const optionsMT = document.getElementById("optionsMiddleText");
     const middle = document.getElementById("middle");
-    // todo 0.6: middleBackground is mostly stolen from Orteil (besides dark noise, that I made myself) and should be modified to use less of his styles.
-    const middleBackground = `background: #000 url(img/dark-noise.png);
-    background-image: url(https://orteil.dashnet.org/cookieclicker/img/shadedBorders.png),url(img/dark-noise.png);
-    background-size: 100% 100%,auto;
-    background-color: #000;`;
     statsMT.style.display = "none";
     infoMT.style.display = "none";
     optionsMT.style.display = "none";
@@ -1121,7 +1118,6 @@ function toggleMiddle(param) { // TODO 0.6: eliminate unnessesary switch stateme
             infoUp = false;
             statsUp = true;
             statsMT.style.display = "block";
-            middle.style = middleBackground;
             break;
         case true:
             statsUp = false;
@@ -1137,7 +1133,6 @@ function toggleMiddle(param) { // TODO 0.6: eliminate unnessesary switch stateme
             optionsUp = false;
             infoUp = true;
             infoMT.style.display = "block";
-            middle.style = middleBackground;
             break;
         case true:
             infoUp = false;
@@ -1153,7 +1148,6 @@ function toggleMiddle(param) { // TODO 0.6: eliminate unnessesary switch stateme
             infoUp = false;
             optionsUp = true;
             optionsMT.style.display = "block";
-            middle.style = middleBackground;
             break;
         case true:
             optionsUp = false;
