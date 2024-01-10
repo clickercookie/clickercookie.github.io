@@ -71,14 +71,14 @@ upgrades.quotes = [
     "World's greatest leap in digital technology*","temp","temp","temp","temp", // television
     "Constant supply of Band-Aids in case of emergency","temp","temp","temp","temp", // worker
     "I'm sure the federal reserve will be okay with this...*","temp","temp","you can keep your cookies even <b>safe</b>r!!","temp", // wallet
-    "temp","temp","temp","temp","temp", // church
+    "his holiness will provide many cookies","temp","temp","temp","temp", // church
 ];
 upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.currentClicked.toLowerCase()} production by 2`,"Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
 // image notes
 // wallet4 (safe) could use a visual upgrade, maybe to the side thingies
 // grandpa4 (dementia pills) is extremely bland
 upgrades.img = [
-    "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png",undefined,
+    "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png","macros.png",
     "hardwood-walking-stick.png","rocking-chair.png",undefined,"dementia-pills.png","shotgun.png",
     "ranch-upgrade1.png",undefined,undefined,undefined,undefined,
     "tv-upgrade1.png",undefined,undefined,undefined,undefined,
@@ -92,13 +92,7 @@ upgrades.currentlyShown = 0;
 upgrades.rowsOfUpgrades = 0;
 
 // buildings
-const buildings = {};
-
-let buildingInfoName = "Name";
-let buildingInfoPrice = 0;
-let buildingInfoQuote = "Quote";
-let buildingInfoProduces = 0;
-let buildingInfoProducing = 0;
+const buildings = {}; // ! i don't think this is used anymore...
 
 // dev variables
 const dev = {
@@ -166,9 +160,8 @@ core.initialization = function() {
         console.log("Cookies were NaN and save was reset.");
     }
 
-    if (localStorage.cookies >= 0) {
+    if (localStorage.cookies >= 0)
         helper.popup.createSimple(400,200,"You are using the old saving method. You will have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format.",false,"localStorage.clear()","Warning",false,false);
-    }
 
     helper.reloadBuildingPrices();
     if (localStorage.getItem("save") == null) {
@@ -203,12 +196,13 @@ core.initialization = function() {
         </div>`);
     }
 
-    if (won) {
+    if (won)
         // document.getElementById("win").style.display = "block";
-    }
-    if (hasCheated) {
+    
+    if (hasCheated)
         document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
-    }
+
+    upgrades.updateBoughtStatistic();
 
     // check for development special stuff
     if (inDevelopment) {
@@ -292,9 +286,8 @@ core.initialization = function() {
         // show the developer mode switch
         document.getElementById("devForm").style.display = "block";
     }
-    if (inDevelopment) {
+    if (inDevelopment)
         document.title = "Clicker Cookie Dev";
-    }
 
     // Changelog Entries, AKA the messiest place ever.
     createChangelogEntry("0.6",["The long awaited 5 upgrades for every single building. No upgrades are planned beyond this.",
@@ -342,7 +335,7 @@ core.initialization = function() {
     ["Hover infobox not updating when the mouse doesn't move.",
     "Grandma showing in simple popups when she isn't supposed to be.",
     "0.5 header having no date.",
-    "upgrade#Identifier is no longer used an has been deleted.",
+    "upgrade#Identifier is no longer used and has been deleted.",
     "Options middle text was highlightable.",
     "Middle text subtitles weren't lined up with other text.",
     "Cookie was clickable in a box shape outside the actual visible cookie."],"Objects Everywhere","May 24th")
@@ -658,15 +651,18 @@ class Building {
         document.getElementById("tooltipProduces").style.display = "block";
         document.getElementById("tooltipProducing").style.display = "block";
 
-        buildingInfoName = this.name.capitalize();
-        buildingInfoPrice = helper.commaify(this.upgradeCost);
-        buildingInfoQuote = this.quote;
-        buildingInfoProduces = helper.commaify(this.CPSGain);
-        buildingInfoProducing = helper.commaify(Math.round(this.CPSGiven * 10) / 10);
+        const buildingInfoName = this.name.capitalize();
+        const buildingInfoPrice = helper.commaify(this.upgradeCost);
+        const buildingInfoQuote = this.quote;
+        const buildingInfoProduces = helper.commaify(this.CPSGain);
+        const buildingInfoProducing = helper.commaify(Math.round(this.CPSGiven * 10) / 10);
 
         if (!mobile) {
             tooltip.style.top = `${mousePos.y - 50}px`;  
             tooltip.style.right = "346px";
+            tooltip.style.left = "auto"; // when tooltip is a statistic it sets the left property because it won't work correctly with right, this resets that
+
+            tooltip.style.borderRightWidth = "0px";
 
             document.getElementById("tooltipName").innerHTML = buildingInfoName;
             document.getElementById("tooltipPrice").innerHTML = `Price: ${buildingInfoPrice}`;
@@ -733,7 +729,7 @@ upgrades.create = function(id,statistic=false) { // statistic is for creating it
 }
 
 upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
-    if (core.cookies < upgrades.prices[id]) return
+    if (core.cookies < upgrades.prices[id]) return;
 
     core.cookies -= upgrades.prices[id];
     upgrades.bought[id] = 1;
@@ -810,11 +806,12 @@ upgrades.hovered = function(id,building,statistic=false) {
     if (statistic === true) {
         tooltip.style.left = `${mousePos.x}px`;
         tooltip.style.top = `${mousePos.y - 113}px`; // it's minus 113 because the size of the tooltip is 110 with a 3px border and we don't want the cursor touching the tooltip
-        tooltip.style.borderRight = "3px";
+        tooltip.style.borderRightWidth = "3px";
     } else {
         tooltip.style.right = "346px";
-        tooltip.style.left = "auto"; // when tooltip is a statistic it sets the left style because it won't work properly with right, this resets that
+        tooltip.style.left = "auto"; // when tooltip is a statistic it sets the left property because it won't work correctly with right, this resets that
         tooltip.style.top = `${mousePos.y - 50}px`; 
+        tooltip.style.borderRightWidth = "0px";
     }
 }
 
@@ -1628,7 +1625,7 @@ function createChangelogEntry(version,added=undefined,changed=undefined,fixed=un
     } else {
         versionHeader.appendChild(document.createTextNode(`Version ${version}: ${name} - ${release}`));
     }
-    newChangelogEntry.appendChild(versionHeader)
+    newChangelogEntry.appendChild(versionHeader);
 
     if (added !== undefined) {
         const addedHeader = document.createElement("p");
@@ -1679,7 +1676,7 @@ function createChangelogEntry(version,added=undefined,changed=undefined,fixed=un
         }
     }
 
-    changelog.appendChild(newChangelogEntry)
+    changelog.appendChild(newChangelogEntry);
 }
 
 //

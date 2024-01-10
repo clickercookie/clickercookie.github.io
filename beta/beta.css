@@ -364,7 +364,7 @@ small {
     width: 258px;
     height: 110px;
     border: solid 3px black;
-    border-right: 0px;
+    border-right-width: 0px;
     background-color: var(--colored-container);
     pointer-events: none; /* if it's hovered over it won't do the flickering thing */
     right: 346px;
@@ -571,18 +571,14 @@ dialog::backdrop {
 
 /* middle button CSS */
 .middle-button-base {
-    border-style: solid;
-    border-width: 2px;
     width: 110px;
     height: 50px;
+    border: 2px solid black;
     margin-left: auto;
     background-color: var(--colored-container);
     color: black; /* this wasn't nessesary until 6/3/23? idk why */
 }
 .info-button {
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
     border-right-width: 0px;
     height: 48px;
     float: right;
@@ -591,14 +587,10 @@ dialog::backdrop {
     border-top-width: 0px;
     border-bottom-width: 0px;
     border-left-width: 0px;
-    border-right-width: 2px;
     float: left;
 }
 .stats-button {
-    border-top-width: 2px;
-    border-bottom-width: 2px;
     border-left-width: 0px;
-    border-right-width: 2px;
     float: left;
 }
 
