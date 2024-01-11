@@ -3,7 +3,7 @@
 // ------------------------------------
 const version = "0.6";
 const versionBranch = (location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") ? 1 : 0; // 0 is main, 1 is beta
-const inDevelopment = 1; // toggle if developing actively. This is completely different than the builtin dev mode!
+const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode!
 const desktop = false;
 
 // customization
@@ -294,7 +294,7 @@ core.initialization = function() {
     "A list of bought upgrades in the Statistics menu, hovering over them will show info related to the upgrade.",
     "A gray \"dark noise\" has been added to middle text menus so that blacks will more easily stick out.",
     "Temporary notification in the bottom-left corner when the game saves."],
-    ["Upgrades to building and upgrade pixel art. For any artists willing to contribute, .ase files can be found in a seperate folder in the img folder on the GitHub.",
+    ["Upgrades to building and upgrade pixel art. For any artists willing to contribute, .ase files can be found in the /img/ase folder on the GitHub.",
     "All buildings are now apart of a class so mod developers can have an easier time creating them.",
     "The saving system. Yes, 3rd time or something, but this time I GURANTEE it's going to stick.",
     "Grandma has been removed due to addition of upgrades and needing to rebalance when the player \"wins\". Also because i'm scared of copyright issues :)",
@@ -306,7 +306,8 @@ core.initialization = function() {
     "Most logic based variable assignments now use ternary operators.",
     "All remaining ancient plus sign string concatenation now use template literals.",
     "Changing the document title now uses document.title instead of assigning an ID to the title element."],
-    ["Centering of buildings bought was done stupidly, fixed now.",
+    ["Upgrade pixel art images were extremely blurry. Buildings still have this blur, but actually make the image look better, so it will stay for the time being.",
+    "Centering of buildings bought was done stupidly, fixed now.",
     "Advanced popups had no filter.",
     "Previously created changelog entries are now grammatically correct.",
     "Accessing the beta version by going to clickercookie.github.io/beta would result in a 404."],"actual upgrades")
@@ -481,7 +482,6 @@ function perMillisecondUniversal() {
         document.getElementById("cookiesPerSecondStat").innerHTML = `${personalization.currentClickedPlural} Per Second: ${helper.commaify(variableView.cookiesPerSecondView)}`;
         document.getElementById("buildingsOwnedStat").innerHTML = `Buildings Owned: ${helper.commaify(core.buildingsOwned)}`;
         document.getElementById("cookieBeenClickedTimesStat").innerHTML = `Total ${personalization.currentClicked} Clicks: ${helper.commaify(core.cookieBeenClickedTimes)}`; // move to cookieClicked() later
-        document.getElementById("upgradesBoughtStat").innerHTML = `Upgrades Bought: ${upgrades.upgradesBought}`;
     }
 
     // set number of bought to bought (not required unless number of bought is set in console)
@@ -772,6 +772,9 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
         break;
     }
     upgrades.expandUpgradesHolder(); // sometimes the upgrade holder has one too many rows because of weird onmousemove behavior, this prevents that
+    
+    document.getElementById("upgradesBoughtCounter").innerHTML = `Bought: ${upgrades.upgradesBought}/${upgrades.unlocked.length}`;
+
     this.updateBoughtStatistic();
 }
 upgrades.destroy = function(id) {
@@ -788,7 +791,8 @@ upgrades.destroyAll = function(statistic=false) {
             continue;
         }
     }
-    upgrades.currentlyShown = 0;
+    if (!statistic)
+        upgrades.currentlyShown = 0;
 }
 upgrades.hovered = function(id,building,statistic=false) {
     const tooltip = document.getElementById("tooltip");
@@ -835,7 +839,7 @@ upgrades.showUnlocked = function() {
 upgrades.updateBoughtStatistic = function() {
     this.destroyAll(true); // would create duplicates of the same upgrade without this
     for (i = 0; i < upgrades.bought.length; i++) {
-        if (upgrades.bought[i] != 1) continue
+        if (upgrades.bought[i] != 1) continue;
 
         upgrades.create(i,true);
     }
@@ -1227,7 +1231,7 @@ saves.importReadData = function() {
         if (element == "versionBranch") {
             if (saves.importedData[element] != versionBranch) { // i had to nest this because you can't break a forEach function
                 // TODO: figure out what my logic was on the above line and any reason i can't use &&
-                helper.popup.createSimple(300,150,`This is a save file from another version branch (${versionBranchToDisplay}). This is incompatible with this version. Please use a different file.`,false,"default","Alert",false,true);
+                helper.popup.createSimple(300,150,`This is a save file from another version branch (${versionBranchToDisplay}), which is incompatible with this version. Please use a different file.`,false,"default","Alert",false,true);
                 return false;
             }
         }
@@ -1257,6 +1261,8 @@ saves.importReadData = function() {
 
     upgrades.destroyAll();
     upgrades.showUnlocked();
+    document.getElementById("upgradesBoughtCounter").innerHTML = `Bought: ${upgrades.upgradesBought}/${upgrades.unlocked.length}`;
+    upgrades.updateBoughtStatistic();
 
     helper.consoleLogDev(`Imported save with ${core.cookies} cookies.`);
 
@@ -1325,6 +1331,8 @@ saves.loadAutoSave = function() {
 
     upgrades.destroyAll();
     upgrades.showUnlocked();
+    document.getElementById("upgradesBoughtCounter").innerHTML = `Bought: ${upgrades.upgradesBought}/${upgrades.unlocked.length}`;
+    upgrades.updateBoughtStatistic();
 }
 
 saves.resetSave = function() {
@@ -1346,6 +1354,8 @@ saves.resetSave = function() {
     document.getElementById("ifModdedStat").innerHTML = "";
 
     upgrades.destroyAll();
+    document.getElementById("upgradesBoughtCounter").innerHTML = `Bought: ${upgrades.upgradesBought}/${upgrades.unlocked.length}`;
+    upgrades.updateBoughtStatistic();
 
     // document.getElementById("win").style.display = "none";
 
