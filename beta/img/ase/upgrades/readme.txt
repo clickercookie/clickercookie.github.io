@@ -1,1 +1,0 @@
-All upgrades should preferably be 64x64 images but drawn in 32x32. This is going to be a bit of a pain, but don't come banging on my door, the images get blurry in a browser and just look all around terrible unless they are in 64x64.
