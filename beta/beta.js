@@ -1217,25 +1217,21 @@ saves.importData = function() {
     reader.readAsText(file);
     
     reader.onloadend = () => {
-        saves.importReadData(importedData);
+        helper.consoleLogDev("imported data: ");
+        helper.consoleLogDev(importedData);
+
+        const versionBranchToDisplay = !versionBranch ? "main" : "beta";
+        const saveKeys = Object.keys(importedData);
+        saveKeys.forEach((element) => { // checks if save's version matches current version
+            if (element == "versionBranch" && importedData[element] != versionBranch) {
+                helper.popup.createSimple(300,150,`This is a save file from another version branch (${versionBranchToDisplay}), which is incompatible with this version. Please use a different file.`,false,"default","Alert",false,true);
+                return false;
+            }
+        });
+
+        saves.save(importedData);
+        saves.loadSave();
     };
-} 
-// TODO at some point: why are these seperate? what is rawImportedData for?
-saves.importReadData = function(data) {
-    helper.consoleLogDev("imported data: ");
-    helper.consoleLogDev(data);
-
-    const versionBranchToDisplay = !versionBranch ? "main" : "beta";
-    const saveKeys = Object.keys(data);
-    saveKeys.forEach((element,index) => { // checks if save's version matches current version
-        if (element == "versionBranch" && data[element] != versionBranch) {
-            helper.popup.createSimple(300,150,`This is a save file from another version branch (${versionBranchToDisplay}), which is incompatible with this version. Please use a different file.`,false,"default","Alert",false,true);
-            return false;
-        }
-    });
-
-    saves.save(data);
-    saves.loadSave();
 }
 
 saves.loadSave = function() {
@@ -1249,7 +1245,7 @@ saves.loadSave = function() {
     church.setVisibility(false);
 
     const saveKeys = Object.keys(loadedSave);
-    saveKeys.forEach((variable,index) => {
+    saveKeys.forEach((variable) => {
         try {
             eval(`${variable} = ${loadedSave[variable]}`); // YES, i know i shouldn't use this. I have no idea how to do this otherwise so yeah probably will stay.
 
@@ -1259,7 +1255,7 @@ saves.loadSave = function() {
         } catch {
             helper.consoleLogDev(`Attempted to load variable: ${variable}, value: ${loadedSave[variable]}. This is either a constant variable or a malformed save item.`);
         }
-        if (variable === "upgrades.unlocked") { // ? arrays don't work with eval???
+        if (variable === "upgrades.unlocked") { // arrays don't work with eval
             upgrades.unlocked = loadedSave["upgrades.unlocked"];
         }
         if (variable === "upgrades.bought") {
@@ -1277,11 +1273,11 @@ saves.loadSave = function() {
     helper.consoleLogDev(`Loaded save with ${core.cookies} cookies.`);
 }
 
-saves.save = function(data=undefined) { // yes if you are wondering i totally 100% without a doubt wrote this code
-    const save = {};
+saves.save = function(data=undefined) {
+    const save = (data === undefined) ? {} : data; // save will be an empty object if data isn't undefined because it will be filled in the for-loop, if data is defined than save will be that
     
-    if (data === undefined) { // todo: don't nest this
-        for (let i = 0; i < this.allToSave.length; i++) {
+    if (data === undefined) { // todo: don't nest this somehow
+        for (let i = 0; i < this.allToSave.length; i++) { // yes if you are wondering i totally 100% without a doubt wrote this code
             const variable = this.allToSave[i];
         
             // Get the name of the variable/property
@@ -1293,22 +1289,13 @@ saves.save = function(data=undefined) { // yes if you are wondering i totally 10
             // Add the variable/property to the object
             save[name] = value;
         }
-        if (!versionBranch) {
-            localStorage.setItem("save",JSON.stringify(save));
-        } else {
-            localStorage.setItem("betaSave",JSON.stringify(save));
-        }
-
-        if (inDevelopment) { console.log("save object: "); console.log(save); }
-    } else { // data is defined
-        if (!versionBranch) {
-            localStorage.setItem("save",JSON.stringify(data));
-        } else {
-            localStorage.setItem("betaSave",JSON.stringify(data));
-        }
-
-        if (inDevelopment) { console.log("save object: "); console.log(data); }
     }
+    if (!versionBranch) {
+        localStorage.setItem("save",JSON.stringify(save));
+    } else {
+        localStorage.setItem("betaSave",JSON.stringify(save));
+    }
+    if (inDevelopment) { console.log("save object: "); console.log(save); }
 
     // Update saving notification
     const indicator = document.getElementById("savingIndicator");
