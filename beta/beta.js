@@ -3,7 +3,7 @@
 // ------------------------------------
 const version = "0.6";
 const versionBranch = (location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") ? 1 : 0; // 0 is main, 1 is beta
-const inDevelopment = 1; // toggle if developing actively. This is completely different than the builtin dev mode!
+const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode!
 const desktop = false;
 
 // customization
@@ -75,11 +75,11 @@ upgrades.quotes = [
 ];
 upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.currentClicked.toLowerCase()} production by 2`,"Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
 // image notes
-// wallet4 (safe) could use a visual upgrade, maybe to the side thingies
 // grandpa4 (dementia pills) is extremely bland
+// reading glasses look awful
 upgrades.img = [
     "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png","macros.png",
-    "hardwood-walking-stick.png","rocking-chair.png",undefined,"dementia-pills.png","shotgun.png",
+    "hardwood-walking-stick.png","rocking-chair.png","reading-glasses.png","dementia-pills.png","shotgun.png",
     "ranch-upgrade1.png",undefined,undefined,undefined,undefined,
     "tv-upgrade1.png",undefined,undefined,undefined,undefined,
     "medkits.png",undefined,undefined,undefined,undefined,
@@ -308,9 +308,10 @@ core.initialization = function() {
     "Changing the document title now uses document.title instead of assigning an ID to the title element."],
     ["Upgrade pixel art images were extremely blurry. Buildings still have this blur, but actually make the image look better, so it will stay for the time being.",
     "Centering of buildings bought was done stupidly, fixed now.",
+    "The X button in the middle area was pushing the titles to the left and making it so they weren't centered.",
     "Advanced popups had no filter.",
     "Previously created changelog entries are now grammatically correct.",
-    "Accessing the beta version by going to clickercookie.github.io/beta would result in a 404."],"actual upgrades")
+    "Accessing the beta version by going to clickercookie.github.io/beta would result in a 404."],"actual upgrades");
 
     createChangelogEntry("0.5.2",["Mobile Support!",
     "Mods!",
@@ -320,7 +321,7 @@ core.initialization = function() {
     "Popups are now a flexbox.",
     "Small gradient on middle text to make it slightly more nice to look at then solid black.",
     "Better middle button function."],
-    ["Options middle text said \"Autosave Management\" when it was supposed to save \"Save Management\"."],"hold the phone","June 23rd")
+    ["Options middle text said \"Autosave Management\" when it was supposed to save \"Save Management\"."],"hold the phone","June 23rd");
 
     createChangelogEntry("0.5.1",["Cookie Wobble!",
     "Can create an advanced popup with pure HTML, contrary to the old way where everything was predetermined.",
@@ -339,7 +340,7 @@ core.initialization = function() {
     "upgrade#Identifier is no longer used and has been deleted.",
     "Options middle text was highlightable.",
     "Middle text subtitles weren't lined up with other text.",
-    "Cookie was clickable in a box shape outside the actual visible cookie."],"Objects Everywhere","May 24th")
+    "Cookie was clickable in a box shape outside the actual visible cookie."],"Objects Everywhere","May 24th");
 
     createChangelogEntry("0.5",["AUTO SAVING!!!",
     "EXPORTING & IMPORTING DATA!!!",
@@ -356,7 +357,7 @@ core.initialization = function() {
     "Extended popup functionality.",
     "Upgrade hovering is more efficient."],
     ["Double-tapping cookie zooming in on mobile devices.",
-    "These list items being highlightable."],undefined,"May 6th")
+    "These list items being highlightable."],undefined,"May 6th");
 
     createChangelogEntry("0.4.1",["Color!",
     "Buttons!",
@@ -384,7 +385,7 @@ core.initialization = function() {
     createChangelogEntry("0.1.1",["Ranches! Buyable for 1000 cookies for the time being.",
     "Minor hover effect when hovering over buildings."],undefined,["totalCookies variable is fixed, but still unused (but not for long!)"],undefined,"March 9th");
     
-    createChangelogEntry("0.1",["Existance."],undefined,undefined,undefined,"March 4th");
+    createChangelogEntry("0.1",["Existence."],undefined,undefined,undefined,"March 4th");
 
     if (navigator.userAgent.match(/Android/i) // stolen from https://www.tutorialspoint.com/How-to-detect-a-mobile-device-with-JavaScript (doesn't always work)
     || navigator.userAgent.match(/webOS/i)

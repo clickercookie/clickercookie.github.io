@@ -490,6 +490,7 @@ dialog::backdrop {
 /* Middle Text CSS */
 .middle-main {
     display: none;
+    position: relative; /* right now this is only used to make the X button not push the middle text to the left, i don't think it does anything else */
     color: white;
     overflow-y: auto;
     height: 86%;
@@ -537,12 +538,14 @@ dialog::backdrop {
 .middle-x {
     height: 48px;
     width: 48px;
-    border: 2px solid white;
-    float: right;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: absolute;
+    top: 0px;
+    right: 0px;
     background-color: black;
+    border: 2px solid white;
 }
 .middle-ul {
     font-size: 14px;
