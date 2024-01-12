@@ -3,7 +3,7 @@
 // ------------------------------------
 const version = "0.6";
 const versionBranch = (location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") ? 1 : 0; // 0 is main, 1 is beta
-const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode!
+const inDevelopment = 1; // toggle if developing actively. This is completely different than the builtin dev mode!
 const desktop = false;
 
 // customization
@@ -173,7 +173,7 @@ core.initialization = function() {
         console.log("betaSave was null and was automatically reset, if this is your first time playing this is an intended behavior.");
     }
 
-    saves.loadAutoSave();
+    saves.loadSave();
 
     // if saves are old
     if (localStorage.betaSave[0] == "[") {
@@ -233,7 +233,7 @@ core.initialization = function() {
 
         const devLoadButton = document.createElement("button");
         devLoadButton.appendChild(document.createTextNode("Force Load Save"));
-        devLoadButton.setAttribute("onclick","saves.loadAutoSave()");
+        devLoadButton.setAttribute("onclick","saves.loadSave()");
         devDiv.appendChild(devLoadButton);
 
         const br3 = document.createElement("br");
@@ -508,7 +508,7 @@ function cookiesPerSecondUpdate() {
 function autoSaveIntervalFunc() { // Turns out this is required and that the game hasn't been auto-saving ever since Objects Everywhere...
     if (!savingAllowed) return false;
 
-    saves.autoSave();
+    saves.save();
 }
 
 // ------------------------------------
@@ -1183,7 +1183,7 @@ function versionSwitch() {
 // Saving
 // ------------------------------------
 saves.exportData = function() {
-    saves.autoSave();
+    saves.save();
     const dataJSON = !versionBranch ? JSON.stringify(localStorage.save) : JSON.stringify(localStorage.betaSave);
 
     const textToBLOB = new Blob([dataJSON], { type: 'text/plain' });
@@ -1204,38 +1204,38 @@ saves.exportData = function() {
 }
 
 saves.importData = function() {
-    saves.autoSave();
+    saves.save();
     const file = document.getElementById("importDataInput").files[0];
     const reader = new FileReader();
+    let importedData; // because of the scope of reader.onload(), it can't be defined as a constant in that function and still work in reader.onloadend()
 
-    reader.onload = function (e) {
-        saves.rawImportedData = JSON.parse(reader.result);
+    reader.onload = function() {
+        importedData = JSON.parse(JSON.parse(reader.result)); // todo: for some reason this has to parse twice, look into this later
     }
     reader.onerror = (e) => alert(`something broke, don't expect me to fix it :D \nerror: ${e}`);
 
     reader.readAsText(file);
     
     reader.onloadend = () => {
-        saves.importReadData();
-    };
-} 
-// TODO at some point: why are these seperate? what is rawImportedData for?
-saves.importReadData = function() {
-    saves.importedData = JSON.parse(saves.rawImportedData);
-    helper.consoleLogDev("imported data: ");
-    helper.consoleLogDev(saves.importedData);
+        helper.consoleLogDev("imported data: ");
+        helper.consoleLogDev(importedData);
 
-    const versionBranchToDisplay = !versionBranch ? "main" : "beta";
-    const saveKeys = Object.keys(saves.importedData);
-    saveKeys.forEach((element,index) => { // checks if save's version matches current version
-        if (element == "versionBranch") {
-            if (saves.importedData[element] != versionBranch) { // i had to nest this because you can't break a forEach function
-                // TODO: figure out what my logic was on the above line and any reason i can't use &&
+        const versionBranchToDisplay = !versionBranch ? "main" : "beta";
+        const saveKeys = Object.keys(importedData);
+        saveKeys.forEach((element) => { // checks if save's version matches current version
+            if (element == "versionBranch" && importedData[element] != versionBranch) {
                 helper.popup.createSimple(300,150,`This is a save file from another version branch (${versionBranchToDisplay}), which is incompatible with this version. Please use a different file.`,false,"default","Alert",false,true);
                 return false;
             }
-        }
-    });
+        });
+
+        saves.save(importedData);
+        saves.loadSave();
+    };
+}
+
+saves.loadSave = function() {
+    const loadedSave = !versionBranch ? JSON.parse(localStorage.getItem("save")) : JSON.parse(localStorage.getItem("betaSave"));
 
     grandpa.setVisibility(false);
     ranch.setVisibility(false);
@@ -1244,82 +1244,18 @@ saves.importReadData = function() {
     wallet.setVisibility(false);
     church.setVisibility(false);
 
-    saveKeys.forEach((element,index) => {
-        let variable = element;
-        helper.consoleLogDev(`IMPORT: variable: ${variable}, data: ${saves.importedData[element]}, element: ${element}`);
-        try {
-            if (element == "upgrades.bought" || element == "upgrades.unlocked") { // arrays don't work without inserting brackets when using eval
-                eval(`${variable} = [${saves.importedData[element]}]`);
-            } else {
-                eval(`${variable} = ${saves.importedData[element]}`); // YES, i know i shouldn't use this. I have no idea how to do this otherwise so yeah probably will stay.
-            }
-        } catch {
-            helper.consoleLogDev(`Attempted to save to constant variable ${variable}`);
-        }
-    });
-    helper.reloadBuildingPrices();
-
-    upgrades.destroyAll();
-    upgrades.showUnlocked();
-    document.getElementById("upgradesBoughtCounter").innerHTML = `Bought: ${upgrades.upgradesBought}/${upgrades.unlocked.length}`;
-    upgrades.updateBoughtStatistic();
-
-    helper.consoleLogDev(`Imported save with ${core.cookies} cookies.`);
-
-    if (mobile) {
-        navbarItemClicked("Cookie");
-    }
-}
-
-saves.autoSave = function() { // yes if you are wondering i totally 100% without a doubt wrote this code
-    const save = {};
-  
-    for (let i = 0; i < this.allToSave.length; i++) {
-        const variable = this.allToSave[i];
-    
-        // Get the name of the variable/property
-        const name = typeof variable === 'object' ? variable.name : variable;
-    
-        // Get the value of the variable/property
-        const value = typeof variable === 'object' ? variable.value : eval(variable); // YES, i know i shouldn't use this. This will be changed once 0.6 enters beta. Maybe. Probably not.
-    
-        // Add the variable/property to the object
-        save[name] = value;
-    }
-
-    if (!versionBranch) {
-        localStorage.setItem("save",JSON.stringify(save));
-    } else {
-        localStorage.setItem("betaSave",JSON.stringify(save));
-    }
-    if (inDevelopment) { console.log("save object: "); console.log(save); }
-
-    // Update saving notification
-    const indicator = document.getElementById("savingIndicator");
-    indicator.classList.add("visible");
-
-    setTimeout(function () {
-        indicator.classList.remove("visible");
-    }, 1500);
-}
-
-saves.loadAutoSave = function() {
-    const loadedSave = !versionBranch ? JSON.parse(localStorage.getItem("save")) : JSON.parse(localStorage.getItem("betaSave"));
-
     const saveKeys = Object.keys(loadedSave);
-    saveKeys.forEach((element,index) => {
-        let variable = element;
-        if (inDevelopment) {
-            console.log(`loaded variable: ${variable}`);
-            console.log(`loaded value: ${loadedSave[element]}`);
-        }
-        
+    saveKeys.forEach((variable) => {
         try {
-            eval(`${variable} = ${loadedSave[element]}`); // YES, i know i shouldn't use this. I have no idea how to do this otherwise so yeah probably will stay.
+            eval(`${variable} = ${loadedSave[variable]}`); // YES, i know i shouldn't use this. I have no idea how to do this otherwise so yeah probably will stay.
+
+            if (!inDevelopment) return;
+            console.log(`loaded variable: ${variable}`);
+            console.log(`loaded value: ${loadedSave[variable]}`);
         } catch {
-            helper.consoleLogDev(`Attempted to load variable: ${variable}`);
+            helper.consoleLogDev(`Attempted to load variable: ${variable}, value: ${loadedSave[variable]}. This is either a constant variable or a malformed save item.`);
         }
-        if (variable === "upgrades.unlocked") { // ? arrays don't work with eval???
+        if (variable === "upgrades.unlocked") { // arrays don't work with eval
             upgrades.unlocked = loadedSave["upgrades.unlocked"];
         }
         if (variable === "upgrades.bought") {
@@ -1333,6 +1269,41 @@ saves.loadAutoSave = function() {
     upgrades.showUnlocked();
     document.getElementById("upgradesBoughtCounter").innerHTML = `Bought: ${upgrades.upgradesBought}/${upgrades.unlocked.length}`;
     upgrades.updateBoughtStatistic();
+
+    helper.consoleLogDev(`Loaded save with ${core.cookies} cookies.`);
+}
+
+saves.save = function(data=undefined) {
+    const save = (data === undefined) ? {} : data; // save will be an empty object if data isn't undefined because it will be filled in the for-loop, if data is defined than save will be that
+    
+    if (data === undefined) { // todo: don't nest this somehow
+        for (let i = 0; i < this.allToSave.length; i++) { // yes if you are wondering i totally 100% without a doubt wrote this code
+            const variable = this.allToSave[i];
+        
+            // Get the name of the variable/property
+            const name = typeof variable === 'object' ? variable.name : variable;
+        
+            // Get the value of the variable/property
+            const value = typeof variable === 'object' ? variable.value : eval(variable); // YES, i know i shouldn't use this. This will be changed once 0.6 enters beta. Maybe. Probably not.
+        
+            // Add the variable/property to the object
+            save[name] = value;
+        }
+    }
+    if (!versionBranch) {
+        localStorage.setItem("save",JSON.stringify(save));
+    } else {
+        localStorage.setItem("betaSave",JSON.stringify(save));
+    }
+    if (inDevelopment) { console.log("save object: "); console.log(save); }
+
+    // Update saving notification
+    const indicator = document.getElementById("savingIndicator");
+    indicator.classList.add("visible");
+
+    setTimeout(function() {
+        indicator.classList.remove("visible");
+    }, 1500);
 }
 
 saves.resetSave = function() {
@@ -1341,7 +1312,7 @@ saves.resetSave = function() {
     } else {
         localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
     }
-    saves.loadAutoSave();
+    saves.loadSave();
     helper.reloadBuildingPrices();
     
     grandpa.unlocked = false;
@@ -1366,9 +1337,8 @@ saves.resetSave = function() {
     wallet.setVisibility(false);
     church.setVisibility(false);
 
-    if (mobile) {
+    if (mobile)
         navbarItemClicked("Cookie");
-    }
 }
 
 saves.convert05Save = function(isBeta=false, isBetaSaveOld=false) { // ! this is remaining only for the lifespan of 0.6 and will be removed in the next major update or after a certain time gap, that's why this function is a nightmare to understand
@@ -1424,7 +1394,7 @@ saves.convert05Save = function(isBeta=false, isBetaSaveOld=false) { // ! this is
     upgrades.unlocked = this.defaultSavedValues["upgrades.unlocked"];
     upgrades.bought = this.defaultSavedValues["upgrades.bought"];
 
-    saves.autoSave();
+    saves.save();
 
     grandpa.unlocked = false;
     ranch.unlocked = false;
@@ -1581,7 +1551,7 @@ mods.addClicked = function() {
     helper.popup.createAdvanced(500,350,`<h3 class='simple-popup-title' style='display:block;'>Add Mod</h3>
     <h5 class='popup-content' style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5>
     <h5 class='popup-content' style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5>
-    <h5 class='popup-content' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a onclick='saves.autoSave()' href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue' target="_blank">read the documentation</a>.</h5>
+    <h5 class='popup-content' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a onclick='saves.save()' href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue' target="_blank">read the documentation</a>.</h5>
     <form onsubmit='return false;' id='addModURLForm' style='margin-top:22px;'>
         <label for='addModURL' class='popup-content'>From URL: </label>
         <input id='addModURL' onchange='mods.loadURL(this.value)'>
