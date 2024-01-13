@@ -84,7 +84,7 @@ upgrades.img = [
     "tv-upgrade1.png",undefined,undefined,undefined,undefined,
     "medkits.png",undefined,undefined,undefined,undefined,
     "200-dollar-bill.png",undefined,undefined,"safe.png",undefined,
-    undefined,undefined,undefined,undefined,undefined,
+    "the-pope.png",undefined,undefined,undefined,undefined,
 ];
 
 upgrades.upgradesBought = 0;
@@ -1250,17 +1250,18 @@ saves.loadSave = function() {
         try {
             eval(`${variable} = ${loadedSave[variable]}`); // YES, i know i shouldn't use this. I have no idea how to do this otherwise so yeah probably will stay.
 
+            if (variable === "upgrades.unlocked") { // arrays don't work with eval
+                upgrades.unlocked = loadedSave["upgrades.unlocked"];
+            }
+            if (variable === "upgrades.bought") {
+                upgrades.bought = loadedSave["upgrades.bought"];
+            }
+
             if (!inDevelopment) return;
             console.log(`loaded variable: ${variable}`);
             console.log(`loaded value: ${loadedSave[variable]}`);
         } catch {
             helper.consoleLogDev(`Attempted to load variable: ${variable}, value: ${loadedSave[variable]}. This is either a constant variable or a malformed save item.`);
-        }
-        if (variable === "upgrades.unlocked") { // arrays don't work with eval
-            upgrades.unlocked = loadedSave["upgrades.unlocked"];
-        }
-        if (variable === "upgrades.bought") {
-            upgrades.bought = loadedSave["upgrades.bought"];
         }
     });
 
