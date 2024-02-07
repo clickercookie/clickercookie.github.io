@@ -55,11 +55,12 @@ upgrades.prices = [
     14000000,70000000,700000000,70000000000,7000000000000, // wallet
     200000000,1000000000,10000000000,1000000000000,100000000000000 // church
 ];
+// todo: LED display should probably be changed with the oled display upgrade being here now
 upgrades.names = [
     "Reinforced Keys","Obsidian Keys","Osmium Keys","10 finger typing","Macros", // keyboard
     "Hardwood Walking Stick","Rocking Chair","Reading Glasses","Dementia Pills","shotgun", // grandpa
     "Pig Slop","ranch2","ranch3","ranch4","ranch5", // ranch
-    "LED Display","television2","television3","television4","television5", // television
+    "LED Display*","Streaming service","television3","OLED Display","television5", // television
     "Medkits","worker2","worker3","worker4","worker5", // worker
     "200 dollar bills","wallet2","wallet3","safe","wallet5", // wallet
     "the pope","church2","church3","church4","church5", // church
@@ -68,7 +69,7 @@ upgrades.quotes = [
     "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","why press when you don't have to?", // keyboard
     "nonna dat softwood junk","newest addition to the porch*","helps with precise chocolate chip placement","what was i doing again?","grandpa's precious*", // grandpa
     "Wait, what have we been feeding them before now?","temp","temp","temp","temp", // ranch
-    "World's greatest leap in digital technology*","temp","temp","temp","temp", // television
+    "World's greatest leap in digital technology*","cookie-flix","temp","s*** it burned in...","temp", // television
     "Constant supply of Band-Aids in case of emergency","temp","temp","temp","temp", // worker
     "I'm sure the federal reserve will be okay with this...*","temp","temp","you can keep your cookies even <b>safe</b>r!!","temp", // wallet
     "his holiness will provide many cookies","temp","temp","temp","temp", // church
