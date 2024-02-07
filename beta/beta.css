@@ -521,7 +521,6 @@ dialog::backdrop {
     text-align: left;
 }
 .middle-text {
-    font-size: 16px; /* todo: since stuff like "Added:" is an h3 element for nice structure and it also uses this class, so we don't have to make another different class we're just setting this here, although i don't like it so make it better later whohoo procrastination */
     margin-left: 9px;
     margin-bottom: 6px;
     margin-top: 6px;

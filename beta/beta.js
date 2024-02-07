@@ -1703,7 +1703,7 @@ function getFile(location) {
 }
 
 // Changelog Entries
-function createChangelogEntry(logs) {
+function createChangelogEntry(logs) { // todo 0.7: try to make this look nicer, but lets be honest it's gonna stay this way
     const changelog = document.querySelector(".changelog-wrapper");
 
     const newChangelogEntry = document.createElement("div");
@@ -1720,6 +1720,7 @@ function createChangelogEntry(logs) {
     if (logs.added !== undefined) {
         const addedHeader = document.createElement("h3");
         addedHeader.setAttribute("class","middle-text");
+        addedHeader.setAttribute("style","font-size: 16px;"); // todo: make this a part of a css class maybe probably not
         addedHeader.innerText = "Added:";
         // addedHeader.appendChild(document.createTextNode("Added:"));
         newChangelogEntry.appendChild(addedHeader);
@@ -1737,6 +1738,7 @@ function createChangelogEntry(logs) {
     if (logs.changed !== undefined) {
         const changedHeader = document.createElement("h3");
         changedHeader.setAttribute("class","middle-text");
+        changedHeader.setAttribute("style","font-size: 16px;");
         changedHeader.innerText = "Changed:"
         newChangelogEntry.appendChild(changedHeader);
 
@@ -1753,6 +1755,7 @@ function createChangelogEntry(logs) {
     if (logs.fixed !== undefined) {
         const fixedHeader = document.createElement("h3");
         fixedHeader.setAttribute("class","middle-text");
+        fixedHeader.setAttribute("style","font-size: 16px;");
         fixedHeader.innerText = "Fixed:"
         newChangelogEntry.appendChild(fixedHeader);
 
