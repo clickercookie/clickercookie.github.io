@@ -82,7 +82,7 @@ upgrades.img = [
     "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png","macros.png",
     "hardwood-walking-stick.png","rocking-chair.png","reading-glasses.png","dementia-pills.png","shotgun.png",
     "ranch-upgrade1.png",undefined,undefined,undefined,undefined,
-    "tv-upgrade1.png",undefined,undefined,undefined,undefined,
+    "tv-upgrade1.png","streaming-service.png",undefined,undefined,undefined,
     "medkits.png",undefined,undefined,undefined,undefined,
     "200-dollar-bill.png",undefined,undefined,"safe.png",undefined,
     "the-pope.png",undefined,undefined,undefined,undefined,
