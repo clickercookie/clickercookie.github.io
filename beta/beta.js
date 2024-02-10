@@ -144,9 +144,9 @@ saves.defaultSavedValues = { // Should be self-explanatory. Doesn't have to be o
 saves.dataLoaded; // data from an auto-save (local storage)
 
 // changelogs
-const versionChangelogs = {
-    "0.1": {
-        version: "0.1", // i don't like doubling this with the property name of the version, but idk how to make this work elsewise so yeah
+const versionChangelogs = [
+    {
+        version: "0.1",
         name: undefined,
         added: [
             "Existence."
@@ -155,7 +155,7 @@ const versionChangelogs = {
         fixed: undefined,
         release: "March 4th, 2023"
     },
-    "0.1.1": {
+    {
         version: "0.1.1",
         name: undefined,
         added: [
@@ -166,7 +166,7 @@ const versionChangelogs = {
         fixed: ["totalCookies variable is fixed, but still unused (but not for long!)"],
         release: "March 9th, 2023"
     },
-    "0.2": {
+    {
         version: "0.2",
         name: undefined,
         added: [
@@ -177,7 +177,7 @@ const versionChangelogs = {
         fixed: undefined,
         release: "March 16th"
     },
-    "0.2.1": {
+    {
         version: "0.2.1",
         name: undefined,
         added: [
@@ -188,7 +188,7 @@ const versionChangelogs = {
         fixed: undefined,
         release: "March 16th, 2023"
     },
-    "0.2.2": {
+    {
         version: "0.2.2",
         name: undefined,
         added: [
@@ -199,7 +199,7 @@ const versionChangelogs = {
         fixed: undefined,
         release: "March 16th, 2023"
     },
-    "0.4": {
+    {
         version: "0.4",
         name: undefined,
         added: [
@@ -211,7 +211,7 @@ const versionChangelogs = {
         fixed: ["Everything."],
         release: "March 24th, 2023"
     },
-    "0.4.1": {
+    {
         version: "0.4.1",
         name: undefined,
         added: [
@@ -227,7 +227,7 @@ const versionChangelogs = {
         ],
         release: "March 24th, 2023"
     },
-    "0.5": {
+    {
         version: "0.5",
         name: undefined,
         added: [
@@ -254,7 +254,7 @@ const versionChangelogs = {
         ],
         release: "May 6th, 2023"
     },
-    "0.5.1": {
+    {
         version: "0.5.1",
         name: "Objects Everywhere",
         added: [
@@ -283,7 +283,7 @@ const versionChangelogs = {
         ],
         release: "May 24th, 2023"
     },
-    "0.5.2": {
+    {
         version: "0.5.2",
         name: "hold the phone",
         added: [
@@ -301,7 +301,7 @@ const versionChangelogs = {
         fixed: ["Options middle text said \"Autosave Management\" when it was supposed to save \"Save Management\"."],
         release: "June 23rd, 2023"
     },
-    "0.6": {
+    {
         version: "0.6",
         name: "actual upgrades",
         added: [
@@ -335,7 +335,7 @@ const versionChangelogs = {
         ],
         release: "???"
     }
-}
+]
 
 // view versions of variables (their main versions have long decimal points)
 const variableView = {};
@@ -485,18 +485,10 @@ core.initialization = function() {
         document.title = "Clicker Cookie Dev";
 
     // Changelog Entries, AKA NOT the messiest place ever.
-    // todo 0.7: this can probably be done automagically by going over every item in the versionChangelogs object
-    createChangelogEntry(versionChangelogs["0.6"]);
-    createChangelogEntry(versionChangelogs["0.5.2"]);
-    createChangelogEntry(versionChangelogs["0.5.1"]);
-    createChangelogEntry(versionChangelogs["0.5"]);
-    createChangelogEntry(versionChangelogs["0.4.1"]);
-    createChangelogEntry(versionChangelogs["0.4"]);
-    createChangelogEntry(versionChangelogs["0.2.2"]);
-    createChangelogEntry(versionChangelogs["0.2.1"]);
-    createChangelogEntry(versionChangelogs["0.2"]);
-    createChangelogEntry(versionChangelogs["0.1.1"]);
-    createChangelogEntry(versionChangelogs["0.1"]);
+    // this array goes from big to small because the function needs to be ran from the latest version to the oldest
+    for (let entry = versionChangelogs.length - 1; entry >= 0; entry--) {
+        createChangelogEntry(versionChangelogs[entry]);
+    }
 
     if (navigator.userAgent.match(/Android/i) // stolen from https://www.tutorialspoint.com/How-to-detect-a-mobile-device-with-JavaScript (doesn't always work)
     || navigator.userAgent.match(/webOS/i)
