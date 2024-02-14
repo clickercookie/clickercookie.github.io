@@ -60,8 +60,8 @@ upgrades.names = [
     "Reinforced Keys","Obsidian Keys","Osmium Keys","10 finger typing","Macros", // keyboard
     "Hardwood Walking Stick","Rocking Chair","Reading Glasses","Dementia Pills","shotgun", // grandpa
     "Pig Slop","ranch2","ranch3","ranch4","ranch5", // ranch
-    "LED Display*","Streaming service","Surround sound","OLED Display","television5", // television
-    "Medkits","worker2","worker3","worker4","worker5", // worker
+    "LED Display*","Streaming service","Surround sound","OLED Display","8K resolution", // television
+    "Medkits","Hard hats","worker3","worker4","worker5", // worker
     "200 dollar bills","wallet2","wallet3","safe","wallet5", // wallet
     "the pope","church2","church3","church4","church5", // church
 ];
@@ -69,8 +69,8 @@ upgrades.quotes = [
     "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","why press when you don't have to?", // keyboard
     "nonna dat softwood junk","newest addition to the porch*","helps with precise chocolate chip placement","what was i doing again?","grandpa's precious*", // grandpa
     "Wait, what have we been feeding them before now?","temp","temp","temp","temp", // ranch
-    "World's greatest leap in digital technology*","cookie-flix","it's all around me!","s*** it burned in...","temp", // television
-    "Constant supply of Band-Aids in case of emergency","temp","temp","temp","temp", // worker
+    "World's greatest leap in digital technology*","cookie-flix","it's all around me!","s*** it burned in...","so many pixels!*", // television
+    "Constant supply of Band-Aids in case of emergency","Keep those skulls safe!","temp","temp","temp", // worker
     "I'm sure the federal reserve will be okay with this...*","temp","temp","you can keep your cookies even <b>safe</b>r!!","temp", // wallet
     "his holiness will provide many cookies","temp","temp","temp","temp", // church
 ];
@@ -83,7 +83,7 @@ upgrades.img = [
     "hardwood-walking-stick.png","rocking-chair.png","reading-glasses.png","dementia-pills.png","shotgun.png",
     "ranch-upgrade1.png",undefined,undefined,undefined,undefined,
     "tv-upgrade1.png","streaming-service.png","surround-sound.png",undefined,undefined,
-    "medkits.png",undefined,undefined,undefined,undefined,
+    "medkits.png","hard-hats.png",undefined,undefined,undefined,
     "200-dollar-bill.png",undefined,undefined,"safe.png",undefined,
     "the-pope.png",undefined,undefined,undefined,undefined,
 ];
@@ -1163,8 +1163,6 @@ personalization.setBackground = function(color) {
         document.getElementById("leftSide").style.background = personalization.currentBackground;
         document.getElementById("middleButtons").style.background = personalization.currentBackground;
         document.getElementById("rightSide").style.background = personalization.currentBackground;
-
-        document.querySelector(".upgrades-holder-background::before").style.backgroundImage = this.currentBackground;
     } else {
         document.querySelector(".content").style.background = `linear-gradient(to right, rgba(0,0,0,0.2), rgba(0,0,0,0.2)), ${personalization.currentBackground}`;
     }
