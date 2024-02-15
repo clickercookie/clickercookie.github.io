@@ -3,7 +3,7 @@
 // ------------------------------------
 const version = "0.6";
 const versionBranch = (location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") ? 1 : 0; // 0 is main, 1 is beta
-const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode!
+const inDevelopment = (location.hostname === "localhost" || location.hostname === "127.0.0.1") ? 1 : 0; // automatically toggles if hosted on the local machine
 const desktop = false;
 
 // customization
@@ -59,30 +59,31 @@ upgrades.prices = [
 upgrades.names = [
     "Reinforced Keys","Obsidian Keys","Osmium Keys","10 finger typing","Macros", // keyboard
     "Hardwood Walking Stick","Rocking Chair","Reading Glasses","Dementia Pills","shotgun", // grandpa
-    "Pig Slop","ranch2","ranch3","ranch4","ranch5", // ranch
+    "Pig Slop","ranch2","ranch3","Big baconator","Ranch dressing", // ranch
     "LED Display*","Streaming service","Surround sound","OLED Display","8K resolution", // television
-    "Medkits","Hard hats","worker3","worker4","worker5", // worker
-    "200 dollar bills","wallet2","wallet3","safe","wallet5", // wallet
+    "Medkits","Hard hats","worker3","High salaries*","Robot workers", // worker
+    "200 dollar bills","Credit cards","wallet3","safe","wallet5", // wallet
     "the pope","church2","church3","church4","church5", // church
 ];
 upgrades.quotes = [
     "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","why press when you don't have to?", // keyboard
     "nonna dat softwood junk","newest addition to the porch*","helps with precise chocolate chip placement","what was i doing again?","grandpa's precious*", // grandpa
-    "Wait, what have we been feeding them before now?","temp","temp","temp","temp", // ranch
-    "World's greatest leap in digital technology*","cookie-flix","it's all around me!","s*** it burned in...","so many pixels!*", // television
-    "Constant supply of Band-Aids in case of emergency","Keep those skulls safe!","temp","temp","temp", // worker
-    "I'm sure the federal reserve will be okay with this...*","temp","temp","you can keep your cookies even <b>safe</b>r!!","temp", // wallet
+    "Wait, what have we been feeding them before now?","temp","temp","think giant pig mech fueled by potatoes","wrong ranch.", // ranch
+    "World's greatest leap in digital technology*","cookie-flix","it's all around me!","s*** it burned in...","so many pixels!", // television
+    "Constant supply of Band-Aids in case of emergency","Keep those skulls safe!","temp","but they pay it back in taxes. to us.","robotic precision*", // worker
+    "I'm sure the federal reserve will be okay with this...*","cookies but digitized*","temp","you can keep your cookies even <b>safe</b>r!!","temp", // wallet
     "his holiness will provide many cookies","temp","temp","temp","temp", // church
 ];
 upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.currentClicked.toLowerCase()} production by 2`,"Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
 // image notes
 // grandpa4 (dementia pills) is extremely bland
 // reading glasses look awful
+// 8k display supposed to be a re-creation of bliss, needs to be done better with more colors
 upgrades.img = [
     "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png","macros.png",
     "hardwood-walking-stick.png","rocking-chair.png","reading-glasses.png","dementia-pills.png","shotgun.png",
-    "ranch-upgrade1.png",undefined,undefined,undefined,undefined,
-    "tv-upgrade1.png","streaming-service.png","surround-sound.png",undefined,undefined,
+    "ranch-upgrade1.png",undefined,undefined,undefined,"ranch-dressing.png",
+    "tv-upgrade1.png","streaming-service.png","surround-sound.png",undefined,"8k-display.png",
     "medkits.png","hard-hats.png",undefined,undefined,undefined,
     "200-dollar-bill.png",undefined,undefined,"safe.png",undefined,
     "the-pope.png",undefined,undefined,undefined,undefined,
@@ -352,7 +353,7 @@ const helper = {};
 core.initialization = function() {
     if (isNaN(core.cookies)) {
         saves.resetSave();
-        console.log("Cookies were NaN and save was reset.");
+        console.warn("Cookies were NaN and save was reset.");
     }
 
     if (localStorage.cookies >= 0)
@@ -361,11 +362,11 @@ core.initialization = function() {
     helper.reloadBuildingPrices();
     if (localStorage.getItem("save") == null) {
         localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
-        console.log("save was null and was automatically reset, if this is your first time playing this is an intended behavior.");
+        console.warn("save was null and was automatically reset, if this is your first time playing this is an intended behavior.");
     }
     if (localStorage.getItem("betaSave") == null) {
         localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
-        console.log("betaSave was null and was automatically reset, if this is your first time playing this is an intended behavior.");
+        console.warn("betaSave was null and was automatically reset, if this is your first time playing this is an intended behavior.");
     }
 
     saves.loadSave();
@@ -886,14 +887,9 @@ upgrades.destroy = function(id) {
     if (!mobile) hideTooltip();
 }
 upgrades.destroyAll = function(statistic=false) {
-    let idToGet;
-    for (i = 0; i < upgrades.unlocked.length; i++) {
-        idToGet = (!statistic) ? `upgrade${i}` : `upgrade${i}Stats` // this eliminates some unnessesary nesting
-        try { // since the element may not exist, this just ignores the error that occurs when it can't find it
-            document.getElementById(idToGet).remove();
-        } catch {
-            continue;
-        }
+    const upgradesHolderChildren = (statistic) ? convertCollectionToArray(document.getElementById("upgradesBoughtStatsHolder").children) : convertCollectionToArray(document.getElementById("upgradesHolder").children);
+    for (let i = 0; i < upgradesHolderChildren.length; i++) {
+        upgradesHolderChildren[i].remove();
     }
     if (!statistic)
         upgrades.currentlyShown = 0;
@@ -936,13 +932,13 @@ upgrades.expandUpgradesHolder = function(retract=false) {
 }
 
 upgrades.showUnlocked = function() {
-    for (i = 0; i < upgrades.unlocked.length; i++) {
+    for (let i = 0; i < upgrades.unlocked.length; i++) {
         if (upgrades.unlocked[i] == 1 && upgrades.bought[i] != 1) upgrades.create(i);
     }
 }
 upgrades.updateBoughtStatistic = function() {
     this.destroyAll(true); // would create duplicates of the same upgrade without this
-    for (i = 0; i < upgrades.bought.length; i++) {
+    for (let i = 0; i < upgrades.bought.length; i++) {
         if (upgrades.bought[i] != 1) continue;
 
         upgrades.create(i,true);
@@ -955,7 +951,7 @@ upgrades.checkUpgradeAvailability = function() {
         1,5,10,25,50
     ];
     // Keyboards
-    for (i = 0; i <= 5; i++) {
+    for (let i = 0; i <= 5; i++) {
         if (keyboard.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
             upgrades.unlocked[i] = 1;
             upgrades.create(i);
@@ -964,7 +960,7 @@ upgrades.checkUpgradeAvailability = function() {
     }
     // Grandpas
     runThroughTimes = 0;
-    for (i = 5; i <= 9; i++) {
+    for (let i = 5; i <= 9; i++) {
         if (grandpa.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
             upgrades.unlocked[i] = 1;
             upgrades.create(i);
@@ -973,7 +969,7 @@ upgrades.checkUpgradeAvailability = function() {
     }
     // Ranches
     runThroughTimes = 0;
-    for (i = 10; i <= 14; i++) {
+    for (let i = 10; i <= 14; i++) {
         if (ranch.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
             upgrades.unlocked[i] = 1;
             upgrades.create(i);
@@ -982,7 +978,7 @@ upgrades.checkUpgradeAvailability = function() {
     }
     // TVs
     runThroughTimes = 0;
-    for (i = 15; i <= 19; i++) {
+    for (let i = 15; i <= 19; i++) {
         if (television.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
             upgrades.unlocked[i] = 1;
             upgrades.create(i);
@@ -991,7 +987,7 @@ upgrades.checkUpgradeAvailability = function() {
     }
     // Workers
     runThroughTimes = 0;
-    for (i = 20; i <= 24; i++) {
+    for (let i = 20; i <= 24; i++) {
         if (worker.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
             upgrades.unlocked[i] = 1;
             upgrades.create(i);
@@ -1000,7 +996,7 @@ upgrades.checkUpgradeAvailability = function() {
     }
     // Wallets
     runThroughTimes = 0;
-    for (i = 25; i <= 29; i++) {
+    for (let i = 25; i <= 29; i++) {
         if (wallet.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
             upgrades.unlocked[i] = 1;
             upgrades.create(i);
@@ -1009,7 +1005,7 @@ upgrades.checkUpgradeAvailability = function() {
     }
     // Churches
     runThroughTimes = 0;
-    for (i = 30; i <= 34; i++) {
+    for (let i = 30; i <= 34; i++) {
         if (church.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
             upgrades.unlocked[i] = 1;
             upgrades.create(i);
@@ -1286,6 +1282,9 @@ function versionSwitch() {
 // ------------------------------------
 // Saving
 // ------------------------------------
+// ! Hey!
+// ! Do not make updates to this code! It will be changing in a later version! Don't waste your time!
+// ! See this issue: https://github.com/clickercookie/clickercookie.github.io/issues/
 saves.exportData = function() {
     saves.save();
     const dataJSON = !versionBranch ? JSON.stringify(localStorage.save) : JSON.stringify(localStorage.betaSave);
@@ -1693,6 +1692,13 @@ function getFile(location) {
         return `url(../${location})`;
     if (!mobile)
         return `url(${location})`;
+}
+function convertCollectionToArray(HTMLCollection) {
+    const array = [];
+    for (let i = 0; i < HTMLCollection.length; i++) {
+        array.push(HTMLCollection[i]);
+    }
+    return array;
 }
 
 // Changelog Entries

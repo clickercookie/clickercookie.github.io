@@ -14,7 +14,7 @@ The game is available at [clickercookie.github.io](https://clickercookie.github.
 ### Dependencies
 There are no dependencies, just plain HTML, CSS, and Javascript.
 ### Running
-You can open the index.html file in a browser by double-clicking it in File Explorer, but for proper saving functionality, using NodeJS `npx serve` or the Live Server VSCode extension is required.
+To run the game, a local web server must be created. Some common ways of doing this are with NodeJS' `npx serve` or the Live Server VSCode extension. **Running the game through File Explorer will not work.**
 
 ## Licensing
 This project is licensed under the GNU GPL-3.0 License - see the LICENSE file for details
