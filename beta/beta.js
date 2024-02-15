@@ -82,7 +82,7 @@ upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.curr
 upgrades.img = [
     "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png","macros.png",
     "hardwood-walking-stick.png","rocking-chair.png","reading-glasses.png","dementia-pills.png","shotgun.png",
-    "ranch-upgrade1.png",undefined,undefined,undefined,"ranch-dressing.png",
+    "pig-slop.png",undefined,undefined,"big-baconator.png","ranch-dressing.png",
     "tv-upgrade1.png","streaming-service.png","surround-sound.png",undefined,"8k-display.png",
     "medkits.png","hard-hats.png",undefined,undefined,undefined,
     "200-dollar-bill.png",undefined,undefined,"safe.png",undefined,
@@ -447,7 +447,6 @@ core.initialization = function() {
 
         const toggleSaving = document.createElement("button");
         toggleSaving.appendChild(document.createTextNode("Toggle Auto-Saving"));
-        toggleSaving.setAttribute("id","mousePosDevText");
         toggleSaving.setAttribute("onclick","dev.toggleSaving()");
         toggleSaving.setAttribute("style","margin-bottom:0px;");
         devDiv.appendChild(toggleSaving);
