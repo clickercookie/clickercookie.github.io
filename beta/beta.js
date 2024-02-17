@@ -762,7 +762,8 @@ class Building {
         const buildingInfoProducing = helper.commaify(Math.round(this.CPSGiven * 10) / 10);
 
         if (!mobile) {
-            tooltip.style.top = `${mousePos.y - 50}px`;  
+            // clamping allows between 0 and the height of the window minus the height of the box. also add one from the height of the box because it doesn't work correctly normally, idk why
+            tooltip.style.top = clamp(mousePos.y - 50,0,window.innerHeight-(tooltip.offsetHeight + 1))+"px";
             tooltip.style.right = "346px";
             tooltip.style.left = "auto"; // when tooltip is a statistic it sets the left property because it won't work correctly with right, this resets that
 
@@ -912,8 +913,9 @@ upgrades.hovered = function(id,building,statistic=false) {
         tooltip.style.borderRightWidth = "3px";
     } else {
         tooltip.style.right = "346px";
+        // clamping allows between 0 and the height of the window minus the height of the box. also add one from the height of the box because it doesn't work correctly normally, idk why
+        tooltip.style.top = clamp(mousePos.y - 50,0,window.innerHeight-(tooltip.offsetHeight + 1))+"px";
         tooltip.style.left = "auto"; // when tooltip is a statistic it sets the left property because it won't work correctly with right, this resets that
-        tooltip.style.top = `${mousePos.y - 50}px`; 
         tooltip.style.borderRightWidth = "0px";
     }
 }
@@ -1698,6 +1700,13 @@ function convertCollectionToArray(HTMLCollection) {
         array.push(HTMLCollection[i]);
     }
     return array;
+}
+function clamp(value, minimum, maximum) {
+    if (value < minimum)
+        value = minimum;
+    else if (value > maximum)
+        value = maximum;
+    return value;
 }
 
 // Changelog Entries
