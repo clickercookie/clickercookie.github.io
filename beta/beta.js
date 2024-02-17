@@ -522,6 +522,16 @@ window.addEventListener('mousemove', (event) => {
     if (inDevelopment == 1)
         document.getElementById("mousePosDevText").textContent = `Mouse Pos: (${mousePos.x}, ${mousePos.y})`;
 });
+function resizeEventHandler() { // ? is the term "event handler" right?
+    // change middle text heights
+    const middleTexts = convertCollectionToArray(document.querySelectorAll(".middle-main"));
+    for (element in middleTexts) {
+        console.log(middleTexts[element]);
+        middleTexts[element].style.height = window.innerHeight-document.getElementById("middleButtons").offsetHeight+"px";
+    }
+}
+resizeEventHandler(); // since we do need certain elements like the middle text to have the correct size without having to resize the window, we call this now
+window.addEventListener("resize",resizeEventHandler);
 
 // timer things
 setInterval(cookiesPerSecondUpdate, 1000);
@@ -909,7 +919,7 @@ upgrades.hovered = function(id,building,statistic=false) {
     tooltip.style.display = "block";
     if (statistic === true) {
         tooltip.style.left = `${mousePos.x}px`;
-        tooltip.style.top = `${mousePos.y - 113}px`; // it's minus 113 because the size of the tooltip is 110 with a 3px border and we don't want the cursor touching the tooltip
+        tooltip.style.top = `${mousePos.y - tooltip.offsetHeight}px`;  // it's minus offsetHeight because we don't want the cursor touching the tooltip
         tooltip.style.borderRightWidth = "3px";
     } else {
         tooltip.style.right = "346px";
