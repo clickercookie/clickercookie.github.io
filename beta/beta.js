@@ -680,38 +680,32 @@ dev.toggleSaving = function() { // TODO 0.6: this should be a toggle without dev
 // Buildings
 // ------------------------------------
 class Building {
-    constructor(name,quote,upgradeCost,CPSGain,id,iconImg="unknown.png",esPlural=false) {
-        if (document.getElementById(`building${id}`) != null) {
-            helper.popup.createSimple(300,150,`<i>huh, what just happened?</i> <br> An error occured: Tried to create a building that already exists (id ${id}).`,true,"default","Error",false,true);
-            return;
-        }
-
+    static UPGRADECOST_MULTIPLIER = 1.15;
+    constructor(name,quote,upgradeCost,CPSGain,iconImg="unknown.png",esPlural=false) {
         this.name = name; // ! SHOULD BE SAME AS OBJECT INSTANCE NAME, will be changed in 0.7!!!
         this.quote = quote;
         this.upgradeCost = upgradeCost;
         this.CPSGiven = 0;
         this.CPSGain = CPSGain;
-        this.id = id
 
         this.bought = 0;
         this.unlocked = false;
-        if (esPlural) { this.plural = "es"; } 
-        else { this.plural = "s"; }
+        if (esPlural) this.plural = "es";
+        else this.plural = "s";
 
         // setup HTML (uses indentation to show structure)
-        this.building = document.createElement("div");
-        this.building.setAttribute("id",`building${this.id}`);
-        this.building.setAttribute("class","building");
+        this.html = document.createElement("div");
+        this.html.setAttribute("class","building");
         // todo 0.7: update on the whole instance name thing, event listeners can fix this super easy
-        this.building.setAttribute("onclick",`${this.name}.buy()`); // this is why names must be the instance name
-        this.building.setAttribute("onmousemove",`${this.name}.hovered()`); // this is why names must be the instance name
-        this.building.setAttribute("onmouseout","hideTooltip()");
+        this.html.setAttribute("onclick",`${this.name}.buy()`); // this is why names must be the instance name
+        this.html.setAttribute("onmousemove",`${this.name}.hovered()`); // this is why names must be the instance name
+        this.html.setAttribute("onmouseout","hideTooltip()");
 
             const icon = document.createElement("img");
             icon.setAttribute("class","building-icon");
             icon.setAttribute("src",`img/${iconImg}`);
             icon.setAttribute("alt",`${this.name} icon`);
-            this.building.appendChild(icon);
+            this.html.appendChild(icon);
 
             const buildingContent = document.createElement("div");
             buildingContent.setAttribute("class","building-content");
@@ -738,16 +732,16 @@ class Building {
                 buildingPrice.innerHTML = this.upgradeCost;
                 buildingContent.appendChild(buildingPrice);
 
-            this.building.appendChild(buildingContent);
+            this.html.appendChild(buildingContent);
 
-        document.getElementById("buildingsWrapper").appendChild(this.building);
+        document.getElementById("buildingsWrapper").appendChild(this.html);
         // end setup HTML
     }
 
     buy() {
         if (core.cookies >= this.upgradeCost) {
             core.cookies -= this.upgradeCost;
-            this.upgradeCost *= 1.15;
+            this.upgradeCost *= Building.UPGRADECOST_MULTIPLIER;
             this.upgradeCost = Math.floor(this.upgradeCost);
             this.bought++;
             this.CPSGiven += this.CPSGain;
@@ -765,7 +759,7 @@ class Building {
         document.getElementById("tooltipProduces").style.display = "block";
         document.getElementById("tooltipProducing").style.display = "block";
 
-        const buildingInfoName = this.name.capitalize();
+        const buildingInfoName = capitalize(this.name);
         const buildingInfoPrice = helper.commaify(this.upgradeCost);
         const buildingInfoQuote = this.quote;
         const buildingInfoProduces = helper.commaify(this.CPSGain);
@@ -791,9 +785,9 @@ class Building {
 
     setVisibility(bool) {
         if (bool) {
-            this.building.style.display = "block";
+            this.html.style.display = "block";
         } else {
-            this.building.style.display = "none";
+            this.html.style.display = "none";
         }
     }
 
@@ -802,7 +796,7 @@ class Building {
     }
 
     destroy() {
-        document.getElementById(`building${this.id}`).remove();
+        this.html.remove();
     }
 }
 
@@ -829,11 +823,12 @@ upgrades.create = function(id,statistic=false) { // statistic is for creating it
     }
     
     const icon = this.img[id];
-    if (icon === undefined)
+    if (icon === undefined) {
         upgrade.style.backgroundImage = getFile("img/unknown-32-32.png");
-    else
+        console.warn(`Couldn't find image file for upgrade with ID: ${id}. Tried to assign image file: ${icon}`);
+    } else {
         upgrade.style.backgroundImage = getFile(`img/upgrades/${icon}`);
-
+    }
     if (!statistic)
         document.getElementById("upgradesHolder").appendChild(upgrade);
     else
@@ -1072,7 +1067,6 @@ function capitalize(str) {
 
     return capitalized;
 }
-String.prototype.capitalize = capitalize; // this can probably be removed
 
 // Popups
 helper.popup = {};
@@ -1670,7 +1664,7 @@ mods.addClicked = function() {
     </form>
     <form>
         <label for='addModFile' class='popup-content' style='margin-right:0px;'>From File: </label>
-        <input type='file' id='addModFile' onchange='mods.loadFile(this.value)' class='popup-content' style='width:86px;'>
+        <input type='file' id='addModFile' accept='.js' onchange='mods.loadFile(this.value)' class='popup-content' style='width:86px;'>
     </form>
     <p class='popup-content no-display' id='importedMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>Imported!</p>
     <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
@@ -1800,19 +1794,19 @@ tooltip.create = function(x,y,content) {
 console.log("you seem smart, how 'bout you contribute to the project? https://github.com/clickercookie/clickercookie.github.io");
 
 // buildings have to be made here instead of init because of scope
-const keyboard = new Building("keyboard","type in cookies",15,0.1,0,"keyboard.png");
+const keyboard = new Building("keyboard","type in cookies",15,0.1,"keyboard.png");
 keyboard.unlocked = true;
-const grandpa = new Building("grandpa","as long as gramps gets a cut",100,1,1,"grandpa.png");
+const grandpa = new Building("grandpa","as long as gramps gets a cut",100,1,"grandpa.png");
 grandpa.setVisibility(false);
-const ranch = new Building("ranch","not the dressing kind",1100,8,2,"ranch.png",true);
+const ranch = new Building("ranch","not the dressing kind",1100,8,"ranch.png",true);
 ranch.setVisibility(false);
-const television = new Building("television","hold infomercials on your cookies",12000,47,3,"tv.png");
+const television = new Building("television","hold infomercials on your cookies",12000,47,"tv.png");
 television.setVisibility(false);
-const worker = new Building("worker","cookies via manual labor",130000,260,4,"worker.png");
+const worker = new Building("worker","cookies via manual labor",130000,260,"worker.png");
 worker.setVisibility(false);
-const wallet = new Building("wallet","more storage space for your vast amount of cookie income",1400000,1440,5,"wallet.png");
+const wallet = new Building("wallet","more storage space for your vast amount of cookie income",1400000,1440,"wallet.png");
 wallet.setVisibility(false);
-const church = new Building("church","pray to the almighty cookie gods",20000000,7800,6,"church.png",true);
+const church = new Building("church","pray to the almighty cookie gods",20000000,7800,"church.png",true);
 church.setVisibility(false);
 
 core.initialization();
