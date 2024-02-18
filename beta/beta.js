@@ -324,6 +324,7 @@ const versionChangelogs = [
             "All boolean variables that used numbers (1 and 0) now use actual booleans (true and false).",
             "Most logic based variable assignments now use ternary operators.",
             "All remaining ancient plus sign string concatenation now use template literals.",
+            "The ancient unknown-64-64.png file used for when an upgrade's image cannot be found has had a visual upgrade and has been renamed to unknown-32-32.png since all upgrades are now drawn as 32x32 images.",
             "Changing the document title now uses document.title instead of assigning an ID to the title element."
         ],
         fixed: [
@@ -829,7 +830,7 @@ upgrades.create = function(id,statistic=false) { // statistic is for creating it
     
     const icon = this.img[id];
     if (icon === undefined)
-        upgrade.style.backgroundImage = getFile("img/unknown-64-64.png");
+        upgrade.style.backgroundImage = getFile("img/unknown-32-32.png");
     else
         upgrade.style.backgroundImage = getFile(`img/upgrades/${icon}`);
 

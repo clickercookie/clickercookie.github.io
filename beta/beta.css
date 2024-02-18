@@ -241,7 +241,7 @@ small {
 .upgrade {
     width: 59.6px;
     height: 59.6px;
-    background-image: url(img/unknown-64-64.png);
+    background-image: url(img/unknown-32-32.png);
     background-size: contain;
     margin: 0px;
     display: inline-block;
