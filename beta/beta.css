@@ -362,8 +362,8 @@ small {
 
 /* Infobox when hovering over a building */
 .tooltip {
-    width: 258px;
-    height: 110px;
+    width: 285px;
+    height: 125px;
     border: solid 3px black;
     border-right-width: 0px;
     background-color: var(--colored-container);

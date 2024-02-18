@@ -61,8 +61,8 @@ upgrades.names = [
     "Hardwood Walking Stick","Rocking Chair","Reading Glasses","Dementia Pills","shotgun", // grandpa
     "Pig Slop","ranch2","ranch3","Big baconator","Ranch dressing", // ranch
     "LED Display*","Streaming service","Surround sound","OLED Display","8K resolution", // television
-    "Medkits","Hard hats","worker3","High salaries*","Robot workers", // worker
-    "200 dollar bills","Credit cards","wallet3","safe","wallet5", // wallet
+    "Medkits","Hard hats","Fast fingers*","High salaries*","Robot workers", // worker
+    "200 dollar bills","Credit cards","wallet3","safe","Wizard\'s wallet", // wallet
     "the pope","church2","church3","church4","church5", // church
 ];
 upgrades.quotes = [
@@ -70,8 +70,8 @@ upgrades.quotes = [
     "nonna dat softwood junk","newest addition to the porch*","helps with precise chocolate chip placement","what was i doing again?","grandpa's precious*", // grandpa
     "Wait, what have we been feeding them before now?","temp","temp","think giant pig mech fueled by potatoes","wrong ranch.", // ranch
     "World's greatest leap in digital technology*","cookie-flix","it's all around me!","s*** it burned in...","so many pixels!", // television
-    "Constant supply of Band-Aids in case of emergency","Keep those skulls safe!","temp","but they pay it back in taxes. to us.","robotic precision*", // worker
-    "I'm sure the federal reserve will be okay with this...*","cookies but digitized*","temp","you can keep your cookies even <b>safe</b>r!!","temp", // wallet
+    "Constant supply of Band-Aids in case of emergency","Keep those skulls safe!","upmost efficient cookie manufacturing*","but they pay it back in taxes. to us.","robotic precision*", // worker
+    "I'm sure the federal reserve will be okay with this...*","cookies but digitized*","temp","you can keep your cookies even <b>safe</b>r!!","<b>infinite</b> storage space*", // wallet
     "his holiness will provide many cookies","temp","temp","temp","temp", // church
 ];
 upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.currentClicked.toLowerCase()} production by 2`,"Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
@@ -85,7 +85,7 @@ upgrades.img = [
     "pig-slop.png",undefined,undefined,"big-baconator.png","ranch-dressing.png",
     "tv-upgrade1.png","streaming-service.png","surround-sound.png",undefined,"8k-display.png",
     "medkits.png","hard-hats.png",undefined,undefined,undefined,
-    "200-dollar-bill.png",undefined,undefined,"safe.png",undefined,
+    "200-dollar-bill.png","credit-cards.png",undefined,"safe.png","wizards-wallet.png",
     "the-pope.png",undefined,undefined,undefined,undefined,
 ];
 
@@ -526,7 +526,6 @@ function resizeEventHandler() { // ? is the term "event handler" right?
     // change middle text heights
     const middleTexts = convertCollectionToArray(document.querySelectorAll(".middle-main"));
     for (element in middleTexts) {
-        console.log(middleTexts[element]);
         middleTexts[element].style.height = window.innerHeight-document.getElementById("middleButtons").offsetHeight+"px";
     }
 }
@@ -773,7 +772,7 @@ class Building {
 
         if (!mobile) {
             // clamping allows between 0 and the height of the window minus the height of the box. also add one from the height of the box because it doesn't work correctly normally, idk why
-            tooltip.style.top = clamp(mousePos.y - 50,0,window.innerHeight-(tooltip.offsetHeight + 1))+"px";
+            tooltip.style.top = clamp(mousePos.y - tooltip.offsetHeight/2,0,window.innerHeight-(tooltip.offsetHeight + 1))+"px";
             tooltip.style.right = "346px";
             tooltip.style.left = "auto"; // when tooltip is a statistic it sets the left property because it won't work correctly with right, this resets that
 
@@ -924,7 +923,7 @@ upgrades.hovered = function(id,building,statistic=false) {
     } else {
         tooltip.style.right = "346px";
         // clamping allows between 0 and the height of the window minus the height of the box. also add one from the height of the box because it doesn't work correctly normally, idk why
-        tooltip.style.top = clamp(mousePos.y - 50,0,window.innerHeight-(tooltip.offsetHeight + 1))+"px";
+        tooltip.style.top = clamp(mousePos.y - tooltip.offsetHeight/2,0,window.innerHeight-(tooltip.offsetHeight + 1))+"px";
         tooltip.style.left = "auto"; // when tooltip is a statistic it sets the left property because it won't work correctly with right, this resets that
         tooltip.style.borderRightWidth = "0px";
     }
@@ -1370,9 +1369,7 @@ saves.loadSave = function() {
                 upgrades.bought = loadedSave["upgrades.bought"];
             }
 
-            if (!inDevelopment) return;
-            console.log(`loaded variable: ${variable}`);
-            console.log(`loaded value: ${loadedSave[variable]}`);
+            helper.consoleLogDev(`loaded variable: ${variable}, value: ${loadedSave[variable]}`);
         } catch {
             helper.consoleLogDev(`Attempted to load variable: ${variable}, value: ${loadedSave[variable]}. This is either a constant variable or a malformed save item.`);
         }
@@ -1405,12 +1402,11 @@ saves.save = function(data=undefined) {
             save[name] = value;
         }
     }
-    if (!versionBranch) {
+    if (!versionBranch)
         localStorage.setItem("save",JSON.stringify(save));
-    } else {
+    else
         localStorage.setItem("betaSave",JSON.stringify(save));
-    }
-    if (inDevelopment) { console.log("save object: "); console.log(save); }
+    if (inDevelopment) console.log("save object: ", save)
 
     // Update saving notification
     const indicator = document.getElementById("savingIndicator");
