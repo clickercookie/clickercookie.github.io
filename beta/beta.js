@@ -64,7 +64,7 @@ upgrades.names = [
     "Medkits","Hard hats","Fast fingers*","High salaries*","Robot workers", // worker
     "200 dollar bills","Credit cards","wallet3","safe","Wizard\'s wallet", // wallet
     "the pope","church2","church3","church4","church5", // church
-];
+];8
 upgrades.quotes = [
     "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","why press when you don't have to?", // keyboard
     "nonna dat softwood junk","newest addition to the porch*","helps with precise chocolate chip placement","what was i doing again?","grandpa's precious*", // grandpa
@@ -321,6 +321,7 @@ const versionChangelogs = [
             "Upgrade viewer and building info are now combined into one tooltip and sizes have been adjusted.",
             "Popups now use dialog boxes, which has an unintended side effect of making their contents look sharper (yay!)",
             "Using the Github button now opens a new tab.",
+            "Renamed perMillisecondUniversal() to gameLoop()",
             "All boolean variables that used numbers (1 and 0) now use actual booleans (true and false).",
             "Most logic based variable assignments now use ternary operators.",
             "All remaining ancient plus sign string concatenation now use template literals.",
@@ -535,10 +536,10 @@ window.addEventListener("resize",resizeEventHandler);
 
 // timer things
 setInterval(cookiesPerSecondUpdate, 1000);
-setInterval(perMillisecondUniversal, 1);
+setInterval(gameLoop, 1);
 setInterval(autoSaveIntervalFunc, 60 * 1000);
 
-function perMillisecondUniversal() {
+function gameLoop() {
     variableView.cookiesView = Math.round(core.cookies * 10) / 10;
     variableView.cookiesView = helper.commaify(variableView.cookiesView);
     variableView.totalCookiesView = Math.round(core.totalCookies * 10) / 10;
@@ -698,7 +699,8 @@ class Building {
         this.html.setAttribute("class","building");
         // todo 0.7: update on the whole instance name thing, event listeners can fix this super easy
         this.html.setAttribute("onclick",`${this.name}.buy()`); // this is why names must be the instance name
-        this.html.setAttribute("onmousemove",`${this.name}.hovered()`); // this is why names must be the instance name
+        this.html.setAttribute("onmousemove",`${this.name}.hovered()`); // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
+        this.html.setAttribute("onmouseover",`${this.name}.hovered()`); // ^
         this.html.setAttribute("onmouseout","hideTooltip()");
 
             const icon = document.createElement("img");
@@ -749,6 +751,7 @@ class Building {
             document.getElementById(`${this.name}Cost`).innerHTML = helper.commaify(this.upgradeCost);
             document.getElementById(`${this.name}${this.plural}Bought`).innerHTML = this.bought;
             this.hovered();
+            this.reloadPrice();
         }
     }
 
@@ -784,11 +787,10 @@ class Building {
     }
 
     setVisibility(bool) {
-        if (bool) {
+        if (bool)
             this.html.style.display = "block";
-        } else {
+        else
             this.html.style.display = "none";
-        }
     }
 
     reloadPrice() {
@@ -811,13 +813,15 @@ upgrades.create = function(id,statistic=false) { // statistic is for creating it
     if (statistic) {
         upgrade.setAttribute("id",`upgrade${id}Stats`);
         upgrade.setAttribute("class","upgrade-stats pointer");
-        upgrade.setAttribute("onmousemove",`upgrades.hovered(${id},${building},true)`);
+        upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building},true)`);  // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
+        upgrade.setAttribute("onmousemove",`upgrades.hovered(${id},${building},true)`); // ^
         upgrade.setAttribute("onmouseout","hideTooltip()");
     }
 
     if (!statistic) {
         upgrade.setAttribute("id",`upgrade${id}`);
         upgrade.setAttribute("onclick",`upgrades.clicked(${id},${building})`);
+        upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building})`);  // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
         upgrade.setAttribute("onmousemove",`upgrades.hovered(${id},${building})`);
         upgrade.setAttribute("onmouseout","hideTooltip()");
     }
@@ -881,7 +885,7 @@ upgrades.clicked = function(id,building) { // yes it's messy, dont judge me
         church.CPSGain *= 2;
         break;
     }
-    upgrades.expandUpgradesHolder(); // sometimes the upgrade holder has one too many rows because of weird onmousemove behavior, this prevents that
+    upgrades.expandUpgradesHolder(); // sometimes the upgrade holder has one too many rows because of weird onmouseover & onmousemove behavior, this prevents that
     
     document.getElementById("upgradesBoughtCounter").innerHTML = `Bought: ${upgrades.upgradesBought}/${upgrades.unlocked.length}`;
 
@@ -929,11 +933,12 @@ upgrades.expandUpgradesHolder = function(retract=false) {
     upgrades.rowsOfUpgrades = Math.ceil(upgrades.currentlyShown / 5);
 
     const holder = document.getElementById("upgradesHolder");
+    const holderHeight = 67.6; // that's the height of the upgrade holder set in style.css, i would figure out how to get the height directly from the element but the height is constantly changing when it's hovered so it's more trouble then it's worth
     if (retract) {
-        holder.style.height = "67.6px";
+        holder.style.height = holderHeight+"px";
         return;
     }
-    const size = (upgrades.rowsOfUpgrades === 0) ? 67.6 : 67.6 * upgrades.rowsOfUpgrades;
+    const size = (upgrades.rowsOfUpgrades === 0) ? holderHeight : holderHeight * upgrades.rowsOfUpgrades;
     holder.style.height = `${size}px`;
 }
 
