@@ -84,7 +84,7 @@ upgrades.img = [
     "hardwood-walking-stick.png","rocking-chair.png","reading-glasses.png","dementia-pills.png","shotgun.png",
     "pig-slop.png",undefined,undefined,"big-baconator.png","ranch-dressing.png",
     "tv-upgrade1.png","streaming-service.png","surround-sound.png",undefined,"8k-display.png",
-    "medkits.png","hard-hats.png",undefined,undefined,undefined,
+    "medkits.png","hard-hats.png","fast-fingers.png",undefined,"robot-workers.png",
     "200-dollar-bill.png","credit-cards.png",undefined,"safe.png","wizards-wallet.png",
     "the-pope.png",undefined,undefined,undefined,undefined,
 ];
@@ -933,7 +933,7 @@ upgrades.expandUpgradesHolder = function(retract=false) {
     upgrades.rowsOfUpgrades = Math.ceil(upgrades.currentlyShown / 5);
 
     const holder = document.getElementById("upgradesHolder");
-    const holderHeight = 67.6; // that's the height of the upgrade holder set in style.css, i would figure out how to get the height directly from the element but the height is constantly changing when it's hovered so it's more trouble then it's worth
+    const holderHeight = 67.6; // this is the height of the upgrade holder set in style.css, i would figure out how to get the height directly from the element but the height is constantly changing when it's hovered so it's more trouble then it's worth
     if (retract) {
         holder.style.height = holderHeight+"px";
         return;

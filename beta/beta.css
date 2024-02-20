@@ -372,7 +372,7 @@ small {
     z-index: 1; /* legit nothing has a higher-than-normal z-index, so this will show above EVERYTHING */
 }
 .tooltip-content {
-    margin-left: 3px;
+    padding: 0px 3px 0px 3px;
 }
 .tooltip-name {
     font-size: 15px;
@@ -562,14 +562,6 @@ dialog::backdrop {
     text-align: left;
     -webkit-user-select: none;
     user-select: none;
-}
-
-.changelog-version-text {
-    margin-left: 9px;
-    margin-bottom: 6px;
-    margin-top: 6px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 10px;
 }
 
 /* middle button CSS */
