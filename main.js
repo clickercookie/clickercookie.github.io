@@ -1,7 +1,7 @@
 // ------------------------------------
 // Variable & Object Definitions
 // ------------------------------------
-const version = "0.5.2";
+const version = "0.5.2.1";
 const versionBranch = location.pathname == "/beta/beta" ? 1 : 0; // 0 is main, 1 is beta
 const inDevelopment = 0; // toggle if developing actively. This is completely different than the builtin dev mode! Recommended that versionBranch is 1 for easier saving if this is toggled.
 
@@ -348,6 +348,14 @@ core.initialization = function() {
     if (isModded == 1 && mobile == 0) {
         document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
     }
+
+    // Holiday Events
+    const date = new Date();
+    // anniversary
+    if (date.getMonth() === 2 && date.getDate() === 3) { // if date is 3/3
+        personalization.setCurrentClicked("cake");
+        helper.popup.createSimple(350,175,"It's Clicker Cookie's birthday! \nThe cookie has been replaced with a birthday cake, but you can change it back in Options.",false,"default","woo hoo!",false,false);
+    }
 }
 
 // mouse position stuff
@@ -363,7 +371,6 @@ window.addEventListener('mousemove', (event) => {
 });
 
 let buildingInfoYPos = `${mousePos.y}` - 50;
-
 
 // timer things
 const intervalCPSU = setInterval(cookiesPerSecondUpdate, 1000);
@@ -982,6 +989,21 @@ helper.commaify = function(toComma) {
     let commaifyed = toComma.toLocaleString("en-US");
     return commaifyed;
 }
+function capitalize(str) {
+    if (!str) str = this;
+
+    const capitalized =
+        str.charAt(0).toUpperCase()
+        + str.slice(1);
+
+    return capitalized;
+}
+function getFile(location) {
+    if (mobile)
+        return `../${location}`;
+    if (!mobile)
+        return location;
+}
 // popups
 helper.popup = {};
 helper.popup.createSimpleAlertError = function(value) {
@@ -1118,44 +1140,37 @@ personalization.setBackground = function(color) {
 }
 
 personalization.setCurrentClicked = function(value) {
-    switch (value) {
-        case "cookie":
-            if (!mobile) {
-                document.getElementById("cookie").src = "img/cookie.png";
-            }
-            if (mobile) {
-                document.getElementById("cookie").src = "../img/cookie.png";
-            }
-            personalization.currentClicked = "Cookie";
-            personalization.currentClickedPlural = "Cookies";
-            personalization.currentClickedLowercase = "cookie";
-            personalization.currentClickedLowercasePlural = "cookies";
-            break;
-        case "potato":
-            if (!mobile) {
-                document.getElementById("cookie").src = "img/potato.png";
-            }
-            if (mobile) {
-                document.getElementById("cookie").src = "../img/potato.png";
-            }
-            personalization.currentClicked = "Potato";
-            personalization.currentClickedPlural = "Potatoes";
-            personalization.currentClickedLowercase = "potato";
-            personalization.currentClickedLowercasePlural = "potatoes";
-            break;
-        case "strawberry":
-            if (!mobile) {
-                document.getElementById("cookie").src = "img/strawberry.png";
-            }
-            if (mobile) {
-                document.getElementById("cookie").src = "../img/strawberry.png";
-            }
-            personalization.currentClicked = "Strawberry";
-            personalization.currentClickedPlural = "Strawberries";
-            personalization.currentClickedLowercase = "strawberry";
-            personalization.currentClickedLowercasePlural = "strawberries";
-            break;
+    const cookie = document.getElementById("cookie");
+    try {
+        document.getElementById("cookie").src = getFile(`img/${value}.png`);
+    } catch {
+        console.warn(`Couldn't find image file for cookie. Tried to assign image file: ${value}.png`)
     }
+    personalization.currentClicked = capitalize(value);
+    // since some words have a plural "es" at the end of their name and I don't want to make a function to detect that, this
+    // function will still have a switch in it for each value, but at a later time this should be changed.
+    cookie.style.borderRadius = "128px";
+    cookie.style.imageRendering = "auto"; // cake is 64x64 so it needs to not be blurry, this resets that
+    switch (value) {
+    case "cookie":
+        personalization.currentClickedPlural = "Cookies";
+        break;
+    case "potato":
+        personalization.currentClickedPlural = "Potatoes";
+        break;
+    case "strawberry":
+        personalization.currentClickedPlural = "Strawberries";
+        break;
+    case "cake":
+        personalization.currentClickedPlural = "Cakes";
+        cookie.style.borderRadius = "0px";
+        cookie.style.imageRendering = "pixelated";
+        document.getElementById("currentClickedSelect").value = "cake";
+        break;
+    default:
+        personalization.currentClickedPlural = `${value}s`;
+    }
+    upgrades.info.upgrade0.description = "Multiplys Keyboard and clicking " + this.currentClicked.toLowerCase() + " production by 2" + "<br>" + "<i>\"" + "press harder" + "\"</i>";
 }
 
 dev.setDevMode = function(value) {

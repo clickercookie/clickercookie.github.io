@@ -83,7 +83,7 @@ upgrades.img = [
     "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png","macros.png",
     "hardwood-walking-stick.png","rocking-chair.png","reading-glasses.png","dementia-pills.png","shotgun.png",
     "pig-slop.png",undefined,undefined,"big-baconator.png","ranch-dressing.png",
-    "tv-upgrade1.png","streaming-service.png","surround-sound.png",undefined,"8k-display.png",
+    "tv-upgrade1.png","streaming-service.png","surround-sound.png","oled-display.png","8k-display.png",
     "medkits.png","hard-hats.png","fast-fingers.png",undefined,"robot-workers.png",
     "200-dollar-bill.png","credit-cards.png",undefined,"safe.png","wizards-wallet.png",
     "the-pope.png",undefined,undefined,undefined,undefined,
@@ -303,6 +303,17 @@ const versionChangelogs = [
         release: "June 23rd, 2023"
     },
     {
+        version: "0.5.2.1",
+        name: "the first of many",
+        added: [
+            "It's our 1st birthday! With this, we now have the Clicker Cookie Anniversary event, which currently only activates the new Currently Clicked food, the Cake.",
+            "Note: Although 0.1 came out on March 4th, initial public development began on the 3rd, which is why we celebrate today!"
+        ],
+        changed: undefined,
+        fixed: undefined,
+        release: "March 3rd, 2024"
+    },
+    {
         version: "0.6",
         name: "actual upgrades",
         added: [
@@ -326,7 +337,8 @@ const versionChangelogs = [
             "Most logic based variable assignments now use ternary operators.",
             "All remaining ancient plus sign string concatenation now use template literals.",
             "The ancient unknown-64-64.png file used for when an upgrade's image cannot be found has had a visual upgrade and has been renamed to unknown-32-32.png since all upgrades are now drawn as 32x32 images.",
-            "Changing the document title now uses document.title instead of assigning an ID to the title element."
+            "Changing the document title now uses document.title instead of assigning an ID to the title element.",
+            "no-select is now done in a more effective way."
         ],
         fixed: [
             "Upgrade pixel art images were extremely blurry. Buildings still have this blur, but actually make the image look better, so it will stay for the time being.",
@@ -408,7 +420,7 @@ core.initialization = function() {
         const devDiv = document.createElement("div");
         
         const devWarning = document.createElement("h4");
-        devWarning.appendChild(document.createTextNode("Dev build detected, options below"));
+        devWarning.appendChild(document.createTextNode("localhost detected, options below"));
         devWarning.setAttribute("style","color:black;");
         devDiv.appendChild(devWarning);
 
@@ -511,6 +523,14 @@ core.initialization = function() {
     // this would go after data is loaded, but it requires the mobile variable to be assigned a value
     if (isModded && !mobile) {
         document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
+    }
+
+    // Holiday Events
+    const date = new Date();
+    // anniversary
+    if (date.getMonth() === 2 && date.getDate() === 3) { // if date is 3/3
+        personalization.setCurrentClicked("cake");
+        helper.popup.createSimple(350,175,"It's Clicker Cookie's birthday! \nThe cookie has been replaced with a birthday cake, but you can change it back in Options.",false,"default","woo hoo!");
     }
 }
 
@@ -828,10 +848,10 @@ upgrades.create = function(id,statistic=false) { // statistic is for creating it
     
     const icon = this.img[id];
     if (icon === undefined) {
-        upgrade.style.backgroundImage = getFile("img/unknown-32-32.png");
+        upgrade.style.backgroundImage = `url(${getFile("img/unknown-32-32.png")})`;
         console.warn(`Couldn't find image file for upgrade with ID: ${id}. Tried to assign image file: ${icon}`);
     } else {
-        upgrade.style.backgroundImage = getFile(`img/upgrades/${icon}`);
+        upgrade.style.backgroundImage = `url(${getFile(`img/upgrades/${icon}`)})`;
     }
     if (!statistic)
         document.getElementById("upgradesHolder").appendChild(upgrade);
@@ -1072,6 +1092,28 @@ function capitalize(str) {
 
     return capitalized;
 }
+// because of the difference in file locations on the mobile version, this is the new way that files should be accessed in other locations
+// so DON'T USE STATIC FILE PATHS when making new HTML!!! Use this!!!
+function getFile(location) {
+    if (mobile || desktop)
+        return `../${location}`;
+    if (!mobile)
+        return location;
+}
+function convertCollectionToArray(HTMLCollection) {
+    const array = [];
+    for (let i = 0; i < HTMLCollection.length; i++) {
+        array.push(HTMLCollection[i]);
+    }
+    return array;
+}
+function clamp(value, minimum, maximum) {
+    if (value < minimum)
+        value = minimum;
+    else if (value > maximum)
+        value = maximum;
+    return value;
+}
 
 // Popups
 helper.popup = {};
@@ -1164,7 +1206,7 @@ helper.popup.destroyAdvanced = function() {
 
 // set areas to different things
 personalization.setBackground = function(color) {
-    personalization.currentBackground = getFile(`img/backgrounds/background-${color}.png`);
+    personalization.currentBackground = `url(${getFile(`img/backgrounds/background-${color}.png`)})`;
     if (!mobile) {
         document.getElementById("leftSide").style.background = personalization.currentBackground;
         document.getElementById("middleButtons").style.background = personalization.currentBackground;
@@ -1176,37 +1218,35 @@ personalization.setBackground = function(color) {
     helper.consoleLogDev(`Background color set to: ${color}`);
 }
 personalization.setCurrentClicked = function(value) {
+    const cookie = document.getElementById("cookie");
+    try {
+        document.getElementById("cookie").src = getFile(`img/${value}.png`);
+    } catch {
+        console.warn(`Couldn't find image file for cookie. Tried to assign image file: ${value}.png`)
+    }
+    personalization.currentClicked = capitalize(value);
+    // since some words have a plural "es" at the end of their name and I don't want to make a function to detect that, this
+    // function will still have a switch in it for each value, but at a later time this should be changed.
+    cookie.style.borderRadius = "128px";
+    cookie.style.imageRendering = "auto"; // cake is 64x64 so it needs to not be blurry, this resets that
     switch (value) {
     case "cookie":
-        if (!mobile) {
-            document.getElementById("cookie").src = "img/cookie.png";
-        }
-        if (mobile || desktop) {
-            document.getElementById("cookie").src = "../img/cookie.png";
-        }
-        personalization.currentClicked = "Cookie";
         personalization.currentClickedPlural = "Cookies";
         break;
     case "potato":
-        if (!mobile) {
-            document.getElementById("cookie").src = "img/potato.png";
-        }
-        if (mobile || desktop) {
-            document.getElementById("cookie").src = "../img/potato.png";
-        }
-        personalization.currentClicked = "Potato";
         personalization.currentClickedPlural = "Potatoes";
         break;
     case "strawberry":
-        if (!mobile) {
-            document.getElementById("cookie").src = "img/strawberry.png";
-        }
-        if (mobile) {
-            document.getElementById("cookie").src = "../img/strawberry.png";
-        }
-        personalization.currentClicked = "Strawberry";
         personalization.currentClickedPlural = "Strawberries";
         break;
+    case "cake":
+        personalization.currentClickedPlural = "Cakes";
+        cookie.style.borderRadius = "0px";
+        cookie.style.imageRendering = "pixelated";
+        document.getElementById("currentClickedSelect").value = "cake";
+        break;
+    default:
+        personalization.currentClickedPlural = `${value}s`;
     }
     upgrades.descriptions[0] = `Multiplys Keyboard and clicking ${this.currentClicked} production by 2`;
 }
@@ -1690,29 +1730,6 @@ mods.reloadModsLoadedText = function() {
 
 function print() {
     helper.popup.createSimple(250,150,"it's console.log",false,"default","dum dum",false,true);
-}
-
-// because of the difference in file locations on the mobile version, this is the new way that files should be accessed in other locations
-// so DON'T USE url() when making new HTML!!! Use this!!!
-function getFile(location) {
-    if (mobile || desktop)
-        return `url(../${location})`;
-    if (!mobile)
-        return `url(${location})`;
-}
-function convertCollectionToArray(HTMLCollection) {
-    const array = [];
-    for (let i = 0; i < HTMLCollection.length; i++) {
-        array.push(HTMLCollection[i]);
-    }
-    return array;
-}
-function clamp(value, minimum, maximum) {
-    if (value < minimum)
-        value = minimum;
-    else if (value > maximum)
-        value = maximum;
-    return value;
 }
 
 // Changelog Entries

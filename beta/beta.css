@@ -12,52 +12,50 @@ body {
     touch-action: manipulation;
     color: white;
     font-family: Arial, Helvetica, sans-serif;
+    
+}
+
+/* does the same thing cookie clicker does by overwriting EVERY element's css so that certain defaults made for normal webpages (not games) don't get it the way (like selecting text) */
+html, body, div, span, applet, object, iframe, 
+h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, 
+address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, 
+small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, 
+ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, 
+thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, 
+footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    /* no selecting */
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    /* no select for images */
+    -webkit-user-drag: none;
     -webkit-touch-callout: none; /* yes its a mobile thing in the desktop version but its here anyway in case mobile breaks idk */
 }
 
-h1 { /* all lines that have these no-select like properties are simply too relied on to be removed, i don't like it but i also don't have much of a choice if i value my time :shrug: */
-    -webkit-user-select: none;
-    user-select: none;
-}
-h3 {
-    user-select: none;
-    -webkit-user-select: none;
-}
-h4 {
-    -webkit-user-select: none;
-    user-select: none;
-}
-p {
-    -webkit-user-select: none;
-    user-select: none;
-}
+/* todo 0.7: find why these are here and how we can make their elements assigned to their own specific class instead of making every element have these properties*/
 a {
     font-weight: bold;
     color: white;
 }
-
 img {
-    -webkit-user-drag: none;
-    -webkit-touch-callout: none;
-    user-select: none;
-    -webkit-user-select: none;
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
-
 ul {
     margin-top: 6px;
     margin-bottom: 6px;
 }
-
 small {
-    user-select: none;
-    -webkit-user-select: none;
     margin-left: auto;
     margin-right: auto;
 }
 
+/* todo 0.7: i don't like these anymore, keep a few like pointer and no-display but remove stuff like red.  */
 /* helper classes */
 .no-display {
     display: none;
@@ -125,10 +123,9 @@ small {
 }
 
 .cookie {
-    margin-top: 12px;
-    margin-bottom: 12px;
     width: 257px;
     height: 257px;
+    margin: 12px auto 12px auto; /* margin left and right are set to auto so it centers */
     animation: cookie-unhover 0.15s ease-out;
     border-radius: 128px;
 }

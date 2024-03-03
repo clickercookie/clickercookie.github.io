@@ -24,7 +24,7 @@
                 <a onclick="saves.save()" href="https://github.com/clickercookie/clickercookie.github.io" target="_blank">
                     <img class="github" src="img/github-mark.svg" alt="github">
                 </a>
-                <h5 id="versionNumber" class="version-number pointer no-select" onclick="versionSwitch()" onmouseover="versionNumberMousedOver()" onmouseout="versionNumberMousedOver(true)">Version: null</h5>
+                <h5 id="versionNumber" class="version-number pointer" onclick="versionSwitch()" onmouseover="versionNumberMousedOver()" onmouseout="versionNumberMousedOver(true)">Version: null</h5>
                 <div id="versionSwitchInfo" class="version-switch-info">
                     <p style="margin:0px; color:black; text-align:center;" id="versionSwitchInfoText">Clicking this will switch to the null branch.</p>
                 </div>
@@ -73,13 +73,13 @@
                 <h3 class="middle-subtitle">About:</h3>
                 <p class="middle-text">Clicker Cookie is a totally original game about clicking a cookie. Made by <a href="https://github.com/FifthTundraG" target="_blank">FifthTundraG</a> in a few hours, this game went from a random clone of a decade old, actively developed clicker game to something that spiraled into a land of insanity.</p>
                 <p class="middle-text">Original game made by Orteil and Opti. <small>we :heart: you!</small></p>
-                <button class="data-button pointer no-select" onclick="helper.popup.createSimple(320,150,'FifthTundraG: Creation<br>potatman4: Playtesting<br>Spencer: Playtesting, Emotional Support',false,'default','Credits',false,false)">Credits</button>
+                <button class="data-button pointer" onclick="helper.popup.createSimple(320,150,'FifthTundraG: Creation<br>potatman4: Playtesting<br>Spencer: Playtesting, Emotional Support',false,'default','Credits',false,false)">Credits</button>
                 <h3 class="middle-subtitle" style="margin-top:0px;">Changelog:</h3>
                 <div class="changelog-wrapper">
                     
                 </div>
             </div>
-            <div id="optionsMiddleText" class="middle-main no-select">
+            <div id="optionsMiddleText" class="middle-main">
                 <div class="middle-x pointer" onclick="closeMiddle()">
                     <img src="img/white-x.png" alt="x button" width="38px" height="38px" class="no-margin">
                 </div>
@@ -107,6 +107,7 @@
                         <option value="cookie">Cookie</option>
                         <option value="potato">Potato</option>
                         <option value="strawberry">Strawberry</option>
+                        <option value="cake">Cake</option>
                     </select>
                 </form>
                 <h5 class="middle-subtitle">Miscellaneous:</h5>
@@ -161,7 +162,7 @@
                 
             </div>
         </div> <!-- end rightSide -->
-        <dialog class="popup no-select" id="simplePopup">
+        <dialog class="popup" id="simplePopup">
             <img alt="popup image" style="display:none;" id="simplePopupImage">
             <h3 class="simple-popup-title" id="simplePopupTitle">title</h3>
             <p class="popup-content" id="simplePopupContent">null</p>
@@ -170,7 +171,7 @@
                 <button onclick="helper.popup.simpleClicked()" id="simplePopupButton" class="popup-button">OK</button>
             </div>
         </dialog>
-        <dialog class="popup no-select" id="advancedPopup">
+        <dialog class="popup" id="advancedPopup">
 
         </dialog>
     </body>
