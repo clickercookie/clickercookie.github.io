@@ -374,10 +374,12 @@ core.initialization = function() {
         helper.popup.createSimple(400,200,"You are using the old saving method. You will have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format.",false,"localStorage.clear()","Warning",false,false);
 
     helper.reloadBuildingPrices();
-    if (localStorage.getItem("save") == null) {
-        localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
-        console.warn("save was null and was automatically reset, if this is your first time playing this is an intended behavior.");
-    }
+    // ! this was tampering with the main version's save and putting it into the new format, it would totally break it unless you manually cleared the localStorage
+    // todo: put this back before 0.6 releases to main
+    // if (localStorage.getItem("save") == null) {
+    //     localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
+    //     console.warn("save was null and was automatically reset, if this is your first time playing this is an intended behavior.");
+    // }
     if (localStorage.getItem("betaSave") == null) {
         localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
         console.warn("betaSave was null and was automatically reset, if this is your first time playing this is an intended behavior.");
