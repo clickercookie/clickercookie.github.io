@@ -654,10 +654,6 @@ dialog::backdrop {
     text-align: center;
 }
 
-.leftSidePush {
-    width: 320px;
-}
-
 .win {
     display: none;
     margin-top: 2px;

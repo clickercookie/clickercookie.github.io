@@ -55,23 +55,22 @@ upgrades.prices = [
     14000000,70000000,700000000,70000000000,7000000000000, // wallet
     200000000,1000000000,10000000000,1000000000000,100000000000000 // church
 ];
-// todo: LED display should probably be changed with the oled display upgrade being here now
 upgrades.names = [
     "Reinforced Keys","Obsidian Keys","Osmium Keys","10 finger typing","Macros", // keyboard
     "Hardwood Walking Stick","Rocking Chair","Reading Glasses","Dementia Pills","shotgun", // grandpa
-    "Pig Slop","ranch2","ranch3","Big baconator","Ranch dressing", // ranch
-    "LED Display*","Streaming service","Surround sound","OLED Display","8K resolution", // television
-    "Medkits","Hard hats","Fast fingers*","High salaries*","Robot workers", // worker
+    "Pig Slop","Tractors","ranch3","Big baconator","Ranch dressing", // ranch
+    "98-inch screen","Streaming service","Surround sound","OLED Display","8K resolution", // television
+    "Medkits","Hard hats","Fast fingers*","Weight training","Robot workers", // worker
     "200 dollar bills","Credit cards","wallet3","safe","Wizard\'s wallet", // wallet
     "the pope","church2","church3","church4","church5", // church
-];8
+];
 upgrades.quotes = [
     "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","why press when you don't have to?", // keyboard
     "nonna dat softwood junk","newest addition to the porch*","helps with precise chocolate chip placement","what was i doing again?","grandpa's precious*", // grandpa
-    "Wait, what have we been feeding them before now?","temp","temp","think giant pig mech fueled by potatoes","wrong ranch.", // ranch
-    "World's greatest leap in digital technology*","cookie-flix","it's all around me!","s*** it burned in...","so many pixels!", // television
-    "Constant supply of Band-Aids in case of emergency","Keep those skulls safe!","upmost efficient cookie manufacturing*","but they pay it back in taxes. to us.","robotic precision*", // worker
-    "I'm sure the federal reserve will be okay with this...*","cookies but digitized*","temp","you can keep your cookies even <b>safe</b>r!!","<b>infinite</b> storage space*", // wallet
+    "Wait, what have we been feeding them before now?","eliminating manual labor since 1892","temp","think giant pig mech fueled by potatoes","wrong ranch.", // ranch
+    "unnecessarily large is an understatement","cookie-flix","it's all around me!","s*** it burned in...","so many pixels!", // television
+    "Constant supply of Band-Aids in case of emergency","Keep those skulls safe!","upmost efficient cookie manufacturing*","firmly attach chocolate chips via brute force","robotic precision*", // worker
+    "I'm sure the federal reserve will be okay with this...*","cookies but digitized","temp","you can keep your cookies even <b>safe</b>r!!","<b>infinite</b> storage space*", // wallet
     "his holiness will provide many cookies","temp","temp","temp","temp", // church
 ];
 upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.currentClicked.toLowerCase()} production by 2`,"Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
@@ -82,9 +81,9 @@ upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.curr
 upgrades.img = [
     "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png","macros.png",
     "hardwood-walking-stick.png","rocking-chair.png","reading-glasses.png","dementia-pills.png","shotgun.png",
-    "pig-slop.png",undefined,undefined,"big-baconator.png","ranch-dressing.png",
-    "tv-upgrade1.png","streaming-service.png","surround-sound.png","oled-display.png","8k-display.png",
-    "medkits.png","hard-hats.png","fast-fingers.png",undefined,"robot-workers.png",
+    "pig-slop.png","tractors.png",undefined,"big-baconator.png","ranch-dressing.png",
+    undefined,"streaming-service.png","surround-sound.png","oled-display.png","8k-display.png",
+    "medkits.png","hard-hats.png","fast-fingers.png","weight-training.png","robot-workers.png",
     "200-dollar-bill.png","credit-cards.png",undefined,"safe.png","wizards-wallet.png",
     "the-pope.png",undefined,undefined,undefined,undefined,
 ];
@@ -317,7 +316,7 @@ const versionChangelogs = [
         version: "0.6",
         name: "actual upgrades",
         added: [
-            "The long awaited 5 upgrades for every single building. No upgrades are planned beyond this.",
+            "The long awaited 5 upgrades for every single building.",
             "A list of bought upgrades in the Statistics menu, hovering over them will show info related to the upgrade.",
             "A gray \"dark noise\" has been added to middle text menus so that blacks will more easily stick out.",
             "Temporary notification in the bottom-left corner when the game saves."
@@ -407,12 +406,9 @@ core.initialization = function() {
         <button onclick='saves.convert05Save(true,true); localStorage.removeItem("betaSaveOld")' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>gimme it back</button> 
         </div>`);
     }
-
-    if (won)
-        // document.getElementById("win").style.display = "block";
     
     if (hasCheated)
-        document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
+        document.getElementById("ifCheatedStat").innerText = "You have cheated on this playthrough!";
 
     upgrades.updateBoughtStatistic();
 
@@ -420,6 +416,7 @@ core.initialization = function() {
     if (inDevelopment) {
         // quick buttons
         const devDiv = document.createElement("div");
+        devDiv.setAttribute("style","padding-left: 3px;")
         
         const devWarning = document.createElement("h4");
         devWarning.appendChild(document.createTextNode("localhost detected, options below"));
@@ -835,7 +832,7 @@ upgrades.create = function(id,statistic=false) { // statistic is for creating it
     if (statistic) {
         upgrade.setAttribute("id",`upgrade${id}Stats`);
         upgrade.setAttribute("class","upgrade-stats pointer");
-        upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building},true)`);  // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
+        upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building},true)`); // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
         upgrade.setAttribute("onmousemove",`upgrades.hovered(${id},${building},true)`); // ^
         upgrade.setAttribute("onmouseout","hideTooltip()");
     }
@@ -1613,6 +1610,12 @@ saves.convert05Save = function(isBeta=false, isBetaSaveOld=false) { // ! this is
 // Modding
 // ------------------------------------
 mods.loadURL = function(url) {
+    const httpCheck = url.slice(0,4);
+    if (httpCheck !== "http") { // we want it to be a url, and this works decently well for detecting it, even if it's not foolproof
+        helper.popup.createSimple(350,175,"This mod's URL is not valid. Please make sure to include \"http://\" or \"https://\" in the URL, if it was not present already.",false,"default","Error",false,true);
+        return false;
+    } 
+
     const file = document.createElement("script");
     file.setAttribute("src",url);
     file.setAttribute("type","text/javascript");
