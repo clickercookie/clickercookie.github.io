@@ -58,7 +58,7 @@ upgrades.prices = [
 upgrades.names = [
     "Reinforced Keys","Obsidian Keys","Osmium Keys","10 finger typing","Macros", // keyboard
     "Hardwood Walking Stick","Rocking Chair","Reading Glasses","Dementia Pills","shotgun", // grandpa
-    "Pig Slop","Tractors","ranch3","Big baconator","Ranch dressing", // ranch
+    "Pig Slop","Needle bale","Tractors","Big baconator","Ranch dressing", // ranch
     "98-inch screen","Streaming service","Surround sound","OLED Display","8K resolution", // television
     "Medkits","Hard hats","Fast fingers*","Weight training","Robot workers", // worker
     "200 dollar bills","Credit cards","wallet3","safe","Wizard\'s wallet", // wallet
@@ -67,7 +67,7 @@ upgrades.names = [
 upgrades.quotes = [
     "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","why press when you don't have to?", // keyboard
     "nonna dat softwood junk","newest addition to the porch*","helps with precise chocolate chip placement","what was i doing again?","grandpa's precious*", // grandpa
-    "Wait, what have we been feeding them before now?","eliminating manual labor since 1892","temp","think giant pig mech fueled by potatoes","wrong ranch.", // ranch
+    "Wait, what have we been feeding them before now?","talk about a hay in a needlestack","eliminating manual labor since 1892","think giant pig mech fueled by potatoes","wrong ranch.", // ranch
     "unnecessarily large is an understatement","cookie-flix","it's all around me!","s*** it burned in...","so many pixels!", // television
     "Constant supply of Band-Aids in case of emergency","Keep those skulls safe!","upmost efficient cookie manufacturing*","firmly attach chocolate chips via brute force","robotic precision*", // worker
     "I'm sure the federal reserve will be okay with this...*","cookies but digitized","temp","you can keep your cookies even <b>safe</b>r!!","<b>infinite</b> storage space*", // wallet
@@ -81,7 +81,7 @@ upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.curr
 upgrades.img = [
     "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png","macros.png",
     "hardwood-walking-stick.png","rocking-chair.png","reading-glasses.png","dementia-pills.png","shotgun.png",
-    "pig-slop.png","tractors.png",undefined,"big-baconator.png","ranch-dressing.png",
+    "pig-slop.png","needle-bale.png","tractors.png","big-baconator.png","ranch-dressing.png",
     undefined,"streaming-service.png","surround-sound.png","oled-display.png","8k-display.png",
     "medkits.png","hard-hats.png","fast-fingers.png","weight-training.png","robot-workers.png",
     "200-dollar-bill.png","credit-cards.png",undefined,"safe.png","wizards-wallet.png",
@@ -1318,11 +1318,10 @@ function closeMiddle() {
     document.getElementById("middle").style.background = personalization.currentBackground;
 }
 function versionNumberMousedOver(undo=false) {
-    if (!undo) {
+    if (!undo)
         document.getElementById("versionSwitchInfo").style.display = "block";
-    } else {
+    else
         document.getElementById("versionSwitchInfo").style.display = "none";
-    }
 }
 function versionSwitch() {
     window.location.href = (versionBranch) ? "/" : "/beta/beta.html";

@@ -12,17 +12,10 @@ body {
     touch-action: manipulation;
     color: white;
     font-family: Arial, Helvetica, sans-serif;
-    
 }
 
 /* does the same thing cookie clicker does by overwriting EVERY element's css so that certain defaults made for normal webpages (not games) don't get it the way (like selecting text) */
-html, body, div, span, applet, object, iframe, 
-h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, 
-address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, 
-small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, 
-ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, 
-thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, 
-footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+* {
     /* no selecting */
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -181,13 +174,10 @@ small {
 
 .middle-buttons {
     display: flex;
-    flex: auto;
     height: 100px;
-    background-image: url(img/backgrounds/background-blue.png);
-    border-style: solid;
-    border-color: var(--brown-border);
-    border-width: 0px;
+    border: 0px solid var(--brown-border);
     border-bottom-width: 8px;
+    background-image: url(img/backgrounds/background-blue.png);
 }
 
 .version-number {
@@ -202,17 +192,16 @@ small {
 }
 
 .version-switch-info {
-    border-style: solid;
-    border-width: 3px;
-    position: absolute;
-    width: 85px;
-    height: 35px;
     display: none;
+    position: absolute;
     bottom: 30px;
     left: 48px;
+    width: 85px;
+    height: 35px;
+    border: 3px solid black;
     font-size: 10px;
-    background-color: var(--colored-container);
     color: black;
+    background-color: var(--colored-container);
 }
 
 
@@ -652,6 +641,10 @@ dialog::backdrop {
     margin-bottom: 0px;
     font-size: 50px;
     text-align: center;
+}
+
+.leftSidePush {
+    width: 320px;
 }
 
 .win {
