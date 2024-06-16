@@ -59,19 +59,19 @@ upgrades.names = [
     "Reinforced Keys","Obsidian Keys","Osmium Keys","10 finger typing","Macros", // keyboard
     "Hardwood Walking Stick","Rocking Chair","Reading Glasses","Dementia Pills","shotgun", // grandpa
     "Pig Slop","Needle bale","Tractors","Big baconator","Ranch dressing", // ranch
-    "98-inch screen","Streaming service","Surround sound","OLED Display","8K resolution", // television
+    "Streaming service","98-inch screen","Surround sound","OLED Display","8K resolution", // television
     "Medkits","Hard hats","Fast fingers*","Weight training","Robot workers", // worker
-    "200 dollar bills","Credit cards","wallet3","safe","Wizard\'s wallet", // wallet
-    "the pope","church2","church3","church4","church5", // church
+    "200 dollar bills","Credit cards","Tax refund","safe","Wizard\'s wallet", // wallet
+    "the pope","Cookie study","church3","church4","church5", // church
 ];
 upgrades.quotes = [
     "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","why press when you don't have to?", // keyboard
     "nonna dat softwood junk","newest addition to the porch*","helps with precise chocolate chip placement","what was i doing again?","grandpa's precious*", // grandpa
     "Wait, what have we been feeding them before now?","talk about a hay in a needlestack","eliminating manual labor since 1892","think giant pig mech fueled by potatoes","wrong ranch.", // ranch
-    "unnecessarily large is an understatement","cookie-flix","it's all around me!","s*** it burned in...","so many pixels!", // television
-    "Constant supply of Band-Aids in case of emergency","Keep those skulls safe!","upmost efficient cookie manufacturing*","firmly attach chocolate chips via brute force","robotic precision*", // worker
-    "I'm sure the federal reserve will be okay with this...*","cookies but digitized","temp","you can keep your cookies even <b>safe</b>r!!","<b>infinite</b> storage space*", // wallet
-    "his holiness will provide many cookies","temp","temp","temp","temp", // church
+    "cookie-flix","unnecessarily large is an understatement.","it's all around me!","s*** it burned in...","so many pixels!", // television
+    "Constant supply of Band-Aids in case of emergency","Keep those skulls safe!","upmost efficient cookie manufacturing*","firmly attach chocolate chips via brute force","robotic precision", // worker
+    "I'm sure the federal reserve will be okay with this...*","cookies but digitized","for when you overbake for the IRS*","you can keep your cookies even <b>safe</b>r!!","<b>infinite</b> storage space*", // wallet
+    "his holiness will provide many cookies","learning about our baking lord's best recipes","temp","temp","temp", // church
 ];
 upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.currentClicked.toLowerCase()} production by 2`,"Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
 // image notes
@@ -82,10 +82,10 @@ upgrades.img = [
     "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png","macros.png",
     "hardwood-walking-stick.png","rocking-chair.png","reading-glasses.png","dementia-pills.png","shotgun.png",
     "pig-slop.png","needle-bale.png","tractors.png","big-baconator.png","ranch-dressing.png",
-    undefined,"streaming-service.png","surround-sound.png","oled-display.png","8k-display.png",
+    "streaming-service.png","98-inch-screen.png","surround-sound.png","oled-display.png","8k-display.png",
     "medkits.png","hard-hats.png","fast-fingers.png","weight-training.png","robot-workers.png",
-    "200-dollar-bill.png","credit-cards.png",undefined,"safe.png","wizards-wallet.png",
-    "the-pope.png",undefined,undefined,undefined,undefined,
+    "200-dollar-bill.png","credit-cards.png","tax-refund.png","safe.png","wizards-wallet.png",
+    "the-pope.png","cookie-study.png",undefined,undefined,undefined,
 ];
 
 upgrades.upgradesBought = 0;
@@ -349,7 +349,7 @@ const versionChangelogs = [
         ],
         release: "???"
     }
-]
+];
 
 // view versions of variables (their main versions have long decimal points)
 const variableView = {};
@@ -370,16 +370,14 @@ core.initialization = function() {
     }
 
     if (localStorage.cookies >= 0)
-        helper.popup.createSimple(400,200,"You are using the old saving method. You will have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format.",false,"localStorage.clear()","Warning",false,false);
+        helper.popup.createSimple(400,200,"You are using an extremely outdated saving method. You will have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format. Your old save cannot be restored.",false,"localStorage.clear()","Warning",false,false);
 
     helper.reloadBuildingPrices();
-    // ! this was tampering with the main version's save and putting it into the new format, it would totally break it unless you manually cleared the localStorage
-    // todo: put this back before 0.6 releases to main
-    // if (localStorage.getItem("save") == null) {
-    //     localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
-    //     console.warn("save was null and was automatically reset, if this is your first time playing this is an intended behavior.");
-    // }
-    if (localStorage.getItem("betaSave") == null) {
+    if (localStorage.getItem("save") == null && versionBranch === 0) {
+        localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
+        console.warn("save was null and was automatically reset, if this is your first time playing this is an intended behavior.");
+    }
+    if (localStorage.getItem("betaSave") == null && versionBranch === 1) {
         localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
         console.warn("betaSave was null and was automatically reset, if this is your first time playing this is an intended behavior.");
     }
@@ -394,9 +392,10 @@ core.initialization = function() {
         <button onclick='saves.convert05Save(true)' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>Reformat me!</button>
         </div>`);
         return "Save the save!";
-    } else if (localStorage.save[0] == "[") {
-        // TODO 0.6: MUST ADD save SUPPORT HERE BEFORE RELEASE!!!
     }
+    // else if (localStorage.save[0] == "[") {
+    // TODO 0.6: MUST ADD save SUPPORT HERE BEFORE RELEASE!!!
+    // }
 
     if (localStorage.getItem("betaSaveOld") != null) { // TODO 0.6: remove this check for full release
         helper.popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3> 
@@ -416,7 +415,7 @@ core.initialization = function() {
     if (inDevelopment) {
         // quick buttons
         const devDiv = document.createElement("div");
-        devDiv.setAttribute("style","padding-left: 3px;")
+        devDiv.setAttribute("style","padding-left: 3px;");
         
         const devWarning = document.createElement("h4");
         devWarning.appendChild(document.createTextNode("localhost detected, options below"));
@@ -471,29 +470,19 @@ core.initialization = function() {
 
         document.getElementById("leftSide").insertBefore(devDiv, document.getElementById("leftSidePush"));
 
-        // version change
-        document.getElementById("versionNumber").innerHTML = `Version: ${version} Dev`;
-
         dev.setDevMode(true);
         document.getElementById("offSelectionDev").innerHTML = "Overwritten";
     }
 
     // change version branch specific stuff
-    if (!versionBranch) {
-        // change title
-        document.title = "Clicker Cookie";
-        // change version displayed
-        document.getElementById("versionNumber").innerHTML = `Version: ${version}`;
-        document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the beta branch";
-    } else {
-        // change title
-        document.title = "Clicker Cookie Beta";
-        // change version displayed
-        document.getElementById("versionNumber").innerHTML = `Version: ${version} Beta`;
-        document.getElementById("versionSwitchInfoText").innerHTML = "Clicking this will switch to the main branch";
-        // show the developer mode switch
+    // change title
+    document.title = (versionBranch) ? "Clicker Cookie Beta" : "Clicker Cookie";
+    // change version displayed
+    document.getElementById("versionNumber").innerText = (versionBranch) ? `Version: ${version} Beta` : `Version: ${version}`;
+    document.getElementById("versionSwitchInfoText").innerText = (versionBranch) ? "Clicking this will switch to the beta branch" : "Clicking this will switch to the main branch";
+    if (versionBranch) // show the developer mode switch
         document.getElementById("devForm").style.display = "block";
-    }
+    
     if (inDevelopment)
         document.title = "Clicker Cookie Dev";
 
@@ -535,7 +524,7 @@ core.initialization = function() {
 
 // Events
 let mousePos = {x: undefined, y: undefined};
-window.addEventListener('mousemove', (event) => {
+window.addEventListener("mousemove", (event) => {
     mousePos = {
         x: event.clientX,
         y: event.clientY 
@@ -546,7 +535,7 @@ window.addEventListener('mousemove', (event) => {
 function resizeEventHandler() { // ? is the term "event handler" right?
     // change middle text heights
     const middleTexts = convertCollectionToArray(document.querySelectorAll(".middle-main"));
-    for (element in middleTexts) {
+    for (let element in middleTexts) {
         middleTexts[element].style.height = window.innerHeight-document.getElementById("middleButtons").offsetHeight+"px";
     }
 }
@@ -690,7 +679,7 @@ dev.setCPS = function(x) {
 dev.toggleSaving = function() { // TODO 0.6: this should be a toggle without dev mode
     if (!this.devMode) return "You need developer mode ON to run this command.";
 
-    savingAllowed = !savingAllowed
+    savingAllowed = !savingAllowed;
 
     if (!inDevelopment) return;
     document.getElementById("currentSavingStatus").innerHTML = `saving: ${savingAllowed}`;
@@ -846,9 +835,9 @@ upgrades.create = function(id,statistic=false) { // statistic is for creating it
     }
     
     const icon = this.img[id];
-    if (icon === undefined) {
+    if (icon === undefined || icon === null) { // todo 0.7: add check if a 404 is returned for the upgrade icon, might require async/await shenanigans but whatevs
         upgrade.style.backgroundImage = `url(${getFile("img/unknown-32-32.png")})`;
-        console.warn(`Couldn't find image file for upgrade with ID: ${id}. Tried to assign image file: ${icon}`);
+        console.warn(`An image file for upgrade with ID: ${id} was not defined. Falling back to "unknown" image.`);
     } else {
         upgrade.style.backgroundImage = `url(${getFile(`img/upgrades/${icon}`)})`;
     }
@@ -1221,7 +1210,7 @@ personalization.setCurrentClicked = function(value) {
     try {
         document.getElementById("cookie").src = getFile(`img/${value}.png`);
     } catch {
-        console.warn(`Couldn't find image file for cookie. Tried to assign image file: ${value}.png`)
+        console.warn(`Couldn't find image file for cookie. Tried to assign image file: ${value}.png`);
     }
     personalization.currentClicked = capitalize(value);
     // since some words have a plural "es" at the end of their name and I don't want to make a function to detect that, this
@@ -1337,8 +1326,8 @@ saves.exportData = function() {
     saves.save();
     const dataJSON = !versionBranch ? JSON.stringify(localStorage.save) : JSON.stringify(localStorage.betaSave);
 
-    const textToBLOB = new Blob([dataJSON], { type: 'text/plain' });
-    const sFileName = 'save.ccsave';
+    const textToBLOB = new Blob([dataJSON], { type: "text/plain" });
+    const sFileName = "save.ccsave";
 
     let newLink = document.createElement("a");
     newLink.download = sFileName;
@@ -1431,10 +1420,10 @@ saves.save = function(data=undefined) {
             const variable = this.allToSave[i];
         
             // Get the name of the variable/property
-            const name = typeof variable === 'object' ? variable.name : variable;
+            const name = typeof variable === "object" ? variable.name : variable;
         
             // Get the value of the variable/property
-            const value = typeof variable === 'object' ? variable.value : eval(variable); // YES, i know i shouldn't use this. This will be changed once 0.6 enters beta. Maybe. Probably not.
+            const value = typeof variable === "object" ? variable.value : eval(variable); // YES, i know i shouldn't use this. This will be changed once 0.6 enters beta. Maybe. Probably not.
         
             // Add the variable/property to the object
             save[name] = value;
@@ -1444,7 +1433,7 @@ saves.save = function(data=undefined) {
         localStorage.setItem("save",JSON.stringify(save));
     else
         localStorage.setItem("betaSave",JSON.stringify(save));
-    if (inDevelopment) console.log("save object: ", save)
+    if (inDevelopment) console.log("save object: ", save);
 
     // Update saving notification
     const indicator = document.getElementById("savingIndicator");
@@ -1500,7 +1489,7 @@ saves.convert05Save = function(isBeta=false, isBetaSaveOld=false) { // ! this is
     keyboard.CPSGiven = oldSave[3];
     grandpa.CPSGiven = oldSave[4];
     ranch.CPSGiven = oldSave[5];
-    television.CPSGiven = oldSave[6]
+    television.CPSGiven = oldSave[6];
     worker.CPSGiven = oldSave[7];
     wallet.CPSGiven = oldSave[8];
     church.CPSGiven = oldSave[9];
@@ -1663,7 +1652,7 @@ mods.loadFile = function() { // add check if mod is valid
 mods.list = function() {
     const numberToList = mods.allMods.length;
 
-    for (i = 0; i < numberToList; i++) {
+    for (let i = 0; i < numberToList; i++) {
         const newModItem = document.createElement("div");
         newModItem.setAttribute("class","popup-content mod-in-list");
         newModItem.setAttribute("id",`modList${i}`);
@@ -1763,8 +1752,8 @@ function createChangelogEntry(logs) { // todo 0.7: try to make this look nicer, 
         addedList.setAttribute("class","middle-ul");
         newChangelogEntry.appendChild(addedList);
 
-        for (i = 0; i < logs.added.length; i++) {
-            const addedListItem = document.createElement('li');
+        for (let i = 0; i < logs.added.length; i++) {
+            const addedListItem = document.createElement("li");
             addedListItem.innerText = logs.added[i];
             addedList.appendChild(addedListItem);
         }
@@ -1773,15 +1762,15 @@ function createChangelogEntry(logs) { // todo 0.7: try to make this look nicer, 
         const changedHeader = document.createElement("h3");
         changedHeader.setAttribute("class","middle-text");
         changedHeader.setAttribute("style","font-size: 16px;");
-        changedHeader.innerText = "Changed:"
+        changedHeader.innerText = "Changed:";
         newChangelogEntry.appendChild(changedHeader);
 
         const changedList = document.createElement("ul");
         changedList.setAttribute("class","middle-ul");
         newChangelogEntry.appendChild(changedList);
 
-        for (i = 0; i < logs.changed.length; i++) {
-            const changedListItem = document.createElement('li');
+        for (let i = 0; i < logs.changed.length; i++) {
+            const changedListItem = document.createElement("li");
             changedListItem.innerText = logs.changed[i];
             changedList.appendChild(changedListItem);
         }
@@ -1790,15 +1779,15 @@ function createChangelogEntry(logs) { // todo 0.7: try to make this look nicer, 
         const fixedHeader = document.createElement("h3");
         fixedHeader.setAttribute("class","middle-text");
         fixedHeader.setAttribute("style","font-size: 16px;");
-        fixedHeader.innerText = "Fixed:"
+        fixedHeader.innerText = "Fixed:";
         newChangelogEntry.appendChild(fixedHeader);
 
         const fixedList = document.createElement("ul");
         fixedList.setAttribute("class","middle-ul");
         newChangelogEntry.appendChild(fixedList);
 
-        for (i = 0; i < logs.fixed.length; i++) {
-            const fixedListItem = document.createElement('li');
+        for (let i = 0; i < logs.fixed.length; i++) {
+            const fixedListItem = document.createElement("li");
             fixedListItem.innerText = logs.fixed[i];
             fixedList.appendChild(fixedListItem);
         }
