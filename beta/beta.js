@@ -62,7 +62,7 @@ upgrades.names = [
     "Streaming service","98-inch screen","Surround sound","OLED Display","8K resolution", // television
     "Medkits","Hard hats","Fast fingers*","Weight training","Robot workers", // worker
     "200 dollar bills","Credit cards","Tax refund","safe","Wizard\'s wallet", // wallet
-    "the pope","Cookie study","church3","church4","church5", // church
+    "the pope","Cookie study","Cible","church4","church5", // church
 ];
 upgrades.quotes = [
     "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","why press when you don't have to?", // keyboard
@@ -71,7 +71,7 @@ upgrades.quotes = [
     "cookie-flix","unnecessarily large is an understatement.","it's all around me!","s*** it burned in...","so many pixels!", // television
     "Constant supply of Band-Aids in case of emergency","Keep those skulls safe!","upmost efficient cookie manufacturing*","firmly attach chocolate chips via brute force","robotic precision", // worker
     "I'm sure the federal reserve will be okay with this...*","cookies but digitized","for when you overbake for the IRS*","you can keep your cookies even <b>safe</b>r!!","<b>infinite</b> storage space*", // wallet
-    "his holiness will provide many cookies","learning about our baking lord's best recipes","temp","temp","temp", // church
+    "his holiness will provide many cookies","learning about our baking lord's best recipes","Get it? <b>c</b>ookie-b<b>ible</b>!<br><br>I'll see myself out.","temp","temp", // church
 ];
 upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.currentClicked.toLowerCase()} production by 2`,"Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
 // image notes
@@ -85,7 +85,7 @@ upgrades.img = [
     "streaming-service.png","98-inch-screen.png","surround-sound.png","oled-display.png","8k-display.png",
     "medkits.png","hard-hats.png","fast-fingers.png","weight-training.png","robot-workers.png",
     "200-dollar-bill.png","credit-cards.png","tax-refund.png","safe.png","wizards-wallet.png",
-    "the-pope.png","cookie-study.png",undefined,undefined,undefined,
+    "the-pope.png","cookie-study.png","cible.png",undefined,undefined,
 ];
 
 upgrades.upgradesBought = 0;
@@ -329,11 +329,11 @@ const versionChangelogs = [
             "All changelog entries are now created with Javascript to cut down on the HTML size.",
             "A year has been added to every release date in the changelogs.",
             "Upgrade viewer and building info are now combined into one tooltip and sizes have been adjusted.",
-            "Popups now use dialog boxes, which has an unintended side effect of making their contents look sharper (yay!)",
+            "Popups now use the dialog element, which has an unintended side effect of making their contents look sharper (yay!)",
             "Using the Github button now opens a new tab.",
             "Renamed perMillisecondUniversal() to gameLoop()",
             "All boolean variables that used numbers (1 and 0) now use actual booleans (true and false).",
-            "Most logic based variable assignments now use ternary operators.",
+            "Most logic-based variable assignments now use ternary operators.",
             "All remaining ancient plus sign string concatenation now use template literals.",
             "The ancient unknown-64-64.png file used for when an upgrade's image cannot be found has had a visual upgrade and has been renamed to unknown-32-32.png since all upgrades are now drawn as 32x32 images.",
             "Changing the document title now uses document.title instead of assigning an ID to the title element.",
@@ -487,7 +487,7 @@ core.initialization = function() {
         document.title = "Clicker Cookie Dev";
 
     // Changelog Entries, AKA NOT the messiest place ever.
-    // this array goes from big to small because the function needs to be ran from the latest version to the oldest
+    // this loop goes from big to small because the function needs to be ran from the latest version to the oldest
     for (let entry = versionChangelogs.length - 1; entry >= 0; entry--) {
         createChangelogEntry(versionChangelogs[entry]);
     }
@@ -545,7 +545,11 @@ window.addEventListener("resize",resizeEventHandler);
 // timer things
 setInterval(cookiesPerSecondUpdate, 1000);
 setInterval(gameLoop, 1);
-setInterval(autoSaveIntervalFunc, 60 * 1000);
+setInterval(() => { // auto-saving
+    if (!savingAllowed) return false;
+
+    saves.save();
+}, 60 * 1000); // 60s
 
 function gameLoop() {
     variableView.cookiesView = Math.round(core.cookies * 10) / 10;
@@ -626,12 +630,6 @@ function cookiesPerSecondUpdate() {
     core.cookies = core.cookies + core.cookiesPerSecond;
     core.totalCookies = core.totalCookies + core.cookiesPerSecond;
     helper.reloadCookieCounter();
-}
-
-function autoSaveIntervalFunc() { // Turns out this is required and that the game hasn't been auto-saving ever since Objects Everywhere...
-    if (!savingAllowed) return false;
-
-    saves.save();
 }
 
 // ------------------------------------
@@ -1052,7 +1050,8 @@ helper.reloadCPSCounter = function() {
         document.getElementById("cookiesPerSecondCounterOptions").innerHTML = `${personalization.currentClickedPlural} Per Second: ${variableView.cookiesPerSecondView}`;
     }
 }
-helper.reloadBuildingPrices = function() { // doesn't account for modded buildings, figuring that out is the work of the developer (sorry!)
+// todo 0.7: my gut says we can do this without running this in the game loop
+helper.reloadBuildingPrices = function() { // doesn't account for modded buildings, figuring that out is the mod developer's job :)
     keyboard.reloadPrice();
     grandpa.reloadPrice();
     ranch.reloadPrice();
@@ -1081,7 +1080,7 @@ function capitalize(str) {
     return capitalized;
 }
 // because of the difference in file locations on the mobile version, this is the new way that files should be accessed in other locations
-// so DON'T USE STATIC FILE PATHS when making new HTML!!! Use this!!!
+//* so DON'T USE STATIC FILE PATHS when making new HTML!!! Use this!!!
 function getFile(location) {
     if (mobile || desktop)
         return `../${location}`;
@@ -1321,7 +1320,7 @@ function versionSwitch() {
 // ------------------------------------
 // ! Hey!
 // ! Do not make updates to this code! It will be changing in a later version! Don't waste your time!
-// ! See this issue: https://github.com/clickercookie/clickercookie.github.io/issues/
+// ! See this issue: https://github.com/clickercookie/clickercookie.github.io/issues/18
 saves.exportData = function() {
     saves.save();
     const dataJSON = !versionBranch ? JSON.stringify(localStorage.save) : JSON.stringify(localStorage.betaSave);
