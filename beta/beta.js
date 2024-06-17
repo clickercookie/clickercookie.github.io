@@ -62,7 +62,7 @@ upgrades.names = [
     "Streaming service","98-inch screen","Surround sound","OLED Display","8K resolution", // television
     "Medkits","Hard hats","Fast fingers*","Weight training","Robot workers", // worker
     "200 dollar bills","Credit cards","Tax refund","safe","Wizard\'s wallet", // wallet
-    "the pope","Cookie study","Cible","church4","church5", // church
+    "the pope","Cookie study","church3","church4","Cible", // church
 ];
 upgrades.quotes = [
     "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","why press when you don't have to?", // keyboard
@@ -71,7 +71,7 @@ upgrades.quotes = [
     "cookie-flix","unnecessarily large is an understatement.","it's all around me!","s*** it burned in...","so many pixels!", // television
     "Constant supply of Band-Aids in case of emergency","Keep those skulls safe!","upmost efficient cookie manufacturing*","firmly attach chocolate chips via brute force","robotic precision", // worker
     "I'm sure the federal reserve will be okay with this...*","cookies but digitized","for when you overbake for the IRS*","you can keep your cookies even <b>safe</b>r!!","<b>infinite</b> storage space*", // wallet
-    "his holiness will provide many cookies","learning about our baking lord's best recipes","Get it? <b>c</b>ookie-b<b>ible</b>!<br><br>I'll see myself out.","temp","temp", // church
+    "his holiness will provide many cookies","learning about our baking lord's best recipes","temp","temp","Get it? <b>c</b>ookie-b<b>ible</b>!<br><br>I'll see myself out.", // church
 ];
 upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.currentClicked.toLowerCase()} production by 2`,"Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
 // image notes
@@ -85,7 +85,7 @@ upgrades.img = [
     "streaming-service.png","98-inch-screen.png","surround-sound.png","oled-display.png","8k-display.png",
     "medkits.png","hard-hats.png","fast-fingers.png","weight-training.png","robot-workers.png",
     "200-dollar-bill.png","credit-cards.png","tax-refund.png","safe.png","wizards-wallet.png",
-    "the-pope.png","cookie-study.png","cible.png",undefined,undefined,
+    "the-pope.png","cookie-study.png",undefined,undefined,"cible.png",
 ];
 
 upgrades.upgradesBought = 0;
@@ -1230,7 +1230,7 @@ personalization.setCurrentClicked = function(value) {
         personalization.currentClickedPlural = "Cakes";
         cookie.style.borderRadius = "0px";
         cookie.style.imageRendering = "pixelated";
-        document.getElementById("currentClickedSelect").value = "cake";
+        document.getElementById("currentClickedSelect").value = "cake"; // ? why is this here (3/3 event?)
         break;
     default:
         personalization.currentClickedPlural = `${value}s`;

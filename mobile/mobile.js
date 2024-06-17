@@ -3,19 +3,15 @@ let availableScreenSpace;
 const content = document.querySelector(".content");
 let filtered = "linear-gradient(to right, rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url(" + personalization.currentBackground +")";
 
+window.addEventListener("resize",resizeElements);
+
 function mobileInit() {
-    sizeCheck();
-    content.style.height = availableScreenSpace + "px";
-    // random things that need specified heights can go here
-    document.getElementById("cookieContent").style.height = availableScreenSpace + "px";
-    document.getElementById("storeContent").style.height = availableScreenSpace + "px";
-    document.getElementById("statsContent").style.height = availableScreenSpace + "px";
-    document.getElementById("optionsContent").style.height = availableScreenSpace + "px";
+    resizeElements();
 
     document.getElementById("title").innerHTML = "Clicker Cookie Mobile";
 }
 
-function sizeCheck() { // doesn't run if window size changes
+function resizeElements() {
     const fullScreenSizeStyle = getComputedStyle(document.getElementById("body"));
     const fullScreenWidth = fullScreenSizeStyle.width.replace("px","")
     const fullScreenHeight = fullScreenSizeStyle.minHeight.replace("px","");
@@ -25,9 +21,17 @@ function sizeCheck() { // doesn't run if window size changes
 
     availableScreenSpace = fullScreenHeight - navbarSize;
 
+    content.style.height = availableScreenSpace + "px";
+    // random things that need specified heights can go here
+    document.getElementById("cookieContent").style.height = availableScreenSpace + "px";
+    document.getElementById("storeContent").style.height = availableScreenSpace + "px";
+    document.getElementById("statsContent").style.height = availableScreenSpace + "px";
+    document.getElementById("optionsContent").style.height = availableScreenSpace + "px";
+
     // Get width for building content
     const buildingContentWidth = fullScreenWidth - 71;
     
+    // todo 0.7.1: put this in loop
     document.getElementById("building0Content").style.width = buildingContentWidth + "px";
     document.getElementById("building1Content").style.width = buildingContentWidth + "px";
     document.getElementById("building2Content").style.width = buildingContentWidth + "px";
@@ -35,10 +39,9 @@ function sizeCheck() { // doesn't run if window size changes
     document.getElementById("building4Content").style.width = buildingContentWidth + "px";
     document.getElementById("building5Content").style.width = buildingContentWidth + "px";
     document.getElementById("building6Content").style.width = buildingContentWidth + "px";
-
-    return "bcw: " + buildingContentWidth;
 }
 
+// todo 0.7.1: instead of item being a string, it could be an element maybe
 function navbarItemClicked(item) {
     document.getElementById("cookieContent").style.display = "none";
     document.getElementById("storeContent").style.display = "none";
