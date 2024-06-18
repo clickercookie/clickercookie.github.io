@@ -62,7 +62,7 @@ upgrades.names = [
     "Streaming service","98-inch screen","Surround sound","OLED Display","8K resolution", // television
     "Medkits","Hard hats","Fast fingers*","Weight training","Robot workers", // worker
     "200 dollar bills","Credit cards","Tax refund","safe","Wizard\'s wallet", // wallet
-    "the pope","Cookie study","church3","church4","Cible", // church
+    "the pope","Cookie study","Cookie ritual","church4","Cible", // church
 ];
 upgrades.quotes = [
     "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","why press when you don't have to?", // keyboard
@@ -70,14 +70,13 @@ upgrades.quotes = [
     "Wait, what have we been feeding them before now?","talk about a hay in a needlestack","eliminating manual labor since 1892","think giant pig mech fueled by potatoes","wrong ranch.", // ranch
     "cookie-flix","unnecessarily large is an understatement.","it's all around me!","s*** it burned in...","so many pixels!", // television
     "Constant supply of Band-Aids in case of emergency","Keep those skulls safe!","upmost efficient cookie manufacturing*","firmly attach chocolate chips via brute force","robotic precision", // worker
-    "I'm sure the federal reserve will be okay with this...*","cookies but digitized","for when you overbake for the IRS*","you can keep your cookies even <b>safe</b>r!!","<b>infinite</b> storage space*", // wallet
-    "his holiness will provide many cookies","learning about our baking lord's best recipes","temp","temp","Get it? <b>c</b>ookie-b<b>ible</b>!<br><br>I'll see myself out.", // church
+    "I'm sure the federal reserve will be okay with this...*","cookies but digitized","for when you overbake to the IRS*","you can keep your cookies even <b>safe</b>r!!","<b>infinite</b> storage space*", // wallet
+    "his holiness will provide many cookies","learning about our baking lord's best recipes","summon cookies from the underworld","temp","Get it? <b>c</b>ookie-b<b>ible</b>!<br><br>I'll see myself out.", // church
 ];
 upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.currentClicked.toLowerCase()} production by 2`,"Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
 // image notes
 // grandpa4 (dementia pills) is extremely bland
 // reading glasses look awful
-// 8k display supposed to be a re-creation of bliss, needs to be done better with more colors
 upgrades.img = [
     "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png","macros.png",
     "hardwood-walking-stick.png","rocking-chair.png","reading-glasses.png","dementia-pills.png","shotgun.png",
@@ -85,7 +84,7 @@ upgrades.img = [
     "streaming-service.png","98-inch-screen.png","surround-sound.png","oled-display.png","8k-display.png",
     "medkits.png","hard-hats.png","fast-fingers.png","weight-training.png","robot-workers.png",
     "200-dollar-bill.png","credit-cards.png","tax-refund.png","safe.png","wizards-wallet.png",
-    "the-pope.png","cookie-study.png",undefined,undefined,"cible.png",
+    "the-pope.png","cookie-study.png","cookie-ritual.png",undefined,"cible.png",
 ];
 
 upgrades.upgradesBought = 0;
@@ -492,6 +491,7 @@ core.initialization = function() {
         createChangelogEntry(versionChangelogs[entry]);
     }
 
+    // detect if the user is on mobile, and if they are re-direct to the mobile version
     if (navigator.userAgent.match(/Android/i) // stolen from https://www.tutorialspoint.com/How-to-detect-a-mobile-device-with-JavaScript (doesn't always work)
     || navigator.userAgent.match(/webOS/i)
     || navigator.userAgent.match(/iPhone/i)
@@ -619,9 +619,6 @@ function gameLoop() {
     document.getElementById("workersBought").innerHTML = worker.bought;
     document.getElementById("walletsBought").innerHTML = wallet.bought;
     document.getElementById("churchesBought").innerHTML = church.bought;
-    
-    // upgrades shown calculation
-    upgrades.rowsOfUpgrades = Math.ceil(upgrades.currentlyShown / 5);
 
     core.cookiesPerSecond = keyboard.CPSGiven+grandpa.CPSGiven+ranch.CPSGiven+television.CPSGiven+worker.CPSGiven+wallet.CPSGiven+church.CPSGiven+dev.CPSGiven;
 }
@@ -918,11 +915,11 @@ upgrades.hovered = function(id,building,statistic=false) {
 
     document.getElementById("tooltipName").innerHTML = upgrades.names[id];
     document.getElementById("tooltipPrice").innerHTML = `Price: ${helper.commaify(upgrades.prices[id])}`;
-    document.getElementById("tooltipDesc").innerHTML = `${upgrades.descriptions[building]}`;
+    document.getElementById("tooltipDesc").innerHTML = upgrades.descriptions[building];
     document.getElementById("tooltipQuote").innerHTML = `<i>\"${upgrades.quotes[id]}\"</i>`;
 
     tooltip.style.display = "block";
-    if (statistic === true) {
+    if (statistic === true) { // todo: make the tooltip clamp here
         tooltip.style.left = `${mousePos.x}px`;
         tooltip.style.top = `${mousePos.y - tooltip.offsetHeight}px`;  // it's minus offsetHeight because we don't want the cursor touching the tooltip
         tooltip.style.borderRightWidth = "3px";
@@ -936,7 +933,7 @@ upgrades.hovered = function(id,building,statistic=false) {
 }
 
 upgrades.expandUpgradesHolder = function(retract=false) {
-    upgrades.rowsOfUpgrades = Math.ceil(upgrades.currentlyShown / 5);
+    const rowsOfUpgrades = Math.ceil(upgrades.currentlyShown / 5);
 
     const holder = document.getElementById("upgradesHolder");
     const holderHeight = 67.6; // this is the height of the upgrade holder set in style.css, i would figure out how to get the height directly from the element but the height is constantly changing when it's hovered so it's more trouble then it's worth
@@ -944,7 +941,7 @@ upgrades.expandUpgradesHolder = function(retract=false) {
         holder.style.height = holderHeight+"px";
         return;
     }
-    const size = (upgrades.rowsOfUpgrades === 0) ? holderHeight : holderHeight * upgrades.rowsOfUpgrades;
+    const size = (rowsOfUpgrades === 0) ? holderHeight : holderHeight * rowsOfUpgrades;
     holder.style.height = `${size}px`;
 }
 
