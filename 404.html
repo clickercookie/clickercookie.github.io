@@ -8,43 +8,38 @@
         <title>404: Page not found</title>
         <style>
             body {overflow: hidden; margin: 0px; font-family: Arial, Helvetica, sans-serif;}
+            a {text-decoration: none; color: black;}
             .big-404 {margin-top: 20lvh;}
             .hidden {display: none;}
             .no-select {-webkit-user-drag: none; user-select: none; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;}
             .center {display: flex; align-items: center; justify-content: center; flex-direction: column;}
             .background {position: absolute; background-image: radial-gradient(rgba(0,0,0,0),rgba(0, 0, 0, 0.595)), url(https://clickercookie.github.io/img/backgrounds/background-blue.png); 
                 width: 100vw; height: 100lvh;}
-            .resume-button {height: 40px; width: 125px; background-color: rgb(33, 92, 151); border-color: rgb(30, 82, 133); border-style: solid;
-                border-width: 2px; display: flex; transition: 0.3s;}
-            .resume-button:hover {background-color: rgb(39, 95, 151); border-color: rgb(37, 87, 137);}
-            .button-text {color: black; text-decoration: none; text-align: center;}
             #wdyd {margin-bottom:0px;}
         </style>
+        <script defer>
+            let cookies = 404;
+    
+            document.getElementById("cookie").addEventListener("click", () => {
+                if (cookies < 424) {
+                    cookies++;
+                }
+                if (cookies === 424) {
+                    document.getElementById("wdyd").innerText = "that's enough";
+                }
+                document.getElementById("big404").innerText = cookies;
+            });
+        </script>
     </head>
     <body>
         <div class="background">
             <div class="center no-select">
                 <h1 class="big-404" id="big404">404</h1>
-                <img src="https://clickercookie.github.io/img/cookie.png" class="no-select" alt="the cookie" onclick="cookieClicked()">
+                <img src="https://clickercookie.github.io/img/cookie.png" class="no-select" alt="the cookie" id="cookie">
                 <h1 id="wdyd">what did you do</h1>
                 <p>Page not found.</p>
-                <div class="resume-button center" onclick="location.href = 'https:\\clickercookie.github.io'">
-                    <p class="button-text center">resume clicking</p>
-                </div>
+                <button><a href="https://clickercookie.github.io/">resume clicking</a></button>
             </div>
         </div>
     </body>
-    <script>
-        let cookies = 404;
-
-        function cookieClicked() {
-            if (cookies < 424) {
-                cookies = cookies + 1;
-            }
-            if (cookies == 424) {
-                document.getElementById("wdyd").innerHTML = "thats enough";
-            }
-            document.getElementById("big404").innerHTML = cookies;
-        }
-    </script>
 </html>

@@ -790,10 +790,7 @@ class Building {
     }
 
     setVisibility(bool) {
-        if (bool)
-            this.html.style.display = "block";
-        else
-            this.html.style.display = "none";
+        this.html.style.display = bool ? "block" : "none";
     }
 
     reloadPrice() {
