@@ -8,16 +8,18 @@ window.addEventListener("resize",resizeElements);
 function mobileInit() {
     resizeElements();
 
-    document.getElementById("title").innerHTML = "Clicker Cookie Mobile";
+    document.getElementById("title").innerText = "Clicker Cookie Mobile";
+
+    // set the border-top for the first building to be shown so that it looks correct
+    document.getElementById("buildingsWrapper").children[0].style.borderTopWidth = "2px";
 }
 
 function resizeElements() {
     const fullScreenSizeStyle = getComputedStyle(document.getElementById("body"));
-    const fullScreenWidth = fullScreenSizeStyle.width.replace("px","")
+    const fullScreenWidth = fullScreenSizeStyle.width.replace("px","");
     const fullScreenHeight = fullScreenSizeStyle.minHeight.replace("px","");
     // Get area but not toolbar
-    const navbarStyle = getComputedStyle(document.getElementById("footer"));
-    const navbarSize = navbarStyle.height.replace("px","");
+    const navbarSize = getComputedStyle(document.getElementById("footer")).height.replace("px","");
 
     availableScreenSpace = fullScreenHeight - navbarSize;
 
@@ -27,18 +29,20 @@ function resizeElements() {
     document.getElementById("storeContent").style.height = availableScreenSpace + "px";
     document.getElementById("statsContent").style.height = availableScreenSpace + "px";
     document.getElementById("optionsContent").style.height = availableScreenSpace + "px";
+    document.getElementById("savingIndicator").style.bottom = navbarSize+"px"
 
     // Get width for building content
+    // todo 0.7.1: what is the significance of the number 71 (building icon size??) and how can it be found dynamically
     const buildingContentWidth = fullScreenWidth - 71;
     
     // todo 0.7.1: put this in loop
-    document.getElementById("building0Content").style.width = buildingContentWidth + "px";
-    document.getElementById("building1Content").style.width = buildingContentWidth + "px";
-    document.getElementById("building2Content").style.width = buildingContentWidth + "px";
-    document.getElementById("building3Content").style.width = buildingContentWidth + "px";
-    document.getElementById("building4Content").style.width = buildingContentWidth + "px";
-    document.getElementById("building5Content").style.width = buildingContentWidth + "px";
-    document.getElementById("building6Content").style.width = buildingContentWidth + "px";
+    keyboard.html.children[1].style.width = buildingContentWidth + "px";
+    grandpa.html.children[1].style.width = buildingContentWidth + "px";
+    ranch.html.children[1].style.width = buildingContentWidth + "px";
+    television.html.children[1].style.width = buildingContentWidth + "px";
+    worker.html.children[1].style.width = buildingContentWidth + "px";
+    wallet.html.children[1].style.width = buildingContentWidth + "px";
+    church.html.children[1].style.width = buildingContentWidth + "px";
 }
 
 // todo 0.7.1: instead of item being a string, it could be an element maybe

@@ -410,8 +410,41 @@ core.initialization = function() {
 
     upgrades.updateBoughtStatistic();
 
+    // change version branch specific stuff
+    // change title
+    document.title = (versionBranch) ? "Clicker Cookie Beta" : "Clicker Cookie";
+    // change version displayed
+    document.getElementById("versionNumber").innerText = (versionBranch) ? `Version: ${version} Beta` : `Version: ${version}`;
+    document.getElementById("versionSwitchInfoText").innerText = (versionBranch) ? "Clicking this will switch to the beta branch" : "Clicking this will switch to the main branch";
+    if (versionBranch) // show the developer mode switch
+        document.getElementById("devForm").style.display = "block";
+    
+    if (inDevelopment)
+        document.title = "Clicker Cookie Dev";
+
+    // Changelog Entries, AKA NOT the messiest place ever.
+    // this loop goes from big to small because the function needs to be ran from the latest version to the oldest
+    for (let entry = versionChangelogs.length - 1; entry >= 0; entry--) {
+        createChangelogEntry(versionChangelogs[entry]);
+    }
+
+    // detect if the user is on mobile, and if they are re-direct to the mobile version
+    checkMobile();
+    if (mobile) {
+        personalization.currentBackground = "url(../img/backgrounds/background-blue.png)"; // todo: getFile?
+        if (location.pathname == "/" || location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") {
+            location.href = (versionBranch) ? "../mobile/mobile.html" : "mobile/mobile.html"; // todo: make this prettier
+        }
+    }
+    
+    // this would go after data is loaded, but it requires the mobile variable to be assigned a value
+    if (isModded && !mobile) {
+        document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
+    }
+
     // check for development special stuff
-    if (inDevelopment) {
+    //* needs to be below mobile version check because this statement cannot run if we're on mobile
+    if (inDevelopment && !mobile) {
         // quick buttons
         const devDiv = document.createElement("div");
         devDiv.setAttribute("style","padding-left: 3px;");
@@ -473,46 +506,6 @@ core.initialization = function() {
         document.getElementById("offSelectionDev").innerHTML = "Overwritten";
     }
 
-    // change version branch specific stuff
-    // change title
-    document.title = (versionBranch) ? "Clicker Cookie Beta" : "Clicker Cookie";
-    // change version displayed
-    document.getElementById("versionNumber").innerText = (versionBranch) ? `Version: ${version} Beta` : `Version: ${version}`;
-    document.getElementById("versionSwitchInfoText").innerText = (versionBranch) ? "Clicking this will switch to the beta branch" : "Clicking this will switch to the main branch";
-    if (versionBranch) // show the developer mode switch
-        document.getElementById("devForm").style.display = "block";
-    
-    if (inDevelopment)
-        document.title = "Clicker Cookie Dev";
-
-    // Changelog Entries, AKA NOT the messiest place ever.
-    // this loop goes from big to small because the function needs to be ran from the latest version to the oldest
-    for (let entry = versionChangelogs.length - 1; entry >= 0; entry--) {
-        createChangelogEntry(versionChangelogs[entry]);
-    }
-
-    // detect if the user is on mobile, and if they are re-direct to the mobile version
-    if (navigator.userAgent.match(/Android/i) // stolen from https://www.tutorialspoint.com/How-to-detect-a-mobile-device-with-JavaScript (doesn't always work)
-    || navigator.userAgent.match(/webOS/i)
-    || navigator.userAgent.match(/iPhone/i)
-    || navigator.userAgent.match(/iPad/i)
-    || navigator.userAgent.match(/iPod/i)
-    || navigator.userAgent.match(/BlackBerry/i)
-    || navigator.userAgent.match(/Windows Phone/i)) {
-        mobile = true;
-        personalization.currentBackground = "url(../img/backgrounds/background-blue.png)";
-        if (location.pathname == "/" || location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") {
-            location.href = (versionBranch) ? "../mobile/mobile.html" : "mobile/mobile.html"; // todo: make this prettier
-        }
-    } else {
-        mobile = false;
-    }
-    
-    // this would go after data is loaded, but it requires the mobile variable to be assigned a value
-    if (isModded && !mobile) {
-        document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
-    }
-
     // Holiday Events
     const date = new Date();
     // anniversary
@@ -529,8 +522,8 @@ window.addEventListener("mousemove", (event) => {
         x: event.clientX,
         y: event.clientY 
     };
-    if (inDevelopment == 1)
-        document.getElementById("mousePosDevText").textContent = `Mouse Pos: (${mousePos.x}, ${mousePos.y})`;
+    if (inDevelopment && !mobile)
+        document.getElementById("mousePosDevText").innerText = `Mouse Pos: (${mousePos.x}, ${mousePos.y})`;
 });
 function resizeEventHandler() { // ? is the term "event handler" right?
     // change middle text heights
@@ -708,7 +701,7 @@ class Building {
 
             const icon = document.createElement("img");
             icon.setAttribute("class","building-icon");
-            icon.setAttribute("src",`img/${iconImg}`);
+            icon.setAttribute("src",getFile(`img/${iconImg}`));
             icon.setAttribute("alt",`${this.name} icon`);
             this.html.appendChild(icon);
 
@@ -1061,8 +1054,24 @@ helper.commaify = function(toComma) {
     let commaifyed = toComma.toLocaleString("en-US");
     return commaifyed;
 }
+
 function hideTooltip() {
     document.getElementById("tooltip").style.display = "none";
+}
+function checkMobile() {
+    if (navigator.userAgent.match(/Android/i) // stolen from https://www.tutorialspoint.com/How-to-detect-a-mobile-device-with-JavaScript (doesn't always work)
+    || navigator.userAgent.match(/webOS/i)
+    || navigator.userAgent.match(/iPhone/i)
+    || navigator.userAgent.match(/iPad/i)
+    || navigator.userAgent.match(/iPod/i)
+    || navigator.userAgent.match(/BlackBerry/i)
+    || navigator.userAgent.match(/Windows Phone/i)) {
+        mobile = true;
+        return true;
+    } else {
+        mobile = false;
+        return false;
+    }
 }
 function capitalize(str) {
     if (!str) str = this;
@@ -1076,6 +1085,7 @@ function capitalize(str) {
 // because of the difference in file locations on the mobile version, this is the new way that files should be accessed in other locations
 //* so DON'T USE STATIC FILE PATHS when making new HTML!!! Use this!!!
 function getFile(location) {
+    checkMobile(); // we run checkMobile() here because in Building getFile() is used, but buildings are created before core.init(), where checkMobile() is normally run. As a bandaid, we just run it here, as well.
     if (mobile || desktop)
         return `../${location}`;
     if (!mobile)

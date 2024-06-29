@@ -184,7 +184,6 @@ footer {
     height: 64px;
     float: left;
     margin-left: 3px;
-    background-image: url(../img/unknown-64-64.png);
 }
 .building-name {
     font-size: 22px;
@@ -336,4 +335,17 @@ footer {
     display: none;
     margin-top: 2px;
     margin-bottom: 6px;
+}
+.saving-indicator {
+    position: absolute;
+    /* bottom property is set in JS to be elevated above the footer */
+    left: 5px;
+    margin-bottom: 6px;
+    font-size: 20px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    transition-timing-function: ease-out;
+}
+.visible { /* visible is only really used for the saving indicator so it's right next to it */  
+    opacity: 1 !important;
 }
