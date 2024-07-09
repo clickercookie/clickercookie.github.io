@@ -153,21 +153,19 @@ footer {
 .store-switch {
     display: flex;
 }
-/* Buildings */
-.buildings-content { /* wrapper for everything in the buildings section */
-    display: grid;
-    overflow-y: scroll;
-}
-.store-marker {
+.store-section-marker { /* the buttons that let you switch between buildings and upgrades */
     margin-top: 5px;
     margin-bottom: 9px;
     margin-right:8px;
 }
-.building-grid {
+
+.store-section-content { /* wrapper for everything in the building & upgrade sections */
     display: grid;
     overflow-y: scroll;
 }
-.building {
+/* Buildings & Upgrades */
+/** This is also used for upgrades because the two have VERY similar styles so we just have them share them */
+.building, .upgrade {
     width: 100vw;
     height: 66px;
     background-color: rgb(217, 215, 165);
@@ -175,9 +173,12 @@ footer {
     border-width: 0px 0px 2px 0px;
     border-color: black;
 }
-.building-content { /* wrapper for number bought, name, and price of a building */
-    display: inline-block;
-    margin-left: 4px;
+.building-content, .upgrade-content { /* wrapper for number bought, name, and price of a building. holds name and desc for upgrades */
+    display: flex;
+    justify-content: space-between;
+    height: 64px;
+    text-shadow: 0px 1px 4px black;
+    padding-left: 4px;
 }
 .building-icon {
     width: 64px;
@@ -185,54 +186,43 @@ footer {
     float: left;
     margin-left: 3px;
 }
-.building-name {
+.upgrade-icon { /* this isn't shared with building-icon because upgrades have pixelated image rendering */
+    width: 64px;
+    height: 64px;
+    float: left;
+    margin-left: 3px;
+    image-rendering: pixelated;
+}
+.building-name, .upgrade-name {
     font-size: 22px;
     line-height: 1px;
     margin-bottom: 0px;
 }
+.buildings-bought-wrapper {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    float: right;
+    margin-right: 15px;
+}
 .buildings-bought {
     font-size: 35px;
-    margin: 12px 16px 0px 0px;
     font-family: monospace;
     float: right;
+    margin: 0px;
 }
-.building-price {
+.building-price, .upgrade-price {
     margin-top: 11px;
     margin-left: 0.6px;
 }
 
-.keyboard-icon {
-    background-image: url(../beta/img/keyboard.png); /* CHANGE WHEN BETA PUSH TO MAIN */
-}
-.grandpa-icon {
-    background-image: url(../beta/img/grandpa.png); /* CHANGE WHEN BETA PUSH TO MAIN */
-}
-.ranch-icon {
-    background-image: url(../beta/img/ranch.png); /* CHANGE WHEN BETA PUSH TO MAIN */
-}
-.tv-icon {
-    background-image: url(../img/tv.png);
-}
-.worker-icon {
-    background-image: url(../img/worker.png);
-}
-.wallet-icon {
-    background-image: url(../img/wallet.png);
-}
-.church-icon {
-    background-image: url(../img/church.png);
-}
-/* Upgrades */
-.upgrades-content {
-    display: none;
-}
-.upgrade {
+/* .upgrade {
     width: 64px;
     height: 64px;
     background-image: url(../img/unknown-64-64.png);
     margin: 0px;
     display: none;
-}
+} */
 
 /* Statistics */
 .stats-content {

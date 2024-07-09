@@ -698,7 +698,6 @@ class Building {
         this.html.setAttribute("onmousemove",`${this.name}.hovered()`); // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
         this.html.setAttribute("onmouseover",`${this.name}.hovered()`); // ^
         this.html.setAttribute("onmouseout","hideTooltip()");
-
             const icon = document.createElement("img");
             icon.setAttribute("class","building-icon");
             icon.setAttribute("src",getFile(`img/${iconImg}`));
@@ -707,29 +706,27 @@ class Building {
 
             const buildingContent = document.createElement("div");
             buildingContent.setAttribute("class","building-content");
+                const namePriceDiv = document.createElement("div");
+                    const buildingName = document.createElement("p");
+                    buildingName.setAttribute("class","building-name");
+                    buildingName.innerHTML = `${capitalize(this.name)}`;
+                    namePriceDiv.appendChild(buildingName);
+
+                    const buildingPrice = document.createElement("p");
+                    buildingPrice.setAttribute("class","building-price");
+                    buildingPrice.setAttribute("id",`${this.name}Cost`);
+                    buildingPrice.innerHTML = this.upgradeCost;
+                    namePriceDiv.appendChild(buildingPrice);
+                buildingContent.appendChild(namePriceDiv);
 
                 const buildingsBoughtWrapper = document.createElement("div");
                 buildingsBoughtWrapper.setAttribute("class","buildings-bought-wrapper");
-
                     const buildingsBought = document.createElement("p");
                     buildingsBought.setAttribute("class","buildings-bought");
                     buildingsBought.setAttribute("id",`${this.name}${this.plural}Bought`);
                     buildingsBought.innerHTML = "0";
                     buildingsBoughtWrapper.appendChild(buildingsBought);
-                
                 buildingContent.appendChild(buildingsBoughtWrapper);
-            
-                const buildingName = document.createElement("p");
-                buildingName.setAttribute("class","building-name");
-                buildingName.innerHTML = `${capitalize(this.name)}`;
-                buildingContent.appendChild(buildingName);
-
-                const buildingPrice = document.createElement("p");
-                buildingPrice.setAttribute("class","building-price");
-                buildingPrice.setAttribute("id",`${this.name}Cost`);
-                buildingPrice.innerHTML = this.upgradeCost;
-                buildingContent.appendChild(buildingPrice);
-
             this.html.appendChild(buildingContent);
 
         document.getElementById("buildingsWrapper").appendChild(this.html);
@@ -801,31 +798,78 @@ class Building {
 upgrades.create = function(id,statistic=false) { // statistic is for creating it in the statistics page
     let building = Math.floor(id / 5);
 
+    const icon = this.img[id]; //? does this need to exist?
+    const UPGRADE_ICON_PATH = (icon === undefined || icon === null) ? getFile("img/unknown-32-32.png") : getFile(`img/upgrades/${icon}`);
+    if (icon === undefined || icon === null) { // todo 0.7: add check if a 404 is returned for the upgrade icon, might require async/await shenanigans but whatevs
+        console.warn(`An image file for upgrade with ID: ${id} was not defined. Falling back to "unknown" image.`);
+    }
+
     const upgrade = document.createElement("div");
     upgrade.setAttribute("class","upgrade");
-    if (statistic) {
+    if (statistic && !mobile) {
         upgrade.setAttribute("id",`upgrade${id}Stats`);
         upgrade.setAttribute("class","upgrade-stats pointer");
         upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building},true)`); // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
         upgrade.setAttribute("onmousemove",`upgrades.hovered(${id},${building},true)`); // ^
         upgrade.setAttribute("onmouseout","hideTooltip()");
-    }
-
-    if (!statistic) {
+        upgrade.style.backgroundImage = `url(${UPGRADE_ICON_PATH})`;
+    } else if (!statistic && !mobile) {
         upgrade.setAttribute("id",`upgrade${id}`);
         upgrade.setAttribute("onclick",`upgrades.clicked(${id},${building})`);
         upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building})`);  // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
         upgrade.setAttribute("onmousemove",`upgrades.hovered(${id},${building})`);
         upgrade.setAttribute("onmouseout","hideTooltip()");
+        upgrade.style.backgroundImage = `url(${UPGRADE_ICON_PATH})`;
+    }
+
+    // setup stuff for the mobile version
+    if (statistic && mobile) {
+        upgrade.setAttribute("id",`upgrade${id}Stats`);
+        upgrade.setAttribute("class","upgrade-stats");
+        console.warn("Statistics are not yet implimented.");
+    } else if (!statistic && mobile) {
+        upgrade.setAttribute("id",`upgrade${id}`);
+        upgrade.addEventListener("click", () => {
+            upgrades.clicked(id,building);
+        });
+
+        // todo 0.7: this is why we need a class for upgrades :rolling_eyes:
+        // we can make an UpgradeMobile class that inherits from Upgrade or something like that
+        const upgradeIcon = document.createElement("img");
+        upgradeIcon.setAttribute("class","upgrade-icon");
+        upgradeIcon.src = UPGRADE_ICON_PATH;
+        upgradeIcon.alt = "upgrade"+id;
+        upgradeIcon.width = "64"; //? when i use 64px, it sets these to 0 instead of 64px. why?
+        upgradeIcon.height = "64";
+        upgrade.appendChild(upgradeIcon);
+
+        const upgradeContent = document.createElement("div");
+        upgradeContent.setAttribute("class","upgrade-content");
+            const namePriceDiv = document.createElement("div");
+                const upgradeName = document.createElement("p");
+                upgradeName.setAttribute("class","upgrade-name");
+                upgradeName.innerText = upgrades.names[id];
+                namePriceDiv.appendChild(upgradeName);
+
+                const upgradePrice = document.createElement("p");
+                upgradePrice.setAttribute("class","upgrade-price");
+                upgradePrice.innerText = helper.commaify(upgrades.prices[id]);
+                namePriceDiv.appendChild(upgradePrice);
+            upgradeContent.appendChild(namePriceDiv);
+
+            const infoWrapper = document.createElement("div");
+            infoWrapper.setAttribute("class","buildings-bought-wrapper");
+                const upgradeInfo = document.createElement("div");
+                upgradeInfo.setAttribute("class","upgrade-info");
+                    const upgradeInfoText = document.createElement("p");
+                    upgradeInfoText.setAttribute("class","upgrade-info-text");
+                    upgradeInfoText.innerText = "Info";
+                    upgradeInfo.appendChild(upgradeInfoText);
+                infoWrapper.appendChild(upgradeInfo);
+            upgradeContent.appendChild(infoWrapper);
+        upgrade.appendChild(upgradeContent);
     }
     
-    const icon = this.img[id];
-    if (icon === undefined || icon === null) { // todo 0.7: add check if a 404 is returned for the upgrade icon, might require async/await shenanigans but whatevs
-        upgrade.style.backgroundImage = `url(${getFile("img/unknown-32-32.png")})`;
-        console.warn(`An image file for upgrade with ID: ${id} was not defined. Falling back to "unknown" image.`);
-    } else {
-        upgrade.style.backgroundImage = `url(${getFile(`img/upgrades/${icon}`)})`;
-    }
     if (!statistic)
         document.getElementById("upgradesHolder").appendChild(upgrade);
     else
@@ -1087,7 +1131,7 @@ function capitalize(str) {
 function getFile(location) {
     checkMobile(); // we run checkMobile() here because in Building getFile() is used, but buildings are created before core.init(), where checkMobile() is normally run. As a bandaid, we just run it here, as well.
     if (mobile || desktop)
-        return `../${location}`;
+        return `../beta/${location}`; //TODO 0.6: MUST REMOVE THE BETA BEFORE RELEASE!!!
     if (!mobile)
         return location;
 }
@@ -1330,10 +1374,9 @@ saves.exportData = function() {
     const dataJSON = !versionBranch ? JSON.stringify(localStorage.save) : JSON.stringify(localStorage.betaSave);
 
     const textToBLOB = new Blob([dataJSON], { type: "text/plain" });
-    const sFileName = "save.ccsave";
 
     let newLink = document.createElement("a");
-    newLink.download = sFileName;
+    newLink.download = "save.ccsave";
 
     if (window.webkitURL != null) {
         newLink.href = window.webkitURL.createObjectURL(textToBLOB);

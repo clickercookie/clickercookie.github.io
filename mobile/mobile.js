@@ -35,6 +35,7 @@ function resizeElements() {
     // todo 0.7.1: what is the significance of the number 71 (building icon size??) and how can it be found dynamically
     const buildingContentWidth = fullScreenWidth - 71;
     
+    // set building-content's for all the buildings to buildingContentWidth
     // todo 0.7.1: put this in loop
     keyboard.html.children[1].style.width = buildingContentWidth + "px";
     grandpa.html.children[1].style.width = buildingContentWidth + "px";
@@ -88,8 +89,8 @@ function navbarItemClicked(item) {
 }
 
 function switchShopCategory(select) {
-    const buildingContent = document.querySelector(".buildings-content");
-    const upgradesContent = document.querySelector(".upgrades-content");
+    const buildingContent = document.getElementById("buildingsContent");
+    const upgradesContent = document.getElementById("upgradesContent");
     buildingContent.style.display = "none";
     upgradesContent.style.display = "none";
 
@@ -97,14 +98,14 @@ function switchShopCategory(select) {
     document.getElementById("upgradesMarker").style.color = "gray";
 
     switch (select) {
-        case "buildings":
-            buildingContent.style.display = "grid";
-            document.getElementById("buildingsMarker").style.color = "white";
-            break;
-        case "upgrades":
-            upgradesContent.style.display = "block";
-            document.getElementById("upgradesMarker").style.color = "white";
-            break;
+    case "buildings":
+        buildingContent.style.display = "grid";
+        document.getElementById("buildingsMarker").style.color = "white";
+        break;
+    case "upgrades":
+        upgradesContent.style.display = "grid";
+        document.getElementById("upgradesMarker").style.color = "white";
+        break;
     }
 }
 

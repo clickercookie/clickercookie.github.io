@@ -27,25 +27,17 @@
                 </div>
                 <h1 class="content-heading">Store</h1>
                 <div class="store-switch">
-                    <h3 class="store-marker" id="buildingsMarker" style="margin-right:8px;" onclick="switchShopCategory('buildings')">Buildings</h3>
-                    <h3 class="store-marker" id="upgradesMarker" style="color:gray;" onclick="switchShopCategory('upgrades')">Upgrades</h3>
+                    <h3 class="store-section-marker" id="buildingsMarker" style="margin-right:8px;" onclick="switchShopCategory('buildings')">Buildings</h3>
+                    <h3 class="store-section-marker" id="upgradesMarker" style="color:gray;" onclick="switchShopCategory('upgrades')">Upgrades</h3>
                 </div>
-                <div class="buildings-content">
-                    <div class="building-grid">
-                        <div class="buildings-wrapper" id="buildingsWrapper">
-                
-                        </div>
+                <div class="store-section-content" id="buildingsContent">
+                    <div class="buildings-wrapper" id="buildingsWrapper">
+            
                     </div>
                 </div>
-                <div class="upgrades-content">
+                <div class="store-section-content" id="upgradesContent">
                     <div id="upgradesHolder" class="upgrades-holder">
-                        <div id="upgrade0" class="upgrade" onclick="upgrades.upgrade0.clicked()"></div>
-                        <div id="upgrade1" class="upgrade" onclick="upgrades.upgrade1.clicked()"></div>
-                        <div id="upgrade2" class="upgrade" onclick="upgrades.upgrade2.clicked()"></div>
-                        <div id="upgrade3" class="upgrade" onclick="upgrades.upgrade3.clicked()"></div>
-                        <div id="upgrade4" class="upgrade" onclick="upgrades.upgrade4.clicked()"></div>
-                        <div id="upgrade5" class="upgrade" onclick="upgrades.upgrade5.clicked()"></div>
-                        <div id="upgrade6" class="upgrade" onclick="upgrades.upgrade6.clicked()"></div>
+                        
                     </div>
                 </div>
                 <div class="no-display"> <!-- junk to prevent error (invisible) -->
