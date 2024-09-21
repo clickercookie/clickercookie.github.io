@@ -419,13 +419,14 @@ small {
 /* Popup CSS */
 .popup {
     display: none;
-    padding: 0px; /* dialog boxes have padding by default */
-    width: 128px;
-    height: 96px;
-    background-color: white;
-    text-align: center;
     flex-direction: column;
     align-items: center;
+    width: 128px;
+    height: 96px;
+    padding: 0px; /* dialog boxes have padding by default */
+    text-align: center;
+    background-color: white;
+    text-shadow: none;
 }
 dialog::backdrop {
     background-color: black;
@@ -436,7 +437,7 @@ dialog::backdrop {
     justify-content: center;
     align-items: center;
 }
-.popup-content {
+.popup-text {
     margin-left: 8px;
     margin-right: 8px;
     color: black;

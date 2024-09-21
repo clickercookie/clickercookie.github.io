@@ -45,7 +45,8 @@
                     <div id="versionSwitchInfoText"></div>
                     <div id="devForm"></div>
                     <div class="changelog-wrapper"></div> <!--? maybe at some point changelogs can be added to mobile? -->
-                    <div class="tooltip absolute no-display" id="tooltip"> <!-- when 0.7.? updates tooltips, this won't have to be there because checks will be built-in. since tooltips suck right now i'm not gonna bother with implimenting them. -->
+                    <div id="devModeSelect"></div>
+                    <div class="tooltip absolute no-display" id="tooltip"> <!-- when 0.7.? updates tooltips, this won't have to be there because mobile version checks will be built-in. since tooltips suck right now i'm not gonna bother with implimenting them. -->
                         <div class="tooltip-content">
                             <p class="tooltip-name black" id="tooltipName">Name</p>
                             <p class="tooltip-price absolute black" id="tooltipPrice">Price</p>
@@ -147,9 +148,6 @@
                 <button onclick="helper.popup.simpleClicked()" id="simplePopupButton" class="popup-button">OK</button>
             </div>
         </div>
-        <div class="popup" id="advancedPopup">
-
-        </div>
         <footer class="flex" id="footer">
             <div class="footer-item" onclick="navbarItemClicked('Cookie')" id="cookieFooterItem" style="scale:1.1;">
                 <img src="img/cookie-footer.png" alt="cookie footer" width="27px" height="27px" class="footer-img">
@@ -168,5 +166,6 @@
                 <p class="footer-text" id="optionsFooterText">Options</p>
             </div>
         </footer>
+        <dialog class="popup" id="advancedPopup"></dialog>
     </body>
 </html>

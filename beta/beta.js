@@ -386,7 +386,7 @@ core.initialization = function() {
     // if saves are old
     if (localStorage.betaSave[0] == "[") {
         helper.popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3>
-        <p class='popup-content'>so we changed the saving system again, good news, press the button below and it will be transfered to the new format.</p>
+        <p class='popup-text'>so we changed the saving system again, good news, press the button below and it will be transfered to the new format.</p>
         <div style='display:flex;flex-direction:row;height:40px;'>
         <button onclick='saves.convert05Save(true)' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>Reformat me!</button>
         </div>`);
@@ -398,7 +398,7 @@ core.initialization = function() {
 
     if (localStorage.getItem("betaSaveOld") != null) { // TODO 0.6: remove this check for full release
         helper.popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3> 
-        <p class='popup-content'>so i kinda lied when i said your save is invalid, i can get it back if you want</p> 
+        <p class='popup-text'>so i kinda lied when i said your save is invalid, i can get it back if you want</p> 
         <div style='display:flex;flex-direction:row;height:40px;'> 
         <button onclick='localStorage.removeItem("betaSaveOld")'>i don't want it</button>
         <button onclick='saves.convert05Save(true,true); localStorage.removeItem("betaSaveOld")' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>gimme it back</button> 
@@ -839,8 +839,8 @@ upgrades.create = function(id,statistic=false) { // statistic is for creating it
         upgradeIcon.setAttribute("class","upgrade-icon");
         upgradeIcon.src = UPGRADE_ICON_PATH;
         upgradeIcon.alt = "upgrade"+id;
-        upgradeIcon.width = "64"; //? when i use 64px, it sets these to 0 instead of 64px. why?
-        upgradeIcon.height = "64";
+        upgradeIcon.width = 64;
+        upgradeIcon.height = 64;
         upgrade.appendChild(upgradeIcon);
 
         const upgradeContent = document.createElement("div");
@@ -859,8 +859,13 @@ upgrades.create = function(id,statistic=false) { // statistic is for creating it
 
             const infoWrapper = document.createElement("div");
             infoWrapper.setAttribute("class","buildings-bought-wrapper");
+            infoWrapper.style.marginRight = "10px";
                 const upgradeInfo = document.createElement("div");
                 upgradeInfo.setAttribute("class","upgrade-info");
+                upgradeInfo.addEventListener("click", (e) => {
+                    e.stopPropagation(); // prevents buying the upgrade when clicking on the info button
+                    upgradeInfoButtonClicked(id); // this is defined in mobile.js
+                });
                     const upgradeInfoText = document.createElement("p");
                     upgradeInfoText.setAttribute("class","upgrade-info-text");
                     upgradeInfoText.innerText = "Info";
@@ -967,6 +972,7 @@ upgrades.hovered = function(id,building,statistic=false) {
 }
 
 upgrades.expandUpgradesHolder = function(retract=false) {
+    if (mobile) return; // this function is not applicable on mobile
     const rowsOfUpgrades = Math.ceil(upgrades.currentlyShown / 5);
 
     const holder = document.getElementById("upgradesHolder");
@@ -1700,17 +1706,17 @@ mods.list = function() {
 
     for (let i = 0; i < numberToList; i++) {
         const newModItem = document.createElement("div");
-        newModItem.setAttribute("class","popup-content mod-in-list");
+        newModItem.setAttribute("class","popup-text mod-in-list");
         newModItem.setAttribute("id",`modList${i}`);
 
         const newModID = document.createElement("small");
         newModID.appendChild(document.createTextNode(`#${i}`));
-        newModID.setAttribute("class","mod-id popup-content");
+        newModID.setAttribute("class","mod-id popup-text");
         newModItem.appendChild(newModID);
 
         const newModName = document.createElement("p");
         newModName.appendChild(document.createTextNode(JSON.stringify(mods.allMods[i])));
-        newModName.setAttribute("class","popup-content");
+        newModName.setAttribute("class","popup-text");
         newModItem.appendChild(newModName);
 
         document.getElementById("modsList").appendChild(newModItem);
@@ -1724,7 +1730,7 @@ mods.addModData = function(id,data) { // yes i basically stole and renamed this 
     // READ THE DOCS!
     if (mods.allMods.includes(id)) {
         helper.popup.createAdvanced(400,200,"<h3 class='simple-popup-title' style='display:block;'>Error</h3> \
-        <p class='popup-content'>This mod's ID is already present!</p> \
+        <p class='popup-text'>This mod's ID is already present!</p> \
         <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>");
         mods.numberLoaded--;
         mods.reloadModsLoadedText();
@@ -1739,25 +1745,25 @@ mods.addModData = function(id,data) { // yes i basically stole and renamed this 
 
 mods.addClicked = function() {
     helper.popup.createAdvanced(500,350,`<h3 class='simple-popup-title' style='display:block;'>Add Mod</h3>
-    <h5 class='popup-content' style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5>
-    <h5 class='popup-content' style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5>
-    <h5 class='popup-content' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a onclick='saves.save()' href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue' target="_blank">read the documentation</a>.</h5>
+    <h5 class='popup-text' style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5>
+    <h5 class='popup-text' style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5>
+    <h5 class='popup-text' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a onclick='saves.save()' href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue' target="_blank">read the documentation</a>.</h5>
     <form onsubmit='return false;' id='addModURLForm' style='margin-top:22px;'>
-        <label for='addModURL' class='popup-content'>From URL: </label>
+        <label for='addModURL' class='popup-text'>From URL: </label>
         <input id='addModURL' onchange='mods.loadURL(this.value)'>
     </form>
     <form>
-        <label for='addModFile' class='popup-content' style='margin-right:0px;'>From File: </label>
-        <input type='file' id='addModFile' accept='.js' onchange='mods.loadFile(this.value)' class='popup-content' style='width:86px;'>
+        <label for='addModFile' class='popup-text' style='margin-right:0px;'>From File: </label>
+        <input type='file' id='addModFile' accept='.js' onchange='mods.loadFile(this.value)' class='popup-text' style='width:86px;'>
     </form>
-    <p class='popup-content no-display' id='importedMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>Imported!</p>
+    <p class='popup-text no-display' id='importedMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>Imported!</p>
     <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
 }
 mods.listClicked = function() {
     helper.popup.createAdvanced(300,350,`<h3 class='simple-popup-title' style='display:block;'>All Mods</h3>
-    <p class='popup-content no-display' id='noModsMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>You have no mods installed!</p>
+    <p class='popup-text no-display' id='noModsMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>You have no mods installed!</p>
     <div id='modsList' class='mods-list'></div>
-    <small class='popup-content no-display' id='removeModsMessage' style='margin-top:3px;'>To remove mods, refresh your page. (make sure to save!)</small>
+    <small class='popup-text no-display' id='removeModsMessage' style='margin-top:3px;'>To remove mods, refresh your page. (make sure to save!)</small>
     <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
 
     mods.list();

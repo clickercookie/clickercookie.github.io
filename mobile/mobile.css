@@ -12,54 +12,6 @@ body {
     -webkit-touch-callout: none;
 }
 
-/* Popups */
-.popup {
-    border-style: solid;
-    border-width: 3px;
-    border-color: black;
-    width: 128px;
-    height: 96px;
-    background-color: white;
-    text-align: center;
-    display: none;
-    position: absolute;
-    top:  50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    flex-direction: column;
-    align-items: center;
-}
-.popup-content {
-    margin-left: 8px;
-    margin-right: 8px;
-    color: black;
-    text-shadow: 0px 0px 0px black;
-}
-.simple-popup-button-div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.popup-button {
-    width: min-content;
-}
-.simple-popup-title {
-    display: none;
-    color: black;
-    text-shadow: 0px 0px 0px white;
-    margin-top: 7px;
-    margin-bottom: 7px;
-    font-size: 17px;
-}
-.filter {
-    background-color: black;
-    opacity: 50%;
-    width: 100vw;
-    height: 100vh;
-    display: none;
-}
-/* End Popups */
-
 /* Helper Classes */
 .flex {
     display: flex;
@@ -176,7 +128,7 @@ footer {
 .building-content, .upgrade-content { /* wrapper for number bought, name, and price of a building. holds name and desc for upgrades */
     display: flex;
     justify-content: space-between;
-    height: 64px;
+    height: 100%;
     text-shadow: 0px 1px 4px black;
     padding-left: 4px;
 }
@@ -223,6 +175,19 @@ footer {
     margin: 0px;
     display: none;
 } */
+
+.upgrade-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border: 3px solid white;
+
+    p {
+        margin: 0;
+    }
+}
 
 /* Statistics */
 .stats-content {
@@ -313,6 +278,38 @@ footer {
 }
 
 /* End Main Content */
+
+/* Popup CSS */
+.popup {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 128px;
+    height: 96px;
+    padding: 0px; /* dialog boxes have padding by default */
+    text-align: center;
+    background-color: white;
+    text-shadow: none;
+}
+dialog::backdrop {
+    background-color: black;
+    opacity: 50%;
+}
+.popup-text {
+    margin-left: 8px;
+    margin-right: 8px;
+    color: black;
+}
+.popup-button {
+    width: min-content;
+}
+.simple-popup-title {
+    display: none;
+    color: black;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    font-size: 17px;
+}
 
 /* Misc */
 .version-number {

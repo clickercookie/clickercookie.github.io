@@ -60,31 +60,31 @@ function navbarItemClicked(item) {
     document.getElementById("statsFooterItem").style.scale = "100%";
     document.getElementById("optionsFooterItem").style.scale = "100%";
     switch (item) {
-        case "Cookie":
-            document.getElementById("cookieContent").style.display = "flex";
-            content.style.background = personalization.currentBackground;
-            document.getElementById("cookieFooterItem").style.scale = "110%";
-            break;
-        case "Store":
-            document.getElementById("storeContent").style.display = "flex";
-            content.style.background = filtered;
-            document.getElementById("storeFooterItem").style.scale = "110%";
-            switchShopCategory("buildings");
-            break;
-        case "Stats":
-            document.getElementById("statsContent").style.display = "flex";
-            content.style.background = filtered;
-            document.getElementById("statsFooterItem").style.scale = "110%";
-            statsUp = 1;
-            break;
-        case "Options":
-            document.getElementById("optionsContent").style.display = "flex";
-            content.style.background = filtered;
-            document.getElementById("optionsFooterItem").style.scale = "110%";
-            break;
-        default:
-            alert("navbarItemClicked() has an invalid parameter!");
-            break;
+    case "Cookie":
+        document.getElementById("cookieContent").style.display = "flex";
+        content.style.background = personalization.currentBackground;
+        document.getElementById("cookieFooterItem").style.scale = "110%";
+        break;
+    case "Store":
+        document.getElementById("storeContent").style.display = "flex";
+        content.style.background = filtered;
+        document.getElementById("storeFooterItem").style.scale = "110%";
+        switchShopCategory("buildings");
+        break;
+    case "Stats":
+        document.getElementById("statsContent").style.display = "flex";
+        content.style.background = filtered;
+        document.getElementById("statsFooterItem").style.scale = "110%";
+        statsUp = 1;
+        break;
+    case "Options":
+        document.getElementById("optionsContent").style.display = "flex";
+        content.style.background = filtered;
+        document.getElementById("optionsFooterItem").style.scale = "110%";
+        break;
+    default:
+        alert("navbarItemClicked() has an invalid parameter!");
+        break;
     }
 }
 
@@ -107,6 +107,16 @@ function switchShopCategory(select) {
         document.getElementById("upgradesMarker").style.color = "white";
         break;
     }
+}
+
+function upgradeInfoButtonClicked(id) {
+    helper.popup.createAdvanced(250,375,`<h1 class="simple-popup-title">Upgrade Info</h1>
+        <img src="${getFile(`img/upgrades/${upgrades.img[id]}`)}" alt="upgrade image" width="128px" height="128px" style="image-rendering:pixelated;">
+        <h2 class="popup-text">${upgrades.names[id]}</h2>
+        <p class="popup-text"><i>"${upgrades.quotes[id]}"</i></p>
+        <p class="popup-text">${upgrades.descriptions[Math.floor(id/5)]}</p>
+        <button onclick="helper.popup.destroyAdvanced()">OK</button>
+    `); // TODO 0.6: CHANGE BETA TO MAIN
 }
 
 mobileInit();
