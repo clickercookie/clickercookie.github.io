@@ -385,10 +385,11 @@ core.initialization = function() {
 
     // if saves are old
     if (localStorage.getItem("save") && localStorage.getItem("save")[0] === "[" && versionBranch === 0) {
+        localStorage.setItem("old05Save", localStorage.getItem("save"));
         helper.popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3>
         <p class='popup-text'>so we changed the saving system again, good news, press the button below and it will be transfered to the new format.</p>
         <div style='display:flex;flex-direction:row;height:40px;'>
-        <button onclick='saves.convert05Save(false)' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>Reformat me!</button>
+        <button onclick='saves.convert05Save()' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>Reformat me!</button>
         </div>`);
         return "Save the save!";
     }
