@@ -1,0 +1,23 @@
+{
+  "name": "clickercookie.github.io",
+  "version": "0.7.0",
+  "description": "A totally original game about clicking a cookie",
+  "main": "main.ts",
+  "scripts": {
+    "build": "npx tsc --build",
+    "clean": "npx tsc --build --clean"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clickercookie/clickercookie.github.io.git"
+  },
+  "author": "FifthTundraG",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/clickercookie/clickercookie.github.io/issues"
+  },
+  "homepage": "https://github.com/clickercookie/clickercookie.github.io#readme",
+  "dependencies": {
+    "typescript": "^5.6.2"
+  }
+}
