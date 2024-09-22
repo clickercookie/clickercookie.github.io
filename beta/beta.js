@@ -386,7 +386,7 @@ core.initialization = function() {
     // if saves are old
     if (localStorage.betaSave[0] == "[") {
         helper.popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3>
-        <p class='popup-content'>so we changed the saving system again, good news, press the button below and it will be transfered to the new format.</p>
+        <p class='popup-text'>so we changed the saving system again, good news, press the button below and it will be transfered to the new format.</p>
         <div style='display:flex;flex-direction:row;height:40px;'>
         <button onclick='saves.convert05Save(true)' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>Reformat me!</button>
         </div>`);
@@ -398,7 +398,7 @@ core.initialization = function() {
 
     if (localStorage.getItem("betaSaveOld") != null) { // TODO 0.6: remove this check for full release
         helper.popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3> 
-        <p class='popup-content'>so i kinda lied when i said your save is invalid, i can get it back if you want</p> 
+        <p class='popup-text'>so i kinda lied when i said your save is invalid, i can get it back if you want</p> 
         <div style='display:flex;flex-direction:row;height:40px;'> 
         <button onclick='localStorage.removeItem("betaSaveOld")'>i don't want it</button>
         <button onclick='saves.convert05Save(true,true); localStorage.removeItem("betaSaveOld")' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>gimme it back</button> 
@@ -410,8 +410,41 @@ core.initialization = function() {
 
     upgrades.updateBoughtStatistic();
 
+    // change version branch specific stuff
+    // change title
+    document.title = (versionBranch) ? "Clicker Cookie Beta" : "Clicker Cookie";
+    // change version displayed
+    document.getElementById("versionNumber").innerText = (versionBranch) ? `Version: ${version} Beta` : `Version: ${version}`;
+    document.getElementById("versionSwitchInfoText").innerText = (versionBranch) ? "Clicking this will switch to the beta branch" : "Clicking this will switch to the main branch";
+    if (versionBranch) // show the developer mode switch
+        document.getElementById("devForm").style.display = "block";
+    
+    if (inDevelopment)
+        document.title = "Clicker Cookie Dev";
+
+    // Changelog Entries, AKA NOT the messiest place ever.
+    // this loop goes from big to small because the function needs to be ran from the latest version to the oldest
+    for (let entry = versionChangelogs.length - 1; entry >= 0; entry--) {
+        createChangelogEntry(versionChangelogs[entry]);
+    }
+
+    // detect if the user is on mobile, and if they are re-direct to the mobile version
+    checkMobile();
+    if (mobile) {
+        personalization.currentBackground = "url(../img/backgrounds/background-blue.png)"; // todo: getFile?
+        if (location.pathname == "/" || location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") {
+            location.href = (versionBranch) ? "../mobile/mobile.html" : "mobile/mobile.html"; // todo: make this prettier
+        }
+    }
+    
+    // this would go after data is loaded, but it requires the mobile variable to be assigned a value
+    if (isModded && !mobile) {
+        document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
+    }
+
     // check for development special stuff
-    if (inDevelopment) {
+    //* needs to be below mobile version check because this statement cannot run if we're on mobile
+    if (inDevelopment && !mobile) {
         // quick buttons
         const devDiv = document.createElement("div");
         devDiv.setAttribute("style","padding-left: 3px;");
@@ -473,46 +506,6 @@ core.initialization = function() {
         document.getElementById("offSelectionDev").innerHTML = "Overwritten";
     }
 
-    // change version branch specific stuff
-    // change title
-    document.title = (versionBranch) ? "Clicker Cookie Beta" : "Clicker Cookie";
-    // change version displayed
-    document.getElementById("versionNumber").innerText = (versionBranch) ? `Version: ${version} Beta` : `Version: ${version}`;
-    document.getElementById("versionSwitchInfoText").innerText = (versionBranch) ? "Clicking this will switch to the beta branch" : "Clicking this will switch to the main branch";
-    if (versionBranch) // show the developer mode switch
-        document.getElementById("devForm").style.display = "block";
-    
-    if (inDevelopment)
-        document.title = "Clicker Cookie Dev";
-
-    // Changelog Entries, AKA NOT the messiest place ever.
-    // this loop goes from big to small because the function needs to be ran from the latest version to the oldest
-    for (let entry = versionChangelogs.length - 1; entry >= 0; entry--) {
-        createChangelogEntry(versionChangelogs[entry]);
-    }
-
-    // detect if the user is on mobile, and if they are re-direct to the mobile version
-    if (navigator.userAgent.match(/Android/i) // stolen from https://www.tutorialspoint.com/How-to-detect-a-mobile-device-with-JavaScript (doesn't always work)
-    || navigator.userAgent.match(/webOS/i)
-    || navigator.userAgent.match(/iPhone/i)
-    || navigator.userAgent.match(/iPad/i)
-    || navigator.userAgent.match(/iPod/i)
-    || navigator.userAgent.match(/BlackBerry/i)
-    || navigator.userAgent.match(/Windows Phone/i)) {
-        mobile = true;
-        personalization.currentBackground = "url(../img/backgrounds/background-blue.png)";
-        if (location.pathname == "/" || location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") {
-            location.href = (versionBranch) ? "../mobile/mobile.html" : "mobile/mobile.html"; // todo: make this prettier
-        }
-    } else {
-        mobile = false;
-    }
-    
-    // this would go after data is loaded, but it requires the mobile variable to be assigned a value
-    if (isModded && !mobile) {
-        document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
-    }
-
     // Holiday Events
     const date = new Date();
     // anniversary
@@ -529,8 +522,8 @@ window.addEventListener("mousemove", (event) => {
         x: event.clientX,
         y: event.clientY 
     };
-    if (inDevelopment == 1)
-        document.getElementById("mousePosDevText").textContent = `Mouse Pos: (${mousePos.x}, ${mousePos.y})`;
+    if (inDevelopment && !mobile)
+        document.getElementById("mousePosDevText").innerText = `Mouse Pos: (${mousePos.x}, ${mousePos.y})`;
 });
 function resizeEventHandler() { // ? is the term "event handler" right?
     // change middle text heights
@@ -705,38 +698,35 @@ class Building {
         this.html.setAttribute("onmousemove",`${this.name}.hovered()`); // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
         this.html.setAttribute("onmouseover",`${this.name}.hovered()`); // ^
         this.html.setAttribute("onmouseout","hideTooltip()");
-
             const icon = document.createElement("img");
             icon.setAttribute("class","building-icon");
-            icon.setAttribute("src",`img/${iconImg}`);
+            icon.setAttribute("src",getFile(`img/${iconImg}`));
             icon.setAttribute("alt",`${this.name} icon`);
             this.html.appendChild(icon);
 
             const buildingContent = document.createElement("div");
             buildingContent.setAttribute("class","building-content");
+                const namePriceDiv = document.createElement("div");
+                    const buildingName = document.createElement("p");
+                    buildingName.setAttribute("class","building-name");
+                    buildingName.innerHTML = `${capitalize(this.name)}`;
+                    namePriceDiv.appendChild(buildingName);
+
+                    const buildingPrice = document.createElement("p");
+                    buildingPrice.setAttribute("class","building-price");
+                    buildingPrice.setAttribute("id",`${this.name}Cost`);
+                    buildingPrice.innerHTML = this.upgradeCost;
+                    namePriceDiv.appendChild(buildingPrice);
+                buildingContent.appendChild(namePriceDiv);
 
                 const buildingsBoughtWrapper = document.createElement("div");
                 buildingsBoughtWrapper.setAttribute("class","buildings-bought-wrapper");
-
                     const buildingsBought = document.createElement("p");
                     buildingsBought.setAttribute("class","buildings-bought");
                     buildingsBought.setAttribute("id",`${this.name}${this.plural}Bought`);
                     buildingsBought.innerHTML = "0";
                     buildingsBoughtWrapper.appendChild(buildingsBought);
-                
                 buildingContent.appendChild(buildingsBoughtWrapper);
-            
-                const buildingName = document.createElement("p");
-                buildingName.setAttribute("class","building-name");
-                buildingName.innerHTML = `${capitalize(this.name)}`;
-                buildingContent.appendChild(buildingName);
-
-                const buildingPrice = document.createElement("p");
-                buildingPrice.setAttribute("class","building-price");
-                buildingPrice.setAttribute("id",`${this.name}Cost`);
-                buildingPrice.innerHTML = this.upgradeCost;
-                buildingContent.appendChild(buildingPrice);
-
             this.html.appendChild(buildingContent);
 
         document.getElementById("buildingsWrapper").appendChild(this.html);
@@ -808,31 +798,88 @@ class Building {
 upgrades.create = function(id,statistic=false) { // statistic is for creating it in the statistics page
     let building = Math.floor(id / 5);
 
+    const icon = this.img[id]; //? does this need to exist?
+    // todo 0.7: below should be a JSDoc
+    //* is already getFile()-ed so don't use getFile() with this variable
+    const UPGRADE_ICON_PATH = (icon === undefined || icon === null) ? getFile("img/unknown-32-32.png") : getFile(`img/upgrades/${icon}`);
+    if (icon === undefined || icon === null) { // todo 0.7: add check if a 404 is returned for the upgrade icon, might require async/await shenanigans but whatevs
+        console.warn(`An image file for upgrade with ID: ${id} was not defined. Falling back to "unknown" image.`);
+    }
+
     const upgrade = document.createElement("div");
     upgrade.setAttribute("class","upgrade");
-    if (statistic) {
+    if (statistic && !mobile) {
         upgrade.setAttribute("id",`upgrade${id}Stats`);
         upgrade.setAttribute("class","upgrade-stats pointer");
         upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building},true)`); // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
         upgrade.setAttribute("onmousemove",`upgrades.hovered(${id},${building},true)`); // ^
         upgrade.setAttribute("onmouseout","hideTooltip()");
-    }
-
-    if (!statistic) {
+        upgrade.style.backgroundImage = `url(${UPGRADE_ICON_PATH})`;
+    } else if (!statistic && !mobile) {
         upgrade.setAttribute("id",`upgrade${id}`);
         upgrade.setAttribute("onclick",`upgrades.clicked(${id},${building})`);
         upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building})`);  // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
         upgrade.setAttribute("onmousemove",`upgrades.hovered(${id},${building})`);
         upgrade.setAttribute("onmouseout","hideTooltip()");
+        upgrade.style.backgroundImage = `url(${UPGRADE_ICON_PATH})`;
+    }
+
+    // setup stuff for the mobile version
+    if (statistic && mobile) {
+        upgrade.setAttribute("id",`upgrade${id}Stats`);
+        upgrade.setAttribute("class","upgrade-stats");
+        upgrade.style.backgroundImage = `url(${UPGRADE_ICON_PATH})`;
+        console.warn("Statistics are not yet implimented.");
+    } else if (!statistic && mobile) {
+        upgrade.setAttribute("id",`upgrade${id}`);
+        upgrade.addEventListener("click", () => {
+            upgrades.clicked(id,building);
+        });
+
+        // todo 0.7: this is why we need a class for upgrades :rolling_eyes:
+        // we can make an UpgradeMobile class that inherits from Upgrade or something like that
+        const upgradeIcon = document.createElement("img");
+        upgradeIcon.setAttribute("class","upgrade-icon");
+        upgradeIcon.src = UPGRADE_ICON_PATH;
+        upgradeIcon.alt = "upgrade"+id;
+        upgradeIcon.width = 64;
+        upgradeIcon.height = 64;
+        upgrade.appendChild(upgradeIcon);
+
+        const upgradeContent = document.createElement("div");
+        upgradeContent.setAttribute("class","upgrade-content");
+            const namePriceDiv = document.createElement("div");
+                const upgradeName = document.createElement("p");
+                upgradeName.setAttribute("class","upgrade-name");
+                upgradeName.innerText = upgrades.names[id];
+                namePriceDiv.appendChild(upgradeName);
+
+                const upgradePrice = document.createElement("p");
+                upgradePrice.setAttribute("class","upgrade-price");
+                upgradePrice.innerText = helper.commaify(upgrades.prices[id]);
+                namePriceDiv.appendChild(upgradePrice);
+            upgradeContent.appendChild(namePriceDiv);
+
+            const infoWrapper = document.createElement("div");
+            infoWrapper.setAttribute("class","buildings-bought-wrapper");
+            infoWrapper.style.marginRight = "10px";
+                const upgradeInfo = document.createElement("div");
+                upgradeInfo.setAttribute("class","upgrade-info");
+                upgradeInfo.addEventListener("click", (e) => {
+                    e.stopPropagation(); // prevents buying the upgrade when clicking on the info button
+                    upgradeInfoButtonClicked(id); // this is defined in mobile.js
+                });
+                    const upgradeInfoText = document.createElement("p");
+                    upgradeInfoText.setAttribute("class","upgrade-info-text");
+                    upgradeInfoText.innerText = "Info";
+                    upgradeInfo.appendChild(upgradeInfoText);
+                infoWrapper.appendChild(upgradeInfo);
+            upgradeContent.appendChild(infoWrapper);
+        upgrade.appendChild(upgradeContent);
+
+        //* i would set the borders for the upgrades (setBordersForUpgrades) here but mobile.js hasn't loaded yet when this is being run so we just do it whenever they switch to the upgrades category which works fine
     }
     
-    const icon = this.img[id];
-    if (icon === undefined || icon === null) { // todo 0.7: add check if a 404 is returned for the upgrade icon, might require async/await shenanigans but whatevs
-        upgrade.style.backgroundImage = `url(${getFile("img/unknown-32-32.png")})`;
-        console.warn(`An image file for upgrade with ID: ${id} was not defined. Falling back to "unknown" image.`);
-    } else {
-        upgrade.style.backgroundImage = `url(${getFile(`img/upgrades/${icon}`)})`;
-    }
     if (!statistic)
         document.getElementById("upgradesHolder").appendChild(upgrade);
     else
@@ -886,7 +933,9 @@ upgrades.clicked = function(id,building) {
         break;
     }
     upgrades.expandUpgradesHolder(); // sometimes the upgrade holder has one too many rows because of weird onmouseover & onmousemove behavior, this prevents that
-    
+    if (mobile)
+        setBordersForUpgrades(); // this is defined in mobile.js
+
     document.getElementById("upgradesBoughtCounter").innerHTML = `Bought: ${upgrades.upgradesBought}/${upgrades.unlocked.length}`;
 
     this.updateBoughtStatistic();
@@ -930,6 +979,7 @@ upgrades.hovered = function(id,building,statistic=false) {
 }
 
 upgrades.expandUpgradesHolder = function(retract=false) {
+    if (mobile) return; // this function is not applicable on mobile
     const rowsOfUpgrades = Math.ceil(upgrades.currentlyShown / 5);
 
     const holder = document.getElementById("upgradesHolder");
@@ -1061,8 +1111,24 @@ helper.commaify = function(toComma) {
     let commaifyed = toComma.toLocaleString("en-US");
     return commaifyed;
 }
+
 function hideTooltip() {
     document.getElementById("tooltip").style.display = "none";
+}
+function checkMobile() {
+    if (navigator.userAgent.match(/Android/i) // stolen from https://www.tutorialspoint.com/How-to-detect-a-mobile-device-with-JavaScript (doesn't always work)
+    || navigator.userAgent.match(/webOS/i)
+    || navigator.userAgent.match(/iPhone/i)
+    || navigator.userAgent.match(/iPad/i)
+    || navigator.userAgent.match(/iPod/i)
+    || navigator.userAgent.match(/BlackBerry/i)
+    || navigator.userAgent.match(/Windows Phone/i)) {
+        mobile = true;
+        return true;
+    } else {
+        mobile = false;
+        return false;
+    }
 }
 function capitalize(str) {
     if (!str) str = this;
@@ -1076,8 +1142,9 @@ function capitalize(str) {
 // because of the difference in file locations on the mobile version, this is the new way that files should be accessed in other locations
 //* so DON'T USE STATIC FILE PATHS when making new HTML!!! Use this!!!
 function getFile(location) {
+    checkMobile(); // we run checkMobile() here because in Building getFile() is used, but buildings are created before core.init(), where checkMobile() is normally run. As a bandaid, we just run it here, as well.
     if (mobile || desktop)
-        return `../${location}`;
+        return `../beta/${location}`; //TODO 0.6: MUST REMOVE THE BETA BEFORE RELEASE!!!
     if (!mobile)
         return location;
 }
@@ -1320,10 +1387,9 @@ saves.exportData = function() {
     const dataJSON = !versionBranch ? JSON.stringify(localStorage.save) : JSON.stringify(localStorage.betaSave);
 
     const textToBLOB = new Blob([dataJSON], { type: "text/plain" });
-    const sFileName = "save.ccsave";
 
     let newLink = document.createElement("a");
-    newLink.download = sFileName;
+    newLink.download = "save.ccsave";
 
     if (window.webkitURL != null) {
         newLink.href = window.webkitURL.createObjectURL(textToBLOB);
@@ -1647,17 +1713,17 @@ mods.list = function() {
 
     for (let i = 0; i < numberToList; i++) {
         const newModItem = document.createElement("div");
-        newModItem.setAttribute("class","popup-content mod-in-list");
+        newModItem.setAttribute("class","popup-text mod-in-list");
         newModItem.setAttribute("id",`modList${i}`);
 
         const newModID = document.createElement("small");
         newModID.appendChild(document.createTextNode(`#${i}`));
-        newModID.setAttribute("class","mod-id popup-content");
+        newModID.setAttribute("class","mod-id popup-text");
         newModItem.appendChild(newModID);
 
         const newModName = document.createElement("p");
         newModName.appendChild(document.createTextNode(JSON.stringify(mods.allMods[i])));
-        newModName.setAttribute("class","popup-content");
+        newModName.setAttribute("class","popup-text");
         newModItem.appendChild(newModName);
 
         document.getElementById("modsList").appendChild(newModItem);
@@ -1671,7 +1737,7 @@ mods.addModData = function(id,data) { // yes i basically stole and renamed this 
     // READ THE DOCS!
     if (mods.allMods.includes(id)) {
         helper.popup.createAdvanced(400,200,"<h3 class='simple-popup-title' style='display:block;'>Error</h3> \
-        <p class='popup-content'>This mod's ID is already present!</p> \
+        <p class='popup-text'>This mod's ID is already present!</p> \
         <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>");
         mods.numberLoaded--;
         mods.reloadModsLoadedText();
@@ -1686,25 +1752,25 @@ mods.addModData = function(id,data) { // yes i basically stole and renamed this 
 
 mods.addClicked = function() {
     helper.popup.createAdvanced(500,350,`<h3 class='simple-popup-title' style='display:block;'>Add Mod</h3>
-    <h5 class='popup-content' style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5>
-    <h5 class='popup-content' style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5>
-    <h5 class='popup-content' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a onclick='saves.save()' href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue' target="_blank">read the documentation</a>.</h5>
+    <h5 class='popup-text' style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5>
+    <h5 class='popup-text' style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5>
+    <h5 class='popup-text' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a onclick='saves.save()' href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue' target="_blank">read the documentation</a>.</h5>
     <form onsubmit='return false;' id='addModURLForm' style='margin-top:22px;'>
-        <label for='addModURL' class='popup-content'>From URL: </label>
+        <label for='addModURL' class='popup-text'>From URL: </label>
         <input id='addModURL' onchange='mods.loadURL(this.value)'>
     </form>
     <form>
-        <label for='addModFile' class='popup-content' style='margin-right:0px;'>From File: </label>
-        <input type='file' id='addModFile' accept='.js' onchange='mods.loadFile(this.value)' class='popup-content' style='width:86px;'>
+        <label for='addModFile' class='popup-text' style='margin-right:0px;'>From File: </label>
+        <input type='file' id='addModFile' accept='.js' onchange='mods.loadFile(this.value)' class='popup-text' style='width:86px;'>
     </form>
-    <p class='popup-content no-display' id='importedMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>Imported!</p>
+    <p class='popup-text no-display' id='importedMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>Imported!</p>
     <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
 }
 mods.listClicked = function() {
     helper.popup.createAdvanced(300,350,`<h3 class='simple-popup-title' style='display:block;'>All Mods</h3>
-    <p class='popup-content no-display' id='noModsMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>You have no mods installed!</p>
+    <p class='popup-text no-display' id='noModsMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>You have no mods installed!</p>
     <div id='modsList' class='mods-list'></div>
-    <small class='popup-content no-display' id='removeModsMessage' style='margin-top:3px;'>To remove mods, refresh your page. (make sure to save!)</small>
+    <small class='popup-text no-display' id='removeModsMessage' style='margin-top:3px;'>To remove mods, refresh your page. (make sure to save!)</small>
     <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
 
     mods.list();

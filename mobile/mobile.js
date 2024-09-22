@@ -8,16 +8,18 @@ window.addEventListener("resize",resizeElements);
 function mobileInit() {
     resizeElements();
 
-    document.getElementById("title").innerHTML = "Clicker Cookie Mobile";
+    document.getElementById("title").innerText = "Clicker Cookie Mobile";
+
+    // set the border-top for the first building to be shown so that it looks correct
+    document.getElementById("buildingsWrapper").children[0].style.borderTopWidth = "2px";
 }
 
 function resizeElements() {
     const fullScreenSizeStyle = getComputedStyle(document.getElementById("body"));
-    const fullScreenWidth = fullScreenSizeStyle.width.replace("px","")
+    const fullScreenWidth = fullScreenSizeStyle.width.replace("px","");
     const fullScreenHeight = fullScreenSizeStyle.minHeight.replace("px","");
     // Get area but not toolbar
-    const navbarStyle = getComputedStyle(document.getElementById("footer"));
-    const navbarSize = navbarStyle.height.replace("px","");
+    const navbarSize = getComputedStyle(document.getElementById("footer")).height.replace("px","");
 
     availableScreenSpace = fullScreenHeight - navbarSize;
 
@@ -27,18 +29,21 @@ function resizeElements() {
     document.getElementById("storeContent").style.height = availableScreenSpace + "px";
     document.getElementById("statsContent").style.height = availableScreenSpace + "px";
     document.getElementById("optionsContent").style.height = availableScreenSpace + "px";
+    document.getElementById("savingIndicator").style.bottom = navbarSize+"px"
 
     // Get width for building content
+    // todo 0.7.1: what is the significance of the number 71 (building icon size??) and how can it be found dynamically
     const buildingContentWidth = fullScreenWidth - 71;
     
+    // set building-content's for all the buildings to buildingContentWidth
     // todo 0.7.1: put this in loop
-    document.getElementById("building0Content").style.width = buildingContentWidth + "px";
-    document.getElementById("building1Content").style.width = buildingContentWidth + "px";
-    document.getElementById("building2Content").style.width = buildingContentWidth + "px";
-    document.getElementById("building3Content").style.width = buildingContentWidth + "px";
-    document.getElementById("building4Content").style.width = buildingContentWidth + "px";
-    document.getElementById("building5Content").style.width = buildingContentWidth + "px";
-    document.getElementById("building6Content").style.width = buildingContentWidth + "px";
+    keyboard.html.children[1].style.width = buildingContentWidth + "px";
+    grandpa.html.children[1].style.width = buildingContentWidth + "px";
+    ranch.html.children[1].style.width = buildingContentWidth + "px";
+    television.html.children[1].style.width = buildingContentWidth + "px";
+    worker.html.children[1].style.width = buildingContentWidth + "px";
+    wallet.html.children[1].style.width = buildingContentWidth + "px";
+    church.html.children[1].style.width = buildingContentWidth + "px";
 }
 
 // todo 0.7.1: instead of item being a string, it could be an element maybe
@@ -55,37 +60,37 @@ function navbarItemClicked(item) {
     document.getElementById("statsFooterItem").style.scale = "100%";
     document.getElementById("optionsFooterItem").style.scale = "100%";
     switch (item) {
-        case "Cookie":
-            document.getElementById("cookieContent").style.display = "flex";
-            content.style.background = personalization.currentBackground;
-            document.getElementById("cookieFooterItem").style.scale = "110%";
-            break;
-        case "Store":
-            document.getElementById("storeContent").style.display = "flex";
-            content.style.background = filtered;
-            document.getElementById("storeFooterItem").style.scale = "110%";
-            switchShopCategory("buildings");
-            break;
-        case "Stats":
-            document.getElementById("statsContent").style.display = "flex";
-            content.style.background = filtered;
-            document.getElementById("statsFooterItem").style.scale = "110%";
-            statsUp = 1;
-            break;
-        case "Options":
-            document.getElementById("optionsContent").style.display = "flex";
-            content.style.background = filtered;
-            document.getElementById("optionsFooterItem").style.scale = "110%";
-            break;
-        default:
-            alert("navbarItemClicked() has an invalid parameter!");
-            break;
+    case "Cookie":
+        document.getElementById("cookieContent").style.display = "flex";
+        content.style.background = personalization.currentBackground;
+        document.getElementById("cookieFooterItem").style.scale = "110%";
+        break;
+    case "Store":
+        document.getElementById("storeContent").style.display = "flex";
+        content.style.background = filtered;
+        document.getElementById("storeFooterItem").style.scale = "110%";
+        switchShopCategory("buildings");
+        break;
+    case "Stats":
+        document.getElementById("statsContent").style.display = "flex";
+        content.style.background = filtered;
+        document.getElementById("statsFooterItem").style.scale = "110%";
+        statsUp = 1;
+        break;
+    case "Options":
+        document.getElementById("optionsContent").style.display = "flex";
+        content.style.background = filtered;
+        document.getElementById("optionsFooterItem").style.scale = "110%";
+        break;
+    default:
+        alert("navbarItemClicked() has an invalid parameter!");
+        break;
     }
 }
 
 function switchShopCategory(select) {
-    const buildingContent = document.querySelector(".buildings-content");
-    const upgradesContent = document.querySelector(".upgrades-content");
+    const buildingContent = document.getElementById("buildingsContent");
+    const upgradesContent = document.getElementById("upgradesContent");
     buildingContent.style.display = "none";
     upgradesContent.style.display = "none";
 
@@ -93,14 +98,35 @@ function switchShopCategory(select) {
     document.getElementById("upgradesMarker").style.color = "gray";
 
     switch (select) {
-        case "buildings":
-            buildingContent.style.display = "grid";
-            document.getElementById("buildingsMarker").style.color = "white";
-            break;
-        case "upgrades":
-            upgradesContent.style.display = "block";
-            document.getElementById("upgradesMarker").style.color = "white";
-            break;
+    case "buildings":
+        buildingContent.style.display = "grid";
+        document.getElementById("buildingsMarker").style.color = "white";
+        break;
+    case "upgrades":
+        upgradesContent.style.display = "grid";
+        document.getElementById("upgradesMarker").style.color = "white";
+        setBordersForUpgrades();
+        break;
+    }
+}
+
+function upgradeInfoButtonClicked(id) {
+    helper.popup.createAdvanced(250,375,`<h1 class="simple-popup-title">Upgrade Info</h1>
+        <img src="${getFile(`img/upgrades/${upgrades.img[id]}`)}" alt="upgrade image" width="128px" height="128px" style="image-rendering:pixelated;">
+        <h2 class="popup-text">${upgrades.names[id]}</h2>
+        <p class="popup-text"><i>"${upgrades.quotes[id]}"</i></p>
+        <p class="popup-text">${upgrades.descriptions[Math.floor(id/5)]}</p>
+        <button onclick="helper.popup.destroyAdvanced()">OK</button>
+    `); // TODO 0.6: CHANGE BETA TO MAIN
+}
+
+// set the first child of the upgrades holder to have a border-top and every other upgrade to not
+function setBordersForUpgrades() {
+    for (let i in convertCollectionToArray(document.getElementById("upgradesHolder").children)) {
+        if (i == 0)
+            document.getElementById("upgradesHolder").children[i].style.borderTopWidth = "2px";
+        else
+            document.getElementById("upgradesHolder").children[i].style.borderTopWidth = "0px";
     }
 }
 

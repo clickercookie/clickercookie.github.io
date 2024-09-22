@@ -12,54 +12,6 @@ body {
     -webkit-touch-callout: none;
 }
 
-/* Popups */
-.popup {
-    border-style: solid;
-    border-width: 3px;
-    border-color: black;
-    width: 128px;
-    height: 96px;
-    background-color: white;
-    text-align: center;
-    display: none;
-    position: absolute;
-    top:  50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    flex-direction: column;
-    align-items: center;
-}
-.popup-content {
-    margin-left: 8px;
-    margin-right: 8px;
-    color: black;
-    text-shadow: 0px 0px 0px black;
-}
-.simple-popup-button-div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.popup-button {
-    width: min-content;
-}
-.simple-popup-title {
-    display: none;
-    color: black;
-    text-shadow: 0px 0px 0px white;
-    margin-top: 7px;
-    margin-bottom: 7px;
-    font-size: 17px;
-}
-.filter {
-    background-color: black;
-    opacity: 50%;
-    width: 100vw;
-    height: 100vh;
-    display: none;
-}
-/* End Popups */
-
 /* Helper Classes */
 .flex {
     display: flex;
@@ -153,21 +105,19 @@ footer {
 .store-switch {
     display: flex;
 }
-/* Buildings */
-.buildings-content { /* wrapper for everything in the buildings section */
-    display: grid;
-    overflow-y: scroll;
-}
-.store-marker {
+.store-section-marker { /* the buttons that let you switch between buildings and upgrades */
     margin-top: 5px;
     margin-bottom: 9px;
     margin-right:8px;
 }
-.building-grid {
+
+.store-section-content { /* wrapper for everything in the building & upgrade sections */
     display: grid;
     overflow-y: scroll;
 }
-.building {
+/* Buildings & Upgrades */
+/** This is also used for upgrades because the two have VERY similar styles so we just have them share them */
+.building, .upgrade {
     width: 100vw;
     height: 66px;
     background-color: rgb(217, 215, 165);
@@ -175,69 +125,74 @@ footer {
     border-width: 0px 0px 2px 0px;
     border-color: black;
 }
-.building-content { /* wrapper for number bought, name, and price of a building */
-    display: inline-block;
-    margin-left: 4px;
+.building-content, .upgrade-content { /* wrapper for number bought, name, and price of a building. holds name and desc for upgrades */
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+    text-shadow: 0px 1px 4px black;
+    padding-left: 4px;
 }
 .building-icon {
     width: 64px;
     height: 64px;
     float: left;
     margin-left: 3px;
-    background-image: url(../img/unknown-64-64.png);
 }
-.building-name {
+.upgrade-icon { /* this isn't shared with building-icon because upgrades have pixelated image rendering */
+    width: 64px;
+    height: 64px;
+    float: left;
+    margin-left: 3px;
+    image-rendering: pixelated;
+}
+.building-name, .upgrade-name {
     font-size: 22px;
     line-height: 1px;
     margin-bottom: 0px;
 }
+.buildings-bought-wrapper {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    float: right;
+    margin-right: 15px;
+}
 .buildings-bought {
     font-size: 35px;
-    margin: 12px 16px 0px 0px;
     font-family: monospace;
     float: right;
+    margin: 0px;
 }
-.building-price {
+.building-price, .upgrade-price {
     margin-top: 11px;
     margin-left: 0.6px;
 }
 
-.keyboard-icon {
-    background-image: url(../beta/img/keyboard.png); /* CHANGE WHEN BETA PUSH TO MAIN */
-}
-.grandpa-icon {
-    background-image: url(../beta/img/grandpa.png); /* CHANGE WHEN BETA PUSH TO MAIN */
-}
-.ranch-icon {
-    background-image: url(../beta/img/ranch.png); /* CHANGE WHEN BETA PUSH TO MAIN */
-}
-.tv-icon {
-    background-image: url(../img/tv.png);
-}
-.worker-icon {
-    background-image: url(../img/worker.png);
-}
-.wallet-icon {
-    background-image: url(../img/wallet.png);
-}
-.church-icon {
-    background-image: url(../img/church.png);
-}
-/* Upgrades */
-.upgrades-content {
-    display: none;
-}
-.upgrade {
+/* .upgrade {
     width: 64px;
     height: 64px;
     background-image: url(../img/unknown-64-64.png);
     margin: 0px;
     display: none;
+} */
+
+.upgrade-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border: 3px solid white;
+
+    p {
+        margin: 0;
+    }
 }
 
 /* Statistics */
 .stats-content {
     flex-direction: column;
+    overflow-y: scroll;
 }
 .stats-heading-wrapper {
     display: flex;
@@ -251,6 +206,22 @@ footer {
     font-family: Arial, Helvetica, sans-serif;
     letter-spacing: 1px;
     font-weight: bold;
+}
+.stats-subtitle {
+    font-size: 22px;
+}
+
+.upgrades-bought-stats-holder {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 64px);
+    justify-content: space-between;
+}
+.upgrade-stats {
+    width: 56px;
+    height: 56px;
+    margin: 3px;
+    background-size: 56px;
+    image-rendering: pixelated;
 }
 /* Options */
 .options-content {
@@ -325,6 +296,38 @@ footer {
 
 /* End Main Content */
 
+/* Popup CSS */
+.popup {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 128px;
+    height: 96px;
+    padding: 0px; /* dialog boxes have padding by default */
+    text-align: center;
+    background-color: white;
+    text-shadow: none;
+}
+dialog::backdrop {
+    background-color: black;
+    opacity: 50%;
+}
+.popup-text {
+    margin-left: 8px;
+    margin-right: 8px;
+    color: black;
+}
+.popup-button {
+    width: min-content;
+}
+.simple-popup-title {
+    display: none;
+    color: black;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    font-size: 17px;
+}
+
 /* Misc */
 .version-number {
     bottom: 38px;
@@ -336,4 +339,17 @@ footer {
     display: none;
     margin-top: 2px;
     margin-bottom: 6px;
+}
+.saving-indicator {
+    position: absolute;
+    /* bottom property is set in JS to be elevated above the footer */
+    left: 5px;
+    margin-bottom: 6px;
+    font-size: 20px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    transition-timing-function: ease-out;
+}
+.visible { /* visible is only really used for the saving indicator so it's right next to it */  
+    opacity: 1 !important;
 }
