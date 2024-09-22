@@ -394,6 +394,7 @@ core.initialization = function() {
         return "Save the save!";
     }
     if (localStorage.getItem("betaSave") && localStorage.getItem("betaSave")[0] === "[" && versionBranch === 1) {
+        localStorage.setItem("old05BetaSave", localStorage.getItem("betaSave"));
         helper.popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3>
         <p class='popup-text'>so we changed the saving system again, good news, press the button below and it will be transfered to the new format.</p>
         <div style='display:flex;flex-direction:row;height:40px;'>
