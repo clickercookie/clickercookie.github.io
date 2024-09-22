@@ -105,6 +105,7 @@ function switchShopCategory(select) {
     case "upgrades":
         upgradesContent.style.display = "grid";
         document.getElementById("upgradesMarker").style.color = "white";
+        setBordersForUpgrades();
         break;
     }
 }
@@ -117,6 +118,16 @@ function upgradeInfoButtonClicked(id) {
         <p class="popup-text">${upgrades.descriptions[Math.floor(id/5)]}</p>
         <button onclick="helper.popup.destroyAdvanced()">OK</button>
     `); // TODO 0.6: CHANGE BETA TO MAIN
+}
+
+// set the first child of the upgrades holder to have a border-top and every other upgrade to not
+function setBordersForUpgrades() {
+    for (let i in convertCollectionToArray(document.getElementById("upgradesHolder").children)) {
+        if (i == 0)
+            document.getElementById("upgradesHolder").children[i].style.borderTopWidth = "2px";
+        else
+            document.getElementById("upgradesHolder").children[i].style.borderTopWidth = "0px";
+    }
 }
 
 mobileInit();

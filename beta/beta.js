@@ -873,6 +873,8 @@ upgrades.create = function(id,statistic=false) { // statistic is for creating it
                 infoWrapper.appendChild(upgradeInfo);
             upgradeContent.appendChild(infoWrapper);
         upgrade.appendChild(upgradeContent);
+
+        //* i would set the borders for the upgrades (setBordersForUpgrades) here but mobile.js hasn't loaded yet when this is being run so we just do it whenever they switch to the upgrades category which works fine
     }
     
     if (!statistic)
@@ -928,7 +930,9 @@ upgrades.clicked = function(id,building) {
         break;
     }
     upgrades.expandUpgradesHolder(); // sometimes the upgrade holder has one too many rows because of weird onmouseover & onmousemove behavior, this prevents that
-    
+    if (mobile)
+        setBordersForUpgrades(); // this is defined in mobile.js
+
     document.getElementById("upgradesBoughtCounter").innerHTML = `Bought: ${upgrades.upgradesBought}/${upgrades.unlocked.length}`;
 
     this.updateBoughtStatistic();
