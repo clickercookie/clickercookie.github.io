@@ -262,9 +262,9 @@ small {
 }
 
 .upgrades-bought-stats-holder {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0px 3px 6px 3px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 64px);
+    justify-content: space-between;
 }
 .upgrade-stats {
     width: 56px;

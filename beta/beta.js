@@ -799,6 +799,8 @@ upgrades.create = function(id,statistic=false) { // statistic is for creating it
     let building = Math.floor(id / 5);
 
     const icon = this.img[id]; //? does this need to exist?
+    // todo 0.7: below should be a JSDoc
+    //* is already getFile()-ed so don't use getFile() with this variable
     const UPGRADE_ICON_PATH = (icon === undefined || icon === null) ? getFile("img/unknown-32-32.png") : getFile(`img/upgrades/${icon}`);
     if (icon === undefined || icon === null) { // todo 0.7: add check if a 404 is returned for the upgrade icon, might require async/await shenanigans but whatevs
         console.warn(`An image file for upgrade with ID: ${id} was not defined. Falling back to "unknown" image.`);
@@ -826,6 +828,7 @@ upgrades.create = function(id,statistic=false) { // statistic is for creating it
     if (statistic && mobile) {
         upgrade.setAttribute("id",`upgrade${id}Stats`);
         upgrade.setAttribute("class","upgrade-stats");
+        upgrade.style.backgroundImage = `url(${UPGRADE_ICON_PATH})`;
         console.warn("Statistics are not yet implimented.");
     } else if (!statistic && mobile) {
         upgrade.setAttribute("id",`upgrade${id}`);
