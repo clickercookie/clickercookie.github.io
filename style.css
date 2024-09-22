@@ -1,3 +1,9 @@
+/* variables (mainly for colors) */
+:root {
+    --brown-border: rgb(121, 77, 46);
+    --colored-container: rgb(255, 243, 209);
+}
+
 /* basic basis for most html elements */
 body {
     margin: 0px;
@@ -6,52 +12,43 @@ body {
     touch-action: manipulation;
     color: white;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+/* does the same thing cookie clicker does by overwriting EVERY element's css so that certain defaults made for normal webpages (not games) don't get it the way (like selecting text) */
+* {
+    /* no selecting */
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    /* no select for images */
+    -webkit-user-drag: none;
     -webkit-touch-callout: none; /* yes its a mobile thing in the desktop version but its here anyway in case mobile breaks idk */
 }
 
-h1 { /* all lines that have these no-select like properties are simply too relied on to be removed, i don't like it but i also don't have much of a choice if i value my time :shrug: */
-    -webkit-user-select: none;
-    user-select: none;
-}
-h3 {
-    user-select: none;
-    -webkit-user-select: none;
-}
-h4 {
-    -webkit-user-select: none;
-    user-select: none;
-}
-p {
-    -webkit-user-select: none;
-    user-select: none;
-}
+/* todo 0.7: find why these are here and how we can make their elements assigned to their own specific class instead of making every element have these properties*/
 a {
     font-weight: bold;
     color: white;
 }
-
 img {
-    -webkit-user-drag: none;
-    -webkit-touch-callout: none;
-    user-select: none;
-    -webkit-user-select: none;
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
-
 ul {
     margin-top: 6px;
     margin-bottom: 6px;
 }
-
 small {
-    user-select: none;
-    -webkit-user-select: none;
     margin-left: auto;
     margin-right: auto;
 }
 
+/* todo 0.7: i don't like these anymore, keep a few like pointer and no-display but remove stuff like red.  */
 /* helper classes */
 .no-display {
     display: none;
@@ -84,6 +81,9 @@ small {
 .shadow {
     text-shadow: 0px 1px 4px black;
 }
+.visible {
+    opacity: 1 !important;
+}
 
 /* important things */
 .leftSide {
@@ -91,7 +91,7 @@ small {
     height: 100vh;
     border-style: solid;
     border-width: 0px 8px 0px 0px;
-    border-color: rgb(121, 77, 46);
+    border-color: var(--brown-border);
     display: flex;
     flex-direction: column;
     background-image: url(img/backgrounds/background-blue.png);
@@ -103,7 +103,7 @@ small {
     height: 100vh;
     border-style: solid;
     border-width: 0px 0px 0px 8px;
-    border-color: rgb(121, 77, 46);
+    border-color: var(--brown-border);
     display: flex;
     flex-direction: column;
     background-image: url(img/backgrounds/background-blue.png);
@@ -116,10 +116,9 @@ small {
 }
 
 .cookie {
-    margin-top: 12px;
-    margin-bottom: 12px;
     width: 257px;
     height: 257px;
+    margin: 12px auto 12px auto; /* margin left and right are set to auto so it centers */
     animation: cookie-unhover 0.15s ease-out;
     border-radius: 128px;
 }
@@ -175,13 +174,10 @@ small {
 
 .middle-buttons {
     display: flex;
-    flex: auto;
     height: 100px;
-    background-image: url(img/backgrounds/background-blue.png);
-    border-style: solid;
-    border-color: rgb(121, 77, 46);
-    border-width: 0px;
+    border: 0px solid var(--brown-border);
     border-bottom-width: 8px;
+    background-image: url(img/backgrounds/background-blue.png);
 }
 
 .version-number {
@@ -196,33 +192,60 @@ small {
 }
 
 .version-switch-info {
-    border-style: solid;
-    border-width: 3px;
-    position: absolute;
-    width: 85px;
-    height: 35px;
     display: none;
+    position: absolute;
     bottom: 30px;
     left: 48px;
+    width: 85px;
+    height: 35px;
+    border: 3px solid black;
     font-size: 10px;
-    background-color: rgb(255, 243, 209);
     color: black;
+    background-color: var(--colored-container);
 }
 
 
 /* divs */
-.buildings {
+.buildings-wrapper {
     float: right;
     margin-top: 6px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
+/* UPGRADES */
 .upgrades-holder {
+    position: relative;
     width: 338px;
-    height: 64px;
+    height: 67.6px;
+    overflow: hidden;
+    border: 6px solid;
+    border-width: 6px 0px 6px 0px;
+    border-color: var(--brown-border);
 }
-
+.upgrade {
+    width: 59.6px;
+    height: 59.6px;
+    background-image: url(img/unknown-32-32.png);
+    background-size: contain;
+    margin: 0px;
+    display: inline-block;
+    cursor: pointer;
+    vertical-align: top;
+    border: 4px solid rgb(80, 51, 30);
+    image-rendering: pixelated; /* makes it so there's no blur in the images */
+}
+.upgrades-holder-background {
+    position: relative;
+}
+.upgrades-holder-background::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+}
 .upgrade-name {
     margin: 2px;
     color: black;
@@ -238,75 +261,17 @@ small {
     color: black;
 }
 
-/* thing that displays upgrade info */
-.upgrade-viewer {
-    display: block;
-    width: 248px;
-    height: 148px;
-    border-style: solid;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
-    border-right-width: 0px;
-    margin: 0px;
-    display: none;
-    flex: auto;
-    background-color: rgb(255, 243, 209);
-    position: absolute;
-    right: 346px;
-    color: black
+.upgrades-bought-stats-holder {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 64px);
+    justify-content: space-between;
 }
-
-.upgrade-viewer-content {
-    display: block;
-    color: black;
-}
-
-.upgrade {
-    width: 64px;
-    height: 64px;
-    background-image: url(img/unknown-64-64.png);
-    margin: 0px;
-    display: none;
-    cursor: pointer;
-}
-
-/* random specific stuff */
-.upgrades-marker {
-    margin-top: 10px;
-    margin-bottom: 3px;
-    text-align: center;
-}
-
-.buildings-marker {
-    margin-top: 5px;
-    margin-bottom: 3px;
-    text-align: center;
-}
-
-.store-heading {
+.upgrade-stats {
+    width: 56px;
+    height: 56px;
     margin: 3px;
-    margin-bottom: 0px;
-    font-size: 50px;
-    text-align: center;
-}
-
-.leftSidePush {
-    width: 320px;
-}
-
-.win {
-    display: none;
-    margin-top: 2px;
-    margin-bottom: 6px;
-    text-align: center;
-}
-.filter {
-    background-color: black;
-    opacity: 50%;
-    width: 100vw;
-    height: 100vh;
-    display: none;
+    background-size: 56px;
+    image-rendering: pixelated;
 }
 
 /* social links stuff */
@@ -325,7 +290,7 @@ small {
 }
 
 /* universal building css */
-.building-already-unlock {
+.building {
     width: 324px;
     height: 64px;
     border-style: solid;
@@ -334,43 +299,34 @@ small {
     transition: 0.3s;
     background-color: rgb(217, 215, 165);
     cursor: pointer;
+    margin-bottom: 4px;
 }
-.building-already-unlock:hover {
-    border-style: solid;
-    border-color: rgb(249, 255, 164);
-    border-width: 3px;
-}
-
-.building-need-unlock {
-    width: 324px;
-    height: 64px;
-    border-style: solid;
-    border-color: rgb(248, 255, 198);
-    border-width: 3px;
-    display: none;
-    transition: 0.3s;
-    background-color: rgb(217, 215, 165);
-    cursor: pointer;
-}
-.building-need-unlock:hover {
+.building:hover {
     border-style: solid;
     border-color: rgb(249, 255, 164);
     border-width: 3px;
 }
 
 .building-content {
-    display: inline-block;
-    width: 248px;
+    display: flex;
+    justify-content: space-between;
     height: 64px;
     text-shadow: 0px 1px 4px black;
-    margin-left: 4px;
+    padding-left: 4px;
 }
 
+.buildings-bought-wrapper {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    float: right;
+    margin-right: 12px;
+}
 .buildings-bought {
     font-size: 35px;
-    margin: 12px 10px 0px 0px;
     font-family: monospace;
     float: right;
+    margin: 0px
 }
 
 .building-name {
@@ -391,38 +347,43 @@ small {
 }
 
 /* Infobox when hovering over a building */
-.building-info {
-    width: 190px;
-    height: 110px;
-    border-style: solid;
-    border-color: black;
-    border-right: 0px;
-    background-color: rgb(255, 243, 209);
+.tooltip {
+    width: 285px;
+    height: 125px;
+    border: solid 3px black;
+    border-right-width: 0px;
+    background-color: var(--colored-container);
+    pointer-events: none; /* if it's hovered over it won't do the flickering thing */
     right: 346px;
+    z-index: 1; /* legit nothing has a higher-than-normal z-index, so this will show above EVERYTHING */
 }
-.building-info-name {
+.tooltip-content {
+    padding: 0px 3px 0px 3px;
+}
+.tooltip-name {
     font-size: 15px;
     margin-top: 4px;
-    margin-left: 3px;
     margin-bottom: 0px;
 }
-.building-info-price {
+.tooltip-price {
     font-size: 15px;
     right: 0px;
     top: 0px;
     margin-top: 4px;
     margin-right: 3px;
 }
-.building-info-quote {
+.tooltip-quote {
     font-size: 12px;
     margin-top: 5px;
-    margin-left: 3px;
     overflow-y: hidden;
 }
-.building-info-stats {
+.tooltip-description {
+    font-size: 13px;
+    margin-left: 1px;
+}
+.tooltip-stats {
     font-size: 14px;
     margin-top: 5px;
-    margin-left: 3px;
     margin-bottom: 0px;
 }
 
@@ -455,29 +416,28 @@ small {
     background-image: url(img/church.png);
 }
 
-/* Simple Popup CSS */
+/* Popup CSS */
 .popup {
-    border-style: solid;
-    border-width: 3px;
-    border-color: black;
-    width: 128px;
-    height: 96px;
-    background-color: white;
-    text-align: center;
     display: none;
-    position: absolute;
-    top:  50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
     flex-direction: column;
     align-items: center;
+    width: 128px;
+    height: 96px;
+    padding: 0px; /* dialog boxes have padding by default */
+    text-align: center;
+    background-color: white;
+    text-shadow: none;
+}
+dialog::backdrop {
+    background-color: black;
+    opacity: 50%;
 }
 .simple-popup-button-div {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.popup-content {
+.popup-text {
     margin-left: 8px;
     margin-right: 8px;
     color: black;
@@ -516,9 +476,16 @@ small {
 /* Middle Text CSS */
 .middle-main {
     display: none;
+    position: relative; /* right now this is only used to make the X button not push the middle text to the left, i don't think it does anything else */
     color: white;
     overflow-y: auto;
     height: 86%;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.2), transparent 25%), 
+        linear-gradient(to left, rgba(0, 0, 0, 0.2), transparent 25%),
+        linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent 25%),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent 25%), 
+        radial-gradient(transparent 80%, rgba(4, 4, 4, 0.3)),
+        url("img/dark-noise.png")
 }
 .middle-title {
     font-size: 35px;
@@ -557,12 +524,14 @@ small {
 .middle-x {
     height: 48px;
     width: 48px;
-    border: 2px solid white;
-    float: right;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: absolute;
+    top: 0px;
+    right: 0px;
     background-color: black;
+    border: 2px solid white;
 }
 .middle-ul {
     font-size: 14px;
@@ -575,37 +544,23 @@ small {
 
 /* changelog stuff */
 .changelog-version-heading {
+    font-size: 20px;
+    margin: 6px 0px 8px 9px;
     text-align: left;
-    font-size: 19px;
-    margin-top: 6px;
-    margin-bottom: 8px;
-    margin-left: 9px;
     -webkit-user-select: none;
     user-select: none;
 }
 
-.changelog-version-text {
-    margin-left: 9px;
-    margin-bottom: 6px;
-    margin-top: 6px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 10px;
-}
-
 /* middle button CSS */
 .middle-button-base {
-    border-style: solid;
-    border-width: 2px;
     width: 110px;
     height: 50px;
+    border: 2px solid black;
     margin-left: auto;
-    background-color: rgb(255, 243, 209);
+    background-color: var(--colored-container);
     color: black; /* this wasn't nessesary until 6/3/23? idk why */
 }
 .info-button {
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
     border-right-width: 0px;
     height: 48px;
     float: right;
@@ -614,14 +569,10 @@ small {
     border-top-width: 0px;
     border-bottom-width: 0px;
     border-left-width: 0px;
-    border-right-width: 2px;
     float: left;
 }
 .stats-button {
-    border-top-width: 2px;
-    border-bottom-width: 2px;
     border-left-width: 0px;
-    border-right-width: 2px;
     float: left;
 }
 
@@ -671,4 +622,44 @@ small {
 .mod-id {
     font-style: italic;
     color: gray;
+}
+
+/* random specific stuff */
+.upgrades-marker {
+    margin-top: 10px;
+    margin-bottom: 3px;
+    text-align: center;
+}
+
+.buildings-marker {
+    margin-top: 5px;
+    margin-bottom: 3px;
+    text-align: center;
+}
+
+.store-heading {
+    margin: 3px;
+    margin-bottom: 0px;
+    font-size: 50px;
+    text-align: center;
+}
+
+.leftSidePush {
+    width: 320px;
+}
+
+.win {
+    display: none;
+    margin-top: 2px;
+    margin-bottom: 6px;
+    text-align: center;
+}
+.saving-indicator {
+    position: absolute;
+    bottom: 20px;
+    left: 3px;
+    font-size: 20px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    transition-timing-function: ease-out;
 }

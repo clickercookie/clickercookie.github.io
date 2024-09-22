@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title id="title">Clicker Cookie</title>
+        <title>Clicker Cookie</title>
         <link rel="icon" type="image/x-icon" href="img/favicon.ico">
         <meta charset="UTF-8">
         <meta name="description" content="A totally original game about clicking a cookie.">
         <meta name="keywords" content="Clicker Cookie, Clicker, Javascript, Game, Cookie Clicker, FifthTundraG">
         <meta name="author" content="FifthTundraG">
-        <meta name="google-site-verification" content="0lpMMn9JOBlidWMwl2rnVbFXtNz-e3m3gQROZpyKSL0" /> <!-- the site isn't getting indexed by google, i'm hoping google search console can fix it. this is for the verification process -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="style.css">  <!-- changeMarker -->
-        <script src="main.js" type="text/javascript" defer></script> <!-- changeMarker -->
+        <link rel="stylesheet" href="./style.css">  <!-- changeMarker -->
+        <script src="./main.js" type="text/javascript" defer></script> <!-- changeMarker -->
     </head>
     <body>
         <div id="leftSide" class="leftSide">
@@ -19,26 +18,20 @@
                 <h3 id="cookieCounter" class="cookie-counter shadow">Cookies: 0</h3>
                 <h4 id="cookiesPerSecondCounter" class="cookies-per-second-counter">Cookies Per Second: 0</h4>
             </div>
-            <h3 class="win shadow" id="win">you win.</h3>
-            <span class="leftSidePush" id="leftSidePush"></span>
+            <!-- <h3 class="win shadow" id="win">you win.</h3> -->
+            <p class="saving-indicator" id="savingIndicator">Saved!</p>
+            <span class="leftSidePush" id="leftSidePush"></span> <!-- for some reason when you open menus it will change the size of the left side's div and smoosh everything, this prevents that (somehow) -->
             <div class="social-links">
-                <a onclick="saves.autoSave()" href="https://github.com/clickercookie/clickercookie.github.io">
+                <a onclick="saves.save()" href="https://github.com/clickercookie/clickercookie.github.io" target="_blank">
                     <img class="github" src="img/github-mark.svg" alt="github">
                 </a>
-                <h5 id="versionNumber" class="version-number pointer no-select" onclick="versionSwitch()" onmouseover="versionNumberMousedOver()" onmouseout="versionNumberMousedOverUndo()">Version: null</h5>
+                <h5 id="versionNumber" class="version-number pointer" onclick="versionSwitch()" onmouseover="versionNumberMousedOver()" onmouseout="versionNumberMousedOver(true)">Version: null</h5>
                 <div id="versionSwitchInfo" class="version-switch-info">
                     <p style="margin:0px; color:black; text-align:center;" id="versionSwitchInfoText">Clicking this will switch to the null branch.</p>
                 </div>
             </div>
-        </div>
+        </div> <!-- end leftSide -->
         <div id="middle" class="middle">
-            <div id="upgradeViewer" class="upgrade-viewer">
-                <div id="upgradeViewerContent" class="upgrade-viewer-content">
-                    <p id="upgradeName" class="upgrade-name">Upgrade Name: </p>
-                    <p id="upgradePrice" class="upgrade-price">Upgrade Price: </p>
-                    <p id="upgradeDesc" class="upgrade-desc">Upgrade Description: </p>
-                </div>
-            </div>
             <div class="middle-buttons" id="middleButtons">
                 <div class="left-middle-buttons pointer">
                     <div id="statsButton" class="middle-button-base stats-button" onclick="toggleMiddle('stats')">
@@ -67,202 +60,27 @@
                 <p class="middle-text-gray" id="cookieBeenClickedTimesStat">Total Cookie Clicks: 0</p>
                 <p class="middle-text-gray" id="ifCheatedStat" style="color:white;"></p>
                 <p class="middle-text-gray" id="ifModdedStat" style="color:white;"></p>
+                <h3 class="middle-subtitle">Upgrades:</h4>
+                <p class="middle-text-gray" id="upgradesBoughtCounter">Bought: 0/35</p> <!-- if we ever get more upgrades this needs to be changed -->
+                <div class="upgrades-bought-stats-holder" id="upgradesBoughtStatsHolder">
+
+                </div>
             </div>
             <div id="infoMiddleText" class="middle-main">
                 <div class="middle-x pointer" onclick="closeMiddle()">
                     <img src="img/white-x.png" alt="x button" width="38px" height="38px" class="no-margin">
                 </div>
                 <h3 class="middle-title">Infomation</h3>
-                <h3 class="middle-subtitle">About:</h5>
-                <p class="middle-text">Clicker Cookie is a totally original game about clicking a cookie. Made by <a href="https://github.com/FifthTundraG">FifthTundraG</a> in a few hours, this game went from a random clone of a decade old, actively developed clicker game to something that spiraled into a land of insanity.</p>
+                <h3 class="middle-subtitle">About:</h3>
+                <p class="middle-text">Clicker Cookie is a totally original game about clicking a cookie. Made by <a href="https://github.com/FifthTundraG" target="_blank">FifthTundraG</a> in a few hours, this game went from a random clone of a decade old, actively developed clicker game to something that spiraled into a land of insanity.</p>
                 <p class="middle-text">Original game made by Orteil and Opti. <small>we :heart: you!</small></p>
-                <button class="data-button pointer no-select" onclick="helper.popup.createSimple(320,150,'FifthTundraG: Creation<br>potatman4: Playtesting<br>Spencer: Playtesting, Emotional Support',false,'default','Credits',false,false)">Credits</button>
-                <h3 class="middle-subtitle" style="margin-top:0px;">Changelog:</h5>
+                <button class="data-button pointer" onclick="helper.popup.createSimple(320,150,'FifthTundraG: Creation<br>potatman4: Playtesting<br>Spencer: Playtesting, Emotional Support',false,'default','Credits',false,false)">Credits</button>
+                <h3 class="middle-subtitle" style="margin-top:0px;">Changelog:</h3>
                 <div class="changelog-wrapper">
-                    <div name="version0.5.2.1" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.5.2.1: the first of many - March 3rd, 2024</h5>
-                        <p class="middle-text">Added:</p>
-                        <ul class="middle-ul">
-                            <li>It's our 1st birthday! With this, we now have the Clicker Cookie Anniversary event, which currently only activates the new Currently Clicked food, the Cake.</li>
-                            <li>Note: Although 0.1 came out on March 4th, initial public development began on the 3rd, which is why we celebrate today!</li>
-                        </ul>
-                    </div>
-                    <div name="version0.5.2" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.5.2: hold the phone - June 23rd</h5>
-                        <p class="middle-text">Added:</p>
-                        <ul class="middle-ul">
-                            <li>Mobile Support!</li>
-                            <li>Mods!</li>
-                            <li>Little X button in the middle area</li>
-                        </ul>
-                        <p class="middle-text">Changed:</p>
-                        <ul class="middle-ul">
-                            <li>Cleaned up CSS</li>
-                            <li>Saves from the main branch no longer are allowed in beta and vice versa to prevent corrupted saves.</li>
-                            <li>Popups are now a flexbox.</li>
-                            <li>Small gradient on middle text to make it slightly more nice to look at then solid black</li>
-                            <li>Better middle button function</li>
-                        </ul>
-                        <p class="middle-text">Fixed:</p>
-                        <ul class="middle-ul">
-                            <li>Options middle text said "Autosave Management" when it was supposed to save "Save Management"</li>
-                        </ul>
-                    </div>
-                    <div name="version0.5.1" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.5.1: Objects Everywhere - May 24th</h5>
-                        <p class="middle-text">Added:</p>
-                        <ul class="middle-ul">
-                            <li>Cookie Wobble!</li>
-                            <li>Can create an advanced popup with pure HTML, contrary to the old way where everything was predetermined.</li>
-                            <li>Credits button under Info.</li>
-                        </ul>
-                        <p class="middle-text">Changed:</p>
-                        <ul class="middle-ul">
-                            <li>All variables and functions now are apart of an object</li>
-                            <li>Cleaned up Javascript in general.</li>
-                            <li>Most numbers now have commas.</li>
-                            <li>All versions from now on have a name and their version number assigned in changelogs.</li>
-                            <li>Removed unused/unnessesary functions</li>
-                            <li>camelCase onclick attributes (onClick) have all been switched to lowercase (onclick).</li>
-                            <li>Renamed some save-related variables to make more sense</li>
-                            <li>Initialization is now inside an object method and called at the bottom of Javascript.</li>
-                        </ul>
-                        <p class="middle-text">Fixed:</p>
-                        <ul class="middle-ul">
-                            <li>Hover infobox not updating when the mouse doesn't move.</li>
-                            <li>Grandma showing in simple pop ups when she isn't supposed to be.</li>
-                            <li>0.5 header having no date.</li>
-                            <li>upgrade#Identifier is no longer used an has been deleted.</li>
-                            <li>Options middle text was highlightable.</li>
-                            <li>Middle text subtitles weren't lined up with other text.</li>
-                            <li>Cookie was clickable in a box shape outside the actual visible cookie.</li>
-                        </ul>
-                        <p class="middle-text" style="font-size:14px;">its also my birthday so you better say happy birthday. or else.</p>
-                    </div>
-                    <div name="version0.5" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.5 - May 6th:</h5>
-                        <p class="middle-text" style="font-size:14px;">The longest update gap yet, what have we been waiting for?</p>
-                        <p class="middle-text">Added:</p>
-                        <ul class="middle-ul">
-                            <li>AUTO SAVING!!!</li>
-                            <li>EXPORTING & IMPORTING DATA!!!</li>
-                            <li>New temporary cookie!</li>
-                            <li>Hovering over buildings gives a small infobox!</li>
-                            <li>More backgrounds!</li>
-                            <li>A familiar face...</li>
-                            <li>Cursor changes type when hovering over certain elements</li>
-                            <li>Special development buttons for when in active development</li>
-                            <li>+ More!</li>
-                        </ul>
-                        <p class="middle-text">Fixed:</p>
-                        <ul class="middle-ul">
-                            <li>Double-tapping cookie zooming in on mobile devices.</li>
-                            <li>These list items being highlightable.</li>
-                        </ul>
-                        <p class="middle-text">Changed:</p>
-                        <ul class="middle-ul">
-                            <li>Prices are now seperated from the building name</li>
-                            <li>Can now switch between middle button text by pressing another button opposed to pressing the active button and then button you want.</li>
-                            <li>Version number now says if the game is in beta or not</li>
-                            <li>Extended popup functionality.</li>
-                            <li>Upgrade hovering is more efficient.</li>
-                        </ul>
-                        <p class="middle-text">Bugs:</p>
-                        <ul class="middle-ul">
-                            <li>This update comes with a TON of bugs that need smashing so please report any to the Github for a quick fix!</li>
-                        </ul>
-                    </div>
-                    <div name="version0.4.1" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.4.1 - March 24th:</h5>
-                        <p class="middle-text">Added:</p>
-                        <ul class="middle-ul">
-                            <li>Color!</li>
-                            <li>Buttons!</li>
-                            <li>Keyboard Upgrade Chain final pixel art!</li>
-                            <li>+ More!</li>
-                        </ul>
-                        <p class="middle-text">Fixed:</p>
-                        <ul class="middle-ul">
-                            <li>Incorrect All Time Cookies & Cookie Clicked variable calculations</li>
-                            <li>Switched to let instead of var</li>
-                            <li>Positioning on some incorrect positions</li>
-                        </ul>
-                    </div>
-                    <div name="version0.4" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.4 - March 24th:</h5>
-                        <p class="middle-text" style="font-size:14px;">"Hey, what happened to 0.3?" <br>
-                            Well, you see... I made 0.3 while I also had 0.4 content being actively worked on, so I kinda just skipped it because this is a BIG update!</p>
-                        <p class="middle-text">Added:</p>
-                        <ul class="middle-ul">
-                            <li>Final major buildings (Wallet & Church)</li>
-                            <li>Upgrades! Only first level upgrades are currently available, excluding the keyboard which has 2 upgrades.</li>
-                            <li>Ability to switch to the beta branch by clicking the version number. The beta branch has code that visually works as expected, but may not have completed pixel art and some incorrect values that skipped me during testing.</li>
-                        </ul>
-                        <p class="middle-text">Changed:</p>
-                        <ul class="middle-ul">
-                            <li>Layout of the body. This may break things so pleases report any issues that occur!</li>
-                        </ul>
-                        <p class="middle-text">Fixed:</p>
-                        <ul class="middle-ul">
-                            <li>Everything.</li>
-                        </ul>
-                    </div>
-                    <div name="version0.2.2" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.2.2 - March 16th:</h5>
-                        <p class="middle-text">Added:</p>
-                        <ul class="middle-ul">
-                            <li>Borders to the left and right sides of the screen.</li>
-                            <li>The capability to create a popup for usage later.</li>
-                        </ul>
-                    </div>
-                    <div name="version0.2.1" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.2.1 - March 16th:</h5>
-                        <p class="middle-text">Added:</p>
-                        <ul class="middle-ul">
-                            <li>Television</li>
-                            <li>Laborers</li>
-                        </ul>
-                        <p class="middle-text">Changes:</p>
-                        <ul class="middle-ul">
-                            <li>Made CSS better</li>
-                        </ul>
-                    </div>
-                    <div name="version0.2" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.2 - March 16th:</h5>
-                        <p class="middle-text">Added:</p>
-                        <ul class="middle-ul">
-                            <li>A Github page</li>
-                            <li>Version number</li>
-                        </ul>
-                        <p class="middle-text" style="font-size:14px;">This is qualified as a major update simply because of the addition of a Github Page, even if it adds little to the actual game.</p>
-                    </div>
-                    <div name="version0.1.1" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.1.1 - March 9th:</h5>
-                        <p class="middle-text">Added:</p>
-                        <ul class="middle-ul">
-                            <li>Ranches! Buyable for 1000 cookies for the time being.</li>
-                            <li>Minor hover effect when hovering over buildings</li>
-                        </ul>
-                        <p class="middle-text">Fixes:</p>
-                        <ul class="middle-ul">
-                            <li>totalCookies variable is fixed, but still unused (but not for long!)</li>
-                        </ul>
-                        <p class="middle-text">Known issues:</p>
-                        <ul class="middle-ul">
-                            <li>Cookie is draggable on Mozilla Firefox and maybe other browsers.</li>
-                            <li>Resizing windows breaks basically everything, although its unlikely this will be fixed.</li>
-                        </ul>
-                    </div>
-                    <div name="version0.1" class="changelog">
-                        <h5 class="changelog-version-heading">Version 0.1 - March 4th:</h5>
-                        <p class="middle-text">Added:</p>
-                        <ul class="middle-ul">
-                            <li>Existance.</li>
-                        </ul>
-                    </div>
+                    
                 </div>
             </div>
-            <div id="optionsMiddleText" class="middle-main no-select">
+            <div id="optionsMiddleText" class="middle-main">
                 <div class="middle-x pointer" onclick="closeMiddle()">
                     <img src="img/white-x.png" alt="x button" width="38px" height="38px" class="no-margin">
                 </div>
@@ -296,8 +114,8 @@
                 <h5 class="middle-subtitle">Miscellaneous:</h5>
                 <p class="middle-text">Save Management:</p>
                 <div class="data-buttons">
-                    <button class="data-button pointer" onclick="saves.autoSave()">Save</button>
-                    <button class="data-button pointer" onclick="saves.loadAutoSave()">Load</button>
+                    <button class="data-button pointer" onclick="saves.save()">Save</button>
+                    <button class="data-button pointer" onclick="saves.loadSave()">Load</button>
                 </div>
                 <div class="data-buttons">
                     <button class="data-button pointer red" onclick="helper.popup.createSimple(300,150,'Are you sure you want to do this?',false,'resetSave()','Warning',true,true)">Reset</button>
@@ -321,118 +139,31 @@
                     </select>
                 </form>
             </div>
-            <div class="building-info absolute no-display" id="buildingInfo">
-                <p class="building-info-name black" id="buildingInfoName">Name</p>
-                <p class="building-info-price absolute black" id="buildingInfoPrice">Price</p>
-                <p class="building-info-quote black" id="buildingInfoQuote">"Quote"</p>
-                <p class="building-info-stats black" id="buildingInfoProduces">Produces</p>
-                <p class="building-info-stats black" id="buildingInfoProducing">Producing</p>
+            <div class="tooltip absolute no-display" id="tooltip">
+                <div class="tooltip-content">
+                    <p class="tooltip-name black" id="tooltipName">Name</p>
+                    <p class="tooltip-price absolute black" id="tooltipPrice">Price</p>
+                    <p class="tooltip-description black" id="tooltipDesc">Description</p> <!-- Hidden when buildings are hovered since they have no description -->
+                    <p class="tooltip-quote black" id="tooltipQuote">"Quote"</p>
+                    <p class="tooltip-stats black" id="tooltipProduces">Produces</p><!-- Hidden when upgrades are hovered since they have no produces/producing -->
+                    <p class="tooltip-stats black" id="tooltipProducing">Producing</p>
+                </div>
             </div>
-        </div>
+        </div> <!-- end middle -->
         <div id="rightSide" class="rightSide">
             <h1 class="store-heading shadow">Store</h1>
             <h3 class="upgrades-marker shadow">Upgrades</h3>
-            <div id="upgradesHolder" class="upgrades-holder">
-                <div id="upgrade0" class="upgrade" onclick="upgrades.upgrade0.clicked()" onmouseover="upgrades.hovered('upgrade0')" onmouseout="upgrades.undoHover()"></div>
-                <div id="upgrade1" class="upgrade" onclick="upgrades.upgrade1.clicked()" onmouseover="upgrades.hovered('upgrade1')" onmouseout="upgrades.undoHover()"></div>
-                <div id="upgrade2" class="upgrade" onclick="upgrades.upgrade2.clicked()" onmouseover="upgrades.hovered('upgrade2')" onmouseout="upgrades.undoHover()"></div>
-                <div id="upgrade3" class="upgrade" onclick="upgrades.upgrade3.clicked()" onmouseover="upgrades.hovered('upgrade3')" onmouseout="upgrades.undoHover()"></div>
-                <div id="upgrade4" class="upgrade" onclick="upgrades.upgrade4.clicked()" onmouseover="upgrades.hovered('upgrade4')" onmouseout="upgrades.undoHover()"></div>
-                <div id="upgrade5" class="upgrade" onclick="upgrades.upgrade5.clicked()" onmouseover="upgrades.hovered('upgrade5')" onmouseout="upgrades.undoHover()"></div>
-                <div id="upgrade6" class="upgrade" onclick="upgrades.upgrade6.clicked()" onmouseover="upgrades.hovered('upgrade6')" onmouseout="upgrades.undoHover()"></div>
+            <div class="upgrades-holder-background">
+                <div id="upgradesHolder" class="upgrades-holder" onmouseover="upgrades.expandUpgradesHolder()" onmouseout="upgrades.expandUpgradesHolder(true)">
+                
+                </div>
             </div>
             <h3 class="buildings-marker shadow">Buildings</h3>
-            <div id="buildings" class="buildings">
-                <table>
-                    <tr>
-                        <td>
-                            <div id="building0" class="building-already-unlock" onclick="buildings.keyboard.buy()" onmouseover="buildings.hovered('keyboard')" onmouseout="buildings.undoHover()">
-                                <div class="building-icon keyboard-icon"></div>
-                                <div class="building-content">
-                                    <p class="buildings-bought" id="keyboardsBought">0</p>
-                                    <p class="building-name">Keyboard</p>
-                                    <p class="building-price" id="keyboardUpgrade">15</p>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div id="building1" class="building-need-unlock" onclick="buildings.grandpa.buy()" onmouseover="buildings.hovered('grandpa')" onmouseout="buildings.undoHover()">
-                                <div class="building-icon grandpa-icon"></div>
-                                <div class="building-content">
-                                    <p class="buildings-bought" id="grandpasBought">0</p>
-                                    <p class="building-name">Grandpa</p>
-                                    <p class="building-price" id="grandpaUpgrade">100</p>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div id="building2" class="building-need-unlock" onclick="buildings.ranch.buy()" onmouseover="buildings.hovered('ranch')" onmouseout="buildings.undoHover()">
-                                <div class="building-icon ranch-icon"></div>
-                                <div class="building-content">
-                                    <p class="buildings-bought" id="ranchesBought">0</p>
-                                    <p class="building-name">Ranch</p>
-                                    <p class="building-price" id="ranchUpgrade">1100</p>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div id="building3" class="building-need-unlock" onclick="buildings.tv.buy()" onmouseover="buildings.hovered('tv')" onmouseout="buildings.undoHover()">
-                                <div class="building-icon tv-icon"></div>
-                                <div class="building-content">
-                                    <p class="buildings-bought" id="tvsBought">0</p>
-                                    <p class="building-name">Television</p>
-                                    <p class="building-price" id="tvUpgrade">12000</p>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div id="building4" class="building-need-unlock" onclick="buildings.worker.buy()" onmouseover="buildings.hovered('worker')" onmouseout="buildings.undoHover()">
-                                <div class="building-icon worker-icon"></div>
-                                <div class="building-content">
-                                    <p class="buildings-bought" id="workersBought">0</p>
-                                    <p class="building-name">Worker</p>
-                                    <p class="building-price" id="workerUpgrade">130000</p>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div id="building5" class="building-need-unlock" onclick="buildings.wallet.buy()" onmouseover="buildings.hovered('wallet')" onmouseout="buildings.undoHover()">
-                                <div class="building-icon wallet-icon"></div>
-                                <div class="building-content">
-                                    <p class="buildings-bought" id="walletsBought">0</p>
-                                    <p class="building-name">Wallet</p>
-                                    <p class="building-price" id="walletUpgrade">1400000</p>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div id="building6" class="building-need-unlock" onclick="buildings.church.buy()" onmouseover="buildings.hovered('church')" onmouseout="buildings.undoHover()">
-                                <div class="building-icon church-icon"></div>
-                                <div class="building-content">
-                                    <p class="buildings-bought" id="churchesBought">0</p>
-                                    <p class="building-name">Church</p>
-                                    <p class="building-price" id="churchUpgrade">20000000</p>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+            <div class="buildings-wrapper" id="buildingsWrapper">
+                
             </div>
-        </div>
-        <div class="absolute filter" id="filter"></div>
-        <div class="popup no-select" id="simplePopup">
+        </div> <!-- end rightSide -->
+        <dialog class="popup" id="simplePopup">
             <img alt="popup image" style="display:none;" id="simplePopupImage">
             <h3 class="simple-popup-title" id="simplePopupTitle">title</h3>
             <p class="popup-content" id="simplePopupContent">null</p>
@@ -440,9 +171,7 @@
                 <button onclick="helper.popup.destroySimple()" id="simplePopupBackButton" class="popup-button no-display" style="margin-right:3px;">Back</button>
                 <button onclick="helper.popup.simpleClicked()" id="simplePopupButton" class="popup-button">OK</button>
             </div>
-        </div>
-        <div class="popup no-select" id="advancedPopup">
-
-        </div>
+        </dialog>
+        <dialog class="popup" id="advancedPopup"></dialog>
     </body>
 </html>

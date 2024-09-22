@@ -384,25 +384,21 @@ core.initialization = function() {
     saves.loadSave();
 
     // if saves are old
-    if (localStorage.betaSave[0] == "[") {
+    if (localStorage.getItem("save") && localStorage.getItem("save")[0] === "[" && versionBranch === 0) {
+        helper.popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3>
+        <p class='popup-text'>so we changed the saving system again, good news, press the button below and it will be transfered to the new format.</p>
+        <div style='display:flex;flex-direction:row;height:40px;'>
+        <button onclick='saves.convert05Save(false)' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>Reformat me!</button>
+        </div>`);
+        return "Save the save!";
+    }
+    if (localStorage.getItem("betaSave") && localStorage.getItem("betaSave")[0] === "[" && versionBranch === 1) {
         helper.popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3>
         <p class='popup-text'>so we changed the saving system again, good news, press the button below and it will be transfered to the new format.</p>
         <div style='display:flex;flex-direction:row;height:40px;'>
         <button onclick='saves.convert05Save(true)' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>Reformat me!</button>
         </div>`);
         return "Save the save!";
-    }
-    // else if (localStorage.save[0] == "[") {
-    // TODO 0.6: MUST ADD save SUPPORT HERE BEFORE RELEASE!!!
-    // }
-
-    if (localStorage.getItem("betaSaveOld") != null) { // TODO 0.6: remove this check for full release
-        helper.popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3> 
-        <p class='popup-text'>so i kinda lied when i said your save is invalid, i can get it back if you want</p> 
-        <div style='display:flex;flex-direction:row;height:40px;'> 
-        <button onclick='localStorage.removeItem("betaSaveOld")'>i don't want it</button>
-        <button onclick='saves.convert05Save(true,true); localStorage.removeItem("betaSaveOld")' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>gimme it back</button> 
-        </div>`);
     }
     
     if (hasCheated)
@@ -415,7 +411,7 @@ core.initialization = function() {
     document.title = (versionBranch) ? "Clicker Cookie Beta" : "Clicker Cookie";
     // change version displayed
     document.getElementById("versionNumber").innerText = (versionBranch) ? `Version: ${version} Beta` : `Version: ${version}`;
-    document.getElementById("versionSwitchInfoText").innerText = (versionBranch) ? "Clicking this will switch to the beta branch" : "Clicking this will switch to the main branch";
+    document.getElementById("versionSwitchInfoText").innerText = (versionBranch) ? "Clicking this will switch to the main branch" : "Clicking this will switch to the beta branch";
     if (versionBranch) // show the developer mode switch
         document.getElementById("devForm").style.display = "block";
     
@@ -664,7 +660,7 @@ dev.setCPS = function(x) {
     helper.reloadCPSCounter();
     document.getElementById("ifCheatedStat").innerHTML = "<b>You have cheated on this playthrough!</b>";
 }
-dev.toggleSaving = function() { // TODO 0.6: this should be a toggle without dev mode
+dev.toggleSaving = function() { // TODO 0.7: this should be a toggle without dev mode
     if (!this.devMode) return "You need developer mode ON to run this command.";
 
     savingAllowed = !savingAllowed;
@@ -1144,7 +1140,7 @@ function capitalize(str) {
 function getFile(location) {
     checkMobile(); // we run checkMobile() here because in Building getFile() is used, but buildings are created before core.init(), where checkMobile() is normally run. As a bandaid, we just run it here, as well.
     if (mobile || desktop)
-        return `../beta/${location}`; //TODO 0.6: MUST REMOVE THE BETA BEFORE RELEASE!!!
+        return `../${location}`;
     if (!mobile)
         return location;
 }
@@ -1302,7 +1298,7 @@ personalization.setCurrentClicked = function(value) {
 // ------------------------------------
 // Random Functions
 // ------------------------------------
-function toggleMiddle(param) { // TODO 0.6: eliminate unnessesary switch statements and general code, ternary statements might work nice but i'm spitballing here
+function toggleMiddle(param) { // TODO 0.7: eliminate unnessesary switch statements and general code, ternary statements might work nice but i'm spitballing here
     const statsMT = document.getElementById("statsMiddleText");
     const infoMT = document.getElementById("infoMiddleText");
     const optionsMT = document.getElementById("optionsMiddleText");
