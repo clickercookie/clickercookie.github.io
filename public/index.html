@@ -9,7 +9,7 @@
         <meta name="author" content="FifthTundraG">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="./style.css">  <!-- changeMarker -->
-        <script src="./main.js" type="text/javascript" defer></script> <!-- changeMarker -->
+        <script src="./main.js" type="module" defer></script> <!-- changeMarker -->
     </head>
     <body>
         <div id="leftSide" class="leftSide">
@@ -61,7 +61,7 @@
                 <p class="middle-text-gray" id="ifCheatedStat" style="color:white;"></p>
                 <p class="middle-text-gray" id="ifModdedStat" style="color:white;"></p>
                 <h3 class="middle-subtitle">Upgrades:</h4>
-                <p class="middle-text-gray" id="upgradesBoughtCounter">Bought: 0/35</p> <!-- if we ever get more upgrades this needs to be changed -->
+                <p class="middle-text-gray">Bought: <span id="upgradesBoughtCounter">null</span>/<span id="totalUpgradesCounter">null</span></p> <!-- if we ever get more upgrades this needs to be changed -->
                 <div class="upgrades-bought-stats-holder" id="upgradesBoughtStatsHolder">
 
                 </div>
