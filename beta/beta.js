@@ -346,7 +346,7 @@ const versionChangelogs = [
             "Previously created changelog entries are now grammatically correct.",
             "Accessing the beta version by going to clickercookie.github.io/beta would result in a 404."
         ],
-        release: "???"
+        release: "September 22nd, 2024"
     }
 ];
 
