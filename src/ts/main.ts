@@ -165,7 +165,7 @@ const helper = {} as {
     popup: {
         createSimple(x: number, y: number, text: string, noButton?: boolean, doWhat?: string, title?: string, backButton?: boolean, isError?: boolean): void
         destroySimple(): void,
-        simpleClicked(doWhat: string): void,
+        simpleClicked(doWhat?: string): void,
         createAdvanced(x: number, y: number, html: string): void,
         destroyAdvanced(): void
     }
@@ -409,6 +409,38 @@ export class Game {
             dev.setDevMode(true);
             document.getElementById("offSelectionDev").innerHTML = "Overwritten";
         }
+
+        // ------- Event Listeners (very long) -------
+        // Middle buttons
+        document.getElementById("statsButton").addEventListener("click", () => {toggleMiddle("stats")});
+        document.getElementById("optionsButton").addEventListener("click", () => {toggleMiddle("options")});
+        document.getElementById("infoButton").addEventListener("click", () => {toggleMiddle("info")});
+        // middle content
+        for (let i in convertCollectionToArray(document.getElementsByClassName("middle-x"))) { //? i don't like how we have to do this, can we find another way? maybe somehow only one X button? actually we should probably refactor how the entire middle section works... todo: make an issue for that
+            document.getElementsByClassName("middle-x")[i].addEventListener("click", () => {closeMiddle()});
+        }
+        document.getElementById("creditsButton").addEventListener("click", () => {helper.popup.createSimple(320,175,'FifthTundraG: Creation<br>potatman4: Playtesting<br>Wolfsarecool44: Playtesting, Emotional Support',false,'default','Credits',false,false)});
+        document.getElementById("backgroundSelect").addEventListener("change", () => {personalization.setBackground((document.getElementById("backgroundSelect") as HTMLFormElement).value)});
+        document.getElementById("currentClickedSelect").addEventListener("change", () => {personalization.setCurrentClicked((document.getElementById("currentClickedSelect") as HTMLFormElement).value)});
+        document.getElementById("saveButton").addEventListener("click", () => {saves.save(this)});
+        document.getElementById("loadButton").addEventListener("click", () => {saves.loadSave(this)});
+        document.getElementById("resetSaveButton").addEventListener("click", () => {helper.popup.createSimple(300,150,'Are you sure you want to do this?',false,'resetSave()','Warning',true,true)});
+        document.getElementById("exportDataButton").addEventListener("click", () => {saves.exportData(this)});
+        document.getElementById("importDataInput").addEventListener("change", () => {saves.importData(this)});
+        document.getElementById("addModButton").addEventListener("click", () => {mods.addClicked()});
+        document.getElementById("listModsButton").addEventListener("click", () => {mods.listClicked()});
+        document.getElementById("devModeSelect").addEventListener("change", () => {dev.setDevMode((document.getElementById("devModeSelect") as HTMLFormElement).value)})
+        // upgrades holder
+        document.getElementById("upgradesHolder").addEventListener("mouseover", () => {upgrades.expandUpgradesHolder()});
+        document.getElementById("upgradesHolder").addEventListener("mouseout", () => {upgrades.expandUpgradesHolder(true)});
+        // simple popup
+        document.getElementById("simplePopupButton").addEventListener("click", () => {helper.popup.simpleClicked()});
+        document.getElementById("simplePopupBackButton").addEventListener("click", () => {helper.popup.destroySimple()});
+        // misc
+        document.getElementById("cookie").addEventListener("click", () => {this.cookieClicked()});
+        document.getElementById("versionNumber").addEventListener("click", () => {versionSwitch()});
+        document.getElementById("versionNumber").addEventListener("mouseover", () => {versionNumberMousedOver()});
+        document.getElementById("versionNumber").addEventListener("mouseout", () => {versionNumberMousedOver(true)});
     
         // Holiday Events
         const date = new Date();
@@ -717,6 +749,10 @@ helper.consoleLogDev = function(str: string) {
 }
 
 // Popups
+/**
+ * **Note: changes to Simple Popups will be coming soon. See #TODO**
+ * https://github.com/clickercookie/clickercookie.github.io/wiki/Using-Popups#simple-popups
+ */
 helper.popup.createSimple = function(x: number, y: number, text: string, noButton: boolean=false, doWhat: string="default", title: string="", backButton: boolean=false, isError: boolean=false) {
     const popup = document.getElementById("simplePopup") as HTMLDialogElement;
 
@@ -803,7 +839,6 @@ helper.popup.destroyAdvanced = function() {
     (document.getElementById("advancedPopup") as HTMLDialogElement).close();
     document.getElementById("advancedPopup").style.display = "none";
 }
-
 // set areas to different things
 personalization.setBackground = function(color: string) {
     personalization.currentBackground = `url(img/backgrounds/background-${color}.png)`;
