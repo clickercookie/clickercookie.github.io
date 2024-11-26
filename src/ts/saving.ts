@@ -43,20 +43,50 @@ export class Savinator {
         this.saveHandler = saveHandler;
     }
 
+    /**
+     * Save a stringified {@link Save} to localStorage with {@link Savinator.saveHandler}'s savedata dump as the data.
+     * ! WARNING: As it currently stands, saving is DESTRUCTIVE! If you save stuff when a mod is registered with the saveHandler then reload to a state where it isn't, a save will overwrite that mod's data!
+     */
     save() {
         const save = new Save();
         const saveDump = this.saveHandler.dumpSaveData();
         for (let i in saveDump) {
-            console.log(i);
             save.addData(i, saveDump[i]);
+            console.log(`Added data to save for ${i} namespace.`);
         }
-        localStorage.setItem("newsave", save.stringify());
+        if (Game.VERSION_BRANCH === Game.Versions.MAIN)
+            localStorage.setItem("newSave", save.stringify());
+        else
+            localStorage.setItem("newBetaSave", save.stringify());
+    }
+
+    /**
+     * Run the {@link SaveProvider.loadSaveData} method of all the providers in this instance's handler with their data in localStorage as the param.
+     */
+    load() {
+        const localStorageSave = new Save(JSON.parse((Game.VERSION_BRANCH === Game.Versions.MAIN) ? localStorage.getItem("newSave") : localStorage.getItem("newBetaSave")))
+        const providers = this.saveHandler.getProviders();
+        for (let namespace in providers) {
+            providers[namespace].loadSaveData(localStorageSave.getData(namespace)); // if we haven't saved anything with that namespace, then this will fail
+            console.log(`Loaded save data for ${namespace} namespace.`);
+        }
+        // this should run the loadSaveData() of every SaveProvider in this guy's saveHandler
     }
 }
 
 export class SaveProvider {
-    getSaveData(): any {
+    /**
+     * If registered with a {@link SaveHandler}, it will use whatever this function returns as the savedata.
+     * @returns Anything you want. You will be responsible for parsing whatever the save data is, personally I like saving it as an object, but anything works. You can even do it Orteil-style with pipes and junk (if you know, you know).
+     */
+    getSaveData(): unknown {
         return undefined;
+    }
+    /**
+     * Whatever you do to load your savadata, do it here. Whenever {@link Savinator.load} is run, any {@link SaveProvider} registered in Savinator's {@link Savinator.saveHandler} will have this function run.
+     */
+    loadSaveData(saveData: unknown) {
+
     }
 }
 export class SaveHandler {
@@ -83,6 +113,11 @@ export class SaveHandler {
     registerProvider(namespace: string, provider: SaveProvider) {
         this.providers[namespace] = provider;
     }
+
+    // todo: i don't like this, i don't know if i really want anyone to be able to interact with anything from game like this.
+    getProviders() {
+        return this.providers;
+    }
 }
 
 
@@ -101,19 +136,30 @@ class Save {
     static VERSION_FORMAT = 4;
 
     private data: SaveData;
-    constructor() {
-        this.data = {
-            header: {
-                version: Game.VERSION,
-                versionBranch: Game.VERSION_BRANCH,
-                format: Save.VERSION_FORMAT
-            },
-            data: {}
+    constructor(data: SaveData=undefined) {
+        if (data === undefined) {
+            this.data = {
+                header: {
+                    version: Game.VERSION,
+                    versionBranch: Game.VERSION_BRANCH,
+                    format: Save.VERSION_FORMAT
+                },
+                data: {}
+            }
+        } else {
+            this.data = data; //! todo: we might want some error checking here
         }
     }
 
     addData(namespace: string, value: any) {
         this.data.data[namespace] = value;
+    }
+
+    getData(namespace: string): unknown {
+        if (this.data.data[namespace] === undefined || this.data.data[namespace] === null) 
+            throw new Error(`Tried to obtain data from a Save with a namespace (${namespace}) that does not exist on the save.`);
+
+        return this.data.data[namespace];
     }
 
     stringify(): string {

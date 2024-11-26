@@ -186,6 +186,11 @@ helper.popup = {} as {
 // ------------------------------------
 // Initialization and Checks for Errors
 // ------------------------------------
+interface ClickerCookieSaveData {
+    cookies: number;
+    cookiesPerSecond: number;
+}
+
 // todo: learn about namespaces and see if that would be better for Game
 export class Game extends SaveProvider {
     // version-related constants
@@ -432,8 +437,8 @@ export class Game extends SaveProvider {
         document.getElementById("creditsButton").addEventListener("click", () => {helper.popup.createSimple(320,175,'FifthTundraG: Creation<br>potatman4: Playtesting<br>Wolfsarecool44: Playtesting, Emotional Support',false,'default','Credits',false,false)});
         document.getElementById("backgroundSelect").addEventListener("change", () => {personalization.setBackground((document.getElementById("backgroundSelect") as HTMLFormElement).value)});
         document.getElementById("currentClickedSelect").addEventListener("change", () => {personalization.setCurrentClicked((document.getElementById("currentClickedSelect") as HTMLFormElement).value)});
-        document.getElementById("saveButton").addEventListener("click", () => {saves.save(this)});
-        document.getElementById("loadButton").addEventListener("click", () => {saves.loadSave(this)});
+        document.getElementById("saveButton").addEventListener("click", () => {this.savinator5000.save()});
+        document.getElementById("loadButton").addEventListener("click", () => {this.savinator5000.load()});
         document.getElementById("resetSaveButton").addEventListener("click", () => {helper.popup.createSimple(300,150,'Are you sure you want to do this?',false,'resetSave()','Warning',true,true)});
         document.getElementById("exportDataButton").addEventListener("click", () => {saves.exportData(this)});
         document.getElementById("importDataInput").addEventListener("change", () => {saves.importData(this)});
@@ -568,11 +573,16 @@ export class Game extends SaveProvider {
         this.reloadCookieCounter();
     }
 
-    getSaveData() {
+    // ------------ All of Game's SaveProvider stuff ------------
+    getSaveData(): ClickerCookieSaveData {
         return {
             cookies: this.cookies,
-            cookiespersecond: this.cookiesPerSecond
+            cookiesPerSecond: this.cookiesPerSecond
         }
+    }
+    loadSaveData(saveData: ClickerCookieSaveData) {
+        this.cookies = saveData.cookies;
+        this.cookiesPerSecond = saveData.cookiesPerSecond;
     }
 }
 
