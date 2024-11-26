@@ -58,6 +58,75 @@ export function updateUpgradesBoughtStatistic() {
     // }
 }
 
+// function checkUpgradeAvailability(game: Game) {
+//     let runThroughTimes = 0; // buildings.building.bought needs for boughtUnlockRequirements indicies
+//     const boughtUnlockRequirements = [ // number of buildings bought required to unlock an upgrade in chronological order
+//         1,5,10,25,50
+//     ];
+//     // Keyboards
+//     for (let i = 0; i <= 5; i++) {
+//         if (game.keyboard.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+//             upgrades.unlocked[i] = 1;
+//             upgrades.create(i);
+//         }
+//         runThroughTimes++;
+//     }
+//     // Grandpas
+//     runThroughTimes = 0;
+//     for (let i = 5; i <= 9; i++) {
+//         if (game.grandpa.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+//             upgrades.unlocked[i] = 1;
+//             upgrades.create(i);
+//         }
+//         runThroughTimes++;
+//     }
+//     // Ranches
+//     runThroughTimes = 0;
+//     for (let i = 10; i <= 14; i++) {
+//         if (game.ranch.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+//             upgrades.unlocked[i] = 1;
+//             upgrades.create(i);
+//         }
+//         runThroughTimes++;
+//     }
+//     // TVs
+//     runThroughTimes = 0;
+//     for (let i = 15; i <= 19; i++) {
+//         if (game.television.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+//             upgrades.unlocked[i] = 1;
+//             upgrades.create(i);
+//         }
+//         runThroughTimes++;
+//     }
+//     // Workers
+//     runThroughTimes = 0;
+//     for (let i = 20; i <= 24; i++) {
+//         if (game.worker.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+//             upgrades.unlocked[i] = 1;
+//             upgrades.create(i);
+//         }
+//         runThroughTimes++;
+//     }
+//     // Wallets
+//     runThroughTimes = 0;
+//     for (let i = 25; i <= 29; i++) {
+//         if (game.wallet.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+//             upgrades.unlocked[i] = 1;
+//             upgrades.create(i);
+//         }
+//         runThroughTimes++;
+//     }
+//     // Churches
+//     runThroughTimes = 0;
+//     for (let i = 30; i <= 34; i++) {
+//         if (game.church.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
+//             upgrades.unlocked[i] = 1;
+//             upgrades.create(i);
+//         }
+//         runThroughTimes++;
+//     }
+// }
+
 /**
  * TODO: NEEDS STATISTIC SUPPORT
  * @param game Game

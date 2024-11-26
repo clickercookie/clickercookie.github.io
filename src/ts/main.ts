@@ -11,8 +11,7 @@ const desktop: boolean = false;
 // ------------------------------------
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
 import { clamp, convertCollectionToArray, capitalize, commaify } from "./helper.js";
-import { Upgrade, UPGRADES_DATA, updateUpgradesBoughtStatistic } from "./upgrades.js";
-import { hideTooltip } from "./tooltip.js";
+import { Upgrade, UPGRADES_DATA, updateUpgradesBoughtStatistic, expandUpgradesHolder } from "./upgrades.js";
 import { Building } from "./buildings.js";
 import { saves } from "./saving.js";
 
@@ -360,7 +359,7 @@ export class Game {
     
             const devResetButton = document.createElement("button");
             devResetButton.appendChild(document.createTextNode("Reset Sava Data"));
-            devResetButton.setAttribute("onclick","saves.resetSave()");
+            devResetButton.addEventListener("click", () => {saves.resetSave(this)});
             devDiv.appendChild(devResetButton);
     
             const br1 = document.createElement("br");
@@ -377,7 +376,7 @@ export class Game {
     
             const devLoadButton = document.createElement("button");
             devLoadButton.appendChild(document.createTextNode("Force Load Save"));
-            devLoadButton.setAttribute("onclick","saves.loadSave()");
+            devLoadButton.addEventListener("click", () => {saves.loadSave(this)});
             devDiv.appendChild(devLoadButton);
     
             const br3 = document.createElement("br");
@@ -395,7 +394,7 @@ export class Game {
     
             const toggleSaving = document.createElement("button");
             toggleSaving.appendChild(document.createTextNode("Toggle Auto-Saving"));
-            toggleSaving.setAttribute("onclick","dev.toggleSaving()");
+            toggleSaving.addEventListener("click", () => {dev.toggleSaving()});
             toggleSaving.setAttribute("style","margin-bottom:0px;");
             devDiv.appendChild(toggleSaving);
             const currentSavingStatus = document.createElement("p");
@@ -431,8 +430,8 @@ export class Game {
         document.getElementById("listModsButton").addEventListener("click", () => {mods.listClicked()});
         document.getElementById("devModeSelect").addEventListener("change", () => {dev.setDevMode((document.getElementById("devModeSelect") as HTMLFormElement).value)})
         // upgrades holder
-        document.getElementById("upgradesHolder").addEventListener("mouseover", () => {upgrades.expandUpgradesHolder()});
-        document.getElementById("upgradesHolder").addEventListener("mouseout", () => {upgrades.expandUpgradesHolder(true)});
+        document.getElementById("upgradesHolder").addEventListener("mouseover", () => {expandUpgradesHolder()});
+        document.getElementById("upgradesHolder").addEventListener("mouseout", () => {expandUpgradesHolder(true)});
         // simple popup
         document.getElementById("simplePopupButton").addEventListener("click", () => {helper.popup.simpleClicked()});
         document.getElementById("simplePopupBackButton").addEventListener("click", () => {helper.popup.destroySimple()});
@@ -459,7 +458,7 @@ export class Game {
         this.reloadCPSCounter();
         this.reloadCookieCounter();
     
-        upgrades.checkUpgradeAvailability();
+        // upgrades.checkUpgradeAvailability();
     
         // building unlocks
         if (this.totalCookies >= 100) {
@@ -607,141 +606,6 @@ dev.toggleSaving = function() { // TODO 0.7: this should be a toggle without dev
 }
 
 // ------------------------------------
-// Upgrades
-// ------------------------------------
-upgrades.create = function(id: number, statistic: boolean=false) { // statistic is for creating it in the statistics page
-    let building = Math.floor(id / 5);
-
-    const icon = this.img[id]; //? does this need to exist?
-    /** is already getFile()-ed so don't use getFile() with this variable */
-    const UPGRADE_ICON_PATH = (icon === undefined || icon === null) ? "img/unknown-32-32.png" : `img/upgrades/${icon}`;
-    if (icon === undefined || icon === null) { // todo 0.7: add check if a 404 is returned for the upgrade icon, might require async/await shenanigans but whatevs
-        console.warn(`An image file for upgrade with ID: ${id} was not defined. Falling back to "unknown" image.`);
-    }
-
-    const upgrade = document.createElement("div");
-    upgrade.setAttribute("class","upgrade");
-    if (statistic) {
-        upgrade.setAttribute("id",`upgrade${id}Stats`);
-        upgrade.setAttribute("class","upgrade-stats pointer");
-        upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building},true)`); // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
-        upgrade.setAttribute("onmousemove",`upgrades.hovered(${id},${building},true)`); // ^
-        upgrade.setAttribute("onmouseout","hideTooltip()");
-        upgrade.style.backgroundImage = `url(${UPGRADE_ICON_PATH})`;
-    } else {
-        upgrade.setAttribute("id",`upgrade${id}`);
-        upgrade.setAttribute("onclick",`upgrades.clicked(${id},${building})`);
-        upgrade.setAttribute("onmouseover",`upgrades.hovered(${id},${building})`);  // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
-        upgrade.setAttribute("onmousemove",`upgrades.hovered(${id},${building})`);
-        upgrade.setAttribute("onmouseout","hideTooltip()");
-        upgrade.style.backgroundImage = `url(${UPGRADE_ICON_PATH})`;
-    }
-    
-    if (!statistic)
-        document.getElementById("upgradesHolder").appendChild(upgrade);
-    else
-        document.getElementById("upgradesBoughtStatsHolder").appendChild(upgrade);
-    
-    if (!statistic)
-        upgrades.currentlyShown++;
-}
-
-upgrades.hovered = function(id: number, building: number, statistic: boolean=false) {
-    const tooltip = document.getElementById("tooltip");
-
-    document.getElementById("tooltipProduces").style.display = "none";
-    document.getElementById("tooltipProducing").style.display = "none";
-    document.getElementById("tooltipDesc").style.display = "block";
-
-    document.getElementById("tooltipName").innerHTML = upgrades.names[id];
-    document.getElementById("tooltipPrice").innerHTML = `Price: ${commaify(upgrades.prices[id])}`;
-    document.getElementById("tooltipDesc").innerHTML = upgrades.descriptions[building];
-    document.getElementById("tooltipQuote").innerHTML = `<i>\"${upgrades.quotes[id]}\"</i>`;
-
-    tooltip.style.display = "block";
-    if (statistic === true) { // todo: make the tooltip clamp here
-        tooltip.style.left = `${game.mousePos.x}px`;
-        tooltip.style.top = `${game.mousePos.y - tooltip.offsetHeight}px`;  // it's minus offsetHeight because we don't want the cursor touching the tooltip
-        tooltip.style.borderRightWidth = "3px";
-    } else {
-        tooltip.style.right = "346px";
-        // clamping allows between 0 and the height of the window minus the height of the box. also add one from the height of the box because it doesn't work correctly normally, idk why
-        tooltip.style.top = clamp(game.mousePos.y - tooltip.offsetHeight/2,0,window.innerHeight-(tooltip.offsetHeight + 1))+"px";
-        tooltip.style.left = "auto"; // when tooltip is a statistic it sets the left property because it won't work correctly with right, this resets that
-        tooltip.style.borderRightWidth = "0px";
-    }
-}
-
-upgrades.checkUpgradeAvailability = function() {
-    let runThroughTimes = 0; // buildings.building.bought needs for boughtUnlockRequirements indicies
-    const boughtUnlockRequirements = [ // number of buildings bought required to unlock an upgrade in chronological order
-        1,5,10,25,50
-    ];
-    // Keyboards
-    for (let i = 0; i <= 5; i++) {
-        if (game.keyboard.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
-            upgrades.unlocked[i] = 1;
-            upgrades.create(i);
-        }
-        runThroughTimes++;
-    }
-    // Grandpas
-    runThroughTimes = 0;
-    for (let i = 5; i <= 9; i++) {
-        if (game.grandpa.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
-            upgrades.unlocked[i] = 1;
-            upgrades.create(i);
-        }
-        runThroughTimes++;
-    }
-    // Ranches
-    runThroughTimes = 0;
-    for (let i = 10; i <= 14; i++) {
-        if (game.ranch.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
-            upgrades.unlocked[i] = 1;
-            upgrades.create(i);
-        }
-        runThroughTimes++;
-    }
-    // TVs
-    runThroughTimes = 0;
-    for (let i = 15; i <= 19; i++) {
-        if (game.television.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
-            upgrades.unlocked[i] = 1;
-            upgrades.create(i);
-        }
-        runThroughTimes++;
-    }
-    // Workers
-    runThroughTimes = 0;
-    for (let i = 20; i <= 24; i++) {
-        if (game.worker.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
-            upgrades.unlocked[i] = 1;
-            upgrades.create(i);
-        }
-        runThroughTimes++;
-    }
-    // Wallets
-    runThroughTimes = 0;
-    for (let i = 25; i <= 29; i++) {
-        if (game.wallet.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
-            upgrades.unlocked[i] = 1;
-            upgrades.create(i);
-        }
-        runThroughTimes++;
-    }
-    // Churches
-    runThroughTimes = 0;
-    for (let i = 30; i <= 34; i++) {
-        if (game.church.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
-            upgrades.unlocked[i] = 1;
-            upgrades.create(i);
-        }
-        runThroughTimes++;
-    }
-}
-
-// ------------------------------------
 // Helper Functions
 // ------------------------------------
 helper.consoleLogDev = function(str: string) {
@@ -790,9 +654,9 @@ helper.popup.createSimple = function(x: number, y: number, text: string, noButto
     }
 
     if (doWhat !== "default") {
-        document.getElementById("simplePopupButton").setAttribute("onclick",`helper.popup.simpleClicked(\"${doWhat}\")`);
+        document.getElementById("simplePopupButton").addEventListener("click", () => {helper.popup.simpleClicked(doWhat)})
     } else {
-        document.getElementById("simplePopupButton").setAttribute("onclick","helper.popup.simpleClicked()");
+        document.getElementById("simplePopupButton").addEventListener("click", () => {helper.popup.simpleClicked()})
     }
 }
 helper.popup.destroySimple = function() {

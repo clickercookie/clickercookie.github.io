@@ -1,5 +1,6 @@
 import { capitalize, commaify, clamp } from "./helper.js";
 import { Game } from "./main.js";
+import { hideTooltip } from "./tooltip.js";
 
 export class Building {
     static UPGRADECOST_MULTIPLIER = 1.15;
@@ -21,7 +22,7 @@ export class Building {
     constructor(game: Game, name: string, quote: string, upgradeCost: number, CPSGain: number, iconImg: string="unknown.png", esPlural: boolean=false) {
         this.game = game;
         
-        this.name = name; // ! SHOULD BE SAME AS OBJECT INSTANCE NAME, will be changed in 0.7!!!
+        this.name = name;
         this.quote = quote;
         this.upgradeCost = upgradeCost;
         this.CPSGiven = 0;
@@ -35,11 +36,10 @@ export class Building {
         // setup HTML (uses indentation to show structure)
         this.html = document.createElement("div");
         this.html.setAttribute("class","building");
-        // todo 0.7: update on the whole instance name thing, event listeners can fix this super easy
-        this.html.setAttribute("onclick",`${this.name}.buy()`); // this is why names must be the instance name
-        this.html.setAttribute("onmousemove",`${this.name}.hovered()`); // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
-        this.html.setAttribute("onmouseover",`${this.name}.hovered()`); // ^
-        this.html.setAttribute("onmouseout","hideTooltip()");
+        this.html.addEventListener("click", () => {this.buy()});
+        this.html.addEventListener("mousemove", () => {this.hovered()});
+        this.html.addEventListener("mouseover", () => {this.hovered()});
+        this.html.addEventListener("onmouseout",() => {hideTooltip()});
             const icon = document.createElement("img");
             icon.setAttribute("class", "building-icon");
             icon.setAttribute("src", `img/${iconImg}`);
