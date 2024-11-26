@@ -13,7 +13,12 @@ import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
 import { clamp, convertCollectionToArray, capitalize, commaify } from "./helper.js";
 import { Upgrade, UPGRADES_DATA, updateUpgradesBoughtStatistic, expandUpgradesHolder } from "./upgrades.js";
 import { Building } from "./buildings.js";
-import { saves } from "./saving.js";
+import { SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
+
+/**
+ * our lord & savior, the save handler
+ */
+export const saveHandler = new SaveHandler(); //* this thing's position in the script (where it's defined) may change later on. originally it was with game's declaration but we need it in the Game class so it complained about inability to access a lexical declaration so i moved it up here 
 
 // ------------------------------------
 // Variable & Object Definitions
@@ -182,11 +187,11 @@ helper.popup = {} as {
 // Initialization and Checks for Errors
 // ------------------------------------
 // todo: learn about namespaces and see if that would be better for Game
-export class Game {
+export class Game extends SaveProvider {
     // version-related constants
-    public VERSION: string;
-    public VERSION_BRANCH: number;
-    public IN_DEVELOPMENT: boolean;
+    public static VERSION: string = version;
+    public static  VERSION_BRANCH: number = versionBranch;
+    public static IN_DEVELOPMENT: boolean = inDevelopment;
 
     // self-explainatory-ish things
     public hasCheated: boolean;
@@ -212,6 +217,8 @@ export class Game {
     // upgrades
     public upgrades: Upgrade[];
 
+    public savinator5000: Savinator;
+
     /** view versions of variables (their main versions have long decimal points) */
     public variableView: {
         cookiesView: string,
@@ -236,9 +243,11 @@ export class Game {
     }
 
     constructor() {
-        this.VERSION = version;
-        this.VERSION_BRANCH = versionBranch;
-        this.IN_DEVELOPMENT = inDevelopment;
+        super();
+
+        // this.VERSION = version;
+        // this.VERSION_BRANCH = versionBranch;
+        // this.IN_DEVELOPMENT = inDevelopment;
 
         // buildings and stuff
         this.keyboard = new Building(this, "keyboard","type in cookies",15,0.1,"keyboard.png");
@@ -272,6 +281,8 @@ export class Game {
             totalCookiesView: "",
             cookiesPerSecondView: ""
         };
+
+        this.savinator5000 = new Savinator(saveHandler);
     }
 
     init() {
@@ -555,6 +566,13 @@ export class Game {
         this.cookieBeenClickedTimes++;
         this.totalCookies += this.cookiesPerClick;
         this.reloadCookieCounter();
+    }
+
+    getSaveData() {
+        return {
+            cookies: this.cookies,
+            cookiespersecond: this.cookiesPerSecond
+        }
     }
 }
 
@@ -971,6 +989,7 @@ tooltip.create = function(x: number, y: number, content: any) {
 console.log("you seem smart, how 'bout you contribute to the project? https://github.com/clickercookie/clickercookie.github.io");
 
 const game = new Game();
+saveHandler.registerProvider("clickercookie", game);
 
 // timer things
 setInterval(() => {
@@ -982,8 +1001,8 @@ setInterval(() => {
 setInterval(() => { // auto-saving
     if (!savingAllowed) return false;
 
-    saves.save(game);
-}, 60 * 1000); // 60s
+    game.savinator5000.save();
+}, 15 * 1000); // 60s
 
 // Events
 window.addEventListener("mousemove", (event) => {

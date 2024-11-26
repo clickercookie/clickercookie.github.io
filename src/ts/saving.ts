@@ -37,12 +37,96 @@ saves.defaultSavedValues = { // Should be self-explanatory. Doesn't have to be o
 // ------------------------------------
 // Saving
 // ------------------------------------
+export class Savinator {
+    private saveHandler: SaveHandler
+    constructor(saveHandler: SaveHandler) {
+        this.saveHandler = saveHandler;
+    }
+
+    save() {
+        const save = new Save();
+        const saveDump = this.saveHandler.dumpSaveData();
+        for (let i in saveDump) {
+            console.log(i);
+            save.addData(i, saveDump[i]);
+        }
+        localStorage.setItem("newsave", save.stringify());
+    }
+}
+
+export class SaveProvider {
+    getSaveData(): any {
+        return undefined;
+    }
+}
+export class SaveHandler {
+    private providers: Record<string, SaveProvider>;
+    constructor() {
+        this.providers = {};
+        
+    }
+
+    dumpSaveData(): Record<string, unknown> {
+        const saveData: Record<string, unknown> = {};
+        for (let i in this.providers) {
+            saveData[i] = this.providers[i].getSaveData();
+        }
+        return saveData;
+    }
+
+    loggy() {
+        for (let i in this.providers) {
+            console.log(this.providers[i].getSaveData())
+        }
+    }
+
+    registerProvider(namespace: string, provider: SaveProvider) {
+        this.providers[namespace] = provider;
+    }
+}
+
+
+interface SaveDataHeader {
+    version: string;
+    versionBranch: number;
+    format: number
+}
+
+interface SaveData {
+    header: SaveDataHeader;
+    data: Record<any, any>
+}
+
+class Save {
+    static VERSION_FORMAT = 4;
+
+    private data: SaveData;
+    constructor() {
+        this.data = {
+            header: {
+                version: Game.VERSION,
+                versionBranch: Game.VERSION_BRANCH,
+                format: Save.VERSION_FORMAT
+            },
+            data: {}
+        }
+    }
+
+    addData(namespace: string, value: any) {
+        this.data.data[namespace] = value;
+    }
+
+    stringify(): string {
+        return JSON.stringify(this.data);
+    }
+}
+
 // ! Hey!
 // ! Do not make updates to this code! It will be changing in a later version! Don't waste your time!
 // ! See this issue: https://github.com/clickercookie/clickercookie.github.io/issues/18
 saves.exportData = function(game: Game) {
     saves.save(game);
-    const dataJSON = !game.VERSION_BRANCH ? JSON.stringify(localStorage.save) : JSON.stringify(localStorage.betaSave);
+    const dataJSON = !Game.VERSION_BRANCH ? JSON.stringify(localStorage.save) : JSON.stringify(localStorage.betaSave);
 
     const textToBLOB = new Blob([dataJSON], { type: "text/plain" });
 
@@ -77,10 +161,10 @@ saves.importData = function(game: Game) {
         // helper.consoleLogDev("imported data: ");
         // helper.consoleLogDev(importedData.toString());
 
-        const versionBranchToDisplay = !game.VERSION_BRANCH ? "main" : "beta";
+        const versionBranchToDisplay = !Game.VERSION_BRANCH ? "main" : "beta";
         const saveKeys = Object.keys(importedData);
         saveKeys.forEach((element) => { // checks if save's version matches current version
-            if (element == "versionBranch" && importedData[element] != game.VERSION_BRANCH) {
+            if (element == "versionBranch" && importedData[element] != Game.VERSION_BRANCH) {
                 // helper.popup.createSimple(300,150,`This is a save file from another version branch (${versionBranchToDisplay}), which is incompatible with this version. Please use a different file.`,false,"default","Alert",false,true);
                 alert("blah blah version branch no good yada yada")
                 return false;
@@ -93,7 +177,7 @@ saves.importData = function(game: Game) {
 }
 
 saves.loadSave = function(game: Game) {
-    const loadedSave = !game.VERSION_BRANCH ? JSON.parse(localStorage.getItem("save")) : JSON.parse(localStorage.getItem("betaSave"));
+    const loadedSave = !Game.VERSION_BRANCH ? JSON.parse(localStorage.getItem("save")) : JSON.parse(localStorage.getItem("betaSave"));
 
     game.grandpa.setVisibility(false);
     game.ranch.setVisibility(false);
@@ -140,11 +224,11 @@ saves.save = function(game: Game, data=undefined) {
             save[name] = value;
         }
     }
-    if (game.VERSION_BRANCH === Game.Versions.MAIN)
+    if (Game.VERSION_BRANCH === Game.Versions.MAIN)
         localStorage.setItem("save",JSON.stringify(save));
     else
         localStorage.setItem("betaSave",JSON.stringify(save));
-    if (game.IN_DEVELOPMENT) console.log("save object: ", save);
+    if (Game.IN_DEVELOPMENT) console.log("save object: ", save);
 
     // Update saving notification
     const indicator = document.getElementById("savingIndicator");
@@ -156,7 +240,7 @@ saves.save = function(game: Game, data=undefined) {
 }
 
 saves.resetSave = function(game: Game) {
-    if (game.VERSION_BRANCH === Game.Versions.MAIN) {
+    if (Game.VERSION_BRANCH === Game.Versions.MAIN) {
         localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
     } else {
         localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
