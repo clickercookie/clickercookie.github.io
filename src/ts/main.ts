@@ -14,6 +14,7 @@ import { clamp, convertCollectionToArray, capitalize, commaify } from "./helper.
 import { Upgrade, UPGRADES_DATA, updateUpgradesBoughtStatistic, expandUpgradesHolder } from "./upgrades.js";
 import { Building } from "./buildings.js";
 import { SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
+import { ModProvider } from "./exmod.js";
 
 /**
  * our lord & savior, the save handler
@@ -440,8 +441,8 @@ export class Game extends SaveProvider {
         document.getElementById("saveButton").addEventListener("click", () => {this.savinator5000.save()});
         document.getElementById("loadButton").addEventListener("click", () => {this.savinator5000.load()});
         document.getElementById("resetSaveButton").addEventListener("click", () => {helper.popup.createSimple(300,150,'Are you sure you want to do this?',false,'resetSave()','Warning',true,true)});
-        document.getElementById("exportDataButton").addEventListener("click", () => {saves.exportData(this)});
-        document.getElementById("importDataInput").addEventListener("change", () => {saves.importData(this)});
+        document.getElementById("exportDataButton").addEventListener("click", () => {this.savinator5000.export()});
+        document.getElementById("importDataInput").addEventListener("change", () => {this.savinator5000.import()});
         document.getElementById("addModButton").addEventListener("click", () => {mods.addClicked()});
         document.getElementById("listModsButton").addEventListener("click", () => {mods.listClicked()});
         document.getElementById("devModeSelect").addEventListener("change", () => {dev.setDevMode((document.getElementById("devModeSelect") as HTMLFormElement).value)})
@@ -999,7 +1000,10 @@ tooltip.create = function(x: number, y: number, content: any) {
 console.log("you seem smart, how 'bout you contribute to the project? https://github.com/clickercookie/clickercookie.github.io");
 
 const game = new Game();
+const modProvider = new ModProvider();
+
 saveHandler.registerProvider("clickercookie", game);
+// saveHandler.registerProvider(modProvider.NAMESPACE, modProvider)
 
 // timer things
 setInterval(() => {

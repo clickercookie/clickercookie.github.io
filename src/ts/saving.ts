@@ -39,25 +39,57 @@ saves.defaultSavedValues = { // Should be self-explanatory. Doesn't have to be o
 // ------------------------------------
 export class Savinator {
     private saveHandler: SaveHandler
+
+    /** If this value is false, when you save when a mod is registered with the saveHandler, then reload the page to a state where it isn't, a save will overwrite that mod's data. */
+    preserveUnusedNamespacesInSaves: boolean;
     constructor(saveHandler: SaveHandler) {
         this.saveHandler = saveHandler;
+
+        this.preserveUnusedNamespacesInSaves = true;
+    }
+
+    setLocalStorageSave(value: string) {
+        if (Game.VERSION_BRANCH === Game.Versions.MAIN)
+            localStorage.setItem("newSave", value);
+        else
+            localStorage.setItem("newBetaSave", value);
+    }
+
+    getLocalStorageSave(): string { //? should this return a Save or a stringified save? (currently the latter)
+        if (Game.VERSION_BRANCH === Game.Versions.MAIN)
+            return localStorage.getItem("newSave");
+        else
+            return localStorage.getItem("newBetaSave");
     }
 
     /**
      * Save a stringified {@link Save} to localStorage with {@link Savinator.saveHandler}'s savedata dump as the data.
-     * ! WARNING: As it currently stands, saving is DESTRUCTIVE! If you save stuff when a mod is registered with the saveHandler then reload to a state where it isn't, a save will overwrite that mod's data!
-     */
-    save() {
-        const save = new Save();
-        const saveDump = this.saveHandler.dumpSaveData();
-        for (let i in saveDump) {
-            save.addData(i, saveDump[i]);
-            console.log(`Added data to save for ${i} namespace.`);
+     * If {@link Savinator.preserveUnusedNamespacesInSaves} is true, then an additional statement will be run that will ensure that if a namespace is present in localStorage and is not present in the dump, that that namespace's data is copied to the new save.
+     * @param [save=undefined] The {@link Save} to use for the save. If defined, will not create a new {@link Save} using {@link Savinator.saveHandler}'s dump but will instead use this parameter.
+    */
+    save(save: Save=undefined) {
+        if (save === undefined) {
+            const newSave = new Save();
+            const saveDump = this.saveHandler.dumpSaveData();
+            if (this.preserveUnusedNamespacesInSaves) { // todo: too many localStorageSave.getNamespaces()
+                const localStorageSave = new Save(JSON.parse(this.getLocalStorageSave()));
+                for (let i in localStorageSave.getNamespaces()) {
+                    if (!(localStorageSave.getNamespaces()[i] in saveDump)) {
+                        newSave.addData(localStorageSave.getNamespaces()[i], localStorageSave.getData(localStorageSave.getNamespaces()[i]));
+                        console.log(`Preserved data for ${localStorageSave.getNamespaces()[i]} namespace (unused).`);
+                    }
+                }
+            }
+            for (let i in saveDump) {
+                newSave.addData(i, saveDump[i]);
+                console.log(`Added data to save for ${i} namespace.`);
+            }
+            this.setLocalStorageSave(newSave.stringify());
+            console.log("Saved!");
+        } else {
+            this.setLocalStorageSave(save.stringify());
+            console.log("Saved (with custom Save)!");
         }
-        if (Game.VERSION_BRANCH === Game.Versions.MAIN)
-            localStorage.setItem("newSave", save.stringify());
-        else
-            localStorage.setItem("newBetaSave", save.stringify());
     }
 
     /**
@@ -70,7 +102,50 @@ export class Savinator {
             providers[namespace].loadSaveData(localStorageSave.getData(namespace)); // if we haven't saved anything with that namespace, then this will fail
             console.log(`Loaded save data for ${namespace} namespace.`);
         }
-        // this should run the loadSaveData() of every SaveProvider in this guy's saveHandler
+    }
+
+    export() {
+        this.save(); //? should we do this? can we do it a different way that would be better?
+        const dataJSON = (Game.VERSION_BRANCH === Game.Versions.MAIN) ? localStorage.getItem("newSave") : localStorage.getItem("newBetaSave");
+
+        const textToBLOB = new Blob([dataJSON], { type: "text/plain" });
+
+        const newLink = document.createElement("a");
+        newLink.download = "save.ccsave";
+
+        if (window.webkitURL !== null) {
+            newLink.href = window.webkitURL.createObjectURL(textToBLOB);
+        } else {
+            newLink.href = window.URL.createObjectURL(textToBLOB);
+            newLink.style.display = "none";
+            document.body.appendChild(newLink);
+        }
+
+        newLink.click(); 
+    }
+
+    import() {
+        this.save(); //? do we need to do this?
+        const file = (document.getElementById("importDataInput") as HTMLInputElement).files[0]; //? should we get the File from the element, or should it be passed as a param to Savinator.import()?
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            const importedData = new Save(JSON.parse(reader.result as string)); //? "as string" way to not? detect mime type from blob make sure js?
+            // helper.consoleLogDev("imported data: ");
+            // helper.consoleLogDev(importedData.toString());
+
+            const versionBranchToDisplay = (Game.VERSION_BRANCH === Game.Versions.MAIN) ? "beta" : "main"; //! i don't like this variable
+            if (importedData.getHeader().versionBranch !== Game.VERSION_BRANCH) {
+                // helper.popup.createSimple(300,150,`This is a save file from another version branch (${versionBranchToDisplay}), which is incompatible with this version. Please use a different file.`,false,"default","Alert",false,true);
+                alert("blah blah version branch no good yada yada")
+            }
+
+            this.save(importedData);
+            this.load();
+        }
+        reader.onerror = (e) => alert(`something broke, don't expect me to fix it :D \nerror: ${e}`);
+
+        reader.readAsText(file);
     }
 }
 
@@ -135,7 +210,7 @@ interface SaveData {
 class Save {
     static VERSION_FORMAT = 4;
 
-    private data: SaveData;
+    private data: SaveData; //? this is private, which is why we have so many get() methods. should it just be public?
     constructor(data: SaveData=undefined) {
         if (data === undefined) {
             this.data = {
@@ -161,65 +236,16 @@ class Save {
 
         return this.data.data[namespace];
     }
+    getHeader() {
+        return this.data.header;
+    }
+    getNamespaces() {
+        return Object.keys(this.data.data);
+    }
 
     stringify(): string {
         return JSON.stringify(this.data);
     }
-}
-
-// ! Hey!
-// ! Do not make updates to this code! It will be changing in a later version! Don't waste your time!
-// ! See this issue: https://github.com/clickercookie/clickercookie.github.io/issues/18
-saves.exportData = function(game: Game) {
-    saves.save(game);
-    const dataJSON = !Game.VERSION_BRANCH ? JSON.stringify(localStorage.save) : JSON.stringify(localStorage.betaSave);
-
-    const textToBLOB = new Blob([dataJSON], { type: "text/plain" });
-
-    let newLink = document.createElement("a");
-    newLink.download = "save.ccsave";
-
-    if (window.webkitURL != null) {
-        newLink.href = window.webkitURL.createObjectURL(textToBLOB);
-    } else {
-        newLink.href = window.URL.createObjectURL(textToBLOB);
-        newLink.style.display = "none";
-        document.body.appendChild(newLink);
-    }
-
-    newLink.click(); 
-}
-
-saves.importData = function(game: Game) {
-    saves.save(game);
-    const file = (document.getElementById("importDataInput") as HTMLInputElement).files[0];
-    const reader = new FileReader();
-    let importedData: Record<string, any>; // because of the scope of reader.onload(), it can't be defined as a constant in that function and still work in reader.onloadend()
-
-    reader.onload = function() {
-        importedData = JSON.parse(JSON.parse(reader.result as string)); // todo: for some reason this has to parse twice, look into this later
-    }
-    reader.onerror = (e) => alert(`something broke, don't expect me to fix it :D \nerror: ${e}`);
-
-    reader.readAsText(file);
-    
-    reader.onloadend = () => {
-        // helper.consoleLogDev("imported data: ");
-        // helper.consoleLogDev(importedData.toString());
-
-        const versionBranchToDisplay = !Game.VERSION_BRANCH ? "main" : "beta";
-        const saveKeys = Object.keys(importedData);
-        saveKeys.forEach((element) => { // checks if save's version matches current version
-            if (element == "versionBranch" && importedData[element] != Game.VERSION_BRANCH) {
-                // helper.popup.createSimple(300,150,`This is a save file from another version branch (${versionBranchToDisplay}), which is incompatible with this version. Please use a different file.`,false,"default","Alert",false,true);
-                alert("blah blah version branch no good yada yada")
-                return false;
-            }
-        });
-
-        saves.save(game, importedData);
-        saves.loadSave(game);
-    };
 }
 
 saves.loadSave = function(game: Game) {

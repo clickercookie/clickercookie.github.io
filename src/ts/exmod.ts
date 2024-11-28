@@ -1,6 +1,6 @@
 //* This is an example of a mod that supports saving.
 
-import { saveHandler } from "./main.js";
+// import { saveHandler } from "./main.js";
 import { SaveProvider } from "./saving.js";
 
 interface ModSave {
@@ -18,7 +18,7 @@ export class ModProvider extends SaveProvider {
 
         this.superCookies = 5;
 
-        document.getElementById("cookieCounter").addEventListener("click", () => {this.superCookies++})
+        document.getElementById("cookieCounter")!.addEventListener("click", () => {this.superCookies++})
     }
 
     getSaveData(): ModSave {
@@ -32,6 +32,6 @@ export class ModProvider extends SaveProvider {
     }
 }
 
-const modProvider = new ModProvider();
+// const modProvider = new ModProvider();
 
-saveHandler.registerProvider(modProvider.NAMESPACE, modProvider)
+// saveHandler.registerProvider(modProvider.NAMESPACE, modProvider)
