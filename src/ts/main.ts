@@ -10,10 +10,10 @@ const desktop: boolean = false;
 // Imports
 // ------------------------------------
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
-import { clamp, convertCollectionToArray, capitalize, commaify } from "./helper.js";
+import { convertCollectionToArray, capitalize, commaify } from "./helper.js";
 import { Upgrade, UPGRADES_DATA, updateUpgradesBoughtStatistic, expandUpgradesHolder, destroyAllUpgrades, showUnlockedUpgrades } from "./upgrades.js";
 import { Building } from "./buildings.js";
-import { Save, SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
+import { SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
 import { ModProvider } from "./exmod.js";
 
 /**

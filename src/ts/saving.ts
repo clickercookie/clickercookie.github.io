@@ -2,7 +2,7 @@
 // it works but it's really terrible because it's changing like ASAP
 
 import { Game } from "./main.js";
-import { destroyAllUpgrades, Upgrade, updateUpgradesBoughtStatistic, showUnlockedUpgrades } from "./upgrades.js";
+import { destroyAllUpgrades, Upgrade, updateUpgradesBoughtStatistic } from "./upgrades.js";
 
 export const saves = {} as {
     importedData: any,

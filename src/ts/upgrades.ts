@@ -1,5 +1,5 @@
 import { Building } from "./buildings.js";
-import { clamp, commaify, convertCollectionToArray } from "./helper.js";
+import { clamp, commaify } from "./helper.js";
 import { hideTooltip } from "./tooltip.js";
 import { Game } from "./main.js";
 
