@@ -11,9 +11,9 @@ const desktop: boolean = false;
 // ------------------------------------
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
 import { clamp, convertCollectionToArray, capitalize, commaify } from "./helper.js";
-import { Upgrade, UPGRADES_DATA, updateUpgradesBoughtStatistic, expandUpgradesHolder } from "./upgrades.js";
+import { Upgrade, UPGRADES_DATA, updateUpgradesBoughtStatistic, expandUpgradesHolder, destroyAllUpgrades, showUnlockedUpgrades } from "./upgrades.js";
 import { Building } from "./buildings.js";
-import { SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
+import { Save, SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
 import { ModProvider } from "./exmod.js";
 
 /**
@@ -189,14 +189,18 @@ helper.popup = {} as {
 // ------------------------------------
 interface ClickerCookieSaveData {
     cookies: number;
-    cookiesPerSecond: number;
+    totalCookies: number;
+    cookiesPerClick: number;
+    cookieBeenClickedTimes: number;
+    hasCheated: boolean;
+    isModded: boolean;
 }
 
 // todo: learn about namespaces and see if that would be better for Game
 export class Game extends SaveProvider {
     // version-related constants
     public static VERSION: string = version;
-    public static  VERSION_BRANCH: number = versionBranch;
+    public static VERSION_BRANCH: number = versionBranch;
     public static IN_DEVELOPMENT: boolean = inDevelopment;
 
     // self-explainatory-ish things
@@ -292,25 +296,28 @@ export class Game extends SaveProvider {
     }
 
     init() {
-        if (isNaN(this.cookies)) {
+        if (isNaN(this.cookies)) { //? do we really still need this?
             saves.resetSave(this);
             console.warn("Cookies were NaN and save was reset.");
         }
-    
+        
         if (localStorage.cookies >= 0)
             helper.popup.createSimple(400,200,"You are using an extremely outdated saving method. You will have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format. Your old save cannot be restored.",false,"localStorage.clear()","Warning",false,false);
     
         this.reloadBuildingPrices();
-        if (localStorage.getItem("save") == null && versionBranch === 0) {
-            localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
+
+        // todo: these can be easily combined
+        if (localStorage.getItem(this.savinator5000.saveName) == null && Game.VERSION_BRANCH === 0) {
+            this.savinator5000.save();
+            
             console.warn("save was null and was automatically reset, if this is your first time playing this is an intended behavior.");
         }
-        if (localStorage.getItem("betaSave") == null && versionBranch === 1) {
-            localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
+        if (localStorage.getItem(this.savinator5000.betaSaveName) == null && Game.VERSION_BRANCH === 1) {
+            this.savinator5000.save();
             console.warn("betaSave was null and was automatically reset, if this is your first time playing this is an intended behavior.");
         }
     
-        saves.loadSave(this);
+        this.savinator5000.load();
     
         // if saves are old
         if (localStorage.getItem("save") && localStorage.getItem("save")[0] === "[" && versionBranch === 0) {
@@ -393,7 +400,7 @@ export class Game extends SaveProvider {
     
             const devLoadButton = document.createElement("button");
             devLoadButton.appendChild(document.createTextNode("Force Load Save"));
-            devLoadButton.addEventListener("click", () => {saves.loadSave(this)});
+            devLoadButton.addEventListener("click", () => {this.savinator5000.load()});
             devDiv.appendChild(devLoadButton);
     
             const br3 = document.createElement("br");
@@ -457,6 +464,15 @@ export class Game extends SaveProvider {
         document.getElementById("versionNumber").addEventListener("click", () => {versionSwitch()});
         document.getElementById("versionNumber").addEventListener("mouseover", () => {versionNumberMousedOver()});
         document.getElementById("versionNumber").addEventListener("mouseout", () => {versionNumberMousedOver(true)});
+        // window events
+        window.addEventListener("mousemove", (event) => {
+            game.mousePos = {
+                x: event.clientX,
+                y: event.clientY
+            }
+            if (inDevelopment && !mobile)
+                document.getElementById("mousePosDevText").innerText = `Mouse Pos: (${game.mousePos.x}, ${game.mousePos.y})`;
+        });
     
         // Holiday Events
         const date = new Date();
@@ -578,12 +594,42 @@ export class Game extends SaveProvider {
     getSaveData(): ClickerCookieSaveData {
         return {
             cookies: this.cookies,
-            cookiesPerSecond: this.cookiesPerSecond
+            totalCookies: this.totalCookies,
+            cookiesPerClick: this.cookiesPerClick,
+            cookieBeenClickedTimes: this.cookieBeenClickedTimes,
+            hasCheated: this.hasCheated,
+            isModded: this.isModded,
         }
     }
     loadSaveData(saveData: ClickerCookieSaveData) {
+        // workaround alert!
+        for (let i in saveData) {
+            if (!(i in this)) {
+                console.log(`Did not find ${i} in game!`);
+            }
+        }
+
+        this.grandpa.setVisibility(false);
+        this.ranch.setVisibility(false);
+        this.television.setVisibility(false);
+        this.worker.setVisibility(false);
+        this.wallet.setVisibility(false);
+        this.church.setVisibility(false);
+
         this.cookies = saveData.cookies;
-        this.cookiesPerSecond = saveData.cookiesPerSecond;
+        this.totalCookies = saveData.totalCookies;
+        this.cookiesPerClick = saveData.cookiesPerClick;
+        this.cookieBeenClickedTimes = saveData.cookieBeenClickedTimes;
+        this.hasCheated = saveData.hasCheated;
+        this.isModded = saveData.isModded;
+        // ...
+
+        this.reloadBuildingPrices();
+
+        destroyAllUpgrades(this);
+        showUnlockedUpgrades(this);
+        document.getElementById("upgradesBoughtCounter").innerText = Upgrade.upgradesBought.toString();
+        updateUpgradesBoughtStatistic();
     }
 }
 
@@ -1019,14 +1065,7 @@ setInterval(() => { // auto-saving
 }, 15 * 1000); // 60s
 
 // Events
-window.addEventListener("mousemove", (event) => {
-    game.mousePos = {
-        x: event.clientX,
-        y: event.clientY
-    }
-    if (inDevelopment && !mobile)
-        document.getElementById("mousePosDevText").innerText = `Mouse Pos: (${game.mousePos.x}, ${game.mousePos.y})`;
-});
+// todo: add to game
 function resizeEventHandler() { // ? is the term "event handler" right?
     // change middle text heights
     const middleTexts = Array.from(document.querySelectorAll(".middle-main"));

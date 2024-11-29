@@ -39,7 +39,7 @@ export class Building {
         this.html.addEventListener("click", () => {this.buy()});
         this.html.addEventListener("mousemove", () => {this.hovered()});
         this.html.addEventListener("mouseover", () => {this.hovered()});
-        this.html.addEventListener("onmouseout",() => {hideTooltip()});
+        this.html.addEventListener("mouseout",() => {hideTooltip()});
             const icon = document.createElement("img");
             icon.setAttribute("class", "building-icon");
             icon.setAttribute("src", `img/${iconImg}`);

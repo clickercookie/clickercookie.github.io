@@ -8,11 +8,6 @@ export const saves = {} as {
     importedData: any,
     allToSave: any[]
     defaultSavedValues: Record<string, any>,
-
-    exportData(game: Game): void,
-    importData(game: Game): void,
-    loadSave(game: Game): void,
-    save(game: Game, data?: object): void,
     resetSave(game: Game): void,
     convert05Save(game: Game, isBeta?: boolean, isBetaSaveOld?: boolean): void
 };
@@ -40,26 +35,43 @@ saves.defaultSavedValues = { // Should be self-explanatory. Doesn't have to be o
 export class Savinator {
     private saveHandler: SaveHandler
 
+    // these are useful for debugging when i need to change the name of the local storage key temporarily
+    saveName: string;
+    betaSaveName: string;
+
     /** If this value is false, when you save when a mod is registered with the saveHandler, then reload the page to a state where it isn't, a save will overwrite that mod's data. */
     preserveUnusedNamespacesInSaves: boolean;
     constructor(saveHandler: SaveHandler) {
         this.saveHandler = saveHandler;
 
         this.preserveUnusedNamespacesInSaves = true;
+
+        this.saveName = "newSave";
+        this.betaSaveName = "newBetaSave";
     }
 
     setLocalStorageSave(value: string) {
         if (Game.VERSION_BRANCH === Game.Versions.MAIN)
-            localStorage.setItem("newSave", value);
+            localStorage.setItem(this.saveName, value);
         else
-            localStorage.setItem("newBetaSave", value);
+            localStorage.setItem(this.betaSaveName, value);
     }
 
-    getLocalStorageSave(): string { //? should this return a Save or a stringified save? (currently the latter)
-        if (Game.VERSION_BRANCH === Game.Versions.MAIN)
-            return localStorage.getItem("newSave");
-        else
-            return localStorage.getItem("newBetaSave");
+    getLocalStorageSave(): Save | null { // todo: this function looks ugly
+        if (Game.VERSION_BRANCH === Game.Versions.MAIN) {
+            if (localStorage.getItem(this.saveName) === null) {
+                return null;
+            } else {
+                return new Save(JSON.parse(localStorage.getItem(this.saveName))); // add error checking, this assumes newSave is a save, it might not be!
+            }
+        } else {
+            if (localStorage.getItem(this.betaSaveName) === null) {
+                return null;
+            } else {
+                return new Save(JSON.parse(localStorage.getItem(this.betaSaveName)));
+            }
+        }
+            
     }
 
     /**
@@ -71,8 +83,8 @@ export class Savinator {
         if (save === undefined) {
             const newSave = new Save();
             const saveDump = this.saveHandler.dumpSaveData();
-            if (this.preserveUnusedNamespacesInSaves) { // todo: too many localStorageSave.getNamespaces()
-                const localStorageSave = new Save(JSON.parse(this.getLocalStorageSave()));
+            if (this.preserveUnusedNamespacesInSaves && this.getLocalStorageSave() !== null) { // todo: too many localStorageSave.getNamespaces()
+                const localStorageSave = this.getLocalStorageSave();
                 for (let i in localStorageSave.getNamespaces()) {
                     if (!(localStorageSave.getNamespaces()[i] in saveDump)) {
                         newSave.addData(localStorageSave.getNamespaces()[i], localStorageSave.getData(localStorageSave.getNamespaces()[i]));
@@ -90,17 +102,27 @@ export class Savinator {
             this.setLocalStorageSave(save.stringify());
             console.log("Saved (with custom Save)!");
         }
+
+        // Update saving notification
+        const indicator = document.getElementById("savingIndicator");
+        indicator.classList.add("visible");
+
+        setTimeout(function() {
+            indicator.classList.remove("visible");
+        }, 1500);
     }
 
     /**
-     * Run the {@link SaveProvider.loadSaveData} method of all the providers in this instance's handler with their data in localStorage as the param.
+     * Run the {@link SaveProvider.loadSaveData()} method of all the providers in this instance's handler with their data in localStorage as the param.
      */
     load() {
-        const localStorageSave = new Save(JSON.parse((Game.VERSION_BRANCH === Game.Versions.MAIN) ? localStorage.getItem("newSave") : localStorage.getItem("newBetaSave")))
+        const localStorageSave = this.getLocalStorageSave();
         const providers = this.saveHandler.getProviders();
-        for (let namespace in providers) {
-            providers[namespace].loadSaveData(localStorageSave.getData(namespace)); // if we haven't saved anything with that namespace, then this will fail
-            console.log(`Loaded save data for ${namespace} namespace.`);
+        for (let namespace in providers) { //? should this go over providers or the localStorageSave.getNamespaces()? is there any benefit to one or the other?
+            if (localStorageSave.getNamespaces().includes(namespace)) { // if the provider namespaces is present in the local storage save
+                providers[namespace].loadSaveData(localStorageSave.getData(namespace));
+                console.log(`Loaded save data for ${namespace} namespace.`);
+            }
         }
     }
 
@@ -207,7 +229,7 @@ interface SaveData {
     data: Record<any, any>
 }
 
-class Save {
+export class Save {
     static VERSION_FORMAT = 4;
 
     private data: SaveData; //? this is private, which is why we have so many get() methods. should it just be public?
@@ -248,76 +270,13 @@ class Save {
     }
 }
 
-saves.loadSave = function(game: Game) {
-    const loadedSave = !Game.VERSION_BRANCH ? JSON.parse(localStorage.getItem("save")) : JSON.parse(localStorage.getItem("betaSave"));
-
-    game.grandpa.setVisibility(false);
-    game.ranch.setVisibility(false);
-    game.television.setVisibility(false);
-    game.worker.setVisibility(false);
-    game.wallet.setVisibility(false);
-    game.church.setVisibility(false);
-
-    const saveKeys = Object.keys(loadedSave);
-    saveKeys.forEach((variable) => {
-        try {
-            eval(`${variable} = ${loadedSave[variable]}`); // YES, i know i shouldn't use this. I have no idea how to do this otherwise so yeah probably will stay.
-
-            // helper.consoleLogDev(`loaded variable: ${variable}, value: ${loadedSave[variable]}`);
-        } catch {
-            // helper.consoleLogDev(`Attempted to load variable: ${variable}, value: ${loadedSave[variable]}. This is either a constant variable or a malformed save item.`);
-        }
-    });
-
-    game.reloadBuildingPrices();
-
-    destroyAllUpgrades(game);
-    showUnlockedUpgrades(game);
-    document.getElementById("upgradesBoughtCounter").innerText = Upgrade.upgradesBought.toString();
-    updateUpgradesBoughtStatistic();
-
-    // helper.consoleLogDev(`Loaded save with ${game.cookies} cookies.`);
-}
-
-saves.save = function(game: Game, data=undefined) {
-    const save: Record<string,any> = (data === undefined) ? {} : data; // save will be an empty object if data isn't undefined because it will be filled in the for-loop, if data is defined than save will be that
-    
-    if (data === undefined) { // todo: don't nest this somehow
-        for (let i = 0; i < saves.allToSave.length; i++) { // yes if you are wondering i totally 100% without a doubt wrote this code
-            const variable = saves.allToSave[i];
-        
-            // Get the name of the variable/property
-            const name: string = typeof variable === "object" ? variable.name : variable;
-        
-            // Get the value of the variable/property
-            const value: any = typeof variable === "object" ? variable.value : eval(variable); // YES, i know i shouldn't use this. This will be changed once 0.6 enters beta. Maybe. Probably not.
-        
-            // Add the variable/property to the object
-            save[name] = value;
-        }
-    }
-    if (Game.VERSION_BRANCH === Game.Versions.MAIN)
-        localStorage.setItem("save",JSON.stringify(save));
-    else
-        localStorage.setItem("betaSave",JSON.stringify(save));
-    if (Game.IN_DEVELOPMENT) console.log("save object: ", save);
-
-    // Update saving notification
-    const indicator = document.getElementById("savingIndicator");
-    indicator.classList.add("visible");
-
-    setTimeout(function() {
-        indicator.classList.remove("visible");
-    }, 1500);
-}
-
 saves.resetSave = function(game: Game) {
     if (Game.VERSION_BRANCH === Game.Versions.MAIN) {
         localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
     } else {
         localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
     }
-    saves.loadSave(game);
+    // saves.loadSave(game);
     game.reloadBuildingPrices();
     
     game.grandpa.unlocked = false;
@@ -398,7 +357,7 @@ saves.convert05Save = function(game: Game, isBeta=false, isBetaSaveOld=false) { 
         game.upgrades[i].bought = saves.defaultSavedValues["upgrades.bought"];
     }
 
-    saves.save(game);
+    // saves.save(game);
 
     game.grandpa.unlocked = false;
     game.ranch.unlocked = false;
