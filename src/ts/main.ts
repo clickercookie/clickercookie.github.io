@@ -255,10 +255,6 @@ export class Game extends SaveProvider {
     constructor() {
         super();
 
-        // this.VERSION = version;
-        // this.VERSION_BRANCH = versionBranch;
-        // this.IN_DEVELOPMENT = inDevelopment;
-
         // buildings and stuff
         this.keyboard = new Building(this, "keyboard","type in cookies",15,0.1,"keyboard.png");
         this.keyboard.unlocked = true;
@@ -306,21 +302,16 @@ export class Game extends SaveProvider {
     
         this.reloadBuildingPrices();
 
-        // todo: these can be easily combined
-        if (localStorage.getItem(this.savinator5000.saveName) == null && Game.VERSION_BRANCH === 0) {
+        // todo before 0.7: does betaSave work here? it looks like it does but i need to thoroughly test it
+        if (this.savinator5000.getLocalStorageSave() === null) {
             this.savinator5000.save();
-            
-            console.warn("save was null and was automatically reset, if this is your first time playing this is an intended behavior.");
-        }
-        if (localStorage.getItem(this.savinator5000.betaSaveName) == null && Game.VERSION_BRANCH === 1) {
-            this.savinator5000.save();
-            console.warn("betaSave was null and was automatically reset, if this is your first time playing this is an intended behavior.");
+            console.warn(`save was null and was automatically reset, if this is your first time playing this is an intended behavior.`); // todo: the "save" line should hopefully be the localStorage key
         }
     
         this.savinator5000.load();
     
-        // if saves are old
-        if (localStorage.getItem("save") && localStorage.getItem("save")[0] === "[" && versionBranch === 0) {
+        // if saves are old (directly interacts with localStorage because using Savinator.getLocalStorageSave() will make it angry since localStorage doesn't have a Save it has an array)
+        if (localStorage.getItem("save") && localStorage.getItem("save")[0] === "[" && Game.VERSION_BRANCH === Game.Versions.MAIN) {
             localStorage.setItem("old05Save", localStorage.getItem("save"));
             helper.popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3>
             <p class='popup-text'>so we changed the saving system again, good news, press the button below and it will be transfered to the new format.</p>
@@ -329,7 +320,7 @@ export class Game extends SaveProvider {
             </div>`);
             return "Save the save!";
         }
-        if (localStorage.getItem("betaSave") && localStorage.getItem("betaSave")[0] === "[" && versionBranch === 1) {
+        if (localStorage.getItem("betaSave") && localStorage.getItem("betaSave")[0] === "[" && Game.VERSION_BRANCH === Game.Versions.BETA) {
             localStorage.setItem("old05BetaSave", localStorage.getItem("betaSave"));
             helper.popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3>
             <p class='popup-text'>so we changed the saving system again, good news, press the button below and it will be transfered to the new format.</p>
@@ -349,14 +340,14 @@ export class Game extends SaveProvider {
     
         // change version branch specific stuff
         // change title
-        document.title = (versionBranch) ? "Clicker Cookie Beta" : "Clicker Cookie";
+        document.title = (Game.VERSION_BRANCH === Game.Versions.MAIN) ? "Clicker Cookie" : "Clicker Cookie Beta";
         // change version displayed
-        document.getElementById("versionNumber").innerText = (versionBranch) ? `Version: ${version} Beta` : `Version: ${version}`;
-        document.getElementById("versionSwitchInfoText").innerText = (versionBranch) ? "Clicking this will switch to the main branch" : "Clicking this will switch to the beta branch";
-        if (versionBranch) // show the developer mode switch
+        document.getElementById("versionNumber").innerText = (Game.VERSION_BRANCH) ? `Version: ${Game.VERSION} Beta` : `Version: ${Game.VERSION}`;
+        document.getElementById("versionSwitchInfoText").innerText = (Game.VERSION_BRANCH === Game.Versions.MAIN) ? "Clicking this will switch to the beta branch" : "Clicking this will switch to the main branch";
+        if (Game.VERSION_BRANCH === Game.Versions.BETA) // show the developer mode switch
             document.getElementById("devForm").style.display = "block";
         
-        if (inDevelopment)
+        if (Game.IN_DEVELOPMENT)
             document.title = "Clicker Cookie Dev";
     
         // Changelog Entries, AKA NOT the messiest place ever.
@@ -367,11 +358,11 @@ export class Game extends SaveProvider {
         
         // this would go after data is loaded, but it requires the mobile variable to be assigned a value
         if (this.isModded) {
-            document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
+            document.getElementById("ifModdedStat").innerText = "You have activated mods on this playthrough!";
         }
     
         // check for development special stuff
-        if (inDevelopment) {
+        if (Game.IN_DEVELOPMENT) {
             // quick buttons
             const devDiv = document.createElement("div");
             devDiv.setAttribute("style","padding-left: 3px;");
@@ -896,7 +887,7 @@ function versionNumberMousedOver(undo=false) {
         document.getElementById("versionSwitchInfo").style.display = "none";
 }
 function versionSwitch() {
-    window.location.href = (versionBranch) ? "/" : "/beta/beta.html";
+    window.location.href = (Game.VERSION_BRANCH === Game.Versions.MAIN) ? "/beta/beta.html" : "/";
 }
 
 // ------------------------------------

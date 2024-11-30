@@ -50,6 +50,7 @@ export class Savinator {
         this.betaSaveName = "newBetaSave";
     }
 
+    // these two methods could probably be static
     setLocalStorageSave(value: string) {
         if (Game.VERSION_BRANCH === Game.Versions.MAIN)
             localStorage.setItem(this.saveName, value);

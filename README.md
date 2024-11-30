@@ -12,9 +12,11 @@ The game is available at [clickercookie.github.io](https://clickercookie.github.
 
 ## Contributing
 ### Dependencies
-There are no dependencies, just plain HTML, CSS, and Javascript.
-### Running
-To run the game, a local web server must be created. You can do this through various methods, but some of the common ways of doing it are using NodeJS `npx serve` or the Live Server VSCode extension. **Opening `index.html` through File Explorer will not work.**
+Run `npm install` to install dependencies.
+### Building
+Run `npm run build` to compile, `.js` files will be placed under the `public/` directory. You can then create a local web server (something like `npx serve`) and navigate to that directory.
+### Creating a "dev" environment
+I am royally terrible at writing NPM scripts, so we don't really have an `npm run dev` like some other projects do. Instead, we run `npx serve` and `npx tsc --watch` in two different terminals (lol). This may change later.
 
 ## Licensing
 This project is licensed under the GNU GPL-3.0 License - see the LICENSE file for details.

@@ -1,70 +1,59 @@
 interface Changelog {
     version: string;
-    name: undefined | string;
-    added: string[] | undefined;
-    changed: string[] | undefined;
-    fixed: string[] | undefined;
-    release: string; //? could this be a Date or is that silly?
+    name?: string;
+    note?: string;
+    added?: string[];
+    changed?: string[];
+    fixed?: string[];
+    release?: string; //? could this be a Date or is that silly?
 }
 
 export const versionChangelogs: Changelog[] = [
     {
         version: "0.1",
-        name: undefined,
         added: [
             "Existence."
         ],
-        changed: undefined,
-        fixed: undefined,
         release: "March 4th, 2023"
     },
     {
         version: "0.1.1",
-        name: undefined,
         added: [
             "Ranches! Buyable for 1000 cookies for the time being.",
             "Minor hover effect when hovering over buildings."
         ],
-        changed: undefined,
         fixed: ["totalCookies variable is fixed, but still unused (but not for long!)"],
         release: "March 9th, 2023"
     },
     {
         version: "0.2",
-        name: undefined,
         added: [
             "A Github page.",
             "Version number."
         ],
-        changed: undefined,
-        fixed: undefined,
         release: "March 16th"
     },
     {
         version: "0.2.1",
-        name: undefined,
         added: [
             "Television!",
             "Laborers!"
         ],
         changed: ["Made CSS better."],
-        fixed: undefined,
         release: "March 16th, 2023"
     },
     {
         version: "0.2.2",
-        name: undefined,
         added: [
             "Borders to the left and right sides of the screen.",
             "The capability to create a popup for usage later."
         ],
-        changed: undefined,
-        fixed: undefined,
         release: "March 16th, 2023"
     },
     {
         version: "0.4",
-        name: undefined,
+        note: "\"Hey, what happened to 0.3?\" <br>\
+                Well, you see... I made 0.3 while I also had 0.4 content being actively worked on, so I kinda just skipped it because this is a BIG update!",
         added: [
             "Final major buildings (Wallet & Church).",
             "Upgrades! Only first level upgrades are currently available, excluding the keyboard which has 2 upgrades.",
@@ -76,7 +65,6 @@ export const versionChangelogs: Changelog[] = [
     },
     {
         version: "0.4.1",
-        name: undefined,
         added: [
             "Color!",
             "Buttons!",
@@ -92,7 +80,6 @@ export const versionChangelogs: Changelog[] = [
     },
     {
         version: "0.5",
-        name: undefined,
         added: [
             "AUTO SAVING!!!",
             "EXPORTING & IMPORTING DATA!!!",
@@ -167,12 +154,10 @@ export const versionChangelogs: Changelog[] = [
     {
         version: "0.5.2.1",
         name: "the first of many",
+        note: "Note: Although 0.1 came out on March 4th, initial public development began on the 3rd, which is why we celebrate today!",
         added: [
             "It's our 1st birthday! With this, we now have the Clicker Cookie Anniversary event, which currently only activates the new Currently Clicked food, the Cake.",
-            "Note: Although 0.1 came out on March 4th, initial public development began on the 3rd, which is why we celebrate today!"
         ],
-        changed: undefined,
-        fixed: undefined,
         release: "March 3rd, 2024"
     },
     {
@@ -210,7 +195,26 @@ export const versionChangelogs: Changelog[] = [
             "Previously created changelog entries are now grammatically correct.",
             "Accessing the beta version by going to clickercookie.github.io/beta would result in a 404."
         ],
-        release: "???"
+        release: "September 22nd, 2024"
+    },
+    {
+        version: "0.7",
+        note: "Hi. It's hard to explain in a simple changelog how much this update has changed. See everything you're looking at? What is happening behind the scenes for what you're seeing has changed. The entire project has been rewritten to be more workable for me, as the developer.",
+        name: "tbd",
+        added: undefined,
+        changed: [
+            "Switched to TypeScript.",
+            "Introduced the v4 Saving System (#18)",
+            "Eliminated inline event handlers, now are handled in init (#27)",
+            "The entire modding system. See the GitHub wiki for more details.",
+            "Split main.js into multiple script files.",
+            "Reorganized the GitHub repo (#35)",
+            "Removed the mobile version due to the extreme amount of work required to upkeep it alongside the desktop version. (#36)",
+            "Logs can now have a \"note\" (it's below the version header)."
+        ],
+        fixed: [
+            "No more HTMLElement.innerHTML where it's not needed, now use innerText." // todo
+        ]
     }
 ];
 
@@ -222,12 +226,22 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
 
     const versionHeader = document.createElement("h2");
     versionHeader.setAttribute("class","changelog-version-heading");
-    if (logs.name === undefined)
-        versionHeader.appendChild(document.createTextNode(`Version ${logs.version} - ${logs.release}`));
-    else
-        versionHeader.appendChild(document.createTextNode(`Version ${logs.version}: ${logs.name} - ${logs.release}`));
-    newChangelogEntry.appendChild(versionHeader);
 
+    const releaseDate = (logs.release === undefined) ? "???" : logs.release;
+    if (logs.name === undefined)
+        versionHeader.appendChild(document.createTextNode(`Version ${logs.version} - ${releaseDate}`));
+    else
+        versionHeader.appendChild(document.createTextNode(`Version ${logs.version}: ${logs.name} - ${releaseDate}`));
+    newChangelogEntry.appendChild(versionHeader);
+    
+    if (logs.note !== undefined) {
+        const note = document.createElement("p");
+        note.setAttribute("class", "middle-text");
+        note.style.fontSize = "14px"; // todo: make css class?
+        note.innerText = logs.note;
+        newChangelogEntry.appendChild(note);
+    }
+    
     if (logs.added !== undefined) {
         const addedHeader = document.createElement("h3");
         addedHeader.setAttribute("class","middle-text");
