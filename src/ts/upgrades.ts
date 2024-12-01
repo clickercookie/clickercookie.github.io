@@ -7,34 +7,18 @@ const personalization = {
     currentClicked: "cookie"
 }
 
-// the description of almost every upgrade is the same, but just in case we want to add more upgrades in the future
-// a "desc" field has been added to the upgrades array. Most upgrade will just reference a string in this array
-// that correlates to the upgrade it's associated with, though.
-const defaultUpgradeDescriptions = [
-    `Multiplys Keyboard and clicking ${personalization.currentClicked.toLowerCase()} production by 2`,
-    "Multiplys Grandpa production by 2"
-    // so on, so forth
-];
-
-class UpgradeData {
+export interface UpgradeData {
     name: string;
     quote: string;
     price: number;
     img: string;
     desc: string;
-    building?: Building;
+    building: Building;
+    /** The number of buildings bought required to unlock the upgrade */
+    buildingsRequired: number;
+    /** This is mostly just here for the keyboard as a kinda workaround lol */
+    multiplyCookiesPerClick?: boolean;
 }
-
-export const UPGRADES_DATA: UpgradeData[] = [
-    { // the "id" would be 0 because that's the index in the array
-        name: "Reinforced Keys",
-        quote: "press harder",
-        price: 100,
-        img: "reinforced-keys.png",
-        desc: defaultUpgradeDescriptions[0],
-        // building: keyboard // not sure exactly how buffing the building will work, maybe passing the instance into this will work?
-    }
-];
 
 export function expandUpgradesHolder(retract: boolean=false) {
     const rowsOfUpgrades = Math.ceil(Upgrade.currentlyShown / 5);
@@ -58,74 +42,18 @@ export function updateUpgradesBoughtStatistic() {
     // }
 }
 
-// function checkUpgradeAvailability(game: Game) {
-//     let runThroughTimes = 0; // buildings.building.bought needs for boughtUnlockRequirements indicies
-//     const boughtUnlockRequirements = [ // number of buildings bought required to unlock an upgrade in chronological order
-//         1,5,10,25,50
-//     ];
-//     // Keyboards
-//     for (let i = 0; i <= 5; i++) {
-//         if (game.keyboard.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
-//             upgrades.unlocked[i] = 1;
-//             upgrades.create(i);
-//         }
-//         runThroughTimes++;
-//     }
-//     // Grandpas
-//     runThroughTimes = 0;
-//     for (let i = 5; i <= 9; i++) {
-//         if (game.grandpa.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
-//             upgrades.unlocked[i] = 1;
-//             upgrades.create(i);
-//         }
-//         runThroughTimes++;
-//     }
-//     // Ranches
-//     runThroughTimes = 0;
-//     for (let i = 10; i <= 14; i++) {
-//         if (game.ranch.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
-//             upgrades.unlocked[i] = 1;
-//             upgrades.create(i);
-//         }
-//         runThroughTimes++;
-//     }
-//     // TVs
-//     runThroughTimes = 0;
-//     for (let i = 15; i <= 19; i++) {
-//         if (game.television.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
-//             upgrades.unlocked[i] = 1;
-//             upgrades.create(i);
-//         }
-//         runThroughTimes++;
-//     }
-//     // Workers
-//     runThroughTimes = 0;
-//     for (let i = 20; i <= 24; i++) {
-//         if (game.worker.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
-//             upgrades.unlocked[i] = 1;
-//             upgrades.create(i);
-//         }
-//         runThroughTimes++;
-//     }
-//     // Wallets
-//     runThroughTimes = 0;
-//     for (let i = 25; i <= 29; i++) {
-//         if (game.wallet.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
-//             upgrades.unlocked[i] = 1;
-//             upgrades.create(i);
-//         }
-//         runThroughTimes++;
-//     }
-//     // Churches
-//     runThroughTimes = 0;
-//     for (let i = 30; i <= 34; i++) {
-//         if (game.church.bought >= boughtUnlockRequirements[runThroughTimes] && upgrades.unlocked[i] == 0) {
-//             upgrades.unlocked[i] = 1;
-//             upgrades.create(i);
-//         }
-//         runThroughTimes++;
-//     }
-// }
+/**
+ * Goes through every upgrade in game.upgrades and check if it's ready to be created. If it is, then run the Upgrade.create() method on it.
+ * @param game Game
+ */
+export function checkUpgradeAvailability(game: Game) {
+    for (let i in game.upgrades) {
+        if (game.upgrades[i].building.bought >= game.upgrades[i].buildingsRequired && game.upgrades[i].unlocked === false) {
+            game.upgrades[i].create();
+            game.upgrades[i].unlocked = true;
+        }
+    }
+}
 
 /**
  * TODO: NEEDS STATISTIC SUPPORT
@@ -144,7 +72,7 @@ export function destroyAllUpgrades(game: Game, statistic: boolean=false) {
 export function showUnlockedUpgrades(game: Game) {
     for (let i in game.upgrades) {
         if (game.upgrades[i].unlocked === true && game.upgrades[i].bought !== true) 
-            new Upgrade(game, UPGRADES_DATA[i]);
+            new Upgrade(game, game.UPGRADES_DATA[i]);
     }
 }
 
@@ -162,6 +90,8 @@ export class Upgrade {
     img: string;
     desc: string;
     building: Building;
+    buildingsRequired: number;
+    multiplyCookiesPerClick: boolean;
 
     bought: boolean;
     unlocked: boolean;
@@ -176,6 +106,11 @@ export class Upgrade {
         this.img = data.img;
         this.desc = data.desc;
         this.building = data.building;
+        this.buildingsRequired = data.buildingsRequired;
+        this.multiplyCookiesPerClick = data.multiplyCookiesPerClick;
+
+        this.bought = false;
+        this.unlocked = false;
 
         const icon = data.img; //? does this need to exist?
         /** is already getFile()-ed so don't use getFile() with this variable */
@@ -184,26 +119,32 @@ export class Upgrade {
             console.warn(`An image file for the "${this.name}" upgrade was not defined. Falling back to the "unknown" image.`);
         }
 
-        this.html = document.createElement("div");
+        this.html = document.createElement("div"); //* this will be appended to the upgradesHolder in this.create()
         this.html.setAttribute("class","upgrade");
         // upgrade.setAttribute("id",`notathingrn${this.name}`);
-        this.html.addEventListener("onclick", () => {
+        this.html.addEventListener("click", () => {
             this.clicked();
         });
-        this.html.addEventListener("onmouseover", () => { // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
+        this.html.addEventListener("mouseover", () => { // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
             this.hovered();
         });
-        this.html.addEventListener("onmousemove", () => { // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
+        this.html.addEventListener("mousemove", () => { // for some reason, the element needs onmousemove AND onmouseover so it doesn't flicker, see #24
             this.hovered();
         });
-        this.html.addEventListener("onmouseout", () => {
+        this.html.addEventListener("mouseout", () => {
             hideTooltip();
         });
         this.html.style.backgroundImage = `url(${UPGRADE_ICON_PATH})`;
         
-        document.getElementById("upgradesHolder")!.appendChild(this.html);
-        
         Upgrade.currentlyShown++;
+    }
+
+    /**
+     * Appends `this.html` (the upgrade) to `element`.
+     * @param element The element to append to. Should pretty much always be the upgrades holder.
+     */
+    create(element: HTMLElement=document.getElementById("upgradesHolder")) {
+        element!.appendChild(this.html);
     }
 
     clicked() {
@@ -216,10 +157,9 @@ export class Upgrade {
         Upgrade.upgradesBought++;
         Upgrade.currentlyShown--;
         
-        //! i do not know if this works and doesn't work with keyboard benefit
         this.building.CPSGiven *= 2;
         this.building.CPSGain *= 2;
-        // core.cookiesPerClick *= 2;
+        if (this.multiplyCookiesPerClick) this.game.cookiesPerClick *= 2;
 
         expandUpgradesHolder(); // sometimes the upgrade holder has one too many rows because of weird onmouseover & onmousemove behavior, this prevents that
 
@@ -251,7 +191,6 @@ export class Upgrade {
     destroy() {
         this.html.remove();
         hideTooltip(); // hide the tooltip so it doesn't stick around after you buy the upgrade
-        
     }
 }
 

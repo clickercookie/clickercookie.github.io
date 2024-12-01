@@ -191,7 +191,6 @@ export class SaveHandler {
     private providers: Record<string, SaveProvider>;
     constructor() {
         this.providers = {};
-        
     }
 
     dumpSaveData(): Record<string, unknown> {

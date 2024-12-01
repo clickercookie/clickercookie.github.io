@@ -199,7 +199,7 @@ export const versionChangelogs: Changelog[] = [
     },
     {
         version: "0.7",
-        note: "Hi. It's hard to explain in a simple changelog how much this update has changed. See everything you're looking at? What is happening behind the scenes for what you're seeing has changed. The entire project has been rewritten to be more workable for me, as the developer.",
+        note: "Hi. It's hard to explain in a simple changelog how much this update has changed. See everything you're looking at? What is happening behind the scenes for what you're looking at has changed. Virtually every single line of code has had some sort of update.",
         name: "tbd",
         added: undefined,
         changed: [

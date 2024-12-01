@@ -11,7 +11,7 @@ const desktop: boolean = false;
 // ------------------------------------
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
 import { convertCollectionToArray, capitalize, commaify } from "./helper.js";
-import { Upgrade, UPGRADES_DATA, updateUpgradesBoughtStatistic, expandUpgradesHolder, destroyAllUpgrades, showUnlockedUpgrades } from "./upgrades.js";
+import { Upgrade, updateUpgradesBoughtStatistic, expandUpgradesHolder, destroyAllUpgrades, showUnlockedUpgrades, checkUpgradeAvailability, UpgradeData } from "./upgrades.js";
 import { Building } from "./buildings.js";
 import { SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
 import { ModProvider } from "./exmod.js";
@@ -51,7 +51,6 @@ const upgrades = {} as {
     currentlyShown: number,
     rowsOfUpgrades: number,
 
-    checkUpgradeAvailability(): void,
     clicked(id: number, building: number): void,
     create(id: number, statistic?: boolean): void,
     destroy(id: number): void,
@@ -60,6 +59,14 @@ const upgrades = {} as {
     hovered(id: number, building: number, statistic?: boolean): void,
     showUnlocked(): void,
     updateBoughtStatistic(): void
+};
+
+// the description of almost every upgrade is the same, but just in case we want to add more upgrades in the future
+// a "desc" field has been added to the upgrades array. Most upgrade will just reference a this array, though
+const defaultUpgradeDescriptions = {
+    keyboard: `Multiplys Keyboard and clicking ${personalization.currentClicked.toLowerCase()} production by 2`,
+    grandpa: "Multiplys Grandpa production by 2"
+    // so on, so forth
 };
 
 // tad bit complex, documentation can be found here: https://github.com/clickercookie/clickercookie.github.io/wiki/Upgrades
@@ -225,6 +232,7 @@ export class Game extends SaveProvider {
     public church: Building;
 
     // upgrades
+    public UPGRADES_DATA: UpgradeData[]
     public upgrades: Upgrade[];
 
     public savinator5000: Savinator;
@@ -270,6 +278,25 @@ export class Game extends SaveProvider {
         this.wallet.setVisibility(false);
         this.church = new Building(this, "church","pray to the almighty cookie gods",20000000,7800,"church.png",true);
         this.church.setVisibility(false);
+
+        this.UPGRADES_DATA = [
+            { // the "id" would be 0 because that's the index in the array
+                name: "Reinforced Keys",
+                quote: "press harder",
+                price: 100,
+                img: "reinforced-keys.png",
+                desc: defaultUpgradeDescriptions.keyboard,
+                building: this.keyboard, // not sure exactly how buffing the building will work, maybe passing the instance into this will work?
+                buildingsRequired: 1,
+                multiplyCookiesPerClick: true
+            }
+        ]
+
+        // upgrades
+        this.upgrades = [];
+        for (let i in this.UPGRADES_DATA) {
+            this.upgrades.push(new Upgrade(this, this.UPGRADES_DATA[i]));
+        }
 
         // initalize variables
         this.cookies = 0;
@@ -336,7 +363,7 @@ export class Game extends SaveProvider {
         updateUpgradesBoughtStatistic();
 
         // set the total upgrades bought counter in the Statistics screen
-        document.getElementById("totalUpgradesCounter").innerText = UPGRADES_DATA.length.toString();
+        document.getElementById("totalUpgradesCounter").innerText = this.upgrades.length.toString();
     
         // change version branch specific stuff
         // change title
@@ -421,7 +448,7 @@ export class Game extends SaveProvider {
             document.getElementById("leftSide").insertBefore(devDiv, document.getElementById("leftSidePush"));
     
             dev.setDevMode(true);
-            document.getElementById("offSelectionDev").innerHTML = "Overwritten";
+            document.getElementById("offSelectionDev").innerText = "Overwritten";
         }
 
         // ------- Event Listeners (very long) -------
@@ -482,7 +509,7 @@ export class Game extends SaveProvider {
         this.reloadCPSCounter();
         this.reloadCookieCounter();
     
-        // upgrades.checkUpgradeAvailability();
+        checkUpgradeAvailability(this);
     
         // building unlocks
         if (this.totalCookies >= 100) {
@@ -1036,7 +1063,7 @@ tooltip.create = function(x: number, y: number, content: any) {
 
 console.log("you seem smart, how 'bout you contribute to the project? https://github.com/clickercookie/clickercookie.github.io");
 
-const game = new Game();
+export const game = new Game();
 const modProvider = new ModProvider();
 
 saveHandler.registerProvider("clickercookie", game);
@@ -1053,7 +1080,7 @@ setInterval(() => { // auto-saving
     if (!savingAllowed) return false;
 
     game.savinator5000.save();
-}, 15 * 1000); // 60s
+}, 60 * 1000); // 60s
 
 // Events
 // todo: add to game
