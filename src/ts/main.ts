@@ -15,6 +15,7 @@ import { Upgrade, updateUpgradesBoughtStatistic, expandUpgradesHolder, destroyAl
 import { Building } from "./buildings.js";
 import { SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
 import { ModProvider } from "./exmod.js";
+import { Personalization } from "./personalization.js";
 
 /**
  * our lord & savior, the save handler
@@ -24,19 +25,6 @@ export const saveHandler = new SaveHandler(); //* this thing's position in the s
 // ------------------------------------
 // Variable & Object Definitions
 // ------------------------------------
-const personalization = {} as {
-    currentBackground: string,
-    currentClicked: string,
-    currentClickedPlural: string,
-    
-    setBackground(color: string): void,
-    setCurrentClicked(value: string): void
-};
-
-personalization.currentBackground = "url(img/backgrounds/background-blue.png)";
-personalization.currentClicked = "Cookie";
-personalization.currentClickedPlural = "Cookies"; // some words have plural "es" at the end so for grammatical safety this is staying
-
 // upgrades
 //* this object will be removed later so it's very bad, this applies to every other objects everywhere-esque thing too
 const upgrades = {} as {
@@ -64,9 +52,13 @@ const upgrades = {} as {
 // the description of almost every upgrade is the same, but just in case we want to add more upgrades in the future
 // a "desc" field has been added to the upgrades array. Most upgrade will just reference a this array, though
 const defaultUpgradeDescriptions = {
-    keyboard: `Multiplys Keyboard and clicking ${personalization.currentClicked.toLowerCase()} production by 2`,
-    grandpa: "Multiplys Grandpa production by 2"
-    // so on, so forth
+    keyboard: `Multiplys Keyboard and clicking NULL production by 2`, // we cannot embed Personalization.getCurrentlyClicked() in here anymore since it Personalization.currentlyClicked is not defined until Game.init() 
+    grandpa: "Multiplys Grandpa production by 2",
+    ranch: "Multiplys Ranch production by 2",
+    television: "Multiplys TV production by 2",
+    worker: "Multiplys Worker production by 2",
+    wallet: "Multiplys Wallet production by 2",
+    church: "Multiplys Church production by 2"
 };
 
 // tad bit complex, documentation can be found here: https://github.com/clickercookie/clickercookie.github.io/wiki/Upgrades
@@ -116,7 +108,7 @@ upgrades.quotes = [
     "I'm sure the federal reserve will be okay with this...*","cookies but digitized","for when you overbake to the IRS*","you can keep your cookies even <b>safe</b>r!!","<b>infinite</b> storage space*", // wallet
     "his holiness will provide many cookies","learning about our baking lord's best recipes","summon cookies from the underworld","Worship them, lest their power overwhelm your mortal form.","Get it? <b>c</b>ookie-b<b>ible</b>!<br><br>I'll see myself out.", // church
 ];
-upgrades.descriptions = [`Multiplys Keyboard and clicking ${personalization.currentClicked.toLowerCase()} production by 2`,"Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
+// upgrades.descriptions = [`Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`,"Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
 // image notes
 // grandpa4 (dementia pills) is extremely bland
 // reading glasses look awful
@@ -260,6 +252,8 @@ export class Game extends SaveProvider {
         static get BETA() { return this.#_BETA; }
     }
 
+    public theGameCanLoopBecauseTheInitializationIsCompleted: boolean = false;
+
     constructor() {
         super();
 
@@ -376,6 +370,26 @@ export class Game extends SaveProvider {
         
         if (Game.IN_DEVELOPMENT)
             document.title = "Clicker Cookie Dev";
+
+        // Register personalization things
+        Personalization.registerObject({name: "Cookie", namePlural: "Cookies", filename: "img/cookie.png"});
+        Personalization.registerObject({name: "Potato", namePlural: "Potatoes", filename: "img/potato.png"});
+        Personalization.registerObject({name: "Strawberry", namePlural: "Strawberries", filename: "img/strawberry.png"});
+        Personalization.registerObject({name: "Cake", namePlural: "Cakes", filename: "img/cake.png", circular: false, pixelated: true});
+        Personalization.registerBackground({name: "blue", displayName: "Blue", filename: "img/backgrounds/background-blue.png"});
+        Personalization.registerBackground({name: "green", displayName: "Green", filename: "img/backgrounds/background-green.png"});
+        Personalization.registerBackground({name: "gray", displayName: "Gray", filename: "img/backgrounds/background-gray.png"});
+        Personalization.registerBackground({name: "purple", displayName: "Purple", filename: "img/backgrounds/background-purple.png"});
+        Personalization.registerBackground({name: "darkblue", displayName: "Dark Blue", filename: "img/backgrounds/background-darkblue.png"});
+        Personalization.registerBackground({name: "orange", displayName: "Orange", filename: "img/backgrounds/background-orange.png"});
+        Personalization.registerBackground({name: "pink", displayName: "Pink", filename: "img/backgrounds/background-pink.png"});
+        Personalization.registerBackground({name: "lime", displayName: "Lime", filename: "img/backgrounds/background-lime.png"});
+        Personalization.registerBackground({name: "yellow", displayName: "Yellow", filename: "img/backgrounds/background-yellow.png"});
+        Personalization.registerBackground({name: "red", displayName: "Red", filename: "img/backgrounds/background-red.png"});
+        Personalization.registerBackground({name: "white", displayName: "White", filename: "img/backgrounds/background-white.png"});
+
+        Personalization.setCurrentlyClicked("cookie");
+        Personalization.setBackground("blue");
     
         // Changelog Entries, AKA NOT the messiest place ever.
         // this loop goes from big to small because the function needs to be ran from the latest version to the oldest
@@ -461,8 +475,8 @@ export class Game extends SaveProvider {
             document.getElementsByClassName("middle-x")[i].addEventListener("click", () => {closeMiddle()});
         }
         document.getElementById("creditsButton").addEventListener("click", () => {helper.popup.createSimple(320,175,'FifthTundraG: Creation<br>potatman4: Playtesting<br>Wolfsarecool44: Playtesting, Emotional Support',false,'default','Credits',false,false)});
-        document.getElementById("backgroundSelect").addEventListener("change", () => {personalization.setBackground((document.getElementById("backgroundSelect") as HTMLFormElement).value)});
-        document.getElementById("currentClickedSelect").addEventListener("change", () => {personalization.setCurrentClicked((document.getElementById("currentClickedSelect") as HTMLFormElement).value)});
+        document.getElementById("backgroundSelect").addEventListener("change", () => {Personalization.setBackground((document.getElementById("backgroundSelect") as HTMLFormElement).value)});
+        document.getElementById("currentlyClickedSelect").addEventListener("change", () => {Personalization.setCurrentlyClicked((document.getElementById("currentlyClickedSelect") as HTMLFormElement).value)});
         document.getElementById("saveButton").addEventListener("click", () => {this.savinator5000.save()});
         document.getElementById("loadButton").addEventListener("click", () => {this.savinator5000.load()});
         document.getElementById("resetSaveButton").addEventListener("click", () => {helper.popup.createSimple(300,150,'Are you sure you want to do this?',false,'resetSave()','Warning',true,true)});
@@ -496,9 +510,11 @@ export class Game extends SaveProvider {
         const date = new Date();
         // anniversary
         if (date.getMonth() === 2 && date.getDate() === 3) { // if date is 3/3
-            personalization.setCurrentClicked("cake");
+            Personalization.setCurrentlyClicked("cake");
             helper.popup.createSimple(350,175,"It's Clicker Cookie's birthday! \nThe cookie has been replaced with a birthday cake, but you can change it back in Options.",false,"default","woo hoo!");
         }
+
+        this.theGameCanLoopBecauseTheInitializationIsCompleted = true;
     }
 
     gameLoop() {
@@ -543,18 +559,18 @@ export class Game extends SaveProvider {
     
         // log to console in case of error
         if (this.cookies < 0) {
-            helper.popup.createSimple(300,150,`<i>huh, what just happened?</i> <br> An error occured: ${personalization.currentClickedPlural} are in negative!<br>Please report this to the GitHub accessable in the bottom left corner`,false,"reset cookies","",false,true);
+            helper.popup.createSimple(300,150,`<i>huh, what just happened?</i> <br> An error occured: ${Personalization.getCurrentlyClickedPlural()} are in negative!<br>Please report this to the GitHub accessable in the bottom left corner`,false,"reset cookies","",false,true);
         }
         // stats that need to be updated beforehand
         this.buildingsOwned = this.keyboard.bought + this.grandpa.bought + this.ranch.bought + this.television.bought + this.worker.bought + this.wallet.bought + this.church.bought;
         
         // set statistic page statistics
         if (statsUp) {
-            document.getElementById("cookiesStat").innerHTML = `${personalization.currentClickedPlural}: ${this.variableView.cookiesView}`;
-            document.getElementById("allTimeCookies").innerHTML = `All Time ${personalization.currentClickedPlural}: ${this.variableView.totalCookiesView}`;
-            document.getElementById("cookiesPerSecondStat").innerHTML = `${personalization.currentClickedPlural} Per Second: ${this.variableView.cookiesPerSecondView}`;
+            document.getElementById("cookiesStat").innerHTML = `${Personalization.getCurrentlyClickedPlural()}: ${this.variableView.cookiesView}`;
+            document.getElementById("allTimeCookies").innerHTML = `All Time ${Personalization.getCurrentlyClickedPlural()}: ${this.variableView.totalCookiesView}`;
+            document.getElementById("cookiesPerSecondStat").innerHTML = `${Personalization.getCurrentlyClickedPlural()} Per Second: ${this.variableView.cookiesPerSecondView}`;
             document.getElementById("buildingsOwnedStat").innerHTML = `Buildings Owned: ${commaify(this.buildingsOwned)}`;
-            document.getElementById("cookieBeenClickedTimesStat").innerHTML = `Total ${personalization.currentClicked} Clicks: ${this.cookieBeenClickedTimes}`; // move to cookieClicked() later
+            document.getElementById("cookieBeenClickedTimesStat").innerHTML = `Total ${Personalization.getCurrentlyClicked()} Clicks: ${this.cookieBeenClickedTimes}`; // move to cookieClicked() later
         }
     
         // set number of bought to bought (not required unless number of bought is set in console)
@@ -576,7 +592,7 @@ export class Game extends SaveProvider {
     }
 
     reloadCookieCounter() {
-        document.getElementById("cookieCounter").innerHTML = `${personalization.currentClickedPlural}: ${this.variableView.cookiesView}`;
+        document.getElementById("cookieCounter").innerHTML = `${Personalization.getCurrentlyClickedPlural()}: ${this.variableView.cookiesView}`;
     }
     /**
      * doesn't account for modded buildings, at the moment figuring that out is the mod developer's job
@@ -593,7 +609,7 @@ export class Game extends SaveProvider {
         this.church.reloadPrice();
     }
     reloadCPSCounter() {
-        document.getElementById("cookiesPerSecondCounter").innerHTML = `${personalization.currentClickedPlural} Per Second: ${game.variableView.cookiesPerSecondView}`;
+        document.getElementById("cookiesPerSecondCounter").innerHTML = `${Personalization.getCurrentlyClickedPlural()} Per Second: ${game.variableView.cookiesPerSecondView}`;
     }
     reloadViewVariables() { 
         this.variableView.cookiesView = commaify(Math.round(game.cookies * 10) / 10),
@@ -667,7 +683,6 @@ dev.setDevMode = function(value: boolean | "on" | "off") {
     if (dev.devMode === true) {
         console.log("Developer Mode activated.");
         (document.getElementById("devModeSelect") as HTMLSelectElement).disabled = true;
-        document.getElementById("whiteBackground").style.display = "block";
     }
 }
 dev.setCookies = function(number: number) {
@@ -796,49 +811,6 @@ helper.popup.destroyAdvanced = function() {
     (document.getElementById("advancedPopup") as HTMLDialogElement).close();
     document.getElementById("advancedPopup").style.display = "none";
 }
-// set areas to different things
-personalization.setBackground = function(color: string) {
-    personalization.currentBackground = `url(img/backgrounds/background-${color}.png)`;
-
-    document.getElementById("leftSide").style.background = personalization.currentBackground;
-    document.getElementById("middleButtons").style.background = personalization.currentBackground;
-    document.getElementById("rightSide").style.background = personalization.currentBackground;
-
-    helper.consoleLogDev(`Background color set to: ${color}`);
-}
-personalization.setCurrentClicked = function(value: string) {
-    const cookie = document.getElementById("cookie") as HTMLImageElement;
-    try {
-        cookie.src = `img/${value}.png`;
-    } catch {
-        console.warn(`Couldn't find image file for cookie. Tried to assign image file: ${value}.png`);
-    }
-    personalization.currentClicked = capitalize(value);
-    // since some words have a plural "es" at the end of their name and I don't want to make a function to detect that, this
-    // function will still have a switch in it for each value, but at a later time this should be changed.
-    cookie.style.borderRadius = "128px";
-    cookie.style.imageRendering = "auto"; // cake is 64x64 so it needs to not be blurry, this resets that
-    switch (value) {
-    case "cookie":
-        personalization.currentClickedPlural = "Cookies";
-        break;
-    case "potato":
-        personalization.currentClickedPlural = "Potatoes";
-        break;
-    case "strawberry":
-        personalization.currentClickedPlural = "Strawberries";
-        break;
-    case "cake":
-        personalization.currentClickedPlural = "Cakes";
-        cookie.style.borderRadius = "0px";
-        cookie.style.imageRendering = "pixelated";
-        (document.getElementById("currentClickedSelect") as HTMLSelectElement).value = "cake"; // ? why is this here (anniversary event?)
-        break;
-    default:
-        personalization.currentClickedPlural = `${value}s`;
-    }
-    upgrades.descriptions[0] = `Multiplys Keyboard and clicking ${this.currentClicked} production by 2`;
-}
 
 // ------------------------------------
 // Random Functions
@@ -862,7 +834,7 @@ function toggleMiddle(param: string) { // TODO 0.7: eliminate unnessesary switch
         case true:
             statsUp = false;
             optionsMT.style.display = "none";
-            middle.style.background = personalization.currentBackground;
+            middle.style.background = Personalization.getCurrentBackgroundFile(true);
             break;
         }
     }
@@ -877,7 +849,7 @@ function toggleMiddle(param: string) { // TODO 0.7: eliminate unnessesary switch
         case true:
             infoUp = false;
             infoMT.style.display = "none";
-            middle.style.background = personalization.currentBackground;
+            middle.style.background = Personalization.getCurrentBackgroundFile(true);
             break;
         }
     }
@@ -892,7 +864,7 @@ function toggleMiddle(param: string) { // TODO 0.7: eliminate unnessesary switch
         case true:
             optionsUp = false;
             optionsMT.style.display = "none";
-            middle.style.background = personalization.currentBackground;
+            middle.style.background = Personalization.getCurrentBackgroundFile(true);
             break;
         }
     }
@@ -905,7 +877,7 @@ function closeMiddle() {
     document.getElementById("optionsMiddleText").style.display = "none";
     document.getElementById("statsMiddleText").style.display = "none";
     document.getElementById("infoMiddleText").style.display = "none";
-    document.getElementById("middle").style.background = personalization.currentBackground;
+    document.getElementById("middle").style.background = Personalization.getCurrentBackgroundFile(true);
 }
 function versionNumberMousedOver(undo=false) {
     if (!undo)
@@ -1074,7 +1046,8 @@ setInterval(() => {
     game.cookiesPerSecondUpdate()
 }, 1000);
 setInterval(() => {
-    game.gameLoop()
+    if (game.theGameCanLoopBecauseTheInitializationIsCompleted)
+        game.gameLoop()
 }, 1);
 setInterval(() => { // auto-saving
     if (!savingAllowed) return false;
