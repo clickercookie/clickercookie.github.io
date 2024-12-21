@@ -21,6 +21,7 @@ jobs:
           path: ./public
   deploy:
     needs: build
+    if: success() && github.ref == 'refs/heads/release'
     permissions:
       pages: write      # to deploy to Pages
       id-token: write   # to verify the deployment originates from an appropriate source
