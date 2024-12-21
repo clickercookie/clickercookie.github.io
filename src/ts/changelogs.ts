@@ -202,6 +202,7 @@ export const versionChangelogs: Changelog[] = [
         note: "Hi. It's hard to explain in a simple changelog how much this update has changed. See everything you're looking at? What is happening behind the scenes for what you're looking at has changed. Virtually every single line of code has had some sort of update.",
         name: "tbd",
         added: [
+            "GitHub issues in changelogs work as hyperlinks, like this one: #13",
             "The white background is now enabled by default."
         ],
         changed: [
@@ -219,6 +220,12 @@ export const versionChangelogs: Changelog[] = [
         ]
     }
 ];
+
+function parseGithubIssue(input: string): string {
+    return input.replace(/(?<!\\)#(\d+)/g, (_, number) => {
+        return `<a href="https://github.com/clickercookie/clickercookie.github.io/issues/${number}" target="_blank">#${number}</a>`;
+    });
+}
 
 export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make this look nicer, but lets be honest it's gonna stay this way
     const changelog = document.querySelector(".changelog-wrapper");
@@ -258,7 +265,7 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
 
         for (let i = 0; i < logs.added.length; i++) {
             const addedListItem = document.createElement("li");
-            addedListItem.innerText = logs.added[i];
+            addedListItem.innerHTML = parseGithubIssue(logs.added[i]);
             addedList.appendChild(addedListItem);
         }
     }
@@ -275,7 +282,7 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
 
         for (let i = 0; i < logs.changed.length; i++) {
             const changedListItem = document.createElement("li");
-            changedListItem.innerText = logs.changed[i];
+            changedListItem.innerHTML = parseGithubIssue(logs.changed[i]);
             changedList.appendChild(changedListItem);
         }
     }
@@ -292,7 +299,7 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
 
         for (let i = 0; i < logs.fixed.length; i++) {
             const fixedListItem = document.createElement("li");
-            fixedListItem.innerText = logs.fixed[i];
+            fixedListItem.innerHTML = parseGithubIssue(logs.fixed[i]);
             fixedList.appendChild(fixedListItem);
         }
     }
