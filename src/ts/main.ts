@@ -61,67 +61,6 @@ const defaultUpgradeDescriptions = {
     church: "Multiplys Church production by 2"
 };
 
-// tad bit complex, documentation can be found here: https://github.com/clickercookie/clickercookie.github.io/wiki/Upgrades
-// anything with an asterisk needs to be redone.
-upgrades.unlocked = [
-    0,0,0,0,0,
-    0,0,0,0,0,
-    0,0,0,0,0,
-    0,0,0,0,0,
-    0,0,0,0,0,
-    0,0,0,0,0,
-    0,0,0,0,0,
-];
-upgrades.bought = [
-    0,0,0,0,0,
-    0,0,0,0,0,
-    0,0,0,0,0,
-    0,0,0,0,0,
-    0,0,0,0,0,
-    0,0,0,0,0,
-    0,0,0,0,0,
-];
-upgrades.prices = [
-    100,500,10000,100000,10000000, // keyboard
-    1000,5000,50000,5000000,500000000, // grandpa
-    11000,55000,550000,55000000,5500000000, // ranch
-    120000,600000,6000000,600000000,60000000000, // television
-    1300000,6500000,65000000,6500000000,650000000000, // worker
-    14000000,70000000,700000000,70000000000,7000000000000, // wallet
-    200000000,1000000000,10000000000,1000000000000,100000000000000 // church
-];
-upgrades.names = [
-    "Reinforced Keys","Obsidian Keys","Osmium Keys","10 finger typing","Macros", // keyboard
-    "Hardwood Walking Stick","Rocking Chair","Reading Glasses","Dementia Pills","shotgun", // grandpa
-    "Pig Slop","Needle bale","Tractors","Big baconator","Ranch dressing", // ranch
-    "Streaming service","98-inch screen","Surround sound","OLED Display","8K resolution", // television
-    "Medkits","Hard hats","Fast fingers*","Weight training","Robot workers", // worker
-    "200 dollar bills","Credit cards","Tax refund","safe","Wizard\'s wallet", // wallet
-    "the pope","Cookie study","Cookie ritual","Cookie gods","Cible", // church
-];
-upgrades.quotes = [
-    "press harder","so heavy they're always pressed","that's very heavy","<i><b>efficiency</b></i>","why press when you don't have to?", // keyboard
-    "nonna dat softwood junk","newest addition to the porch*","helps with precise chocolate chip placement","what was i doing again?","grandpa's precious*", // grandpa
-    "Wait, what have we been feeding them before now?","talk about a hay in a needlestack","eliminating manual labor since 1892","think giant pig mech fueled by potatoes","wrong ranch.", // ranch
-    "cookie-flix","unnecessarily large is an understatement.","it's all around me!","s*** it burned in...","so many pixels!", // television
-    "Constant supply of Band-Aids in case of emergency","Keep those skulls safe!","upmost efficient cookie manufacturing*","firmly attach chocolate chips via brute force","robotic precision", // worker
-    "I'm sure the federal reserve will be okay with this...*","cookies but digitized","for when you overbake to the IRS*","you can keep your cookies even <b>safe</b>r!!","<b>infinite</b> storage space*", // wallet
-    "his holiness will provide many cookies","learning about our baking lord's best recipes","summon cookies from the underworld","Worship them, lest their power overwhelm your mortal form.","Get it? <b>c</b>ookie-b<b>ible</b>!<br><br>I'll see myself out.", // church
-];
-// upgrades.descriptions = [`Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`,"Multiplys Grandpa production by 2","Multiplys Ranch production by 2","Multiplys TV production by 2","Multiplys Worker production by 2","Multiplys Wallet production by 2","Multiplys Church production by 2"];
-// image notes
-// grandpa4 (dementia pills) is extremely bland
-// reading glasses look awful
-upgrades.img = [
-    "reinforced-keys.png","obsidian-keys.png","osmium-keys.png","10-finger-typing.png","macros.png",
-    "hardwood-walking-stick.png","rocking-chair.png","reading-glasses.png","dementia-pills.png","shotgun.png",
-    "pig-slop.png","needle-bale.png","tractors.png","big-baconator.png","ranch-dressing.png",
-    "streaming-service.png","98-inch-screen.png","surround-sound.png","oled-display.png","8k-display.png",
-    "medkits.png","hard-hats.png","fast-fingers.png","weight-training.png","robot-workers.png",
-    "200-dollar-bill.png","credit-cards.png","tax-refund.png","safe.png","wizards-wallet.png",
-    "the-pope.png","cookie-study.png","cookie-ritual.png","cookie-gods.png","cible.png",
-];
-
 // dev variables
 const dev = {} as {
     devMode: boolean,
@@ -274,15 +213,332 @@ export class Game extends SaveProvider {
         this.church.setVisibility(false);
 
         this.UPGRADES_DATA = [
-            { // the "id" would be 0 because that's the index in the array
+            // keyboard
+            {
                 name: "Reinforced Keys",
                 quote: "press harder",
                 price: 100,
                 img: "reinforced-keys.png",
                 desc: defaultUpgradeDescriptions.keyboard,
-                building: this.keyboard, // not sure exactly how buffing the building will work, maybe passing the instance into this will work?
+                building: this.keyboard,
                 buildingsRequired: 1,
                 multiplyCookiesPerClick: true
+            },
+            {
+                name: "Obsidian Keys",
+                quote: "so heavy they're always pressed",
+                price: 500,
+                img: "obsidian-keys.png",
+                desc: defaultUpgradeDescriptions.keyboard,
+                building: this.keyboard,
+                buildingsRequired: 5,
+                multiplyCookiesPerClick: true
+            },
+            {
+                name: "Osmium Keys",
+                quote: "that's very heavy",
+                price: 10_000,
+                img: "osmium-keys.png",
+                desc: defaultUpgradeDescriptions.keyboard,
+                building: this.keyboard,
+                buildingsRequired: 10,
+                multiplyCookiesPerClick: true
+            },
+            {
+                name: "10 finger typing",
+                quote: "<i><b>efficiency</b></i>", //? your 6th grade ict teacher would be so proud
+                price: 100_000,
+                img: "10-finger-typing.png",
+                desc: defaultUpgradeDescriptions.keyboard,
+                building: this.keyboard,
+                buildingsRequired: 25,
+                multiplyCookiesPerClick: true
+            },
+            {
+                name: "Macros",
+                quote: "why press when you don't have to?",
+                price: 1_000_000,
+                img: "macros.png",
+                desc: defaultUpgradeDescriptions.keyboard,
+                building: this.keyboard,
+                buildingsRequired: 50,
+                multiplyCookiesPerClick: true
+            },
+            // grandpa
+            {
+                name: "Hardwood Walking Stick",
+                quote: "nonna dat softwood junk",
+                price: 1_000,
+                img: "hardwood-walking-stick.png",
+                desc: defaultUpgradeDescriptions.grandpa,
+                building: this.grandpa,
+                buildingsRequired: 1
+            },
+            {
+                name: "Rocking Chair",
+                quote: "newest addition to the porch*", //? because his butt problems weren't bad enough
+                price: 5_000,
+                img: "rocking-chair.png",
+                desc: defaultUpgradeDescriptions.grandpa,
+                building: this.grandpa,
+                buildingsRequired: 5
+            },
+            {
+                name: "Reading Glasses",
+                quote: "helps with precise chocolate chip placement",
+                price: 50_000,
+                img: "reading-glasses.png",
+                desc: defaultUpgradeDescriptions.grandpa,
+                building: this.grandpa,
+                buildingsRequired: 10
+            },
+            {
+                name: "Dementia Pills",
+                quote: "what was i doing again?",
+                price: 5_000_000,
+                img: "dementia-pills.png",
+                desc: defaultUpgradeDescriptions.grandpa,
+                building: this.grandpa,
+                buildingsRequired: 25
+            },
+            {
+                name: "shotgun",
+                quote: "grandpa's precious*",
+                price: 500_000_000,
+                img: "shotgun.png",
+                desc: defaultUpgradeDescriptions.grandpa,
+                building: this.grandpa,
+                buildingsRequired: 50
+            },
+            // ranch
+            {
+                name: "Pig Slop",
+                quote: "Wait, what have we been feeding them before now?*",
+                price: 11_000,
+                img: "pig-slop.png",
+                desc: defaultUpgradeDescriptions.ranch,
+                building: this.ranch,
+                buildingsRequired: 1
+            },
+            {
+                name: "Needle bale",
+                quote: "talk about a hay in a needlestack",
+                price: 55_000,
+                img: "needle-bale.png",
+                desc: defaultUpgradeDescriptions.ranch,
+                building: this.ranch,
+                buildingsRequired: 5
+            },
+            {
+                name: "Tractors",
+                quote: "eliminating manual labor since 1892",
+                price: 550_000,
+                img: "tractors.png",
+                desc: defaultUpgradeDescriptions.ranch,
+                building: this.ranch,
+                buildingsRequired: 10
+            },
+            {
+                name: "Big baconator",
+                quote: "think giant pig mech fueled by potatoes",
+                price: 55_000_000,
+                img: "big-baconator.png",
+                desc: defaultUpgradeDescriptions.ranch,
+                building: this.ranch,
+                buildingsRequired: 25
+            },
+            {
+                name: "Ranch dressing",
+                quote: "Wrong ranch.",
+                price: 5_500_000_000,
+                img: "ranch-dressing.png",
+                desc: defaultUpgradeDescriptions.ranch,
+                building: this.ranch,
+                buildingsRequired: 50
+            },
+            // television
+            {
+                name: "Streaming service",
+                quote: "cookie-flix",
+                price: 120_000,
+                img: "streaming-service.png",
+                desc: defaultUpgradeDescriptions.television,
+                building: this.television,
+                buildingsRequired: 1
+            },
+            {
+                name: "98-inch screen",
+                quote: "unnecessarily large is an understatement.",
+                price: 600_000,
+                img: "98-inch-screen.png",
+                desc: defaultUpgradeDescriptions.television,
+                building: this.television,
+                buildingsRequired: 5
+            },
+            {
+                name: "Surround sound",
+                quote: "it's all around me!",
+                price: 6_000_000,
+                img: "surround-sound.png",
+                desc: defaultUpgradeDescriptions.television,
+                building: this.television,
+                buildingsRequired: 10
+            },
+            {
+                name: "OLED Display",
+                quote: "s*** it burned in...",
+                price: 60_0000_000,
+                img: "oled-display.png",
+                desc: defaultUpgradeDescriptions.television,
+                building: this.television,
+                buildingsRequired: 25
+            },
+            {
+                name: "8K resolution",
+                quote: "so many pixels!",
+                price: 60_000_000_000,
+                img: "8k-resolution.png",
+                desc: defaultUpgradeDescriptions.television,
+                building: this.television,
+                buildingsRequired: 50
+            },
+            // worker
+            {
+                name: "Medkits",
+                quote: "Constant supply of Band-Aids in case of emergency",
+                price: 1_300_000,
+                img: "medkits.png",
+                desc: defaultUpgradeDescriptions.worker,
+                building: this.worker,
+                buildingsRequired: 1
+            },
+            {
+                name: "Hard hats",
+                quote: "Keep those skulls safe!*",
+                price: 6_500_000,
+                img: "hard-hats.png",
+                desc: defaultUpgradeDescriptions.worker,
+                building: this.worker,
+                buildingsRequired: 5
+            },
+            {
+                name: "Fast fingers*",
+                quote: "upmost efficient cookie manufacturing*",
+                price: 65_000_000,
+                img: "fast-fingers.png",
+                desc: defaultUpgradeDescriptions.worker,
+                building: this.worker,
+                buildingsRequired: 10
+            },
+            {
+                name: "Weight training",
+                quote: "firmly attach chocolate chips via brute force",
+                price: 6_500_000_000,
+                img: "weight-training.png",
+                desc: defaultUpgradeDescriptions.worker,
+                building: this.worker,
+                buildingsRequired: 25
+            },
+            {
+                name: "Robot workers",
+                quote: "robotic precision",
+                price: 650_000_000_000,
+                img: "robot-workers.png",
+                desc: defaultUpgradeDescriptions.worker,
+                building: this.worker,
+                buildingsRequired: 50
+            },
+            // wallet
+            {
+                name: "200 dollar bills",
+                quote: "I'm sure the federal reserve will be okay with this...*",
+                price: 14_000_000,
+                img: "200-dollar-bills.png",
+                desc: defaultUpgradeDescriptions.wallet,
+                building: this.wallet,
+                buildingsRequired: 1
+            },
+            {
+                name: "Credit cards",
+                quote: "cookies but digitized",
+                price: 70_000_000,
+                img: "credit-cards.png",
+                desc: defaultUpgradeDescriptions.wallet,
+                building: this.wallet,
+                buildingsRequired: 5
+            },
+            {
+                name: "Tax refund",
+                quote: "for when you overbake to the IRS*",
+                price: 700_000_000,
+                img: "tax-refund.png",
+                desc: defaultUpgradeDescriptions.wallet,
+                building: this.wallet,
+                buildingsRequired: 10
+            },
+            {
+                name: "safe",
+                quote: "you can keep your cookies even <b>safe</b>r!!",
+                price: 70_000_000_000,
+                img: "safe.png",
+                desc: defaultUpgradeDescriptions.wallet,
+                building: this.wallet,
+                buildingsRequired: 25
+            },
+            {
+                name: "Wizard\'s wallet",
+                quote: "<b>infinite</b> storage space*",
+                price: 7_000_000_000_000,
+                img: "wizards-wallet.png",
+                desc: defaultUpgradeDescriptions.wallet,
+                building: this.wallet,
+                buildingsRequired: 50
+            },
+            // church
+            {
+                name: "the pope",
+                quote: "his holiness will provide many cookies",
+                price: 200_000_000,
+                img: "the-pope.png",
+                desc: defaultUpgradeDescriptions.church,
+                building: this.church,
+                buildingsRequired: 1
+            },
+            {
+                name: "Cookie study",
+                quote: "learning about our baking lord's best recipes",
+                price: 1_000_000_000,
+                img: "cookie-study.png",
+                desc: defaultUpgradeDescriptions.church,
+                building: this.church,
+                buildingsRequired: 5
+            },
+            {
+                name: "Cookie ritual",
+                quote: "summon cookies from the underworld",
+                price: 10_000_000_000,
+                img: "cookie-ritual.png",
+                desc: defaultUpgradeDescriptions.church,
+                building: this.church,
+                buildingsRequired: 10
+            },
+            {
+                name: "Cookie gods",
+                quote: "Worship them, lest their power overwhelm your mortal form.",
+                price: 1_000_000_000_000,
+                img: "cookie-gods.png",
+                desc: defaultUpgradeDescriptions.church,
+                building: this.church,
+                buildingsRequired: 25
+            },
+            {
+                name: "Cible",
+                quote: "Get it? <b>c</b>ookie-b<b>ible</b>!<br><br>I'll see myself out.",
+                price: 100_000_000_000_000,
+                img: "cible.png",
+                desc: defaultUpgradeDescriptions.church,
+                building: this.church,
+                buildingsRequired: 50
             }
         ]
 
@@ -1069,4 +1325,4 @@ window.addEventListener("resize",resizeEventHandler);
 
 game.init();
 
-console.log(game)
+console.log(game);

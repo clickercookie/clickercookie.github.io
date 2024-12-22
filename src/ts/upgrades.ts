@@ -11,7 +11,7 @@ export interface UpgradeData {
     name: string;
     quote: string;
     price: number;
-    img: string;
+    img: string; //? should this be the full path (ex. img/upgrades/xyz.png) or one that cuts that bit out? (ex. xyz.png (what it currently is))
     desc: string;
     building: Building;
     /** The number of buildings bought required to unlock the upgrade */
@@ -79,6 +79,7 @@ export function showUnlockedUpgrades(game: Game) {
 // const keyboard = new Building(new Game(), "es1", "12312312", 123, 123
 
 export class Upgrade {
+    /** Used for calculating the size of the upgradesHolder */
     public static currentlyShown: number = 0;
     public static upgradesBought: number = 0;
 
@@ -135,8 +136,6 @@ export class Upgrade {
             hideTooltip();
         });
         this.html.style.backgroundImage = `url(${UPGRADE_ICON_PATH})`;
-        
-        Upgrade.currentlyShown++;
     }
 
     /**
@@ -145,6 +144,8 @@ export class Upgrade {
      */
     create(element: HTMLElement=document.getElementById("upgradesHolder")) {
         element!.appendChild(this.html);
+
+        Upgrade.currentlyShown++;
     }
 
     clicked() {
@@ -155,7 +156,6 @@ export class Upgrade {
         this.hovered(); //? i don't remember why this is here but i know it's important just trust me
         this.destroy();
         Upgrade.upgradesBought++;
-        Upgrade.currentlyShown--;
         
         this.building.CPSGiven *= 2;
         this.building.CPSGain *= 2;
@@ -190,6 +190,7 @@ export class Upgrade {
 
     destroy() {
         this.html.remove();
+        Upgrade.currentlyShown--;
         hideTooltip(); // hide the tooltip so it doesn't stick around after you buy the upgrade
     }
 }
