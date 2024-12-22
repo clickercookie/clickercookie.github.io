@@ -11,7 +11,7 @@ const desktop: boolean = false;
 // ------------------------------------
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
 import { convertCollectionToArray, capitalize, commaify } from "./helper.js";
-import { Upgrade, updateUpgradesBoughtStatistic, expandUpgradesHolder, destroyAllUpgrades, showUnlockedUpgrades, checkUpgradeAvailability, UpgradeData } from "./upgrades.js";
+import { Upgrade, updateUpgradesBoughtStatistic, expandUpgradesHolder, UpgradeData, UpgradeHandler, UpgradeSave } from "./upgrades.js";
 import { Building } from "./buildings.js";
 import { SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
 import { ModProvider } from "./exmod.js";
@@ -175,6 +175,7 @@ interface ClickerCookieSaveData {
 
     /* upgrades */
     upgradesBought: number;
+    upgradesSave: Record<string, UpgradeSave>
 }
 
 // todo: learn about namespaces and see if that would be better for Game
@@ -206,8 +207,8 @@ export class Game extends SaveProvider {
     public church: Building;
 
     // upgrades
-    public UPGRADES_DATA: UpgradeData[]
-    public upgrades: Upgrade[];
+    public upgradeHandler: UpgradeHandler; //? i want this to be private
+    public UPGRADES_DATA: UpgradeData[];
 
     public savinator5000: Savinator;
 
@@ -255,9 +256,11 @@ export class Game extends SaveProvider {
         this.church = new Building(this, "church","pray to the almighty cookie gods",20000000,7800,"church.png",true);
         this.church.setVisibility(false);
 
+        // upgrades
         this.UPGRADES_DATA = [
             // keyboard
             {
+                uid: "cckeyboard1",
                 name: "Reinforced Keys",
                 quote: "press harder",
                 price: 100,
@@ -268,6 +271,7 @@ export class Game extends SaveProvider {
                 multiplyCookiesPerClick: true
             },
             {
+                uid: "cckeyboard2",
                 name: "Obsidian Keys",
                 quote: "so heavy they're always pressed",
                 price: 500,
@@ -278,6 +282,7 @@ export class Game extends SaveProvider {
                 multiplyCookiesPerClick: true
             },
             {
+                uid: "cckeyboard3",
                 name: "Osmium Keys",
                 quote: "that's very heavy",
                 price: 10_000,
@@ -288,6 +293,7 @@ export class Game extends SaveProvider {
                 multiplyCookiesPerClick: true
             },
             {
+                uid: "cckeyboard4",
                 name: "10 finger typing",
                 quote: "<i><b>efficiency</b></i>", //? your 6th grade ict teacher would be so proud
                 price: 100_000,
@@ -298,6 +304,7 @@ export class Game extends SaveProvider {
                 multiplyCookiesPerClick: true
             },
             {
+                uid: "cckeyboard5",
                 name: "Macros",
                 quote: "why press when you don't have to?",
                 price: 1_000_000,
@@ -309,6 +316,7 @@ export class Game extends SaveProvider {
             },
             // grandpa
             {
+                uid: "ccgrandpa1",
                 name: "Hardwood Walking Stick",
                 quote: "nonna dat softwood junk",
                 price: 1_000,
@@ -318,6 +326,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 1
             },
             {
+                uid: "ccgrandpa2",
                 name: "Rocking Chair",
                 quote: "newest addition to the porch*", //? because his butt problems weren't bad enough
                 price: 5_000,
@@ -327,6 +336,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 5
             },
             {
+                uid: "ccgrandpa3",
                 name: "Reading Glasses",
                 quote: "helps with precise chocolate chip placement",
                 price: 50_000,
@@ -336,6 +346,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 10
             },
             {
+                uid: "ccgrandpa4",
                 name: "Dementia Pills",
                 quote: "what was i doing again?",
                 price: 5_000_000,
@@ -345,6 +356,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 25
             },
             {
+                uid: "ccgrandpa5",
                 name: "shotgun",
                 quote: "grandpa's precious*",
                 price: 500_000_000,
@@ -355,6 +367,7 @@ export class Game extends SaveProvider {
             },
             // ranch
             {
+                uid: "ccranch1",
                 name: "Pig Slop",
                 quote: "Wait, what have we been feeding them before now?*",
                 price: 11_000,
@@ -364,6 +377,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 1
             },
             {
+                uid: "ccranch2",
                 name: "Needle bale",
                 quote: "talk about a hay in a needlestack",
                 price: 55_000,
@@ -373,6 +387,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 5
             },
             {
+                uid: "ccranch3",
                 name: "Tractors",
                 quote: "eliminating manual labor since 1892",
                 price: 550_000,
@@ -382,6 +397,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 10
             },
             {
+                uid: "ccranch4",
                 name: "Big baconator",
                 quote: "think giant pig mech fueled by potatoes",
                 price: 55_000_000,
@@ -391,6 +407,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 25
             },
             {
+                uid: "ccranch5",
                 name: "Ranch dressing",
                 quote: "Wrong ranch.",
                 price: 5_500_000_000,
@@ -401,6 +418,7 @@ export class Game extends SaveProvider {
             },
             // television
             {
+                uid: "cctelevision1",
                 name: "Streaming service",
                 quote: "cookie-flix",
                 price: 120_000,
@@ -410,6 +428,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 1
             },
             {
+                uid: "cctelevision2",
                 name: "98-inch screen",
                 quote: "unnecessarily large is an understatement.",
                 price: 600_000,
@@ -419,6 +438,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 5
             },
             {
+                uid: "cctelevision3",
                 name: "Surround sound",
                 quote: "it's all around me!",
                 price: 6_000_000,
@@ -428,6 +448,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 10
             },
             {
+                uid: "cctelevision4",
                 name: "OLED Display",
                 quote: "s*** it burned in...",
                 price: 60_0000_000,
@@ -437,6 +458,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 25
             },
             {
+                uid: "cctelevision5",
                 name: "8K resolution",
                 quote: "so many pixels!",
                 price: 60_000_000_000,
@@ -447,6 +469,7 @@ export class Game extends SaveProvider {
             },
             // worker
             {
+                uid: "ccworker1",
                 name: "Medkits",
                 quote: "Constant supply of Band-Aids in case of emergency",
                 price: 1_300_000,
@@ -456,6 +479,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 1
             },
             {
+                uid: "ccworker2",
                 name: "Hard hats",
                 quote: "Keep those skulls safe!*",
                 price: 6_500_000,
@@ -465,6 +489,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 5
             },
             {
+                uid: "ccworker3",
                 name: "Fast fingers*",
                 quote: "upmost efficient cookie manufacturing*",
                 price: 65_000_000,
@@ -474,6 +499,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 10
             },
             {
+                uid: "ccworker4",
                 name: "Weight training",
                 quote: "firmly attach chocolate chips via brute force",
                 price: 6_500_000_000,
@@ -483,6 +509,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 25
             },
             {
+                uid: "ccworker5",
                 name: "Robot workers",
                 quote: "robotic precision",
                 price: 650_000_000_000,
@@ -493,6 +520,7 @@ export class Game extends SaveProvider {
             },
             // wallet
             {
+                uid: "ccwallet1",
                 name: "200 dollar bills",
                 quote: "I'm sure the federal reserve will be okay with this...*",
                 price: 14_000_000,
@@ -502,6 +530,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 1
             },
             {
+                uid: "ccwallet2",
                 name: "Credit cards",
                 quote: "cookies but digitized",
                 price: 70_000_000,
@@ -511,6 +540,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 5
             },
             {
+                uid: "ccwallet3",
                 name: "Tax refund",
                 quote: "for when you overbake to the IRS*",
                 price: 700_000_000,
@@ -520,6 +550,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 10
             },
             {
+                uid: "ccwallet4",
                 name: "safe",
                 quote: "you can keep your cookies even <b>safe</b>r!!",
                 price: 70_000_000_000,
@@ -529,6 +560,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 25
             },
             {
+                uid: "ccwallet5",
                 name: "Wizard\'s wallet",
                 quote: "<b>infinite</b> storage space*",
                 price: 7_000_000_000_000,
@@ -539,6 +571,7 @@ export class Game extends SaveProvider {
             },
             // church
             {
+                uid: "ccchurch1",
                 name: "the pope",
                 quote: "his holiness will provide many cookies",
                 price: 200_000_000,
@@ -548,6 +581,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 1
             },
             {
+                uid: "ccchurch2",
                 name: "Cookie study",
                 quote: "learning about our baking lord's best recipes",
                 price: 1_000_000_000,
@@ -557,6 +591,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 5
             },
             {
+                uid: "ccchurch3",
                 name: "Cookie ritual",
                 quote: "summon cookies from the underworld",
                 price: 10_000_000_000,
@@ -566,6 +601,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 10
             },
             {
+                uid: "ccchurch4",
                 name: "Cookie gods",
                 quote: "Worship them, lest their power overwhelm your mortal form.",
                 price: 1_000_000_000_000,
@@ -575,6 +611,7 @@ export class Game extends SaveProvider {
                 buildingsRequired: 25
             },
             {
+                uid: "ccchurch5",
                 name: "Cible",
                 quote: "Get it? <b>c</b>ookie-b<b>ible</b>!<br><br>I'll see myself out.",
                 price: 100_000_000_000_000,
@@ -583,12 +620,11 @@ export class Game extends SaveProvider {
                 building: this.church,
                 buildingsRequired: 50
             }
-        ]
+        ];
+        this.upgradeHandler = new UpgradeHandler();
 
-        // upgrades
-        this.upgrades = [];
         for (let i in this.UPGRADES_DATA) {
-            this.upgrades.push(new Upgrade(this, this.UPGRADES_DATA[i]));
+            this.upgradeHandler.register(new Upgrade(this, this.UPGRADES_DATA[i]));
         }
 
         // initalize variables
@@ -656,7 +692,7 @@ export class Game extends SaveProvider {
         updateUpgradesBoughtStatistic();
 
         // set the total upgrades bought counter in the Statistics screen
-        document.getElementById("totalUpgradesCounter").innerText = this.upgrades.length.toString();
+        // document.getElementById("totalUpgradesCounter").innerText = this.upgrades.length.toString(); //! this is no longer working!!!!!!!!!!!!
     
         // change version branch specific stuff
         // change title
@@ -824,7 +860,7 @@ export class Game extends SaveProvider {
         this.reloadCPSCounter();
         this.reloadCookieCounter();
     
-        checkUpgradeAvailability(this);
+        this.upgradeHandler.checkUpgradeAvailability();
     
         // building unlocks
         if (this.totalCookies >= 100) {
@@ -972,6 +1008,7 @@ export class Game extends SaveProvider {
 
             /* upgrades */
             upgradesBought: Upgrade.upgradesBought,
+            upgradesSave: this.upgradeHandler.dumpUpgradesSave()
         }
     }
     loadSaveData(saveData: ClickerCookieSaveData) {        
@@ -1033,10 +1070,12 @@ export class Game extends SaveProvider {
         this.church.CPSGiven = saveData.churchCPSGiven;
         // ...
 
+        this.upgradeHandler.loadUpgradesSave(saveData.upgradesSave);
+
         this.reloadBuildingPrices();
 
-        destroyAllUpgrades(this);
-        showUnlockedUpgrades(this);
+        this.upgradeHandler.destroyAllUpgrades();
+        this.upgradeHandler.showUnlockedUpgrades();
         document.getElementById("upgradesBoughtCounter").innerText = Upgrade.upgradesBought.toString();
         updateUpgradesBoughtStatistic();
     }

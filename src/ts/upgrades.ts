@@ -7,7 +7,85 @@ const personalization = {
     currentClicked: "cookie"
 }
 
+export interface UpgradeSave {
+    unlocked: boolean;
+    bought: boolean;
+}
+
+export class UpgradeHandler {
+    private upgrades: Upgrade[] = [];
+
+    register(upgrade: Upgrade) {
+        this.upgrades.push(upgrade);
+    }
+
+    getUpgradeFromUID(uid: string): Upgrade | null {
+        for (let i in this.upgrades) {
+            if (this.upgrades[i].uid === uid) {
+                return this.upgrades[i];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * TODO: NEEDS STATISTIC SUPPORT
+     * @param statistic Are we destroying all the upgrades in the Statistics page?
+     */
+    destroyAllUpgrades(statistic: boolean=false) {
+        for (let i in this.upgrades) {
+            this.upgrades[i].destroy();
+        }
+        
+        if (!statistic)
+            Upgrade.currentlyShown = 0;
+    }
+
+    showUnlockedUpgrades() { //? is this still used? isn't this just checkUpgradeAvaliability?
+        for (let i in this.upgrades) {
+            if (this.upgrades[i].unlocked === true && this.upgrades[i].bought !== true) 
+                // new Upgrade(game, game.UPGRADES_DATA[i]);
+                this.upgrades[i].create();
+        }
+    }
+
+    /**
+     * Goes through every upgrade in {@link UpgradeHandler.upgrades} and check if it's ready to be created. If it is, then run the {@link Upgrade.create()} method on it.
+     */
+    checkUpgradeAvailability() {
+        for (let i in this.upgrades) {
+            if (this.upgrades[i].building.bought >= this.upgrades[i].buildingsRequired && this.upgrades[i].unlocked === false) {
+                this.upgrades[i].create();
+                this.upgrades[i].unlocked = true;
+            }
+        }
+    }
+
+    dumpUpgradesSave() {
+        const saveObj: Record<string, UpgradeSave> = {};
+        for (let i in this.upgrades) {
+            saveObj[this.upgrades[i].uid] = {
+                unlocked: this.upgrades[i].unlocked,
+                bought: this.upgrades[i].bought
+            }
+            console.log(this.upgrades[i])
+        }
+        return saveObj;
+    }
+
+    loadUpgradesSave(saveObj: Record<string, UpgradeSave>) {
+        for (let i in saveObj) {
+            this.getUpgradeFromUID(i).bought = saveObj[i].bought;
+            this.getUpgradeFromUID(i).unlocked = saveObj[i].unlocked;
+        }
+    }
+}
+
 export interface UpgradeData {
+    /** This is used to save unlocked/bought properties for the upgrade, and should be unique and NEVER CHANGE. it can be whatever you want.
+     * See {@link Game.UPGRADES_DATA} for the reserved ones.
+     */
+    uid: string;
     name: string;
     quote: string;
     price: number;
@@ -42,42 +120,6 @@ export function updateUpgradesBoughtStatistic() {
     // }
 }
 
-/**
- * Goes through every upgrade in game.upgrades and check if it's ready to be created. If it is, then run the Upgrade.create() method on it.
- * @param game Game
- */
-export function checkUpgradeAvailability(game: Game) {
-    for (let i in game.upgrades) {
-        if (game.upgrades[i].building.bought >= game.upgrades[i].buildingsRequired && game.upgrades[i].unlocked === false) {
-            game.upgrades[i].create();
-            game.upgrades[i].unlocked = true;
-        }
-    }
-}
-
-/**
- * TODO: NEEDS STATISTIC SUPPORT
- * @param game Game
- * @param statistic Are we destroying all the upgrades in the Statistics page?
- */
-export function destroyAllUpgrades(game: Game, statistic: boolean=false) {
-    for (let i in game.upgrades) {
-        game.upgrades[i].destroy();
-    }
-    
-    if (!statistic)
-        Upgrade.currentlyShown = 0;
-}
-
-export function showUnlockedUpgrades(game: Game) {
-    for (let i in game.upgrades) {
-        if (game.upgrades[i].unlocked === true && game.upgrades[i].bought !== true) 
-            new Upgrade(game, game.UPGRADES_DATA[i]);
-    }
-}
-
-// const keyboard = new Building(new Game(), "es1", "12312312", 123, 123
-
 export class Upgrade {
     /** Used for calculating the size of the upgradesHolder */
     public static currentlyShown: number = 0;
@@ -85,6 +127,7 @@ export class Upgrade {
 
     private game: Game;
 
+    uid: string;
     name: string;
     quote: string;
     price: number;
@@ -100,7 +143,8 @@ export class Upgrade {
     html: HTMLDivElement;
     constructor(game: Game, data: UpgradeData) {
         this.game = game;
-
+        
+        this.uid = data.uid;
         this.name = data.name;
         this.quote = data.quote;
         this.price = data.price;

@@ -2,7 +2,7 @@
 // it works but it's really terrible because it's changing like ASAP
 
 import { Game } from "./main.js";
-import { destroyAllUpgrades, Upgrade, updateUpgradesBoughtStatistic } from "./upgrades.js";
+import { Upgrade, updateUpgradesBoughtStatistic } from "./upgrades.js";
 
 export const saves = {} as {
     importedData: any,
@@ -288,7 +288,7 @@ saves.resetSave = function(game: Game) {
     document.getElementById("ifCheatedStat").innerHTML = "";
     document.getElementById("ifModdedStat").innerHTML = "";
 
-    destroyAllUpgrades(game);
+    game.upgradeHandler.destroyAllUpgrades();
     document.getElementById("upgradesBoughtCounter").innerHTML = Upgrade.upgradesBought.toString();
     updateUpgradesBoughtStatistic();
 
@@ -300,121 +300,4 @@ saves.resetSave = function(game: Game) {
     game.worker.setVisibility(false);
     game.wallet.setVisibility(false);
     game.church.setVisibility(false);
-}
-
-saves.convert05Save = function(game: Game, isBeta=false, isBetaSaveOld=false) { // ! this is remaining only for the lifespan of 0.6 and will be removed in the next major update or after a certain time gap, that's why this function is a nightmare to understand
-    const oldSave = isBeta ? isBetaSaveOld ? JSON.parse(localStorage.getItem("betaSaveOld")) : JSON.parse(localStorage.getItem("betaSave")) : JSON.parse(localStorage.getItem("save"));
-
-    game.cookies = oldSave[0];
-    game.totalCookies = oldSave[1];
-    game.cookiesPerSecond = oldSave[2];
-
-    game.keyboard.CPSGiven = oldSave[3];
-    game.grandpa.CPSGiven = oldSave[4];
-    game.ranch.CPSGiven = oldSave[5];
-    game.television.CPSGiven = oldSave[6];
-    game.worker.CPSGiven = oldSave[7];
-    game.wallet.CPSGiven = oldSave[8];
-    game.church.CPSGiven = oldSave[9];
-
-    game.keyboard.bought = oldSave[10];
-    game.grandpa.bought = oldSave[11];
-    game.ranch.bought = oldSave[12];
-    game.television.bought = oldSave[13];
-    game.worker.bought = oldSave[14];
-    game.wallet.bought = oldSave[15];
-    game.church.bought = oldSave[16];
-
-    game.keyboard.CPSGain = oldSave[17];
-    game.grandpa.CPSGain = oldSave[18];
-    game.ranch.CPSGain = oldSave[19];
-    game.television.CPSGain = oldSave[20];
-    game.worker.CPSGain = oldSave[21];
-    game.wallet.CPSGain = oldSave[22];
-    game.church.CPSGain = oldSave[23];
-
-    game.keyboard.upgradeCost = oldSave[24];
-    game.grandpa.upgradeCost = oldSave[25];
-    game.ranch.upgradeCost = oldSave[26];
-    game.television.upgradeCost = oldSave[27];
-    game.worker.upgradeCost = oldSave[28];
-    game.wallet.upgradeCost = oldSave[29];
-    game.church.upgradeCost = oldSave[30];
-
-    // no more upgrades bought crap
-
-    game.cookiesPerClick = oldSave[38];
-    game.cookieBeenClickedTimes = oldSave[39];
-    game.buildingsOwned = oldSave[40];
-    // no grandma prompt clicks
-    game.hasCheated = oldSave[42];
-    // no won
-    game.isModded = oldSave[44];
-    // obviously no version branch
-    
-    for (let i in game.upgrades) {
-        game.upgrades[i].unlocked = saves.defaultSavedValues["upgrades.unlocked"];
-        game.upgrades[i].bought = saves.defaultSavedValues["upgrades.bought"];
-    }
-
-    // saves.save(game);
-
-    game.grandpa.unlocked = false;
-    game.ranch.unlocked = false;
-    game.television.unlocked = false;
-    game.worker.unlocked = false;
-    game.wallet.unlocked = false;
-    game.church.unlocked = false;
-    document.getElementById("ifCheatedStat").innerHTML = "";
-    document.getElementById("ifModdedStat").innerHTML = "";
-
-    destroyAllUpgrades(game);
-    game.keyboard.CPSGain = 0.1;
-    game.grandpa.CPSGain = 1;
-    game.ranch.CPSGain = 8;
-    game.television.CPSGain = 47;
-    game.worker.CPSGain = 260;
-    game.wallet.CPSGain = 1440;
-    game.church.CPSGain = 7800;
-
-    // document.getElementById("win").style.display = "none";
-
-    if (oldSave[11] >= 1) {
-        game.grandpa.setVisibility(true);
-    } else {
-        game.grandpa.setVisibility(false);
-    }
-    if (oldSave[12] >= 1) {
-        game.ranch.setVisibility(true);
-    } else {
-        game.ranch.setVisibility(false);
-    }
-    if (oldSave[13] >= 1) {
-        game.television.setVisibility(true);
-    } else {
-        game.television.setVisibility(false);
-    }
-    if (oldSave[14] >= 1) {
-        game.worker.setVisibility(true);
-    } else {
-        game.worker.setVisibility(false);
-    }
-    if (oldSave[15] >= 1) {
-        game.wallet.setVisibility(true);
-    } else {
-        game.wallet.setVisibility(false);
-    }
-    if (oldSave[16] >= 1) {
-        game.church.setVisibility(true);
-    } else {
-        game.church.setVisibility(false);
-    }
-    
-    if (localStorage.getItem("devSave") != null) {
-        localStorage.removeItem("devSave");
-    }
-    if (isBetaSaveOld) {
-        localStorage.removeItem("betaSaveOld");
-    }
-    location.reload();
 }

@@ -11,6 +11,8 @@ Featuring 7 original buildings, semi-functional Javascript, and temporary pixel 
 The game is available at [clickercookie.github.io](https://clickercookie.github.io), and can be played with no setup necessary. If you discover a bug (you probably will), please create a new issue. To play on the beta version, click the version number in the bottom left of the window.
 
 ## Contributing
+**Note: The `develop` branch is currently unstable as the transition to 0.7 is a major rewrite of the backend. Developing mods is not recommended. You have been warned.**
+
 ### Dependencies
 Run `npm install` to install dependencies.
 ### Building
