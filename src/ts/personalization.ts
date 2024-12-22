@@ -87,9 +87,7 @@ export class Personalization {
         if (this.currentlyClicked.circular === false)
             cookie.style.borderRadius = "0px";
 
-        if (value === "cake") {
-            (document.getElementById("currentlyClickedSelect") as HTMLSelectElement).value = "cake"; // ? why is this here (anniversary event?)
-        }
+        (document.getElementById("currentlyClickedSelect") as HTMLSelectElement).value = value; //* if the thing is set by something other than the HTMLSelectElement change event then we need to make sure the correct obj is listed as the value
 
         //! upgrades.descriptions[0] = `Multiplys Keyboard and clicking ${this.currentClicked} production by 2`;
         console.log(`Currently clicked set to: ${value}`);
@@ -122,7 +120,10 @@ export class Personalization {
 
         document.getElementById("leftSide").style.background = Personalization.getCurrentBackgroundFile(true);
         document.getElementById("middleButtons").style.background = Personalization.getCurrentBackgroundFile(true);
+        document.getElementById("middle").style.background = Personalization.getCurrentBackgroundFile(true);
         document.getElementById("rightSide").style.background = Personalization.getCurrentBackgroundFile(true);
+
+        (document.getElementById("backgroundSelect") as HTMLSelectElement).value = value; //* if the thing is set by something other than the HTMLSelectElement change event then we need to make sure the correct obj is listed as the value
 
         console.log(`Background color set to: ${value}`);
     }

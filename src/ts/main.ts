@@ -4,13 +4,12 @@
 const version: string = "0.6";
 const versionBranch: number = (location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") ? 1 : 0; // 0 is main, 1 is beta
 const inDevelopment: boolean = (location.hostname === "localhost" || location.hostname === "127.0.0.1") ? true : false; // automatically toggles if hosted on the local machine
-const desktop: boolean = false;
 
 // ------------------------------------
 // Imports
 // ------------------------------------
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
-import { convertCollectionToArray, capitalize, commaify } from "./helper.js";
+import { convertCollectionToArray, commaify } from "./helper.js";
 import { Upgrade, updateUpgradesBoughtStatistic, expandUpgradesHolder, UpgradeData, UpgradeHandler, UpgradeSave } from "./upgrades.js";
 import { Building } from "./buildings.js";
 import { SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
@@ -25,30 +24,6 @@ export const saveHandler = new SaveHandler(); //* this thing's position in the s
 // ------------------------------------
 // Variable & Object Definitions
 // ------------------------------------
-// upgrades
-//* this object will be removed later so it's very bad, this applies to every other objects everywhere-esque thing too
-const upgrades = {} as {
-    unlocked: number[],
-    bought: number[],
-    prices: number[],
-    names: string[],
-    quotes: string[],
-    descriptions: string[],
-    img: string[],
-    upgradesBought: number,
-    currentlyShown: number,
-    rowsOfUpgrades: number,
-
-    clicked(id: number, building: number): void,
-    create(id: number, statistic?: boolean): void,
-    destroy(id: number): void,
-    destroyAll(statistic?: boolean): void,
-    expandUpgradesHolder(retract?: boolean): void,
-    hovered(id: number, building: number, statistic?: boolean): void,
-    showUnlocked(): void,
-    updateBoughtStatistic(): void
-};
-
 // the description of almost every upgrade is the same, but just in case we want to add more upgrades in the future
 // a "desc" field has been added to the upgrades array. Most upgrade will just reference a this array, though
 const defaultUpgradeDescriptions = {
@@ -99,9 +74,7 @@ let optionsUp = false;
 
 // misc
 let cookieProductionStopped = false;
-let won = 0;
 let mobile: boolean; // defined in initialization
-let savingAllowed = true;
 
 const helper = {} as {
     consoleLogDev(str: string): void,
@@ -176,6 +149,13 @@ interface ClickerCookieSaveData {
     /* upgrades */
     upgradesBought: number;
     upgradesSave: Record<string, UpgradeSave>
+
+    // personalization
+    currentClickedObjectName: string;
+    backgroundName: string;
+    
+    // misc
+    autoSavingAllowed: boolean;
 }
 
 // todo: learn about namespaces and see if that would be better for Game
@@ -188,6 +168,14 @@ export class Game extends SaveProvider {
     // self-explainatory-ish things
     public hasCheated: boolean;
     public isModded: boolean;
+    private _autoSavingAllowed: boolean;
+    get autoSavingAllowed(): boolean {
+        return this._autoSavingAllowed;
+    }
+    set autoSavingAllowed(value: boolean) {
+        this._autoSavingAllowed = value;
+        (document.getElementById("autoSavingToggleSelect") as HTMLSelectElement).value = (this.autoSavingAllowed) ? "on" : "off";
+    }
 
     // core stuff
     public cookies: number;
@@ -637,6 +625,7 @@ export class Game extends SaveProvider {
 
         this.hasCheated = false;
         this.isModded = false;
+        this.autoSavingAllowed = true;
 
         this.variableView = {
             cookiesView: "",
@@ -648,6 +637,26 @@ export class Game extends SaveProvider {
     }
 
     init() {
+        // Register personalization things (must be before save load because loading requires these to be registered to set them)
+        Personalization.registerObject({name: "Cookie", namePlural: "Cookies", filename: "img/cookie.png"});
+        Personalization.registerObject({name: "Potato", namePlural: "Potatoes", filename: "img/potato.png"});
+        Personalization.registerObject({name: "Strawberry", namePlural: "Strawberries", filename: "img/strawberry.png"});
+        Personalization.registerObject({name: "Cake", namePlural: "Cakes", filename: "img/cake.png", circular: false, pixelated: true});
+        Personalization.registerBackground({name: "blue", displayName: "Blue", filename: "img/backgrounds/background-blue.png"});
+        Personalization.registerBackground({name: "green", displayName: "Green", filename: "img/backgrounds/background-green.png"});
+        Personalization.registerBackground({name: "gray", displayName: "Gray", filename: "img/backgrounds/background-gray.png"});
+        Personalization.registerBackground({name: "purple", displayName: "Purple", filename: "img/backgrounds/background-purple.png"});
+        Personalization.registerBackground({name: "darkblue", displayName: "Dark Blue", filename: "img/backgrounds/background-darkblue.png"});
+        Personalization.registerBackground({name: "orange", displayName: "Orange", filename: "img/backgrounds/background-orange.png"});
+        Personalization.registerBackground({name: "pink", displayName: "Pink", filename: "img/backgrounds/background-pink.png"});
+        Personalization.registerBackground({name: "lime", displayName: "Lime", filename: "img/backgrounds/background-lime.png"});
+        Personalization.registerBackground({name: "yellow", displayName: "Yellow", filename: "img/backgrounds/background-yellow.png"});
+        Personalization.registerBackground({name: "red", displayName: "Red", filename: "img/backgrounds/background-red.png"});
+        Personalization.registerBackground({name: "white", displayName: "White", filename: "img/backgrounds/background-white.png"});
+
+        Personalization.setCurrentlyClicked("cookie");
+        Personalization.setBackground("blue");
+
         if (isNaN(this.cookies)) { //? do we really still need this?
             saves.resetSave(this);
             console.warn("Cookies were NaN and save was reset.");
@@ -705,26 +714,6 @@ export class Game extends SaveProvider {
         
         if (Game.IN_DEVELOPMENT)
             document.title = "Clicker Cookie Dev";
-
-        // Register personalization things
-        Personalization.registerObject({name: "Cookie", namePlural: "Cookies", filename: "img/cookie.png"});
-        Personalization.registerObject({name: "Potato", namePlural: "Potatoes", filename: "img/potato.png"});
-        Personalization.registerObject({name: "Strawberry", namePlural: "Strawberries", filename: "img/strawberry.png"});
-        Personalization.registerObject({name: "Cake", namePlural: "Cakes", filename: "img/cake.png", circular: false, pixelated: true});
-        Personalization.registerBackground({name: "blue", displayName: "Blue", filename: "img/backgrounds/background-blue.png"});
-        Personalization.registerBackground({name: "green", displayName: "Green", filename: "img/backgrounds/background-green.png"});
-        Personalization.registerBackground({name: "gray", displayName: "Gray", filename: "img/backgrounds/background-gray.png"});
-        Personalization.registerBackground({name: "purple", displayName: "Purple", filename: "img/backgrounds/background-purple.png"});
-        Personalization.registerBackground({name: "darkblue", displayName: "Dark Blue", filename: "img/backgrounds/background-darkblue.png"});
-        Personalization.registerBackground({name: "orange", displayName: "Orange", filename: "img/backgrounds/background-orange.png"});
-        Personalization.registerBackground({name: "pink", displayName: "Pink", filename: "img/backgrounds/background-pink.png"});
-        Personalization.registerBackground({name: "lime", displayName: "Lime", filename: "img/backgrounds/background-lime.png"});
-        Personalization.registerBackground({name: "yellow", displayName: "Yellow", filename: "img/backgrounds/background-yellow.png"});
-        Personalization.registerBackground({name: "red", displayName: "Red", filename: "img/backgrounds/background-red.png"});
-        Personalization.registerBackground({name: "white", displayName: "White", filename: "img/backgrounds/background-white.png"});
-
-        Personalization.setCurrentlyClicked("cookie");
-        Personalization.setBackground("blue");
     
         // Changelog Entries, AKA NOT the messiest place ever.
         // this loop goes from big to small because the function needs to be ran from the latest version to the oldest
@@ -817,6 +806,7 @@ export class Game extends SaveProvider {
         document.getElementById("resetSaveButton").addEventListener("click", () => {helper.popup.createSimple(300,150,'Are you sure you want to do this?',false,'resetSave()','Warning',true,true)});
         document.getElementById("exportDataButton").addEventListener("click", () => {this.savinator5000.export()});
         document.getElementById("importDataInput").addEventListener("change", () => {this.savinator5000.import()});
+        document.getElementById("autoSavingToggleSelect").addEventListener("change", () => {this.autoSavingAllowed = ((document.getElementById("autoSavingToggleSelect") as HTMLFormElement).value === "on") ? true : false});;
         document.getElementById("addModButton").addEventListener("click", () => {mods.addClicked()});
         document.getElementById("listModsButton").addEventListener("click", () => {mods.listClicked()});
         document.getElementById("devModeSelect").addEventListener("change", () => {dev.setDevMode((document.getElementById("devModeSelect") as HTMLFormElement).value)})
@@ -1008,7 +998,14 @@ export class Game extends SaveProvider {
 
             /* upgrades */
             upgradesBought: Upgrade.upgradesBought,
-            upgradesSave: this.upgradeHandler.dumpUpgradesSave()
+            upgradesSave: this.upgradeHandler.dumpUpgradesSave(),
+
+            // personalization
+            currentClickedObjectName: Personalization.getCurrentlyClicked().toLowerCase(),
+            backgroundName: Personalization.currentBackground.name.toLowerCase(), // todo: make better
+
+            // misc
+            autoSavingAllowed: this.autoSavingAllowed,
         }
     }
     loadSaveData(saveData: ClickerCookieSaveData) {        
@@ -1072,6 +1069,12 @@ export class Game extends SaveProvider {
 
         this.upgradeHandler.loadUpgradesSave(saveData.upgradesSave);
 
+        // personalization
+        Personalization.setCurrentlyClicked(saveData.currentClickedObjectName);
+        Personalization.setBackground(saveData.backgroundName);
+
+        this.autoSavingAllowed = saveData.autoSavingAllowed;
+
         this.reloadBuildingPrices();
 
         this.upgradeHandler.destroyAllUpgrades();
@@ -1117,14 +1120,6 @@ dev.setCPS = function(number: number) {
     game.reloadViewVariables();
     game.reloadCPSCounter();
     document.getElementById("ifCheatedStat").innerHTML = "<b>You have cheated on this playthrough!</b>";
-}
-dev.toggleSaving = function() { // TODO 0.7: this should be a toggle without dev mode
-    if (!this.devMode) return "You need developer mode ON to run this command.";
-
-    savingAllowed = !savingAllowed;
-
-    if (!inDevelopment) return;
-    document.getElementById("currentSavingStatus").innerHTML = `saving: ${savingAllowed}`;
 }
 
 // ------------------------------------
@@ -1464,7 +1459,7 @@ setInterval(() => {
         game.gameLoop()
 }, 1);
 setInterval(() => { // auto-saving
-    if (!savingAllowed) return false;
+    if (!game.autoSavingAllowed) return false;
 
     game.savinator5000.save();
 }, 60 * 1000); // 60s

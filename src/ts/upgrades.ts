@@ -3,10 +3,6 @@ import { clamp, commaify } from "./helper.js";
 import { hideTooltip } from "./tooltip.js";
 import { Game } from "./main.js";
 
-const personalization = {
-    currentClicked: "cookie"
-}
-
 export interface UpgradeSave {
     unlocked: boolean;
     bought: boolean;
@@ -68,7 +64,6 @@ export class UpgradeHandler {
                 unlocked: this.upgrades[i].unlocked,
                 bought: this.upgrades[i].bought
             }
-            console.log(this.upgrades[i])
         }
         return saveObj;
     }
