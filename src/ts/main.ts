@@ -126,12 +126,55 @@ helper.popup = {} as {
 // Initialization and Checks for Errors
 // ------------------------------------
 interface ClickerCookieSaveData {
+    version: string;
+
+    // core
     cookies: number;
     totalCookies: number;
     cookiesPerClick: number;
     cookieBeenClickedTimes: number;
     hasCheated: boolean;
     isModded: boolean;
+
+    /* buildings */
+    // keyboard
+    keyboardsBought: number;
+    keyboardCPSGain: number;
+    keyboardUpgradeCost: number;
+    keyboardCPSGiven: number;
+    // grandpa
+    grandpasBought: number;
+    grandpaCPSGain: number;
+    grandpaUpgradeCost: number;
+    grandpaCPSGiven: number;
+    // ranch
+    ranchesBought: number;
+    ranchCPSGain: number;
+    ranchUpgradeCost: number;
+    ranchCPSGiven: number;
+    // television
+    televisionsBought: number;
+    televisionCPSGain: number;
+    televisionUpgradeCost: number;
+    televisionCPSGiven: number; 
+    // worker
+    workersBought: number;
+    workerCPSGain: number;
+    workerUpgradeCost: number;
+    workerCPSGiven: number;
+    // wallet
+    walletsBought: number;
+    walletCPSGain: number;
+    walletUpgradeCost: number;
+    walletCPSGiven: number; 
+    // church
+    churchesBought: number;
+    churchCPSGain: number;
+    churchUpgradeCost: number;
+    churchCPSGiven: number;
+
+    /* upgrades */
+    upgradesBought: number;
 }
 
 // todo: learn about namespaces and see if that would be better for Game
@@ -883,22 +926,61 @@ export class Game extends SaveProvider {
     // ------------ All of Game's SaveProvider stuff ------------
     getSaveData(): ClickerCookieSaveData {
         return {
+            version: Game.VERSION,
             cookies: this.cookies,
             totalCookies: this.totalCookies,
             cookiesPerClick: this.cookiesPerClick,
             cookieBeenClickedTimes: this.cookieBeenClickedTimes,
             hasCheated: this.hasCheated,
             isModded: this.isModded,
+            /* buildings */
+            // keyboard
+            keyboardsBought: this.keyboard.bought,
+            keyboardCPSGain: this.keyboard.CPSGain,
+            keyboardUpgradeCost: this.keyboard.upgradeCost,
+            keyboardCPSGiven: this.keyboard.CPSGiven,
+            // grandpa
+            grandpasBought: this.grandpa.bought,
+            grandpaCPSGain: this.grandpa.CPSGain,
+            grandpaUpgradeCost: this.grandpa.upgradeCost,
+            grandpaCPSGiven: this.grandpa.CPSGiven,
+            // ranch
+            ranchesBought: this.ranch.bought,
+            ranchCPSGain: this.ranch.CPSGain,
+            ranchUpgradeCost: this.ranch.upgradeCost,
+            ranchCPSGiven: this.ranch.CPSGiven,
+            // television
+            televisionsBought: this.television.bought,
+            televisionCPSGain: this.television.CPSGain,
+            televisionUpgradeCost: this.television.upgradeCost,
+            televisionCPSGiven: this.television.CPSGiven,
+            // worker
+            workersBought: this.worker.bought,
+            workerCPSGain: this.worker.CPSGain,
+            workerUpgradeCost: this.worker.upgradeCost,
+            workerCPSGiven: this.worker.CPSGiven,
+            // wallet
+            walletsBought: this.wallet.bought,
+            walletCPSGain: this.wallet.CPSGain,
+            walletUpgradeCost: this.wallet.upgradeCost,
+            walletCPSGiven: this.wallet.CPSGiven,
+            // church
+            churchesBought: this.church.bought,
+            churchCPSGain: this.church.CPSGain,
+            churchUpgradeCost: this.church.upgradeCost,
+            churchCPSGiven: this.church.CPSGiven,
+
+            /* upgrades */
+            upgradesBought: Upgrade.upgradesBought,
         }
     }
-    loadSaveData(saveData: ClickerCookieSaveData) {
-        // workaround alert!
+    loadSaveData(saveData: ClickerCookieSaveData) {        
         for (let i in saveData) {
-            if (!(i in this)) {
-                console.log(`Did not find ${i} in game!`);
+            if (i === undefined) {
+                console.warn("During loading a value in saveData was found undefined. Errors will likely follow...");
             }
         }
-
+        
         this.grandpa.setVisibility(false);
         this.ranch.setVisibility(false);
         this.television.setVisibility(false);
@@ -912,6 +994,43 @@ export class Game extends SaveProvider {
         this.cookieBeenClickedTimes = saveData.cookieBeenClickedTimes;
         this.hasCheated = saveData.hasCheated;
         this.isModded = saveData.isModded;
+
+        /* buildings */
+        // keyboard
+        this.keyboard.bought = saveData.keyboardsBought;
+        this.keyboard.CPSGain = saveData.keyboardCPSGain;
+        this.keyboard.upgradeCost = saveData.keyboardUpgradeCost;
+        this.keyboard.CPSGiven = saveData.keyboardCPSGiven;
+        // grandpa
+        this.grandpa.bought = saveData.grandpasBought;
+        this.grandpa.CPSGain = saveData.grandpaCPSGain;
+        this.grandpa.upgradeCost = saveData.grandpaUpgradeCost;
+        this.grandpa.CPSGiven = saveData.grandpaCPSGiven;
+        // ranch
+        this.ranch.bought = saveData.ranchesBought;
+        this.ranch.CPSGain = saveData.ranchCPSGain;
+        this.ranch.upgradeCost = saveData.ranchUpgradeCost;
+        this.ranch.CPSGiven = saveData.ranchCPSGiven;
+        // television
+        this.television.bought = saveData.televisionsBought;
+        this.television.CPSGain = saveData.televisionCPSGain;
+        this.television.upgradeCost = saveData.televisionUpgradeCost;
+        this.television.CPSGiven = saveData.televisionCPSGiven;
+        // worker
+        this.worker.bought = saveData.workersBought;
+        this.worker.CPSGain = saveData.workerCPSGain;
+        this.worker.upgradeCost = saveData.workerUpgradeCost;
+        this.worker.CPSGiven = saveData.workerCPSGiven;
+        // wallet
+        this.wallet.bought = saveData.walletsBought;
+        this.wallet.CPSGain = saveData.walletCPSGain;
+        this.wallet.upgradeCost = saveData.walletUpgradeCost;
+        this.wallet.CPSGiven = saveData.walletCPSGiven;
+        // church
+        this.church.bought = saveData.churchesBought;
+        this.church.CPSGain = saveData.churchCPSGain;
+        this.church.upgradeCost = saveData.churchUpgradeCost;
+        this.church.CPSGiven = saveData.churchCPSGiven;
         // ...
 
         this.reloadBuildingPrices();
