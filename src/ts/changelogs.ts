@@ -5,6 +5,7 @@ interface Changelog {
     added?: string[];
     changed?: string[];
     fixed?: string[];
+    removed?: string[];
     release?: string; //? could this be a Date or is that silly?
 }
 
@@ -202,6 +203,7 @@ export const versionChangelogs: Changelog[] = [
         note: "Hi. It's hard to explain in a simple changelog how much this update has changed. See everything you're looking at? What is happening behind the scenes for what you're looking at has changed. Virtually every single line of code has had some sort of update.",
         name: "tbd",
         added: [
+            "A button in Options to toggle auto-saving (#29)",
             "GitHub issues in changelogs work as hyperlinks, like this one: #13",
             "The white background is now enabled by default."
         ],
@@ -212,11 +214,14 @@ export const versionChangelogs: Changelog[] = [
             "The entire modding system. See the GitHub wiki for more details.",
             "Split main.js into multiple script files.",
             "Reorganized the GitHub repo (#35)",
-            "Removed the mobile version due to the extreme amount of work required to upkeep it alongside the desktop version. (#36)",
             "Logs can now have a \"note\" (it's below the version header)."
         ],
         fixed: [
-            "No more HTMLElement.innerHTML where it's not needed, now use innerText." // todo
+            "Resetting save and importing data does not import data. (#13)", // todo
+            "No more HTMLElement.innerHTML where it's not needed, now use innerText. (#43)" // todo
+        ],
+        removed: [
+            "Removed the mobile version due to the extreme amount of work required to upkeep it alongside the main version. (#36)",
         ]
     }
 ];
@@ -301,6 +306,23 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
             const fixedListItem = document.createElement("li");
             fixedListItem.innerHTML = parseGithubIssue(logs.fixed[i]);
             fixedList.appendChild(fixedListItem);
+        }
+    }
+    if (logs.removed !== undefined) {
+        const removedHeader = document.createElement("h3");
+        removedHeader.setAttribute("class","middle-text");
+        removedHeader.setAttribute("style","font-size: 16px;");
+        removedHeader.innerText = "Removed:";
+        newChangelogEntry.appendChild(removedHeader);
+
+        const removedList = document.createElement("ul");
+        removedList.setAttribute("class","middle-ul");
+        newChangelogEntry.appendChild(removedList);
+
+        for (let i = 0; i < logs.removed.length; i++) {
+            const fixedListItem = document.createElement("li");
+            fixedListItem.innerHTML = parseGithubIssue(logs.removed[i]);
+            removedList.appendChild(fixedListItem);
         }
     }
 
