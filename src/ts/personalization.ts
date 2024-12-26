@@ -4,7 +4,7 @@
 interface CurrentlyClickedObject {
     name: string;
     namePlural: string;
-    filename: string;
+    src: string;
     /** should border-radius be 128px? default is true */
     circular?: boolean,
     /** image-rendering auto/pixelated? default is false */
@@ -15,23 +15,19 @@ interface Background {
     /** {@link HTMLSelectElement.value} will be set to this */
     name: string;
     displayName: string;
-    filename: string;
+    src: string;
 }
 
 export class Personalization {
+    static currentlyClicked: CurrentlyClickedObject;
+    static registeredClickableObjects: CurrentlyClickedObject[] = [];
+
+    static currentBackground: Background;
+    static registeredBackgrounds: Background[] = [];
+
     // -----------------------
     // Currently Clicked Stuff
     // -----------------------
-    static currentlyClicked: CurrentlyClickedObject;
-    static clickableObjects: CurrentlyClickedObject[] = [];
-
-    static currentBackground: Background;
-    static validBackgrounds: Background[] = [];
-
-    static validBackgroundColors: string[] = [
-        ""
-    ]
-
     /**
      * @returns The currently clicked object (CAPITALIZED!!!)
      */
@@ -47,7 +43,7 @@ export class Personalization {
     }
 
     static registerObject(object: CurrentlyClickedObject) {
-        this.clickableObjects.push(object);
+        this.registeredClickableObjects.push(object);
 
         const option = document.createElement("option");
         option.value = object.name.toLowerCase();
@@ -63,19 +59,20 @@ export class Personalization {
      * @param value Usually `currentlyClickedSelect`'s `value`
      */
     static setCurrentlyClicked(value: string): void {
-        console.log(this.clickableObjects)
-        console.log("HELLO")
-
-        const foundObject = this.clickableObjects.find(obj => obj.name.toLowerCase() === value);
+        console.log(value)
+        const foundObject = this.registeredClickableObjects.find(obj => obj.name.toLowerCase() === value);
         if (foundObject) {
             this.currentlyClicked = foundObject;
         } else {
-            throw new Error(`There is no registered "${value}" currently clicked object.`)
+            console.warn(`There is no registered "${value}" currently clicked object. Defaulting back to "cookie".`);
+            alert(`There is no registered "${value}" currently clicked object. Defaulting back to "cookie".`);
+            this.setCurrentlyClicked("cookie");
+            return;
         }
 
         const cookie = document.getElementById("cookie") as HTMLImageElement;
         try { // if #28 is done this check may be irrelevent, also this check doesn't work
-            cookie.src = this.currentlyClicked.filename;
+            cookie.src = this.currentlyClicked.src;
         } catch {
             console.warn(`Couldn't find image file for cookie. Tried to assign image file: ${value}.png`);
         }
@@ -98,9 +95,9 @@ export class Personalization {
     // -----------------------
     static getCurrentBackgroundFile(includeURL: boolean=false) {
         if (includeURL)
-            return `url(${this.currentBackground.filename})`;
+            return `url(${this.currentBackground.src})`;
         else
-            return this.currentBackground.filename;
+            return this.currentBackground.src;
     }
 
     //* DRY ↓
@@ -111,11 +108,14 @@ export class Personalization {
      * @param value Usually `currentlyClickedSelect`'s `value`
      */
     static setBackground(value: string) {
-        const foundObject = this.validBackgrounds.find(obj => obj.name.toLowerCase() === value);
+        const foundObject = this.registeredBackgrounds.find(obj => obj.name.toLowerCase() === value);
         if (foundObject) {
             this.currentBackground = foundObject;
         } else {
-            throw new Error(`There is no registered "${value}" background.`)
+            console.warn(`There is no registered "${value}" background. Defaulting back to "blue".`);
+            alert(`There is no registered "${value}" background. Defaulting back to "blue".`);
+            this.setBackground("blue");
+            return;
         }
 
         document.getElementById("leftSide").style.background = Personalization.getCurrentBackgroundFile(true);
@@ -129,7 +129,7 @@ export class Personalization {
     }
 
     static registerBackground(background: Background) {
-        this.validBackgrounds.push(background);
+        this.registeredBackgrounds.push(background);
 
         const option = document.createElement("option");
         option.value = background.name.toLowerCase();
