@@ -1,3 +1,5 @@
+import { game } from "./main.js";
+
 export function convertCollectionToArray(HTMLCollection: HTMLCollection): Element[] {
     const array: Element[] = [];
     for (let i = 0; i < HTMLCollection.length; i++) {
@@ -43,3 +45,95 @@ export function commaify(toComma: number): string {
     const commaifyed = toComma.toLocaleString("en-US");
     return commaifyed;
 }
+
+//** expect a popup.ts file in the future! */
+export const popup = {
+    simpleHTML: document.getElementById("simplePopup") as HTMLDialogElement,
+    advancedHTML: document.getElementById("advancedPopup") as HTMLDialogElement,
+
+    createSimple(x: number, y: number, text: string, noButton: boolean=false, doWhat: string="default", title: string="", backButton: boolean=false, isError: boolean=false) {
+        this.simpleHTML.style.display = "flex";
+        this.simpleHTML.showModal();
+        this.simpleHTML.style.width = `${x}px`;
+        this.simpleHTML.style.height = `${y}px`;
+        
+        document.getElementById("simplePopupContent").innerHTML = text;
+        document.getElementById("simplePopupButtonDiv").style.width = `${x}px`;
+        
+        if (title === "") {
+            document.getElementById("simplePopupTitle").style.display = "none";
+        } else {
+            document.getElementById("simplePopupTitle").style.display = "block";
+            document.getElementById("simplePopupTitle").innerHTML = title;
+        }
+
+        if (noButton) {
+            document.getElementById("simplePopupButton").style.display = "none";
+        } else {
+            document.getElementById("simplePopupButton").style.display = "inline-block";
+        }
+
+        if (backButton) {
+            document.getElementById("simplePopupBackButton").style.display = "inline-block";
+        } else {
+            document.getElementById("simplePopupBackButton").style.display = "none";
+        }
+
+        if (isError) {
+            this.simpleHTML.style.borderColor = "red";
+        } else {
+            this.simpleHTML.style.borderColor = "black";
+        }
+
+        if (doWhat !== "default") {
+            document.getElementById("simplePopupButton").addEventListener("click", () => {this.simpleHTML.simpleClicked(doWhat)})
+        } else {
+            document.getElementById("simplePopupButton").addEventListener("click", () => {this.simpleHTML.simpleClicked()})
+        }
+    },
+
+    destroySimple() {
+        this.simpleHTML.style.display = "none";
+        this.simpleHTML.close();
+
+        document.getElementById("simplePopupContent").innerHTML = "null";
+        document.getElementById("simplePopupButton").style.display = "none";
+    },
+
+    simpleClicked(doWhat: string="default") {
+        switch (doWhat) {
+        case "default":
+            this.destroySimple();
+            break;
+        case "resetSave()":
+            // game.savinator5000.reset(); // TODO: Savinator doesn't have reset yet
+            this.destroySimple();
+            break;
+        case "localStorage.clear()":
+            localStorage.clear();
+            this.destroySimple();
+            location.reload();
+            break;
+        case "reset cookies":
+            game.cookies = 0;
+            break;
+        default:
+            alert(`Simple Popup doWhat is invalid, value is: ${doWhat} \nPlease report this to the GitHub accessable in the bottom left corner`);
+            this.destroySimple();
+        }
+    },
+
+    createAdvanced(x: number, y: number, html: string) {
+        this.advancedHTML.style.display = "flex";
+        this.advancedHTML.showModal();
+        this.advancedHTML.style.width = `${x}px`;
+        this.advancedHTML.style.height = `${y}px`;
+
+        this.advancedHTML.innerHTML = html;
+    },
+
+    destroyAdvanced() {
+        this.advancedHTML.close();
+        this.advancedHTML.style.display = "none";
+    }
+};

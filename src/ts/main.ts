@@ -9,12 +9,13 @@ const inDevelopment: boolean = (location.hostname === "localhost" || location.ho
 // Imports
 // ------------------------------------
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
-import { convertCollectionToArray, commaify } from "./helper.js";
+import { convertCollectionToArray, commaify, popup } from "./helper.js";
 import { Upgrade, updateUpgradesBoughtStatistic, expandUpgradesHolder, UpgradeData, UpgradeHandler, UpgradeSave } from "./upgrades.js";
 import { Building } from "./buildings.js";
 import { SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
 import { ModProvider } from "./exmod.js";
 import { Personalization } from "./personalization.js";
+import { mods } from "./mods.js"
 
 /**
  * our lord & savior, the save handler
@@ -50,23 +51,6 @@ const dev = {} as {
 dev.devMode = false;
 dev.CPSGiven = 0;
 
-// mods stuff
-const mods = {} as {
-    numberLoaded: number,
-    allMods: string[],
-
-    loadURL(url: string): void,
-    loadFile(): void,
-    list(): void,
-    addModData(id: string, data: any): void,
-    addClicked(): void,
-    listClicked(): void,
-    reloadModsLoadedText(): void
-};
-
-mods.numberLoaded = 0;
-mods.allMods = [];
-
 // middle other occupiers
 let statsUp = false;
 let infoUp = false;
@@ -77,27 +61,9 @@ let cookieProductionStopped = false;
 let mobile: boolean; // defined in initialization
 
 const helper = {} as {
-    consoleLogDev(str: string): void,
-    popup: {
-        createSimple(x: number, y: number, text: string, noButton?: boolean, doWhat?: string, title?: string, backButton?: boolean, isError?: boolean): void
-        destroySimple(): void,
-        simpleClicked(doWhat?: string): void,
-        createAdvanced(x: number, y: number, html: string): void,
-        destroyAdvanced(): void
-    }
+    consoleLogDev(str: string): void
 };
 
-helper.popup = {} as {
-    createSimple(x: number, y: number, text: string, noButton?: boolean, doWhat?: string, title?: string, backButton?: boolean, isError?: boolean): void
-    destroySimple(): void,
-    simpleClicked(doWhat: string): void,
-    createAdvanced(x: number, y: number, html: string): void,
-    destroyAdvanced(): void
-};
-
-// ------------------------------------
-// Initialization and Checks for Errors
-// ------------------------------------
 interface ClickerCookieSaveData {
     version: string;
 
@@ -663,7 +629,7 @@ export class Game extends SaveProvider {
         }
         
         if (localStorage.cookies >= 0)
-            helper.popup.createSimple(400,200,"You are using an extremely outdated saving method. You will have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format. Your old save cannot be restored.",false,"localStorage.clear()","Warning",false,false);
+            popup.createSimple(400,200,"You are using an extremely outdated saving method. You will have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format. Your old save cannot be restored.",false,"localStorage.clear()","Warning",false,false);
     
         this.reloadBuildingPrices();
 
@@ -678,7 +644,7 @@ export class Game extends SaveProvider {
         // if saves are old (directly interacts with localStorage because using Savinator.getLocalStorageSave() will make it angry since localStorage doesn't have a Save it has an array)
         if (localStorage.getItem("save") && localStorage.getItem("save")[0] === "[" && Game.VERSION_BRANCH === Game.Versions.MAIN) {
             localStorage.setItem("old05Save", localStorage.getItem("save"));
-            helper.popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3>
+            popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3>
             <p class='popup-text'>so we changed the saving system again, good news, press the button below and it will be transfered to the new format.</p>
             <div style='display:flex;flex-direction:row;height:40px;'>
             <button onclick='saves.convert05Save(false)' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>Reformat me!</button>
@@ -687,7 +653,7 @@ export class Game extends SaveProvider {
         }
         if (localStorage.getItem("betaSave") && localStorage.getItem("betaSave")[0] === "[" && Game.VERSION_BRANCH === Game.Versions.BETA) {
             localStorage.setItem("old05BetaSave", localStorage.getItem("betaSave"));
-            helper.popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3>
+            popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3>
             <p class='popup-text'>so we changed the saving system again, good news, press the button below and it will be transfered to the new format.</p>
             <div style='display:flex;flex-direction:row;height:40px;'>
             <button onclick='saves.convert05Save(true)' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>Reformat me!</button>
@@ -798,12 +764,12 @@ export class Game extends SaveProvider {
         for (let i in convertCollectionToArray(document.getElementsByClassName("middle-x"))) { //? i don't like how we have to do this, can we find another way? maybe somehow only one X button? actually we should probably refactor how the entire middle section works... todo: make an issue for that
             document.getElementsByClassName("middle-x")[i].addEventListener("click", () => {closeMiddle()});
         }
-        document.getElementById("creditsButton").addEventListener("click", () => {helper.popup.createSimple(320,175,'FifthTundraG: Creation<br>potatman4: Playtesting<br>Wolfsarecool44: Playtesting, Emotional Support',false,'default','Credits',false,false)});
+        document.getElementById("creditsButton").addEventListener("click", () => {popup.createSimple(320,175,'FifthTundraG: Creation<br>potatman4: Playtesting<br>Wolfsarecool44: Playtesting, Emotional Support',false,'default','Credits',false,false)});
         document.getElementById("backgroundSelect").addEventListener("change", () => {Personalization.setBackground((document.getElementById("backgroundSelect") as HTMLFormElement).value)});
         document.getElementById("currentlyClickedSelect").addEventListener("change", () => {Personalization.setCurrentlyClicked((document.getElementById("currentlyClickedSelect") as HTMLFormElement).value)});
         document.getElementById("saveButton").addEventListener("click", () => {this.savinator5000.save()});
         document.getElementById("loadButton").addEventListener("click", () => {this.savinator5000.load()});
-        document.getElementById("resetSaveButton").addEventListener("click", () => {helper.popup.createSimple(300,150,'Are you sure you want to do this?',false,'resetSave()','Warning',true,true)});
+        document.getElementById("resetSaveButton").addEventListener("click", () => {popup.createSimple(300,150,'Are you sure you want to do this?',false,'resetSave()','Warning',true,true)});
         document.getElementById("exportDataButton").addEventListener("click", () => {this.savinator5000.export()});
         document.getElementById("importDataInput").addEventListener("change", () => {this.savinator5000.import()});
         document.getElementById("autoSavingToggleSelect").addEventListener("change", () => {this.autoSavingAllowed = ((document.getElementById("autoSavingToggleSelect") as HTMLFormElement).value === "on") ? true : false});;
@@ -814,8 +780,8 @@ export class Game extends SaveProvider {
         document.getElementById("upgradesHolder").addEventListener("mouseover", () => {expandUpgradesHolder()});
         document.getElementById("upgradesHolder").addEventListener("mouseout", () => {expandUpgradesHolder(true)});
         // simple popup
-        document.getElementById("simplePopupButton").addEventListener("click", () => {helper.popup.simpleClicked()});
-        document.getElementById("simplePopupBackButton").addEventListener("click", () => {helper.popup.destroySimple()});
+        document.getElementById("simplePopupButton").addEventListener("click", () => {popup.simpleClicked()});
+        document.getElementById("simplePopupBackButton").addEventListener("click", () => {popup.destroySimple()});
         // misc
         document.getElementById("cookie").addEventListener("click", () => {this.cookieClicked()});
         document.getElementById("versionNumber").addEventListener("click", () => {versionSwitch()});
@@ -836,7 +802,7 @@ export class Game extends SaveProvider {
         // anniversary
         if (date.getMonth() === 2 && date.getDate() === 3) { // if date is 3/3
             Personalization.setCurrentlyClicked("cake");
-            helper.popup.createSimple(350,175,"It's Clicker Cookie's birthday! \nThe cookie has been replaced with a birthday cake, but you can change it back in Options.",false,"default","woo hoo!");
+            popup.createSimple(350,175,"It's Clicker Cookie's birthday! \nThe cookie has been replaced with a birthday cake, but you can change it back in Options.",false,"default","woo hoo!");
         }
 
         this.theGameCanLoopBecauseTheInitializationIsCompleted = true;
@@ -884,7 +850,7 @@ export class Game extends SaveProvider {
     
         // log to console in case of error
         if (this.cookies < 0) {
-            helper.popup.createSimple(300,150,`<i>huh, what just happened?</i> <br> An error occured: ${Personalization.getCurrentlyClickedPlural()} are in negative!<br>Please report this to the GitHub accessable in the bottom left corner`,false,"reset cookies","",false,true);
+            popup.createSimple(300,150,`<i>huh, what just happened?</i> <br> An error occured: ${Personalization.getCurrentlyClickedPlural()} are in negative!<br>Please report this to the GitHub accessable in the bottom left corner`,false,"reset cookies","",false,true);
         }
         // stats that need to be updated beforehand
         this.buildingsOwned = this.keyboard.bought + this.grandpa.bought + this.ranch.bought + this.television.bought + this.worker.bought + this.wallet.bought + this.church.bought;
@@ -1134,92 +1100,6 @@ helper.consoleLogDev = function(str: string) {
  * **Note: changes to Simple Popups will be coming soon. See #TODO**
  * https://github.com/clickercookie/clickercookie.github.io/wiki/Using-Popups#simple-popups
  */
-helper.popup.createSimple = function(x: number, y: number, text: string, noButton: boolean=false, doWhat: string="default", title: string="", backButton: boolean=false, isError: boolean=false) {
-    const popup = document.getElementById("simplePopup") as HTMLDialogElement;
-
-    popup.style.display = "flex";
-    popup.showModal();
-    popup.style.width = `${x}px`;
-    popup.style.height = `${y}px`;
-
-    document.getElementById("simplePopupContent").innerHTML = text;
-    document.getElementById("simplePopupButtonDiv").style.width = `${x}px`;
-    
-    if (title === "") {
-        document.getElementById("simplePopupTitle").style.display = "none";
-    } else {
-        document.getElementById("simplePopupTitle").style.display = "block";
-        document.getElementById("simplePopupTitle").innerHTML = title;
-    }
-
-    if (noButton) {
-        document.getElementById("simplePopupButton").style.display = "none";
-    } else {
-        document.getElementById("simplePopupButton").style.display = "inline-block";
-    }
-
-    if (backButton) {
-        document.getElementById("simplePopupBackButton").style.display = "inline-block";
-    } else {
-        document.getElementById("simplePopupBackButton").style.display = "none";
-    }
-
-    if (isError) {
-        popup.style.borderColor = "red";
-    } else {
-        popup.style.borderColor = "black";
-    }
-
-    if (doWhat !== "default") {
-        document.getElementById("simplePopupButton").addEventListener("click", () => {helper.popup.simpleClicked(doWhat)})
-    } else {
-        document.getElementById("simplePopupButton").addEventListener("click", () => {helper.popup.simpleClicked()})
-    }
-}
-helper.popup.destroySimple = function() {
-    const popup = document.getElementById("simplePopup") as HTMLDialogElement;
-    popup.style.display = "none";
-    popup.close();
-
-    document.getElementById("simplePopupContent").innerHTML = "null";
-    document.getElementById("simplePopupButton").style.display = "none";
-}
-helper.popup.simpleClicked = function(doWhat: string="default") {
-    switch (doWhat) {
-    case "default":
-        helper.popup.destroySimple();
-        break;
-    case "resetSave()":
-        saves.resetSave(game);
-        helper.popup.destroySimple();
-        break;
-    case "localStorage.clear()":
-        localStorage.clear();
-        helper.popup.destroySimple();
-        location.reload();
-        break;
-    case "reset cookies":
-        game.cookies = 0;
-        break;
-    default:
-        alert(`Simple Popup doWhat is invalid, value is: ${doWhat} \nPlease report this to the GitHub accessable in the bottom left corner`);
-        this.destroySimple();
-    }
-}
-helper.popup.createAdvanced = function(x: number, y: number, html: string) { // TODO anytime: reimpliment filter toggling, just in case (defo not high priority)
-    const advancedPopup = document.getElementById("advancedPopup") as HTMLDialogElement;
-
-    advancedPopup.style.display = "flex";
-    advancedPopup.showModal();
-    advancedPopup.style.width = `${x}px`;
-    advancedPopup.style.height = `${y}px`;
-
-    advancedPopup.innerHTML = html;
-}
-helper.popup.destroyAdvanced = function() {
-    (document.getElementById("advancedPopup") as HTMLDialogElement).close();
-    document.getElementById("advancedPopup").style.display = "none";
-}
 
 // ------------------------------------
 // Random Functions
@@ -1298,135 +1178,8 @@ function versionSwitch() {
     window.location.href = (Game.VERSION_BRANCH === Game.Versions.MAIN) ? "/beta/beta.html" : "/";
 }
 
-// ------------------------------------
-// Modding
-// ------------------------------------
-mods.loadURL = function(url: string) { // todo: could url be a URL type?
-    const httpCheck = url.slice(0,4);
-    if (httpCheck !== "http") { // we want it to be a url, and this works decently well for detecting it, even if it's not foolproof
-        helper.popup.createSimple(350,175,"This mod's URL is not valid. Please make sure to include \"http://\" or \"https://\" in the URL, if it was not present already.",false,"default","Error",false,true);
-        return false;
-    } 
-
-    const file = document.createElement("script");
-    file.setAttribute("src",url);
-    file.setAttribute("type","text/javascript");
-    const modId = mods.numberLoaded + 1;
-    file.setAttribute("id",`mod${modId}`);
-
-    document.head.appendChild(file);
-
-    (document.getElementById("addModURLForm") as HTMLFormElement).reset();
-    document.getElementById("importedMessage").style.display = "block";
-
-    mods.numberLoaded++;
-    game.isModded = true;
-    document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
-    mods.reloadModsLoadedText();
-}
-mods.loadFile = function() { // add check if mod is valid
-    const file = (document.getElementById("addModFile") as HTMLInputElement).files[0];
-    const reader = new FileReader();
-
-    reader.onerror = (e) => alert(`something broke, don't expect me to fix it :D \nerror: ${e}`);
-
-    reader.readAsText(file);
-    
-    reader.onloadend = () => {
-        const readFile = reader.result as string;
-        
-        const script = document.createElement("script");
-        script.appendChild(document.createTextNode(readFile));
-        script.setAttribute("type","text/javascript");
-        const modId = mods.numberLoaded + 1;
-        script.setAttribute("id","mod" + modId);
-
-        document.head.appendChild(script);
-
-        (document.getElementById("addModURLForm") as HTMLFormElement).reset();
-        document.getElementById("importedMessage").style.display = "block";
-
-        mods.numberLoaded++;
-        game.isModded = true;
-        document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
-        mods.reloadModsLoadedText();
-    };
-}
-
-mods.list = function() {
-    const numberToList = mods.allMods.length;
-
-    for (let i = 0; i < numberToList; i++) {
-        const newModItem = document.createElement("div");
-        newModItem.setAttribute("class","popup-text mod-in-list");
-        newModItem.setAttribute("id",`modList${i}`);
-
-        const newModID = document.createElement("small");
-        newModID.appendChild(document.createTextNode(`#${i}`));
-        newModID.setAttribute("class","mod-id popup-text");
-        newModItem.appendChild(newModID);
-
-        const newModName = document.createElement("p");
-        newModName.appendChild(document.createTextNode(JSON.stringify(mods.allMods[i])));
-        newModName.setAttribute("class","popup-text");
-        newModItem.appendChild(newModName);
-
-        document.getElementById("modsList").appendChild(newModItem);
-    }
-
-    if (numberToList === 0) document.getElementById("noModsMessage").style.display = "block";
-    if (numberToList > 0) document.getElementById("removeModsMessage").style.display = "block";
-}
-
-mods.addModData = function(id: string, data: {initialization(): void}) { // yes i basically stole and renamed this entire function from cookie clicker's Game.registerMod orteil did it better okay i might seem smart but i'm really not.
-    // READ THE DOCS!
-    if (mods.allMods.includes(id)) {
-        helper.popup.createAdvanced(400,200,"<h3 class='simple-popup-title' style='display:block;'>Error</h3> \
-        <p class='popup-text'>This mod's ID is already present!</p> \
-        <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>");
-        mods.numberLoaded--;
-        mods.reloadModsLoadedText();
-        return false;
-    }
-    mods.allMods.push(id);
-    document.getElementById("ifModdedStat").innerHTML = "You have activated mods on this playthrough!";
-    game.isModded = true;
-    data.initialization();
-    console.log(`Loaded mod ${id}`);
-}
-
-mods.addClicked = function() {
-    helper.popup.createAdvanced(500,350,`<h3 class='simple-popup-title' style='display:block;'>Add Mod</h3>
-    <h5 class='popup-text' style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5>
-    <h5 class='popup-text' style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5>
-    <h5 class='popup-text' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a onclick='saves.save()' href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue' target="_blank">read the documentation</a>.</h5>
-    <form onsubmit='return false;' id='addModURLForm' style='margin-top:22px;'>
-        <label for='addModURL' class='popup-text'>From URL: </label>
-        <input id='addModURL' onchange='mods.loadURL(this.value)'>
-    </form>
-    <form>
-        <label for='addModFile' class='popup-text' style='margin-right:0px;'>From File: </label>
-        <input type='file' id='addModFile' accept='.js' onchange='mods.loadFile(this.value)' class='popup-text' style='width:86px;'>
-    </form>
-    <p class='popup-text no-display' id='importedMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>Imported!</p>
-    <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
-}
-mods.listClicked = function() {
-    helper.popup.createAdvanced(300,350,`<h3 class='simple-popup-title' style='display:block;'>All Mods</h3>
-    <p class='popup-text no-display' id='noModsMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>You have no mods installed!</p>
-    <div id='modsList' class='mods-list'></div>
-    <small class='popup-text no-display' id='removeModsMessage' style='margin-top:3px;'>To remove mods, refresh your page. (make sure to save!)</small>
-    <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
-
-    mods.list();
-}
-
-mods.reloadModsLoadedText = function() {
-    document.getElementById("modsNumberLoaded").innerHTML = `You have ${mods.numberLoaded} mods loaded!`;
-}
-
 function print() {
-    helper.popup.createSimple(250,150,"it's console.log",false,"default","dum dum",false,true);
+    popup.createSimple(250,150,"it's console.log",false,"default","dum dum",false,true);
 }
 
 //
