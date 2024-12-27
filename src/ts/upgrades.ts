@@ -84,7 +84,7 @@ export interface UpgradeData {
     name: string;
     quote: string;
     price: number;
-    img: string; //? should this be the full path (ex. img/upgrades/xyz.png) or one that cuts that bit out? (ex. xyz.png (what it currently is))
+    img?: string; //? should this be the full path (ex. img/upgrades/xyz.png) or one that cuts that bit out? (ex. xyz.png (what it currently is))
     desc: string;
     building: Building;
     /** The number of buildings bought required to unlock the upgrade */

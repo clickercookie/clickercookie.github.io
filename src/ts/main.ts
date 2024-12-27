@@ -13,14 +13,20 @@ import { convertCollectionToArray, commaify, popup } from "./helper.js";
 import { Upgrade, updateUpgradesBoughtStatistic, expandUpgradesHolder, UpgradeData, UpgradeHandler, UpgradeSave } from "./upgrades.js";
 import { Building } from "./buildings.js";
 import { SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
-import { ModProvider } from "./exmod.js";
+import { NewMod } from "./exmod.js";
 import { Personalization } from "./personalization.js";
-import { mods } from "./mods.js"
+import { Mod, ModHandler, mods } from "./mods.js"
 
 /**
  * our lord & savior, the save handler
  */
 export const saveHandler = new SaveHandler(); //* this thing's position in the script (where it's defined) may change later on. originally it was with game's declaration but we need it in the Game class so it complained about inability to access a lexical declaration so i moved it up here 
+/**
+ * our abstracted lord & savior, the mod handler
+ * 
+ * temp: Many things with the modding system are pretty much "it's a good idea to do this, but if you don't *want* to you don't have to.". This is different, you **MUST** register with the modProvider.
+ */
+export const modHandler = new ModHandler(saveHandler);
 
 // ------------------------------------
 // Variable & Object Definitions
@@ -63,6 +69,11 @@ let mobile: boolean; // defined in initialization
 const helper = {} as {
     consoleLogDev(str: string): void
 };
+
+enum Versions {
+    MAIN = 0,
+    BETA = 1
+}
 
 interface ClickerCookieSaveData {
     version: string;
@@ -127,9 +138,9 @@ interface ClickerCookieSaveData {
 // todo: learn about namespaces and see if that would be better for Game
 export class Game extends SaveProvider {
     // version-related constants
-    public static VERSION: string = version;
-    public static VERSION_BRANCH: number = versionBranch;
-    public static IN_DEVELOPMENT: boolean = inDevelopment;
+    public static readonly VERSION: string = version;
+    public static readonly VERSION_BRANCH: number = versionBranch;
+    public static readonly IN_DEVELOPMENT: boolean = inDevelopment;
 
     // self-explainatory-ish things
     public hasCheated: boolean;
@@ -178,16 +189,7 @@ export class Game extends SaveProvider {
         y: number
     };
 
-    // classes
-    static Versions = class {
-        // Private Fields
-        static #_MAIN = 0;
-        static #_BETA = 1;
-    
-        // Accessors for "get" functions only (no "set" functions)
-        static get MAIN() { return this.#_MAIN; }
-        static get BETA() { return this.#_BETA; }
-    }
+    static readonly Versions = Versions;
 
     public theGameCanLoopBecauseTheInitializationIsCompleted: boolean = false;
 
@@ -817,6 +819,9 @@ export class Game extends SaveProvider {
         this.reloadCookieCounter();
     
         this.upgradeHandler.checkUpgradeAvailability();
+        for (let i in modHandler.mods) {
+            modHandler.mods[i].upgradesHandler.checkUpgradeAvailability();
+        }
     
         // building unlocks
         if (this.totalCookies >= 100) {
@@ -874,6 +879,8 @@ export class Game extends SaveProvider {
         document.getElementById("churchesBought").innerHTML = this.church.bought.toString();
     
         this.cookiesPerSecond = this.keyboard.CPSGiven+this.grandpa.CPSGiven+this.ranch.CPSGiven+this.television.CPSGiven+this.worker.CPSGiven+this.wallet.CPSGiven+this.church.CPSGiven+dev.CPSGiven;
+    
+        Mod.callKooh("loop");
     }
     
     cookiesPerSecondUpdate() {
@@ -913,6 +920,8 @@ export class Game extends SaveProvider {
         this.cookieBeenClickedTimes++;
         this.totalCookies += this.cookiesPerClick;
         this.reloadCookieCounter();
+
+        Mod.callKooh("click");
     }
 
     // ------------ All of Game's SaveProvider stuff ------------
@@ -1045,6 +1054,10 @@ export class Game extends SaveProvider {
 
         this.upgradeHandler.destroyAllUpgrades();
         this.upgradeHandler.showUnlockedUpgrades();
+        for (let i in modHandler.mods) {
+            modHandler.mods[i].upgradesHandler.destroyAllUpgrades();
+            modHandler.mods[i].upgradesHandler.showUnlockedUpgrades();
+        }
         document.getElementById("upgradesBoughtCounter").innerText = Upgrade.upgradesBought.toString();
         updateUpgradesBoughtStatistic();
     }
@@ -1198,10 +1211,10 @@ tooltip.create = function(x: number, y: number, content: any) {
 console.log("you seem smart, how 'bout you contribute to the project? https://github.com/clickercookie/clickercookie.github.io");
 
 export const game = new Game();
-const modProvider = new ModProvider();
+const newMod = new NewMod();
 
 saveHandler.registerProvider("clickercookie", game);
-// saveHandler.registerProvider(modProvider.NAMESPACE, modProvider)
+modHandler.register(newMod);
 
 // timer things
 setInterval(() => {

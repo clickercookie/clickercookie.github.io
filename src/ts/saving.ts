@@ -1,7 +1,4 @@
-// hello, welcome to my dumpster fire
-// it works but it's really terrible because it's changing like ASAP
-
-import { Game } from "./main.js";
+import { Game, modHandler } from "./main.js";
 import { Upgrade, updateUpgradesBoughtStatistic } from "./upgrades.js";
 
 export const saves = {} as {
@@ -289,6 +286,9 @@ saves.resetSave = function(game: Game) {
     document.getElementById("ifModdedStat").innerHTML = "";
 
     game.upgradeHandler.destroyAllUpgrades();
+    for (let i in modHandler.mods) {
+        modHandler.mods[i].upgradesHandler.destroyAllUpgrades();
+    }
     document.getElementById("upgradesBoughtCounter").innerHTML = Upgrade.upgradesBought.toString();
     updateUpgradesBoughtStatistic();
 
