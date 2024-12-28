@@ -4,7 +4,6 @@
 import { Building } from "./buildings.js";
 import { game } from "./main.js";
 import { Mod } from "./mods.js";
-import { SaveProvider } from "./saving.js";
 import { Upgrade, UpgradeData } from "./upgrades.js";
 
 interface ModSave {
@@ -14,26 +13,27 @@ interface ModSave {
 export class NewMod extends Mod {
     superCookies: number;
 
-    private UPGRADES: UpgradeData[] = [
-        {
-            uid: "newmod-xyz1",
-            name: "xyz upgrade",
-            quote: "so funy haha",
-            price: 69,
-            desc: "multiplies stuff and stuff",
-            building: this.buildings[0],
-            buildingsRequired: 3
-        }
-    ]
+    private readonly UPGRADES_DATA: UpgradeData[];
     constructor() {
         super("modname");
 
         this.superCookies = 5;
 
-        this.buildings.push(new Building(game, "xyz", "we be making potatoes with this one", 1, 5))
+        this.buildings.push(new Building(game.clickercookie, "xyz", "we be making potatoes with this one", 1, 5))
 
-        for (let i in this.UPGRADES) {
-            this.upgradesHandler.register(new Upgrade(game, this.UPGRADES[i]));
+        this.UPGRADES_DATA = [
+            {
+                uid: "newmod-xyz1",
+                name: "xyz upgrade",
+                quote: "so funy haha",
+                price: 69,
+                desc: "multiplies stuff and stuff",
+                building: this.buildings[0],
+                buildingsRequired: 3
+            }
+        ];
+        for (let i in this.UPGRADES_DATA) {
+            this.upgradeHandler.register(new Upgrade(game.clickercookie, this.UPGRADES_DATA[i]));
         }
 
         document.getElementById("cookieCounter")!.addEventListener("click", () => {this.superCookies++});

@@ -112,15 +112,21 @@ export class Savinator {
 
     /**
      * Run the {@link SaveProvider.loadSaveData()} method of all the providers in this instance's handler with their data in localStorage as the param.
+     * 
+     * {@link Game.loadSaveData} is always run last.
      */
     load() {
         const localStorageSave = this.getLocalStorageSave();
         const providers = this.saveHandler.getProviders();
         for (let namespace in providers) { //? should this go over providers or the localStorageSave.getNamespaces()? is there any benefit to one or the other?
-            if (localStorageSave.getNamespaces().includes(namespace)) { // if the provider namespaces is present in the local storage save
+            if (localStorageSave.getNamespaces().includes(namespace) && namespace !== "game") { // if the provider namespace is present in the local storage save
                 providers[namespace].loadSaveData(localStorageSave.getData(namespace));
                 console.log(`Loaded save data for ${namespace} namespace.`);
             }
+        }
+        if (providers["game"] !== undefined) { // game should always be there, but just in case it isn't we check
+            providers["game"].loadSaveData(localStorageSave.getData("game"));
+            console.log(`Loaded save data for game namespace.`);
         }
     }
 
@@ -267,37 +273,36 @@ export class Save {
     }
 }
 
-saves.resetSave = function(game: Game) {
+saves.resetSave = function(game: Game) {// todo: this still needs the 0.7 treatment
     if (Game.VERSION_BRANCH === Game.Versions.MAIN) {
         localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
     } else {
         localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
     }
     // saves.loadSave(game);
-    game.reloadBuildingPrices();
+    game.reloadBuildingDynamics();
     
-    game.grandpa.unlocked = false;
-    game.ranch.unlocked = false;
-    game.television.unlocked = false;
-    game.worker.unlocked = false;
-    game.wallet.unlocked = false;
-    game.church.unlocked = false;
+    game.clickercookie.grandpa.unlocked = false;
+    game.clickercookie.ranch.unlocked = false;
+    game.clickercookie.television.unlocked = false;
+    game.clickercookie.worker.unlocked = false;
+    game.clickercookie.wallet.unlocked = false;
+    game.clickercookie.church.unlocked = false;
     document.getElementById("ifCheatedStat").innerHTML = "";
     document.getElementById("ifModdedStat").innerHTML = "";
 
-    game.upgradeHandler.destroyAllUpgrades();
     for (let i in modHandler.mods) {
-        modHandler.mods[i].upgradesHandler.destroyAllUpgrades();
+        modHandler.mods[i].upgradeHandler.destroyAllUpgrades();
     }
     document.getElementById("upgradesBoughtCounter").innerHTML = Upgrade.upgradesBought.toString();
     updateUpgradesBoughtStatistic();
 
     // document.getElementById("win").style.display = "none";
 
-    game.grandpa.setVisibility(false);
-    game.ranch.setVisibility(false);
-    game.television.setVisibility(false);
-    game.worker.setVisibility(false);
-    game.wallet.setVisibility(false);
-    game.church.setVisibility(false);
+    game.clickercookie.grandpa.setVisibility(false);
+    game.clickercookie.ranch.setVisibility(false);
+    game.clickercookie.television.setVisibility(false);
+    game.clickercookie.worker.setVisibility(false);
+    game.clickercookie.wallet.setVisibility(false);
+    game.clickercookie.church.setVisibility(false);
 }

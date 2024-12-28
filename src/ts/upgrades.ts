@@ -1,7 +1,8 @@
 import { Building } from "./buildings.js";
 import { clamp, commaify } from "./helper.js";
 import { hideTooltip } from "./tooltip.js";
-import { Game } from "./main.js";
+import { game, Game } from "./main.js";
+import ClickerCookie from "./clickercookie.js";
 
 export interface UpgradeSave {
     unlocked: boolean;
@@ -37,6 +38,11 @@ export class UpgradeHandler {
             Upgrade.currentlyShown = 0;
     }
 
+    /** 
+     * This is used to create an upgrade if it is unlocked and not bought. This is distinct from {@link UpgradeHandler.checkUpgradeAvailability()}, in that the purpose of that function is to set it to unlocked if it meets its criteria .
+     * 
+     * This is really only used in the context of loading, wherein unlocked and unbought upgrades will not yet exist.
+     * */
     showUnlockedUpgrades() { //? is this still used? isn't this just checkUpgradeAvaliability?
         for (let i in this.upgrades) {
             if (this.upgrades[i].unlocked === true && this.upgrades[i].bought !== true) 
@@ -46,7 +52,9 @@ export class UpgradeHandler {
     }
 
     /**
-     * Goes through every upgrade in {@link UpgradeHandler.upgrades} and check if it's ready to be created. If it is, then run the {@link Upgrade.create()} method on it.
+     * Goes through every upgrade in {@link UpgradeHandler.upgrades} and check if it's ready to be created. If it is, then set it to unlocked then run the {@link Upgrade.create()} method on it.
+     * 
+     * This is distinct from {@link UpgradeHandler.showUnlockedUpgrades()}, in that the purpose of that function is to create an upgrade if it is unlocked and unbought.
      */
     checkUpgradeAvailability() {
         for (let i in this.upgrades) {
@@ -120,7 +128,7 @@ export class Upgrade {
     public static currentlyShown: number = 0;
     public static upgradesBought: number = 0;
 
-    private game: Game;
+    private clickercookie: ClickerCookie;
 
     uid: string;
     name: string;
@@ -136,8 +144,8 @@ export class Upgrade {
     unlocked: boolean;
 
     html: HTMLDivElement;
-    constructor(game: Game, data: UpgradeData) {
-        this.game = game;
+    constructor(clickercookie: ClickerCookie, data: UpgradeData) {
+        this.clickercookie = clickercookie
         
         this.uid = data.uid;
         this.name = data.name;
@@ -188,9 +196,9 @@ export class Upgrade {
     }
 
     clicked() {
-        if (this.game.cookies < this.price) return;
+        if (this.clickercookie.cookies < this.price) return;
 
-        this.game.cookies -= this.price;
+        this.clickercookie.cookies -= this.price;
         this.bought = true;
         this.hovered(); //? i don't remember why this is here but i know it's important just trust me
         this.destroy();
@@ -198,7 +206,7 @@ export class Upgrade {
         
         this.building.CPSGiven *= 2;
         this.building.CPSGain *= 2;
-        if (this.multiplyCookiesPerClick) this.game.cookiesPerClick *= 2;
+        if (this.multiplyCookiesPerClick) this.clickercookie.cookiesPerClick *= 2;
 
         expandUpgradesHolder(); // sometimes the upgrade holder has one too many rows because of weird onmouseover & onmousemove behavior, this prevents that
 
@@ -207,7 +215,7 @@ export class Upgrade {
         updateUpgradesBoughtStatistic();
     }
 
-    hovered() {
+    hovered() { // todo: this is very similar to Building.hovered
         const tooltip = document.getElementById("tooltip")!;
 
         document.getElementById("tooltipProduces")!.style.display = "none";
@@ -222,7 +230,8 @@ export class Upgrade {
         tooltip.style.display = "block";
         tooltip.style.right = "346px";
         // clamping allows between 0 and the height of the window minus the height of the box. also add one from the height of the box because it doesn't work correctly normally, idk why
-        tooltip.style.top = clamp(this.game.mousePos.y - tooltip.offsetHeight/2,0,window.innerHeight-(tooltip.offsetHeight + 1))+"px";
+        //! this uses game but shouldn't with the tooltip refactor
+        tooltip.style.top = clamp(game.mousePos.y - tooltip.offsetHeight/2,0,window.innerHeight-(tooltip.offsetHeight + 1))+"px";
         tooltip.style.left = "auto"; // when tooltip is a statistic it sets the left property because it won't work correctly with right, this resets that
         tooltip.style.borderRightWidth = "0px";
     }

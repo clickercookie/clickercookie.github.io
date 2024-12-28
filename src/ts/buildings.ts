@@ -1,11 +1,12 @@
+import ClickerCookie from "./clickercookie.js";
 import { capitalize, commaify, clamp } from "./helper.js";
-import { Game } from "./main.js";
+import { game } from "./main.js";
 import { hideTooltip } from "./tooltip.js";
 
 export class Building {
-    static UPGRADECOST_MULTIPLIER = 1.15;
+    static UPGRADECOST_MULTIPLIER = 1.15; //? should this be static?
 
-    private game: Game;
+    private clickercookie: ClickerCookie;
 
     name: string;
     quote: string;
@@ -14,13 +15,13 @@ export class Building {
     GPSGain: number;
     CPSGain: number;
 
-    bought: number;
+    bought: number; // todo: add set method to change the html for this
     unlocked: boolean;
     plural: "s" | "es";
 
     html: HTMLDivElement;
-    constructor(game: Game, name: string, quote: string, upgradeCost: number, CPSGain: number, iconImg: string="unknown.png", esPlural: boolean=false) {
-        this.game = game;
+    constructor(clickercookie: ClickerCookie, name: string, quote: string, upgradeCost: number, CPSGain: number, iconImg: string="unknown.png", esPlural: boolean=false) {
+        this.clickercookie = clickercookie;
         
         this.name = name;
         this.quote = quote;
@@ -76,21 +77,21 @@ export class Building {
     }
 
     buy() {
-        if (this.game.cookies >= this.upgradeCost) {
-            this.game.cookies -= this.upgradeCost;
+        if (this.clickercookie.cookies >= this.upgradeCost) {
+            this.clickercookie.cookies -= this.upgradeCost;
             this.upgradeCost *= Building.UPGRADECOST_MULTIPLIER;
             this.upgradeCost = Math.floor(this.upgradeCost);
             this.bought++;
             this.CPSGiven += this.CPSGain;
-            this.game.reloadCookieCounter();
+            this.clickercookie.reloadCookieCounter();
             document.getElementById(`${this.name}Cost`).innerHTML = commaify(this.upgradeCost);
-            document.getElementById(`${this.name}${this.plural}Bought`).innerHTML = this.bought.toString();
+            document.getElementById(`${this.name}${this.plural}Bought`).innerText = commaify(this.bought);
             this.hovered();
-            this.reloadPrice();
+            this.reloadDynamicElements();
         }
     }
 
-    hovered() {
+    hovered() { // todo: this is very similar to Upgrade.hovered
         const tooltip = document.getElementById("tooltip");
 
         document.getElementById("tooltipDesc").style.display = "none";
@@ -104,7 +105,8 @@ export class Building {
         const buildingInfoProducing = commaify(Math.round(this.CPSGiven * 10) / 10);
 
         // clamping allows between 0 and the height of the window minus the height of the box. also add one from the height of the box because it doesn't work correctly normally, idk why
-        tooltip.style.top = clamp(this.game.mousePos.y - tooltip.offsetHeight/2,0,window.innerHeight-(tooltip.offsetHeight + 1))+"px";
+        //! this uses game but shouldn't with the tooltip refactor
+        tooltip.style.top = clamp(game.mousePos.y - tooltip.offsetHeight/2,0,window.innerHeight-(tooltip.offsetHeight + 1))+"px";
         tooltip.style.right = "346px";
         tooltip.style.left = "auto"; // when tooltip is a statistic it sets the left property because it won't work correctly with right, this resets that
 
@@ -123,8 +125,10 @@ export class Building {
         this.html.style.display = bool ? "block" : "none";
     }
 
-    reloadPrice() {
+    /** Price and bought */
+    reloadDynamicElements() {
         document.getElementById(`${this.name}Cost`).innerHTML = commaify(this.upgradeCost);
+        document.getElementById(`${this.name}${this.plural}Bought`).innerText = commaify(this.bought);
     }
 
     destroy() {

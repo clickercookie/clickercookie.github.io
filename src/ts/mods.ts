@@ -35,7 +35,7 @@ interface ModsObject {
     reloadModsLoadedText(): void
 }
 
-type Kooh = "click" | "cps" | "loop";
+type Kooh = "click" | "cps" | "loop" | "init" | "cps";
 
 /**
  * Provides high-level abstractions for mod developers to work with
@@ -44,17 +44,20 @@ export class Mod extends SaveProvider {
     // ------------------
     // Koohs
     // ------------------
-    static koohs: Partial<Record<Kooh, () => void>> = {}
+    static koohs: Record<Kooh, Array<() => void>> = {
+        "click": [],
+        "cps": [],
+        "init": [],
+        "loop": []
+    }
 
     static registerKooh(id: Kooh, func: () => void) {
-        this.koohs[id] = func;
+        this.koohs[id].push(func);
     }
 
     static callKooh(id: Kooh) {
-        for (let i in this.koohs) {
-            if (i === id) {
-                this.koohs[i]();
-            }
+        for (let i in this.koohs[id]) {
+            this.koohs[id][i]();
         }
     }
 
@@ -68,13 +71,11 @@ export class Mod extends SaveProvider {
      * 
      * One thing it does NOT handle is dumping savedata so do that yourself :D
      */
-    public upgradesHandler: UpgradeHandler;
+    public upgradeHandler: UpgradeHandler;
 
     /** Every building in this array will have it's CPSGiven applied to {@link Game.cookiesPerSecond} 
      * 
      * Note: This will eventually be a BuildingHandler, but until that's implimented this is the solution I've come up with. See #40
-     * 
-     * Double Note: This commit does NOT have this actually doing anything. Next commit it will.
     */
     public buildings: Building[];
 
@@ -83,7 +84,7 @@ export class Mod extends SaveProvider {
 
         this.NAMESPACE = namespace;
 
-        this.upgradesHandler = new UpgradeHandler();
+        this.upgradeHandler = new UpgradeHandler();
         this.buildings = [];
     }
 }

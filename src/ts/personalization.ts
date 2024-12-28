@@ -59,7 +59,6 @@ export class Personalization {
      * @param value Usually `currentlyClickedSelect`'s `value`
      */
     static setCurrentlyClicked(value: string): void {
-        console.log(value)
         const foundObject = this.registeredClickableObjects.find(obj => obj.name.toLowerCase() === value);
         if (foundObject) {
             this.currentlyClicked = foundObject;

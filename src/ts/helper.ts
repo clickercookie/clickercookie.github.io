@@ -115,7 +115,7 @@ export const popup = {
             location.reload();
             break;
         case "reset cookies":
-            game.cookies = 0;
+            game.clickercookie.cookies = 0; //! bad
             break;
         default:
             alert(`Simple Popup doWhat is invalid, value is: ${doWhat} \nPlease report this to the GitHub accessable in the bottom left corner`);
