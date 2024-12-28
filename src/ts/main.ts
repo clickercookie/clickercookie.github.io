@@ -129,7 +129,9 @@ export class Game extends SaveProvider {
         if (localStorage.cookies >= 0)
             popup.createSimple(400,200,"You are using an extremely outdated saving method. You will have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format. Your old save cannot be restored.",false,"localStorage.clear()","Warning",false,false);
     
-        this.reloadBuildingDynamics();
+        for (let namespace in modHandler.mods) {
+            modHandler.mods[namespace].buildingHandler.reloadBuildingDynamics();
+        }
 
         // todo before 0.7: does betaSave work here? it looks like it does but i need to thoroughly test it
         if (this.savinator5000.getLocalStorageSave() === null) {
@@ -310,8 +312,8 @@ export class Game extends SaveProvider {
         // stats that need to be updated beforehand
         let buildingsOwned = 0;
         for (let namespace in modHandler.mods) {
-            for (let i in modHandler.mods[namespace].buildings) {
-                buildingsOwned += modHandler.mods[namespace].buildings[i].bought;
+            for (let i in modHandler.mods[namespace].buildingHandler.buildings) {
+                buildingsOwned += modHandler.mods[namespace].buildingHandler.buildings[i].bought;
             }
         }
         this.clickercookie.buildingsOwned = buildingsOwned;
@@ -327,8 +329,8 @@ export class Game extends SaveProvider {
 
         let cps = 0;
         for (let namespace in modHandler.mods) {
-            for (let i in modHandler.mods[namespace].buildings) {
-                cps += modHandler.mods[namespace].buildings[i].CPSGiven;
+            for (let i in modHandler.mods[namespace].buildingHandler.buildings) {
+                cps += modHandler.mods[namespace].buildingHandler.buildings[i].CPSGiven;
             }
         }
         this.clickercookie.cookiesPerSecond = cps;
@@ -338,18 +340,6 @@ export class Game extends SaveProvider {
     
     cookiesPerSecondUpdate() {
         Mod.callKooh("cps");
-    }
-
-    /**
-     * todo 0.7: my gut says we can do this without running this in the game loop
-     */
-    reloadBuildingDynamics() { //! TODO: MUST BE IN BUILDINGHANDLER!!!
-        for (let namespace in modHandler.mods) {
-            for (let i in modHandler.mods[namespace].buildings) {
-                console.log(modHandler.mods[namespace].buildings[i])
-                modHandler.mods[namespace].buildings[i].reloadDynamicElements();
-            }
-        }
     }
 
     cookieClicked() {
@@ -379,7 +369,9 @@ export class Game extends SaveProvider {
 
         // the following doesn't have anything to do with GameSaveData but will be done here because this spot makes the most sense
         // this is also why game loads last
-        this.reloadBuildingDynamics();
+        for (let namespace in modHandler.mods) {
+            modHandler.mods[namespace].buildingHandler.reloadBuildingDynamics();
+        }
 
         for (let i in modHandler.mods) {
             modHandler.mods[i].upgradeHandler.destroyAllUpgrades();
@@ -574,3 +566,4 @@ window.addEventListener("resize",resizeEventHandler);
 game.init();
 
 console.log("game:", game);
+console.log("mod handler:", modHandler)

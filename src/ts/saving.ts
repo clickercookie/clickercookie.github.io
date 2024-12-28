@@ -280,7 +280,9 @@ saves.resetSave = function(game: Game) {// todo: this still needs the 0.7 treatm
         localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
     }
     // saves.loadSave(game);
-    game.reloadBuildingDynamics();
+    for (let namespace in modHandler.mods) {
+        modHandler.mods[namespace].buildingHandler.reloadBuildingDynamics();
+    }
     
     game.clickercookie.grandpa.unlocked = false;
     game.clickercookie.ranch.unlocked = false;

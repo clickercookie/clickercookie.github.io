@@ -1,4 +1,4 @@
-import { Building } from "./buildings.js";
+import { Building, BuildingData } from "./buildings.js";
 import { commaify, popup } from "./helper.js";
 import { Game } from "./main.js";
 import { Mod } from "./mods.js";
@@ -98,6 +98,7 @@ export default class ClickerCookie extends Mod {
 
     // upgrades
     public readonly UPGRADES_DATA: UpgradeData[];
+    public readonly BUILDINGS_DATA: Record<string, BuildingData>;
 
     constructor() {
         super("clickercookie");
@@ -117,30 +118,87 @@ export default class ClickerCookie extends Mod {
         };
 
         // buildings and stuff
-        this.keyboard = new Building(this, "keyboard","type in cookies",15,0.1,"keyboard.png");
+        this.BUILDINGS_DATA = {
+            keyboard: {
+                name: "keyboard",
+                namePlural: "keyboards",
+                quote: "type in cookies",
+                upgradeCost: 15,
+                CPSGain: 0.1,
+                img: "keyboard.png"
+            },
+            grandpa: {
+                name: "grandpa",
+                namePlural: "grandpas",
+                quote: "as long as gramps gets a cut",
+                upgradeCost: 100,
+                CPSGain: 1,
+                img: "grandpa.png"
+            },
+            ranch: {
+                name: "ranch",
+                namePlural: "ranches",
+                quote: "not the dressing kind",
+                upgradeCost: 1_100,
+                CPSGain: 8,
+                img: "ranch.png"
+            },
+            television: {
+                name: "television",
+                namePlural: "televisions",
+                quote: "hold infomercials on your cookies",
+                upgradeCost: 12_000,
+                CPSGain: 47,
+                img: "tv.png"
+            },
+            worker: {
+                name: "worker",
+                namePlural: "workers",
+                quote: "cookies via manual labor",
+                upgradeCost: 130_000,
+                CPSGain: 260,
+                img: "worker.png"
+            },
+            wallet: {
+                name: "wallet",
+                namePlural: "wallets",
+                quote: "more storage space for your vast amount of cookie income",
+                upgradeCost: 1_400_000,
+                CPSGain: 1_440,
+                img: "wallet.png"
+            },
+            church: {
+                name: "church",
+                namePlural: "churches",
+                quote: "pray to the almighty cookie gods",
+                upgradeCost: 20_000_000,
+                CPSGain: 7_800,
+                img: "church.png"
+            }
+        };
+
+        this.keyboard = new Building(this, this.BUILDINGS_DATA.keyboard);
         this.keyboard.unlocked = true;
-        this.grandpa = new Building(this, "grandpa","as long as gramps gets a cut",100,1,"grandpa.png");
+        this.grandpa = new Building(this, this.BUILDINGS_DATA.grandpa);
         this.grandpa.setVisibility(false);
-        this.ranch = new Building(this, "ranch","not the dressing kind",1100,8,"ranch.png",true);
+        this.ranch = new Building(this, this.BUILDINGS_DATA.ranch);
         this.ranch.setVisibility(false);
-        this.television = new Building(this, "television","hold infomercials on your cookies",12000,47,"tv.png");
+        this.television = new Building(this, this.BUILDINGS_DATA.television);
         this.television.setVisibility(false);
-        this.worker = new Building(this, "worker","cookies via manual labor",130000,260,"worker.png");
+        this.worker = new Building(this, this.BUILDINGS_DATA.worker);
         this.worker.setVisibility(false);
-        this.wallet = new Building(this, "wallet","more storage space for your vast amount of cookie income",1400000,1440,"wallet.png");
+        this.wallet = new Building(this, this.BUILDINGS_DATA.wallet);
         this.wallet.setVisibility(false);
-        this.church = new Building(this, "church","pray to the almighty cookie gods",20000000,7800,"church.png",true);
+        this.church = new Building(this, this.BUILDINGS_DATA.church);
         this.church.setVisibility(false);
 
-        // temp: push to this.buildings
-        this.buildings.push(this.keyboard);
-        this.buildings.push(this.grandpa);
-        this.buildings.push(this.ranch);
-        this.buildings.push(this.television);
-        this.buildings.push(this.worker);
-        this.buildings.push(this.wallet);
-        this.buildings.push(this.church);
-
+        this.buildingHandler.register(this.keyboard);
+        this.buildingHandler.register(this.grandpa);
+        this.buildingHandler.register(this.ranch);
+        this.buildingHandler.register(this.television);
+        this.buildingHandler.register(this.worker);
+        this.buildingHandler.register(this.wallet);
+        this.buildingHandler.register(this.church);
 
         // upgrades
         this.UPGRADES_DATA = [
@@ -181,7 +239,7 @@ export default class ClickerCookie extends Mod {
             {
                 uid: "cckeyboard4",
                 name: "10 finger typing",
-                quote: "<i><b>efficiency</b></i>", //? your 6th grade ict teacher would be so proud
+                quote: "<i><b>efficiency</b></i>", //? your middle school ict teacher would be so proud
                 price: 100_000,
                 img: "10-finger-typing.png",
                 desc: defaultUpgradeDescriptions.keyboard,

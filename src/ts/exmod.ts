@@ -13,13 +13,22 @@ interface ModSave {
 export class NewMod extends Mod {
     superCookies: number;
 
+    banana: Building;
+
     private readonly UPGRADES_DATA: UpgradeData[];
     constructor() {
         super("modname");
 
         this.superCookies = 5;
 
-        this.buildings.push(new Building(game.clickercookie, "xyz", "we be making potatoes with this one", 1, 5))
+        this.banana = new Building(game.clickercookie, {
+            name: "banaan",
+            namePlural: "many bannaa",
+            quote: "i love anana",
+            upgradeCost: 8,
+            CPSGain: 5
+        });
+        this.buildingHandler.register(this.banana);
 
         this.UPGRADES_DATA = [
             {
@@ -28,7 +37,7 @@ export class NewMod extends Mod {
                 quote: "so funy haha",
                 price: 69,
                 desc: "multiplies stuff and stuff",
-                building: this.buildings[0],
+                building: this.banana,
                 buildingsRequired: 3
             }
         ];

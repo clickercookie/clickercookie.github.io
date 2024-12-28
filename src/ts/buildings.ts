@@ -3,89 +3,124 @@ import { capitalize, commaify, clamp } from "./helper.js";
 import { game } from "./main.js";
 import { hideTooltip } from "./tooltip.js";
 
-export class Building {
-    static UPGRADECOST_MULTIPLIER = 1.15; //? should this be static?
+export class BuildingHandler {
+    buildings: Building[] = [];
+    
+    register(building: Building) {
+        this.buildings.push(building);
+    }
 
-    private clickercookie: ClickerCookie;
+    /**
+     * todo 0.7: my gut says we can do this without running this in the game loop
+     */
+    reloadBuildingDynamics() {
+        for (let i in this.buildings) {
+            this.buildings[i].reloadDynamicElements();
+        }
+    }
+}
+
+export interface BuildingData {
+    name: string;
+    namePlural: string;
+    quote: string;
+    upgradeCost: number;
+    CPSGain: number;
+    img?: string;
+    /** Default is 1.15 */
+    upgradeCostMultiplier?: number;
+}
+
+export class Building {
+    private _clickercookie: ClickerCookie;
 
     name: string;
+    namePlural: string;
     quote: string;
     upgradeCost: number;
     CPSGiven: number;
-    GPSGain: number;
     CPSGain: number;
+    upgradeCostMultiplier: number;
 
-    bought: number; // todo: add set method to change the html for this
+    bought: number; // todo: add set method to change the html for this (acutally that's not possible because HTML won't be present in document when this is set)
     unlocked: boolean;
     plural: "s" | "es";
 
     html: HTMLDivElement;
-    constructor(clickercookie: ClickerCookie, name: string, quote: string, upgradeCost: number, CPSGain: number, iconImg: string="unknown.png", esPlural: boolean=false) {
-        this.clickercookie = clickercookie;
+    constructor(clickercookie: ClickerCookie, data: BuildingData) {
+        this._clickercookie = clickercookie;
         
-        this.name = name;
-        this.quote = quote;
-        this.upgradeCost = upgradeCost;
+        this.name = data.name;
+        this.namePlural = data.namePlural;
+        this.quote = data.quote;
+        this.upgradeCost = data.upgradeCost;
         this.CPSGiven = 0;
-        this.CPSGain = CPSGain;
+        this.CPSGain = data.CPSGain;
+        if (data.upgradeCostMultiplier)
+            this.upgradeCostMultiplier = data.upgradeCostMultiplier;
+        else
+            this.upgradeCostMultiplier = 1.15;
+
+        //* if upgradeCost is too low, Math.floor'ing it after multiplying it by upgradeCostMultiplier can actually just get you the same upgradeCost as before. warn in console if this will happen, but don't throw an error in case it's intended or smth stupid
+        if (Math.floor(this.upgradeCost * this.upgradeCostMultiplier) === this.upgradeCost) {
+            console.warn(`${this.name} upgrade cost is too low to increase after buy. Increase BuildingData.upgradeCost or BuildingData.upgradeCostMultiplier.`)
+        }
 
         this.bought = 0;
         this.unlocked = false;
-        if (esPlural) this.plural = "es";
-        else this.plural = "s";
 
         // setup HTML (uses indentation to show structure)
         this.html = document.createElement("div");
-        this.html.setAttribute("class","building");
+        this.html.className = "building";
         this.html.addEventListener("click", () => {this.buy()});
         this.html.addEventListener("mousemove", () => {this.hovered()});
         this.html.addEventListener("mouseover", () => {this.hovered()});
         this.html.addEventListener("mouseout",() => {hideTooltip()});
             const icon = document.createElement("img");
-            icon.setAttribute("class", "building-icon");
-            icon.setAttribute("src", `img/${iconImg}`);
-            icon.setAttribute("alt", `${this.name} icon`);
+            icon.className = "building-icon";
+            if (data.img)
+                icon.src = `img/${data.img}`;
+            else
+                icon.src = `img/unknown.png`;
+            icon.alt = `${this.name} icon`;
             this.html.appendChild(icon);
 
             const buildingContent = document.createElement("div");
             buildingContent.setAttribute("class","building-content");
                 const namePriceDiv = document.createElement("div");
                     const buildingName = document.createElement("p");
-                    buildingName.setAttribute("class","building-name");
+                    buildingName.className = "building-name";
                     buildingName.innerHTML = `${capitalize(this.name)}`;
                     namePriceDiv.appendChild(buildingName);
 
                     const buildingPrice = document.createElement("p");
-                    buildingPrice.setAttribute("class","building-price");
-                    buildingPrice.setAttribute("id",`${this.name}Cost`);
+                    buildingPrice.className = "building-price";
+                    buildingPrice.id = `${this.name}Cost`;
                     buildingPrice.innerHTML = this.upgradeCost.toString();
                     namePriceDiv.appendChild(buildingPrice);
                 buildingContent.appendChild(namePriceDiv);
 
                 const buildingsBoughtWrapper = document.createElement("div");
-                buildingsBoughtWrapper.setAttribute("class","buildings-bought-wrapper");
+                buildingsBoughtWrapper.className = "buildings-bought-wrapper";
                     const buildingsBought = document.createElement("p");
-                    buildingsBought.setAttribute("class","buildings-bought");
-                    buildingsBought.setAttribute("id",`${this.name}${this.plural}Bought`);
+                    buildingsBought.className = "buildings-bought";
+                    buildingsBought.id = `${this.name}${this.plural}Bought`;
                     buildingsBought.innerHTML = "0";
                     buildingsBoughtWrapper.appendChild(buildingsBought);
                 buildingContent.appendChild(buildingsBoughtWrapper);
             this.html.appendChild(buildingContent);
-
         document.getElementById("buildingsWrapper").appendChild(this.html);
         // end setup HTML
     }
 
     buy() {
-        if (this.clickercookie.cookies >= this.upgradeCost) {
-            this.clickercookie.cookies -= this.upgradeCost;
-            this.upgradeCost *= Building.UPGRADECOST_MULTIPLIER;
+        if (this._clickercookie.cookies >= this.upgradeCost) {
+            this._clickercookie.cookies -= this.upgradeCost;
+            this.upgradeCost *= this.upgradeCostMultiplier;
             this.upgradeCost = Math.floor(this.upgradeCost);
             this.bought++;
             this.CPSGiven += this.CPSGain;
-            this.clickercookie.reloadCookieCounter();
-            document.getElementById(`${this.name}Cost`).innerHTML = commaify(this.upgradeCost);
-            document.getElementById(`${this.name}${this.plural}Bought`).innerText = commaify(this.bought);
+            this._clickercookie.reloadCookieCounter();
             this.hovered();
             this.reloadDynamicElements();
         }

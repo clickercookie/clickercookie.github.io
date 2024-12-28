@@ -1,4 +1,4 @@
-import { Building } from "./buildings.js";
+import { Building, BuildingHandler } from "./buildings.js";
 import { popup } from "./helper.js";
 import { game } from "./main.js";
 import { SaveHandler, SaveProvider } from "./saving.js";
@@ -67,17 +67,17 @@ export class Mod extends SaveProvider {
     /** Mod namespace used for saving */
     public NAMESPACE: string;
 
-    /** When registered, this {@link UpgradeHandler} gets special treatment from {@link Game}, automatically handling things like destruction and unlocks. You probably want to use this. 
+    /** 
+     * When registered, this {@link UpgradeHandler} gets special treatment from {@link Game}, automatically handling things like destruction and unlocks. You probably want to use this. 
      * 
      * One thing it does NOT handle is dumping savedata so do that yourself :D
      */
     public upgradeHandler: UpgradeHandler;
 
-    /** Every building in this array will have it's CPSGiven applied to {@link Game.cookiesPerSecond} 
-     * 
-     * Note: This will eventually be a BuildingHandler, but until that's implimented this is the solution I've come up with. See #40
-    */
-    public buildings: Building[];
+    /**
+     * Any {@link Building} registered in this handler will get special treatment from {@link Game}, automatically handling things like TODO.
+     */
+    public buildingHandler: BuildingHandler;
 
     constructor(namespace: string) { //? should namespace be a param?
         super();
@@ -85,7 +85,7 @@ export class Mod extends SaveProvider {
         this.NAMESPACE = namespace;
 
         this.upgradeHandler = new UpgradeHandler();
-        this.buildings = [];
+        this.buildingHandler = new BuildingHandler();
     }
 }
 
