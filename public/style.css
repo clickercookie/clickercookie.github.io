@@ -582,28 +582,6 @@ dialog::backdrop {
     margin-bottom: 4px;
 }
 
-.custom-button-label { /* this is just stolen & modified from the default CSS for a button */
-    writing-mode: horizontal-tb !important;
-    color: buttontext;
-    display: inline-block;
-    text-align: center;
-    box-sizing: border-box;
-    background-color: buttonface;
-    padding: 1px 6px;
-    font-size: 13px;
-    border-style: solid;
-    border-color: gray;
-    border-width: 1.2px;
-    border-radius: 3px;
-    height: 21.45px;
-    padding-top: 2.2px;
-}
-.custom-button-label:hover {
-    cursor: pointer;
-    background-color: rgb(229,229,229);
-    border-color: rgb(65,65,65);
-}
-
 /* Mods */
 .mods-list {
     width: 100%;

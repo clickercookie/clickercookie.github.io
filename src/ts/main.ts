@@ -271,6 +271,7 @@ export class Game extends SaveProvider {
         document.getElementById("loadButton").addEventListener("click", () => {this.savinator5000.load()});
         document.getElementById("resetSaveButton").addEventListener("click", () => {popup.createSimple(300,150,'Are you sure you want to do this?',false,'resetSave()','Warning',true,true)});
         document.getElementById("exportDataButton").addEventListener("click", () => {this.savinator5000.export()});
+        document.getElementById("importDataButton").addEventListener("click", () => {document.getElementById("importDataInput").click()});
         document.getElementById("importDataInput").addEventListener("change", () => {this.savinator5000.import()});
         document.getElementById("autoSavingToggleSelect").addEventListener("change", () => {this.autoSavingAllowed = ((document.getElementById("autoSavingToggleSelect") as HTMLFormElement).value === "on") ? true : false});;
         document.getElementById("addModButton").addEventListener("click", () => {mods.addClicked()});
