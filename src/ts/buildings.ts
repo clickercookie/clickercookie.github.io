@@ -90,13 +90,13 @@ export class Building {
                 const namePriceDiv = document.createElement("div");
                     const buildingName = document.createElement("p");
                     buildingName.className = "building-name";
-                    buildingName.innerHTML = `${capitalize(this.name)}`;
+                    buildingName.innerText = `${capitalize(this.name)}`;
                     namePriceDiv.appendChild(buildingName);
 
                     const buildingPrice = document.createElement("p");
                     buildingPrice.className = "building-price";
                     buildingPrice.id = `${this.name}Cost`;
-                    buildingPrice.innerHTML = this.upgradeCost.toString();
+                    buildingPrice.innerText = this.upgradeCost.toString();
                     namePriceDiv.appendChild(buildingPrice);
                 buildingContent.appendChild(namePriceDiv);
 
@@ -105,7 +105,7 @@ export class Building {
                     const buildingsBought = document.createElement("p");
                     buildingsBought.className = "buildings-bought";
                     buildingsBought.id = `${this.name}${this.plural}Bought`;
-                    buildingsBought.innerHTML = "0";
+                    buildingsBought.innerText = "0";
                     buildingsBoughtWrapper.appendChild(buildingsBought);
                 buildingContent.appendChild(buildingsBoughtWrapper);
             this.html.appendChild(buildingContent);
@@ -162,7 +162,7 @@ export class Building {
 
     /** Price and bought */
     reloadDynamicElements() {
-        document.getElementById(`${this.name}Cost`).innerHTML = commaify(this.upgradeCost);
+        document.getElementById(`${this.name}Cost`).innerText = commaify(this.upgradeCost);
         document.getElementById(`${this.name}${this.plural}Bought`).innerText = commaify(this.bought);
     }
 

@@ -290,13 +290,13 @@ saves.resetSave = function(game: Game) {// todo: this still needs the 0.7 treatm
     game.clickercookie.worker.unlocked = false;
     game.clickercookie.wallet.unlocked = false;
     game.clickercookie.church.unlocked = false;
-    document.getElementById("ifCheatedStat").innerHTML = "";
-    document.getElementById("ifModdedStat").innerHTML = "";
+    document.getElementById("ifCheatedStat").style.display = "none";
+    document.getElementById("ifModdedStat").style.display = "none";
 
     for (let i in modHandler.mods) {
         modHandler.mods[i].upgradeHandler.destroyAllUpgrades();
     }
-    document.getElementById("upgradesBoughtCounter").innerHTML = Upgrade.upgradesBought.toString();
+    document.getElementById("upgradesBoughtCounter").innerText = Upgrade.upgradesBought.toString();
     updateUpgradesBoughtStatistic();
 
     // document.getElementById("win").style.display = "none";

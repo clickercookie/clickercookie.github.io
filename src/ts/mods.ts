@@ -114,7 +114,7 @@ export const mods: ModsObject = {
     
         mods.numberLoaded++;
         game.isModded = true;
-        document.getElementById("ifModdedStat")!.innerHTML = "You have activated mods on this playthrough!";
+        document.getElementById("ifModdedStat")!.style.display = "block";
         mods.reloadModsLoadedText();
     },
 
@@ -142,7 +142,7 @@ export const mods: ModsObject = {
     
             mods.numberLoaded++;
             game.isModded = true;
-            document.getElementById("ifModdedStat")!.innerHTML = "You have activated mods on this playthrough!";
+            document.getElementById("ifModdedStat")!.style.display = "block";
             mods.reloadModsLoadedText();
         };
     },
@@ -183,7 +183,7 @@ export const mods: ModsObject = {
             return false;
         }
         mods.allMods.push(id);
-        document.getElementById("ifModdedStat")!.innerHTML = "You have activated mods on this playthrough!";
+        document.getElementById("ifModdedStat")!.style.display = "block";
         game.isModded = true;
         data.initialization();
         console.log(`Loaded mod ${id}`);

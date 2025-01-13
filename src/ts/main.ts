@@ -162,7 +162,7 @@ export class Game extends SaveProvider {
         }
         
         if (this.hasCheated)
-            document.getElementById("ifCheatedStat").innerText = "You have cheated on this playthrough!";
+            document.getElementById("ifCheatedStat").style.display = "block";
     
         updateUpgradesBoughtStatistic();
 
@@ -189,7 +189,7 @@ export class Game extends SaveProvider {
         
         // this would go after data is loaded, but it requires the mobile variable to be assigned a value
         if (this.isModded) {
-            document.getElementById("ifModdedStat").innerText = "You have activated mods on this playthrough!";
+            document.getElementById("ifModdedStat").style.display = "block";
         }
     
         // check for development special stuff
@@ -321,11 +321,11 @@ export class Game extends SaveProvider {
         
         // set statistic page statistics
         if (statsUp) {
-            document.getElementById("cookiesStat").innerHTML = `${Personalization.getCurrentlyClickedPlural()}: ${this.clickercookie.variableView.cookiesView}`;
-            document.getElementById("allTimeCookies").innerHTML = `All Time ${Personalization.getCurrentlyClickedPlural()}: ${this.clickercookie.variableView.totalCookiesView}`;
-            document.getElementById("cookiesPerSecondStat").innerHTML = `${Personalization.getCurrentlyClickedPlural()} Per Second: ${this.clickercookie.variableView.cookiesPerSecondView}`;
-            document.getElementById("buildingsOwnedStat").innerHTML = `Buildings Owned: ${commaify(this.clickercookie.buildingsOwned)}`;
-            document.getElementById("cookieBeenClickedTimesStat").innerHTML = `Total ${Personalization.getCurrentlyClicked()} Clicks: ${this.clickercookie.cookieBeenClickedTimes}`; // move to cookieClicked() later
+            document.getElementById("cookiesStat").innerText = `${Personalization.getCurrentlyClickedPlural()}: ${this.clickercookie.variableView.cookiesView}`;
+            document.getElementById("allTimeCookies").innerText = `All Time ${Personalization.getCurrentlyClickedPlural()}: ${this.clickercookie.variableView.totalCookiesView}`;
+            document.getElementById("cookiesPerSecondStat").innerText = `${Personalization.getCurrentlyClickedPlural()} Per Second: ${this.clickercookie.variableView.cookiesPerSecondView}`;
+            document.getElementById("buildingsOwnedStat").innerText = `Buildings Owned: ${commaify(this.clickercookie.buildingsOwned)}`;
+            document.getElementById("cookieBeenClickedTimesStat").innerText = `Total ${Personalization.getCurrentlyClicked()} Clicks: ${this.clickercookie.cookieBeenClickedTimes}`; // move to cookieClicked() later
         }
 
         let cps = 0;
@@ -409,7 +409,7 @@ dev.setCookies = function(number: number) {
     game.hasCheated = true;
     game.clickercookie.reloadViewVariables();
     game.clickercookie.reloadCookieCounter();
-    document.getElementById("ifCheatedStat").innerHTML = "You have cheated on this playthrough!";
+    document.getElementById("ifCheatedStat").style.display = "block";
 }
 dev.setCPS = function(number: number) {
     if (!dev.devMode) return "You need developer mode ON to run this command.";
@@ -418,7 +418,7 @@ dev.setCPS = function(number: number) {
     game.hasCheated = true;
     game.clickercookie.reloadViewVariables();
     game.clickercookie.reloadCPSCounter();
-    document.getElementById("ifCheatedStat").innerHTML = "<b>You have cheated on this playthrough!</b>";
+    document.getElementById("ifCheatedStat").style.display = "block";
 }
 
 // ------------------------------------

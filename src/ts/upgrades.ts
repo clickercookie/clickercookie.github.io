@@ -210,7 +210,7 @@ export class Upgrade {
 
         expandUpgradesHolder(); // sometimes the upgrade holder has one too many rows because of weird onmouseover & onmousemove behavior, this prevents that
 
-        document.getElementById("upgradesBoughtCounter")!.innerHTML = Upgrade.upgradesBought.toString();
+        document.getElementById("upgradesBoughtCounter")!.innerText = Upgrade.upgradesBought.toString();
 
         updateUpgradesBoughtStatistic();
     }

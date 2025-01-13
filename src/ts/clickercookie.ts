@@ -651,10 +651,10 @@ export default class ClickerCookie extends Mod {
     }
 
     reloadCookieCounter() { // todo: make this be run on a set method or smth instead of its own method
-        document.getElementById("cookieCounter").innerHTML = `${Personalization.getCurrentlyClickedPlural()}: ${this.variableView.cookiesView}`;
+        document.getElementById("cookieCounter").innerText = `${Personalization.getCurrentlyClickedPlural()}: ${this.variableView.cookiesView}`;
     }
     reloadCPSCounter() {
-        document.getElementById("cookiesPerSecondCounter").innerHTML = `${Personalization.getCurrentlyClickedPlural()} Per Second: ${this.variableView.cookiesPerSecondView}`;
+        document.getElementById("cookiesPerSecondCounter").innerText = `${Personalization.getCurrentlyClickedPlural()} Per Second: ${this.variableView.cookiesPerSecondView}`;
     }
 
     cookieClicked() {

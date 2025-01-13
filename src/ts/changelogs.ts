@@ -219,7 +219,7 @@ export const versionChangelogs: Changelog[] = [
         fixed: [
             "Resetting save and importing data does not import data. (#13)", // todo
             "The \"Import Data\" button is using a browser-specific styling workaround. (#39)",
-            "No more HTMLElement.innerHTML where it's not needed, now use innerText. (#43)" // todo
+            "No more HTMLElement.innerHTML where it's not needed, now use innerText. (#43)"
         ],
         removed: [
             "Removed the mobile version due to the extreme amount of work required to upkeep it alongside the main version. (#36)",
