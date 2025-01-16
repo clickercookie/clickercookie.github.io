@@ -9,15 +9,6 @@ export class BuildingHandler {
     register(building: Building) {
         this.buildings.push(building);
     }
-
-    /**
-     * todo 0.7: my gut says we can do this without running this in the game loop
-     */
-    reloadBuildingDynamics() {
-        for (let i in this.buildings) {
-            this.buildings[i].reloadDynamicElements();
-        }
-    }
 }
 
 export interface BuildingData {
@@ -37,19 +28,73 @@ export class Building {
     name: string;
     namePlural: string;
     quote: string;
-    upgradeCost: number;
+    private _upgradeCost: number;
+    public get upgradeCost() { return this._upgradeCost }
+    public set upgradeCost(num: number) {
+        this._upgradeCost = num;
+        document.getElementById(`${this.name}Cost`).innerText = commaify(this._upgradeCost);
+    }
     CPSGiven: number;
     CPSGain: number;
-    upgradeCostMultiplier: number;
+    readonly upgradeCostMultiplier: number;
 
-    bought: number; // todo: add set method to change the html for this (acutally that's not possible because HTML won't be present in document when this is set)
+    private _bought: number;
+    public get bought() { return this._bought }
+    public set bought(num: number) {
+        this._bought = num;
+        document.getElementById(`${this.namePlural}Bought`).innerText = commaify(this._bought);
+    }
     unlocked: boolean;
     plural: "s" | "es";
 
     html: HTMLDivElement;
     constructor(clickercookie: ClickerCookie, data: BuildingData) {
         this._clickercookie = clickercookie;
+
+        // setup HTML (uses indentation to show structure)
+        this.html = document.createElement("div");
+        this.html.className = "building";
+        this.html.addEventListener("click", () => {this.buy()});
+        this.html.addEventListener("mousemove", () => {this.hovered()});
+        this.html.addEventListener("mouseover", () => {this.hovered()});
+        this.html.addEventListener("mouseout",() => {hideTooltip()});
+            const icon = document.createElement("img");
+            icon.className = "building-icon";
+            if (data.img)
+                icon.src = `img/${data.img}`;
+            else
+                icon.src = `img/unknown.png`;
+            icon.alt = `${data.name} icon`;
+            this.html.appendChild(icon);
+
+            const buildingContent = document.createElement("div");
+            buildingContent.className = "building-content";
+                const namePriceDiv = document.createElement("div");
+                    const buildingName = document.createElement("p");
+                    buildingName.className = "building-name";
+                    buildingName.innerText = capitalize(data.name);
+                    namePriceDiv.appendChild(buildingName);
+
+                    const buildingPrice = document.createElement("p");
+                    buildingPrice.className = "building-price";
+                    buildingPrice.id = `${data.name}Cost`;
+                    buildingPrice.innerText = data.upgradeCost.toString();
+                    namePriceDiv.appendChild(buildingPrice);
+                buildingContent.appendChild(namePriceDiv);
+
+                const buildingsBoughtWrapper = document.createElement("div");
+                buildingsBoughtWrapper.className = "buildings-bought-wrapper";
+                    const buildingsBought = document.createElement("p");
+                    buildingsBought.className = "buildings-bought";
+                    buildingsBought.id = `${data.namePlural}Bought`;
+                    buildingsBought.innerText = "0";
+                    buildingsBoughtWrapper.appendChild(buildingsBought);
+                buildingContent.appendChild(buildingsBoughtWrapper);
+            this.html.appendChild(buildingContent);
+        document.getElementById("buildingsWrapper").appendChild(this.html);
+        // end setup HTML
         
+        // must setup HTML before assigning these, see setters
         this.name = data.name;
         this.namePlural = data.namePlural;
         this.quote = data.quote;
@@ -68,49 +113,6 @@ export class Building {
 
         this.bought = 0;
         this.unlocked = false;
-
-        // setup HTML (uses indentation to show structure)
-        this.html = document.createElement("div");
-        this.html.className = "building";
-        this.html.addEventListener("click", () => {this.buy()});
-        this.html.addEventListener("mousemove", () => {this.hovered()});
-        this.html.addEventListener("mouseover", () => {this.hovered()});
-        this.html.addEventListener("mouseout",() => {hideTooltip()});
-            const icon = document.createElement("img");
-            icon.className = "building-icon";
-            if (data.img)
-                icon.src = `img/${data.img}`;
-            else
-                icon.src = `img/unknown.png`;
-            icon.alt = `${this.name} icon`;
-            this.html.appendChild(icon);
-
-            const buildingContent = document.createElement("div");
-            buildingContent.setAttribute("class","building-content");
-                const namePriceDiv = document.createElement("div");
-                    const buildingName = document.createElement("p");
-                    buildingName.className = "building-name";
-                    buildingName.innerText = `${capitalize(this.name)}`;
-                    namePriceDiv.appendChild(buildingName);
-
-                    const buildingPrice = document.createElement("p");
-                    buildingPrice.className = "building-price";
-                    buildingPrice.id = `${this.name}Cost`;
-                    buildingPrice.innerText = this.upgradeCost.toString();
-                    namePriceDiv.appendChild(buildingPrice);
-                buildingContent.appendChild(namePriceDiv);
-
-                const buildingsBoughtWrapper = document.createElement("div");
-                buildingsBoughtWrapper.className = "buildings-bought-wrapper";
-                    const buildingsBought = document.createElement("p");
-                    buildingsBought.className = "buildings-bought";
-                    buildingsBought.id = `${this.name}${this.plural}Bought`;
-                    buildingsBought.innerText = "0";
-                    buildingsBoughtWrapper.appendChild(buildingsBought);
-                buildingContent.appendChild(buildingsBoughtWrapper);
-            this.html.appendChild(buildingContent);
-        document.getElementById("buildingsWrapper").appendChild(this.html);
-        // end setup HTML
     }
 
     buy() {
@@ -121,7 +123,6 @@ export class Building {
             this.bought++;
             this.CPSGiven += this.CPSGain;
             this.hovered();
-            this.reloadDynamicElements();
         }
     }
 
@@ -157,12 +158,6 @@ export class Building {
 
     setVisibility(bool: boolean) {
         this.html.style.display = bool ? "block" : "none";
-    }
-
-    /** Price and bought */
-    reloadDynamicElements() {
-        document.getElementById(`${this.name}Cost`).innerText = commaify(this.upgradeCost);
-        document.getElementById(`${this.name}${this.plural}Bought`).innerText = commaify(this.bought);
     }
 
     destroy() {

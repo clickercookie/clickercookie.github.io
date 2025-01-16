@@ -136,10 +136,6 @@ export class Game extends SaveProvider {
         
         if (localStorage.cookies >= 0)
             popup.createSimple(400,200,"You are using an extremely outdated saving method. You will have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format. Your old save cannot be restored.",false,"localStorage.clear()","Warning",false,false);
-    
-        for (let namespace in modHandler.mods) {
-            modHandler.mods[namespace].buildingHandler.reloadBuildingDynamics();
-        }
 
         // todo before 0.7: does betaSave work here? it looks like it does but i need to thoroughly test it
         if (this.savinator5000.getLocalStorageSave() === null) {
@@ -360,11 +356,6 @@ export class Game extends SaveProvider {
         Personalization.setBackground(saveData.backgroundName);
 
         // the following doesn't have anything to do with GameSaveData but will be done here because this spot makes the most sense
-        // this is also why game loads last
-        for (let namespace in modHandler.mods) {
-            modHandler.mods[namespace].buildingHandler.reloadBuildingDynamics();
-        }
-
         for (let i in modHandler.mods) {
             modHandler.mods[i].upgradeHandler.destroyAllUpgrades();
             modHandler.mods[i].upgradeHandler.showUnlockedUpgrades();
