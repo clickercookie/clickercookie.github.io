@@ -84,13 +84,21 @@ export class Game extends SaveProvider {
     public clickercookie: ClickerCookie;
 
     // self-explainatory-ish things
-    public hasCheated: boolean;
-    public isModded: boolean;
-    private _autoSavingAllowed: boolean;
-    get autoSavingAllowed(): boolean {
-        return this._autoSavingAllowed;
+    private _hasCheated: boolean;
+    public get hasCheated() { return this._hasCheated }
+    public set hasCheated(bool: boolean) {
+        this._hasCheated = bool;
+        document.getElementById("ifCheatedStat").style.display = (this._hasCheated) ? "block" : "none";
     }
-    set autoSavingAllowed(value: boolean) {
+    private _isModded: boolean;
+    public get isModded() { return this._isModded }
+    public set isModded(bool: boolean) {
+        this._isModded = bool;
+        document.getElementById("ifModdedStat").style.display = (this._isModded) ? "block" : "none";
+    }
+    private _autoSavingAllowed: boolean;
+    public get autoSavingAllowed(): boolean { return this._autoSavingAllowed }
+    public set autoSavingAllowed(value: boolean) {
         this._autoSavingAllowed = value;
         (document.getElementById("autoSavingToggleSelect") as HTMLSelectElement).value = (this.autoSavingAllowed) ? "on" : "off";
     }
@@ -160,9 +168,6 @@ export class Game extends SaveProvider {
             </div>`);
             return "Save the save!";
         }
-        
-        if (this.hasCheated)
-            document.getElementById("ifCheatedStat").style.display = "block";
     
         updateUpgradesBoughtStatistic();
 
@@ -185,11 +190,6 @@ export class Game extends SaveProvider {
         // this loop goes from big to small because the function needs to be ran from the latest version to the oldest
         for (let entry = versionChangelogs.length - 1; entry >= 0; entry--) {
             createChangelogEntry(versionChangelogs[entry]);
-        }
-        
-        // this would go after data is loaded, but it requires the mobile variable to be assigned a value
-        if (this.isModded) {
-            document.getElementById("ifModdedStat").style.display = "block";
         }
     
         // check for development special stuff
@@ -398,14 +398,12 @@ dev.setCookies = function(number: number) {
     game.clickercookie.cookies = number;
     game.clickercookie.totalCookies =+ number;
     game.hasCheated = true;
-    document.getElementById("ifCheatedStat").style.display = "block";
 }
 dev.setCPS = function(number: number) {
     if (!dev.devMode) return "You need developer mode ON to run this command.";
 
     dev.CPSGiven = number;
     game.hasCheated = true;
-    document.getElementById("ifCheatedStat").style.display = "block";
 }
 
 // ------------------------------------
