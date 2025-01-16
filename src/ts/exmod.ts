@@ -45,7 +45,7 @@ export class NewMod extends Mod {
             this.upgradeHandler.register(new Upgrade(game.clickercookie, this.UPGRADES_DATA[i]));
         }
 
-        document.getElementById("cookieCounter")!.addEventListener("click", () => {this.superCookies++});
+        document.getElementById("cookieCount")!.addEventListener("click", () => {this.superCookies++});
 
         Mod.registerKooh("click", () => {
             console.log("Hello from "+this.NAMESPACE+"!");

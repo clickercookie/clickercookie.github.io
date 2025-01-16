@@ -203,8 +203,10 @@ export const versionChangelogs: Changelog[] = [
         note: "Hi. It's hard to explain in a simple changelog how much this update has changed. See everything you're looking at? What is happening behind the scenes for what you're looking at has changed. Virtually every single line of code has had some sort of update.",
         name: "tbd",
         added: [
+            "\"Cookies Per Click\" statistic.",
             "A button in Options to toggle auto-saving (#29)",
             "GitHub issues in changelogs work as hyperlinks, like this one: #13",
+            "A \"removed\" section in changelogs",
             "The white background is now enabled by default."
         ],
         changed: [

@@ -1,5 +1,5 @@
 import { Building, BuildingData } from "./buildings.js";
-import { commaify, popup } from "./helper.js";
+import { commaify, makeSlightlyImperfectFloatNice, popup } from "./helper.js";
 import { Game } from "./main.js";
 import { Mod } from "./mods.js";
 import { Personalization } from "./personalization.js";
@@ -72,20 +72,48 @@ interface ClickerCookieSaveData {
 }
 
 export default class ClickerCookie extends Mod {
-    // core stuff
-    public cookies: number;
+    /* core stuff */
+    // cookies
+    private _cookies: number = 0;
+    public get cookies(): number {
+        return this._cookies;
+    }
+    public set cookies(num: number) {
+        this._cookies = num;
+        document.getElementById("cookieCount").innerText = makeSlightlyImperfectFloatNice(this._cookies);
+        this.updateStatistics();
+    }
+    // total cookies
     public totalCookies: number;
-    public cookiesPerSecond: number;
-    public cookiesPerClick: number;
-    public cookieBeenClickedTimes: number;
-    public buildingsOwned: number;
-
-    /** view versions of variables (their main versions have long decimal points) */
-    public variableView: {
-        cookiesView: string,
-        totalCookiesView: string,
-        cookiesPerSecondView: string
-    };
+    // cookies per second
+    private _cookiesPerSecond: number = 0;
+    public get cookiesPerSecond(): number { return this._cookiesPerSecond }
+    public set cookiesPerSecond(num: number) {
+        this._cookiesPerSecond = num;
+        document.getElementById("cookiesPerSecondCount").innerText = makeSlightlyImperfectFloatNice(this._cookiesPerSecond);
+        this.updateStatistics();
+    }
+    // cookies per click
+    private _cookiesPerClick: number = 1;
+    public get cookiesPerClick() { return this._cookiesPerClick }
+    public set cookiesPerClick(num: number) {
+        this._cookiesPerClick = num;
+        this.updateStatistics();
+    }
+    // cookie been clicked times
+    private _cookieBeenClickedTimes: number = 0;
+    public get cookieBeenClickedTimes() { return this._cookieBeenClickedTimes }
+    public set cookieBeenClickedTimes(num: number) {
+        this._cookieBeenClickedTimes = num;
+        this.updateStatistics();
+    }
+    // buildings owned
+    private _buildingsOwned: number = 0;
+    public get buildingsOwned() { return this._buildingsOwned }
+    public set buildingsOwned(num: number) {
+        this._buildingsOwned = num;
+        this.updateStatistics();
+    }
 
     // buildings
     public keyboard: Building;
@@ -103,19 +131,7 @@ export default class ClickerCookie extends Mod {
     constructor() {
         super("clickercookie");
 
-        // core stuff
-        this.cookies = 0;
-        this.totalCookies = 0;
-        this.cookiesPerSecond = 0;
-        this.cookiesPerClick = 1;
-        this.cookieBeenClickedTimes = 0;
-        this.buildingsOwned = 0;
-
-        this.variableView = {
-            cookiesView: "",
-            totalCookiesView: "",
-            cookiesPerSecondView: ""
-        };
+        //* core stuff CANNOT be assigned in the constructor because setters look for personalization stuff that is not loaded from a save yet
 
         // buildings and stuff
         this.BUILDINGS_DATA = {
@@ -607,13 +623,6 @@ export default class ClickerCookie extends Mod {
     }
 
     gameLoop() {
-        // todo: can we get this out of game loop?
-        this.reloadViewVariables();
-    
-        // CPS
-        this.reloadCPSCounter();
-        this.reloadCookieCounter();
-
         // check for stopped cookie production
         if (cookieProductionStopped)
             this.cookies = 0;
@@ -650,30 +659,23 @@ export default class ClickerCookie extends Mod {
         }
     }
 
-    reloadCookieCounter() { // todo: make this be run on a set method or smth instead of its own method
-        document.getElementById("cookieCounter").innerText = `${Personalization.getCurrentlyClickedPlural()}: ${this.variableView.cookiesView}`;
-    }
-    reloadCPSCounter() {
-        document.getElementById("cookiesPerSecondCounter").innerText = `${Personalization.getCurrentlyClickedPlural()} Per Second: ${this.variableView.cookiesPerSecondView}`;
+    updateStatistics() { // todo: make this only run when the stats page is a. first pulled up, b. continued to be pulled up
+        document.getElementById("cookiesStat").innerText = `${Personalization.getCurrentlyClickedPlural()}: ${makeSlightlyImperfectFloatNice(this.cookies)}`;
+        document.getElementById("allTimeCookies").innerText = `All Time ${Personalization.getCurrentlyClickedPlural()}: ${makeSlightlyImperfectFloatNice(this.totalCookies)}`;
+        document.getElementById("cookiesPerSecondStat").innerText = `${Personalization.getCurrentlyClickedPlural()} Per Second: ${makeSlightlyImperfectFloatNice(this.cookiesPerSecond)}`;
+        document.getElementById("buildingsOwnedStat").innerText = `Buildings Owned: ${commaify(this.buildingsOwned)}`;
+        document.getElementById("cookieBeenClickedTimesStat").innerText = `Total ${Personalization.getCurrentlyClicked()} Clicks: ${this.cookieBeenClickedTimes}`;
+        document.getElementById("cookiesPerClickStat").innerText = `${Personalization.getCurrentlyClickedPlural()} Per Click: ${this.cookiesPerClick}`;
     }
 
     cookieClicked() {
         this.cookies += this.cookiesPerClick;
         this.cookieBeenClickedTimes++;
         this.totalCookies += this.cookiesPerClick;
-        this.reloadCookieCounter();
     }
     cpsUpdate() {
         this.cookies = this.cookies + this.cookiesPerSecond;
         this.totalCookies = this.totalCookies + this.cookiesPerSecond;
-        this.reloadCookieCounter();
-    }
-
-
-    reloadViewVariables() { 
-        this.variableView.cookiesView = commaify(Math.round(this.cookies * 10) / 10);
-        this.variableView.totalCookiesView = commaify(Math.round(this.totalCookies * 10) / 10);
-        this.variableView.cookiesPerSecondView = commaify(Math.round(this.cookiesPerSecond * 10) / 10);
     }
 
     // ------------ All of ClickerCookie's SaveProvider stuff ------------

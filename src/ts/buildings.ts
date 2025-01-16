@@ -120,7 +120,6 @@ export class Building {
             this.upgradeCost = Math.floor(this.upgradeCost);
             this.bought++;
             this.CPSGiven += this.CPSGain;
-            this._clickercookie.reloadCookieCounter();
             this.hovered();
             this.reloadDynamicElements();
         }

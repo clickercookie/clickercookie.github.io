@@ -46,6 +46,17 @@ export function commaify(toComma: number): string {
     return commaifyed;
 }
 
+/** Oftentimes, because JS is a pain in the butt hole, number such as 128.2 may instead be 128.2000000000013. This is not very friendly to look at. This makes that number better.
+ * 
+ * Historically, we would use a seperate object for numbers that would be impacted by this that would automatically apply the calculations in this function (variableView), but I prefer this method instead.
+ * 
+ * @param num The number (ex. 128.2000000000013) that needs to look nicer
+ * @returns A nicer looking number
+ */
+export function makeSlightlyImperfectFloatNice(num: number): string {
+    return commaify(Math.round(num * 10) / 10)
+}
+
 //** expect a popup.ts file in the future! */
 export const popup = {
     simpleHTML: document.getElementById("simplePopup") as HTMLDialogElement,

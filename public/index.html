@@ -15,8 +15,8 @@
         <div id="leftSide" class="leftSide">
             <img id="cookie" class="cookie pointer" src="img/cookie.png" alt="cookie" draggable="false">
             <div class="cookie-counter-wrapper">
-                <h3 id="cookieCounter" class="cookie-counter shadow">Cookies: 0</h3>
-                <h4 id="cookiesPerSecondCounter" class="cookies-per-second-counter">Cookies Per Second: 0</h4>
+                <h3 class="cookie-counter shadow">Cookies: <span id="cookieCount">0</span></h3>
+                <h4 class="cookies-per-second-counter">Cookies Per Second: <span id="cookiesPerSecondCount">0</span></h4>
             </div>
             <!-- <h3 class="win shadow" id="win">you win.</h3> -->
             <p class="saving-indicator" id="savingIndicator">Saved!</p>
@@ -53,11 +53,12 @@
                     <img src="img/white-x.png" alt="x button" width="38" height="38" class="no-margin">
                 </div>
                 <h3 class="middle-title">Statistics</h3>
-                <p class="middle-text-gray" id="cookiesStat">Cookies: 0</p>
+                <p class="middle-text-gray" id="cookiesStat">Cookies: 0</p> <!-- can statistics be cool and instead be registered programmatically? -->
                 <p class="middle-text-gray" id="allTimeCookies">All Time Cookies: 0</p>
                 <p class="middle-text-gray" id="buildingsOwnedStat">Buildings Owned: 0</p>
                 <p class="middle-text-gray" id="cookiesPerSecondStat">Cookies Per Second: 0</p>
                 <p class="middle-text-gray" id="cookieBeenClickedTimesStat">Total Cookie Clicks: 0</p>
+                <p class="middle-text-gray" id="cookiesPerClickStat">Cookies Per Click: 1</p>
                 <p class="middle-text-gray no-display" id="ifCheatedStat" style="color:white;">You have cheated on this playthrough!</p>
                 <p class="middle-text-gray no-display" id="ifModdedStat" style="color:white;">You have activated mods on this playthrough!</p>
                 <h3 class="middle-subtitle">Upgrades:</h3>

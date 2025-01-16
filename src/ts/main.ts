@@ -318,15 +318,6 @@ export class Game extends SaveProvider {
             }
         }
         this.clickercookie.buildingsOwned = buildingsOwned;
-        
-        // set statistic page statistics
-        if (statsUp) {
-            document.getElementById("cookiesStat").innerText = `${Personalization.getCurrentlyClickedPlural()}: ${this.clickercookie.variableView.cookiesView}`;
-            document.getElementById("allTimeCookies").innerText = `All Time ${Personalization.getCurrentlyClickedPlural()}: ${this.clickercookie.variableView.totalCookiesView}`;
-            document.getElementById("cookiesPerSecondStat").innerText = `${Personalization.getCurrentlyClickedPlural()} Per Second: ${this.clickercookie.variableView.cookiesPerSecondView}`;
-            document.getElementById("buildingsOwnedStat").innerText = `Buildings Owned: ${commaify(this.clickercookie.buildingsOwned)}`;
-            document.getElementById("cookieBeenClickedTimesStat").innerText = `Total ${Personalization.getCurrentlyClicked()} Clicks: ${this.clickercookie.cookieBeenClickedTimes}`; // move to cookieClicked() later
-        }
 
         let cps = 0;
         for (let namespace in modHandler.mods) {
@@ -407,8 +398,6 @@ dev.setCookies = function(number: number) {
     game.clickercookie.cookies = number;
     game.clickercookie.totalCookies =+ number;
     game.hasCheated = true;
-    game.clickercookie.reloadViewVariables();
-    game.clickercookie.reloadCookieCounter();
     document.getElementById("ifCheatedStat").style.display = "block";
 }
 dev.setCPS = function(number: number) {
@@ -416,8 +405,6 @@ dev.setCPS = function(number: number) {
 
     dev.CPSGiven = number;
     game.hasCheated = true;
-    game.clickercookie.reloadViewVariables();
-    game.clickercookie.reloadCPSCounter();
     document.getElementById("ifCheatedStat").style.display = "block";
 }
 
