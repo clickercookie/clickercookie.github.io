@@ -6,6 +6,7 @@
         "sourceMap": false,
         "module": "ES2022", // figure this stuff out later
         "target": "es2022",
+        "moduleResolution": "node",
         "outDir": "public"
     },
     "files": [

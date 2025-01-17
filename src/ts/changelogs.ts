@@ -216,6 +216,7 @@ export const versionChangelogs: Changelog[] = [
             "The entire modding system. See the GitHub wiki for more details.",
             "Split main.js into multiple script files.",
             "Reorganized the GitHub repo (#35)",
+            "Now using ESBuild as the build system.",
             "Logs can now have a \"note\" (it's below the version header)."
         ],
         fixed: [
