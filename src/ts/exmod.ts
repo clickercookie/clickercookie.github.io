@@ -48,7 +48,7 @@ export class NewMod extends Mod {
         document.getElementById("cookieCount")!.addEventListener("click", () => {this.superCookies++});
 
         Mod.registerKooh("click", () => {
-            console.log("Hello from "+this.NAMESPACE+"!");
+            this.logger.info("Hello from "+this.NAMESPACE+"!");
         });
     }
 

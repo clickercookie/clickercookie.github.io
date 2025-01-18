@@ -9,13 +9,15 @@ const inDevelopment: boolean = (location.hostname === "localhost" || location.ho
 // Imports
 // ------------------------------------
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
-import { convertCollectionToArray, commaify, popup } from "./helper.js";
+import { convertCollectionToArray, commaify, popup, Logger, LogManager } from "./helper.js";
 import { Upgrade, updateUpgradesBoughtStatistic, expandUpgradesHolder } from "./upgrades.js";
 import { SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
 import { NewMod } from "./exmod.js";
 import { Personalization } from "./personalization.js";
 import { Mod, ModHandler, mods } from "./mods.js"
 import ClickerCookie from "./clickercookie.js"
+import { WindowMan } from "ts-windowman";
+import { ConsoleWindow } from "./dev.js";
 
 /**
  * our lord & savior, the save handler
@@ -82,6 +84,9 @@ export class Game extends SaveProvider {
 
     /** Said to be the physical manifestation of the cookie gods themselves... */
     public clickercookie: ClickerCookie;
+    public windowman: WindowMan;
+
+    private logger: Logger;
 
     // self-explainatory-ish things
     private _hasCheated: boolean;
@@ -125,6 +130,11 @@ export class Game extends SaveProvider {
         this.autoSavingAllowed = true;
 
         this.clickercookie = new ClickerCookie();
+        this.windowman = new WindowMan();
+        this.windowman.init(document.body);
+        this.windowman.config.titlebarColor = "#200036";
+
+        this.logger = LogManager.getLogger("game");
 
         this.savinator5000 = new Savinator(saveHandler);
 
@@ -295,7 +305,8 @@ export class Game extends SaveProvider {
         });
 
         this.theGameCanLoopBecauseTheInitializationIsCompleted = true;
-        console.log("Successfully completed initialization.");
+        this.logger.debug("Successfully completed initialization.");
+        this.logger.info("you seem smart, how 'bout you contribute to the project? https://github.com/clickercookie/clickercookie.github.io");
     }
 
     gameLoop() {
@@ -398,19 +409,6 @@ dev.setCPS = function(number: number) {
 }
 
 // ------------------------------------
-// Helper Functions
-// ------------------------------------
-helper.consoleLogDev = function(str: string) {
-    if (dev.devMode) console.log(str);
-}
-
-// Popups
-/**
- * **Note: changes to Simple Popups will be coming soon. See #TODO**
- * https://github.com/clickercookie/clickercookie.github.io/wiki/Using-Popups#simple-popups
- */
-
-// ------------------------------------
 // Random Functions
 // ------------------------------------
 function toggleMiddle(param: string) { // TODO 0.7: eliminate unnessesary switch statements and general code, ternary statements might work nice but i'm spitballing here
@@ -504,8 +502,6 @@ tooltip.create = function(x: number, y: number, content: any) {
     return "this isn't used yet, but 0.6.1 has plans to upgrade the tooltip system, and this will hopefully have functionality";
 }
 
-console.log("you seem smart, how 'bout you contribute to the project? https://github.com/clickercookie/clickercookie.github.io");
-
 export const game = new Game();
 const newMod = new NewMod();
 
@@ -539,8 +535,16 @@ function resizeEventHandler() { // ? is the term "event handler" right?
 }
 resizeEventHandler(); // since we do need certain elements like the middle text to have the correct size without having to resize the window, we call this now
 window.addEventListener("resize",resizeEventHandler);
+window.addEventListener("keydown", () => {
+    game.windowman.createWindow(new ConsoleWindow());
+});
 
 game.init();
 
 console.log("game:", game);
 console.log("mod handler:", modHandler)
+
+// todo: where tf does this go?
+LogManager.initialize();
+
+console.log("%cHey! This isn't what you're looking for! Enable developer mode, then press \` (tilde).", "font-size: x-large; font-weight: bold");

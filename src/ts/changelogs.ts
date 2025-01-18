@@ -206,6 +206,7 @@ export const versionChangelogs: Changelog[] = [
             "\"Cookies Per Click\" statistic.",
             "A button in Options to toggle auto-saving (#29)",
             "GitHub issues in changelogs work as hyperlinks, like this one: #13",
+            "Developer console accessible by pressing the tilde key (#44)",
             "A \"removed\" section in changelogs",
             "The white background is now enabled by default."
         ],

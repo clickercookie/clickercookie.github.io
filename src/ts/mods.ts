@@ -1,5 +1,5 @@
 import { Building, BuildingHandler } from "./buildings.js";
-import { popup } from "./helper.js";
+import { Logger, LogManager, popup } from "./helper.js";
 import { game } from "./main.js";
 import { SaveHandler, SaveProvider } from "./saving.js";
 import { UpgradeHandler } from "./upgrades.js";
@@ -25,6 +25,7 @@ export class ModHandler {
 interface ModsObject {
     numberLoaded: number,
     allMods: string[],
+    logger: Logger,
 
     loadURL(url: string): void,
     loadFile(): void,
@@ -79,6 +80,11 @@ export class Mod extends SaveProvider {
      */
     public buildingHandler: BuildingHandler;
 
+    /**
+     * Government-issued logger
+     */
+    public logger: Logger;
+
     constructor(namespace: string) { //? should namespace be a param?
         super();
 
@@ -86,6 +92,7 @@ export class Mod extends SaveProvider {
 
         this.upgradeHandler = new UpgradeHandler();
         this.buildingHandler = new BuildingHandler();
+        this.logger = LogManager.getLogger(this.NAMESPACE);
     }
 }
 
@@ -93,6 +100,7 @@ export const mods: ModsObject = {
     numberLoaded: 0,
     /** string[] */
     allMods: [],
+    logger: LogManager.getLogger("mods"),
 
     loadURL: function(url: string) { // todo: could url be a URL type?
         const httpCheck = url.slice(0,4);
@@ -183,7 +191,7 @@ export const mods: ModsObject = {
         mods.allMods.push(id);
         game.isModded = true;
         data.initialization();
-        console.log(`Loaded mod ${id}`);
+        this.logger.info(`Loaded mod ${id}`);
     },
 
     addClicked: function() {
@@ -203,7 +211,6 @@ export const mods: ModsObject = {
         <button id='popupAddModButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
         document.getElementById("addModURL").addEventListener("change", () => { this.loadURL((document.getElementById("addModURL") as HTMLInputElement).value) });
         document.getElementById("popupAddModButton").addEventListener("click", () => { popup.destroyAdvanced() }); //* just to let it be known it's called "popupAddModButton" because "addModButton" is already used by the data button
-        console.log(document.getElementById("addModButton"))
     },
 
     listClicked: function() {

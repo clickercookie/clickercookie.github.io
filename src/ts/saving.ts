@@ -1,3 +1,4 @@
+import { Logger, LogManager } from "./helper.js";
 import { Game, modHandler } from "./main.js";
 import { Upgrade, updateUpgradesBoughtStatistic } from "./upgrades.js";
 
@@ -30,7 +31,9 @@ saves.defaultSavedValues = { // Should be self-explanatory. Doesn't have to be o
 // Saving
 // ------------------------------------
 export class Savinator {
-    private saveHandler: SaveHandler
+    private _saveHandler: SaveHandler
+
+    private logger: Logger;
 
     // these are useful for debugging when i need to change the name of the local storage key temporarily
     saveName: string;
@@ -39,7 +42,9 @@ export class Savinator {
     /** If this value is false, when you save when a mod is registered with the saveHandler, then reload the page to a state where it isn't, a save will overwrite that mod's data. */
     preserveUnusedNamespacesInSaves: boolean;
     constructor(saveHandler: SaveHandler) {
-        this.saveHandler = saveHandler;
+        this._saveHandler = saveHandler;
+
+        this.logger = LogManager.getLogger("savinator");
 
         this.preserveUnusedNamespacesInSaves = true;
 
@@ -80,25 +85,25 @@ export class Savinator {
     save(save: Save=undefined) {
         if (save === undefined) {
             const newSave = new Save();
-            const saveDump = this.saveHandler.dumpSaveData();
+            const saveDump = this._saveHandler.dumpSaveData();
             if (this.preserveUnusedNamespacesInSaves && this.getLocalStorageSave() !== null) { // todo: too many localStorageSave.getNamespaces()
                 const localStorageSave = this.getLocalStorageSave();
                 for (let i in localStorageSave.getNamespaces()) {
                     if (!(localStorageSave.getNamespaces()[i] in saveDump)) {
                         newSave.addData(localStorageSave.getNamespaces()[i], localStorageSave.getData(localStorageSave.getNamespaces()[i]));
-                        console.log(`Preserved data for ${localStorageSave.getNamespaces()[i]} namespace (unused).`);
+                        this.logger.debug(`Preserved data for ${localStorageSave.getNamespaces()[i]} namespace (unused).`);
                     }
                 }
             }
             for (let i in saveDump) {
                 newSave.addData(i, saveDump[i]);
-                console.log(`Added data to save for ${i} namespace.`);
+                this.logger.debug(`Added data to save for ${i} namespace.`);
             }
             this.setLocalStorageSave(newSave.stringify());
-            console.log("Saved!");
+            this.logger.info("Saved!");
         } else {
             this.setLocalStorageSave(save.stringify());
-            console.log("Saved (with custom Save)!");
+            this.logger.info("Saved (with custom Save)!");
         }
 
         // Update saving notification
@@ -117,17 +122,18 @@ export class Savinator {
      */
     load() {
         const localStorageSave = this.getLocalStorageSave();
-        const providers = this.saveHandler.getProviders();
+        const providers = this._saveHandler.getProviders();
         for (let namespace in providers) { //? should this go over providers or the localStorageSave.getNamespaces()? is there any benefit to one or the other?
             if (localStorageSave.getNamespaces().includes(namespace) && namespace !== "game") { // if the provider namespace is present in the local storage save
                 providers[namespace].loadSaveData(localStorageSave.getData(namespace));
-                console.log(`Loaded save data for ${namespace} namespace.`);
+                this.logger.debug(`Loaded save data for ${namespace} namespace.`);
             }
         }
         if (providers["game"] !== undefined) { // game should always be there, but just in case it isn't we check
             providers["game"].loadSaveData(localStorageSave.getData("game"));
-            console.log(`Loaded save data for game namespace.`);
+            this.logger.debug(`Loaded save data for game namespace.`);
         }
+        this.logger.info("Loaded!");
     }
 
     export() {
@@ -204,7 +210,7 @@ export class SaveHandler {
         return saveData;
     }
 
-    loggy() {
+    loggy() { //! i think this was a temp function lol
         for (let i in this.providers) {
             console.log(this.providers[i].getSaveData())
         }

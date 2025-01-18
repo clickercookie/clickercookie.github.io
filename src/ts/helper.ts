@@ -46,6 +46,103 @@ export function commaify(toComma: number): string {
     return commaifyed;
 }
 
+// ----------------
+// Logs
+// ----------------
+export const logEvent = new Event("log");
+export const globalLogEvent = new Event("globallog");
+
+export class LogManager {
+    static loggers: Record<string, Logger> = {};
+
+    static logSubscribers: Function[] = [];
+
+    static initialize() {
+        for (let i in this.loggers) {
+            this.loggers[i].addEventListener("log", () => {
+                for (let ii in this.logSubscribers) {
+                    this.logSubscribers[ii]();
+                }
+                // this.prototype.dispatchEvent(globalLogEvent);
+            });
+        }
+    }
+
+    static getLogger(name: string): Logger {
+        if (Object.keys(this.loggers).includes(name)) {
+            return this.loggers[name];
+        } else {
+            this.loggers[name] = new Logger(name);
+            return this.loggers[name];
+        }
+    }
+
+    static dumpLogs(): Log[] {
+        const allLogs: Log[] = [];
+        for (let i in this.loggers) {
+            for (let ii in this.loggers[i].logs) {
+                allLogs.push(this.loggers[i].logs[ii]);
+            }
+        }
+        allLogs.sort((a, b) => a.time - b.time);
+        return allLogs;
+    }
+
+    static getLogs() {
+        const logs = this.dumpLogs();
+        const logMessages = [];
+        for (let i in logs) {
+            const time = new Date(logs[i].time)
+            logMessages.push(`[${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}] [${logs[i].name}/${logs[i].level}]: ${logs[i].message}`);
+        }
+        return logMessages;
+    }
+}
+
+//? type or enum?
+type LogLevel = "debug" | "info" | "warn" | "error" | "fatal";
+
+export class Logger extends EventTarget {
+    logs: Log[];
+    name: string;
+
+    constructor(name: string) {
+        super();
+
+        this.logs = [];
+        this.name = name;
+    }
+
+    debug(msg: string) {
+        this.logs.push({message: msg, time: Date.now(), level: "debug", name: this.name});
+        this.dispatchEvent(logEvent);
+    }
+    info(msg: string) {
+        this.logs.push({message: msg, time: Date.now(), level: "info", name: this.name});
+        this.dispatchEvent(logEvent);
+    }
+    warn(msg: string) {
+        this.logs.push({message: msg, time: Date.now(), level: "warn", name: this.name});
+        this.dispatchEvent(logEvent);
+    }
+    error(msg: string) {
+        this.logs.push({message: msg, time: Date.now(), level: "error", name: this.name});
+        this.dispatchEvent(logEvent);
+    }
+    fatal(msg: string) {
+        this.logs.push({message: msg, time: Date.now(), level: "fatal", name: this.name});
+        this.dispatchEvent(logEvent);
+    }
+}
+
+interface Log {
+    message: string;
+    /** UTC time */
+    time: number;
+    level: LogLevel;
+    name: string;
+}
+
 /** Oftentimes, because JS is a pain in the butt hole, number such as 128.2 may instead be 128.2000000000013. This is not very friendly to look at. This makes that number better.
  * 
  * Historically, we would use a seperate object for numbers that would be impacted by this that would automatically apply the calculations in this function (variableView), but I prefer this method instead.

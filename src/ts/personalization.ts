@@ -1,3 +1,5 @@
+import { Logger, LogManager } from "./helper.js";
+
 /**
  * Both `name` and `namePlural` should be capitalized.
 */
@@ -24,6 +26,8 @@ export class Personalization {
 
     static currentBackground: Background;
     static registeredBackgrounds: Background[] = [];
+
+    static logger: Logger = LogManager.getLogger("personalization");
 
     // -----------------------
     // Currently Clicked Stuff
@@ -86,7 +90,7 @@ export class Personalization {
         (document.getElementById("currentlyClickedSelect") as HTMLSelectElement).value = value; //* if the thing is set by something other than the HTMLSelectElement change event then we need to make sure the correct obj is listed as the value
 
         //! upgrades.descriptions[0] = `Multiplys Keyboard and clicking ${this.currentClicked} production by 2`;
-        console.log(`Currently clicked set to: ${value}`);
+        this.logger.debug(`Currently clicked set to: ${value}`);
     }
 
     // -----------------------
@@ -111,7 +115,7 @@ export class Personalization {
         if (foundObject) {
             this.currentBackground = foundObject;
         } else {
-            console.warn(`There is no registered "${value}" background. Defaulting back to "blue".`);
+            this.logger.warn(`There is no registered "${value}" background. Defaulting back to "blue".`);
             alert(`There is no registered "${value}" background. Defaulting back to "blue".`);
             this.setBackground("blue");
             return;
@@ -124,7 +128,7 @@ export class Personalization {
 
         (document.getElementById("backgroundSelect") as HTMLSelectElement).value = value; //* if the thing is set by something other than the HTMLSelectElement change event then we need to make sure the correct obj is listed as the value
 
-        console.log(`Background color set to: ${value}`);
+        this.logger.debug(`Background color set to: ${value}`);
     }
 
     static registerBackground(background: Background) {
