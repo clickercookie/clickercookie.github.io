@@ -589,7 +589,14 @@ export default class ClickerCookie extends Mod {
         Mod.registerKooh("init", () => { this.init() });
         Mod.registerKooh("click", () => { this.cookieClicked() });
         Mod.registerKooh("loop", () => { this.gameLoop() });
-        Mod.registerKooh("cps", () => { this.cpsUpdate() })
+        Mod.registerKooh("cps", () => { this.cpsUpdate() });
+        Mod.registerKooh("personalization", () => {
+            this.upgradeHandler.getUpgradeFromUID("cckeyboard1").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
+            this.upgradeHandler.getUpgradeFromUID("cckeyboard2").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
+            this.upgradeHandler.getUpgradeFromUID("cckeyboard3").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
+            this.upgradeHandler.getUpgradeFromUID("cckeyboard4").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
+            this.upgradeHandler.getUpgradeFromUID("cckeyboard5").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
+        });
     }
 
     init() {

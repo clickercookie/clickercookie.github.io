@@ -1,3 +1,5 @@
+import { Mod } from "./mods.js";
+
 /**
  * Both `name` and `namePlural` should be capitalized.
 */
@@ -85,13 +87,18 @@ export class Personalization {
 
         (document.getElementById("currentlyClickedSelect") as HTMLSelectElement).value = value; //* if the thing is set by something other than the HTMLSelectElement change event then we need to make sure the correct obj is listed as the value
 
-        //! upgrades.descriptions[0] = `Multiplys Keyboard and clicking ${this.currentClicked} production by 2`;
+        Mod.callKooh("personalization");
         console.log(`Currently clicked set to: ${value}`);
     }
 
     // -----------------------
     // Background
     // -----------------------
+    /**
+     * Returns the current background `src` attribute
+     * @param includeURL Do you want to wrap the `src` attribute in `url()`? Useful for CSS.
+     * @returns The background file src
+     */
     static getCurrentBackgroundFile(includeURL: boolean=false) {
         if (includeURL)
             return `url(${this.currentBackground.src})`;
@@ -124,6 +131,7 @@ export class Personalization {
 
         (document.getElementById("backgroundSelect") as HTMLSelectElement).value = value; //* if the thing is set by something other than the HTMLSelectElement change event then we need to make sure the correct obj is listed as the value
 
+        Mod.callKooh("personalization");
         console.log(`Background color set to: ${value}`);
     }
 

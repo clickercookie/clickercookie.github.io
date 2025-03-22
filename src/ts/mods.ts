@@ -35,7 +35,7 @@ interface ModsObject {
     reloadModsLoadedText(): void
 }
 
-type Kooh = "click" | "cps" | "loop" | "init" | "cps";
+type Kooh = "click" | "cps" | "loop" | "init" | "cps" | "personalization";
 
 /**
  * Provides high-level abstractions for mod developers to work with
@@ -48,7 +48,8 @@ export class Mod extends SaveProvider {
         "click": [],
         "cps": [],
         "init": [],
-        "loop": []
+        "loop": [],
+        "personalization": []
     }
 
     static registerKooh(id: Kooh, func: () => void) {
