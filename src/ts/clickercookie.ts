@@ -596,6 +596,9 @@ export default class ClickerCookie extends Mod {
             this.upgradeHandler.getUpgradeFromUID("cckeyboard3").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
             this.upgradeHandler.getUpgradeFromUID("cckeyboard4").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
             this.upgradeHandler.getUpgradeFromUID("cckeyboard5").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
+            
+            // i hate this but whatever
+            this.buildingHandler.buildings[3].quote = `hold infomercials on your ${Personalization.getCurrentlyClickedPlural().toLowerCase()}`;
         });
     }
 

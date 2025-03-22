@@ -221,6 +221,7 @@ export const versionChangelogs: Changelog[] = [
         fixed: [
             "Resetting save and importing data does not import data. (#13)", // todo
             "The \"Import Data\" button is using a browser-specific styling workaround. (#39)",
+            "Television description doesn't change with personalization. (#54)",
             "No more HTMLElement.innerHTML where it's not needed, now use innerText. (#43)"
         ],
         removed: [
