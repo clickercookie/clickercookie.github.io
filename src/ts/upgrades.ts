@@ -33,9 +33,6 @@ export class UpgradeHandler {
         for (let i in this.upgrades) {
             this.upgrades[i].destroy();
         }
-        
-        if (!statistic)
-            Upgrade.currentlyShown = 0;
     }
 
     /** 
@@ -102,7 +99,9 @@ export interface UpgradeData {
 }
 
 export function expandUpgradesHolder(retract: boolean=false) {
-    const rowsOfUpgrades = Math.ceil(Upgrade.currentlyShown / 5);
+    const upgradesShown = document.getElementById("upgradesHolder").children.length;
+
+    const rowsOfUpgrades = Math.ceil(upgradesShown / 5);
 
     const holder = document.getElementById("upgradesHolder");
     const holderHeight = 67.6; // this is the height of the upgrade holder set in style.css, i would figure out how to get the height directly from the element but the height is constantly changing when it's hovered so it's more trouble then it's worth
@@ -124,8 +123,6 @@ export function updateUpgradesBoughtStatistic() {
 }
 
 export class Upgrade {
-    /** Used for calculating the size of the upgradesHolder */
-    public static currentlyShown: number = 0;
     public static upgradesBought: number = 0;
 
     private clickercookie: ClickerCookie;
@@ -191,8 +188,6 @@ export class Upgrade {
      */
     create(element: HTMLElement=document.getElementById("upgradesHolder")) {
         element!.appendChild(this.html);
-
-        Upgrade.currentlyShown++;
     }
 
     clicked() {
@@ -238,7 +233,6 @@ export class Upgrade {
 
     destroy() {
         this.html.remove();
-        Upgrade.currentlyShown--;
         hideTooltip(); // hide the tooltip so it doesn't stick around after you buy the upgrade
     }
 }
