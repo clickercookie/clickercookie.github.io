@@ -199,6 +199,12 @@ export const versionChangelogs: Changelog[] = [
         release: "September 22nd, 2024"
     },
     {
+        version: "0.6-1",
+        name: "warcrimes",
+        fixed: [ "Fixed geneva conventions violation (#52)" ],
+        release: "March 13th, 2025"
+    },
+    {
         version: "0.7",
         note: "Hi. It's hard to explain in a simple changelog how much this update has changed. See everything you're looking at? What is happening behind the scenes for what you're looking at has changed. Virtually every single line of code has had some sort of update.",
         name: "tbd",
