@@ -1,4 +1,1 @@
-User-agent: *
-Disallow: /mobile/*
-
 Sitemap: https://clickercookie.github.io/sitemap.xml
