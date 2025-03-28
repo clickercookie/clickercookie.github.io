@@ -1,1 +1,3 @@
+User-agent: *
+
 Sitemap: https://clickercookie.github.io/sitemap.xml

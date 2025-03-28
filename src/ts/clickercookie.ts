@@ -603,21 +603,21 @@ export default class ClickerCookie extends Mod {
 
     init() {
         // Register personalization things (must be before save load because loading requires these to be registered to set them)
-        Personalization.registerObject({name: "Cookie", namePlural: "Cookies", src: "img/cookie.png"});
-        Personalization.registerObject({name: "Potato", namePlural: "Potatoes", src: "img/potato.png"});
-        Personalization.registerObject({name: "Strawberry", namePlural: "Strawberries", src: "img/strawberry.png"});
-        Personalization.registerObject({name: "Cake", namePlural: "Cakes", src: "img/cake.png", circular: false, pixelated: true});
-        Personalization.registerBackground({name: "blue", displayName: "Blue", src: "img/backgrounds/background-blue.png"});
-        Personalization.registerBackground({name: "green", displayName: "Green", src: "img/backgrounds/background-green.png"});
-        Personalization.registerBackground({name: "gray", displayName: "Gray", src: "img/backgrounds/background-gray.png"});
-        Personalization.registerBackground({name: "purple", displayName: "Purple", src: "img/backgrounds/background-purple.png"});
-        Personalization.registerBackground({name: "darkblue", displayName: "Dark Blue", src: "img/backgrounds/background-darkblue.png"});
-        Personalization.registerBackground({name: "orange", displayName: "Orange", src: "img/backgrounds/background-orange.png"});
-        Personalization.registerBackground({name: "pink", displayName: "Pink", src: "img/backgrounds/background-pink.png"});
-        Personalization.registerBackground({name: "lime", displayName: "Lime", src: "img/backgrounds/background-lime.png"});
-        Personalization.registerBackground({name: "yellow", displayName: "Yellow", src: "img/backgrounds/background-yellow.png"});
-        Personalization.registerBackground({name: "red", displayName: "Red", src: "img/backgrounds/background-red.png"});
-        Personalization.registerBackground({name: "white", displayName: "White", src: "img/backgrounds/background-white.png"});
+        Personalization.currentlyClickedHandler.register("cookie", {name: "Cookie", namePlural: "Cookies", src: "img/cookie.png"});
+        Personalization.currentlyClickedHandler.register("potato", {name: "Potato", namePlural: "Potatoes", src: "img/potato.png"});
+        Personalization.currentlyClickedHandler.register("strawberry", {name: "Strawberry", namePlural: "Strawberries", src: "img/strawberry.png"});
+        Personalization.currentlyClickedHandler.register("cake", {name: "Cake", namePlural: "Cakes", src: "img/cake.png", circular: false, pixelated: true});
+        Personalization.backgroundHandler.register("blue", {name: "Blue", src: "img/backgrounds/background-blue.png"});
+        Personalization.backgroundHandler.register("green", {name: "Green", src: "img/backgrounds/background-green.png"});
+        Personalization.backgroundHandler.register("gray", {name: "Gray", src: "img/backgrounds/background-gray.png"});
+        Personalization.backgroundHandler.register("purple", {name: "Purple", src: "img/backgrounds/background-purple.png"});
+        Personalization.backgroundHandler.register("darkblue", {name: "Dark Blue", src: "img/backgrounds/background-darkblue.png"});
+        Personalization.backgroundHandler.register("orange", {name: "Orange", src: "img/backgrounds/background-orange.png"});
+        Personalization.backgroundHandler.register("pink", {name: "Pink", src: "img/backgrounds/background-pink.png"});
+        Personalization.backgroundHandler.register("lime", {name: "Lime", src: "img/backgrounds/background-lime.png"});
+        Personalization.backgroundHandler.register("yellow", {name: "Yellow", src: "img/backgrounds/background-yellow.png"});
+        Personalization.backgroundHandler.register("red", {name: "Red", src: "img/backgrounds/background-red.png"});
+        Personalization.backgroundHandler.register("white", {name: "White", src: "img/backgrounds/background-white.png"});
 
         Personalization.setCurrentlyClicked("cookie");
         Personalization.setBackground("blue");
