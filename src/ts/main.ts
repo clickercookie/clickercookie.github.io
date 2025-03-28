@@ -73,10 +73,11 @@ interface GameSaveData {
 }
 
 export class Game extends SaveProvider {
-    // version-related constants
+    // Important game-wide constants
     public static readonly VERSION: string = version;
     public static readonly VERSION_BRANCH: number = versionBranch;
     public static readonly IN_DEVELOPMENT: boolean = inDevelopment;
+    public static readonly GITHUB_REPO: string = "https://github.com/clickercookie/clickercookie.github.io";
 
     static readonly Versions = Versions;
 
@@ -181,6 +182,9 @@ export class Game extends SaveProvider {
         
         if (Game.IN_DEVELOPMENT)
             document.title = "Clicker Cookie Dev";
+
+        // set the bottom left github repo icon to link to the github repo
+        (document.getElementById("githubHyperlink") as HTMLAnchorElement).href = Game.GITHUB_REPO;
     
         // Changelog Entries, AKA NOT the messiest place ever.
         // this loop goes from big to small because the function needs to be ran from the latest version to the oldest
@@ -504,7 +508,7 @@ tooltip.create = function(x: number, y: number, content: any) {
     return "this isn't used yet, but 0.6.1 has plans to upgrade the tooltip system, and this will hopefully have functionality";
 }
 
-console.log("you seem smart, how 'bout you contribute to the project? https://github.com/clickercookie/clickercookie.github.io");
+console.log(`you seem smart, how 'bout you contribute to the project? ${Game.GITHUB_REPO}`);
 
 export const game = new Game();
 const newMod = new NewMod();

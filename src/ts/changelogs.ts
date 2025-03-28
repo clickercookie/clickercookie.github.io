@@ -1,3 +1,5 @@
+import { parseGithubIssue } from "./helper.js";
+
 /** these are all unused except for hotfix
  * 
  * also our versioning scheme looks like this:
@@ -259,12 +261,6 @@ export const versionChangelogs: Changelog[] = [
         ]
     }
 ];
-
-function parseGithubIssue(input: string): string {
-    return input.replace(/(?<!\\)#(\d+)/g, (_, number) => {
-        return `<a href="https://github.com/clickercookie/clickercookie.github.io/issues/${number}" target="_blank">#${number}</a>`;
-    });
-}
 
 export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make this look nicer, but lets be honest it's gonna stay this way
     const changelog = document.querySelector(".changelog-wrapper");

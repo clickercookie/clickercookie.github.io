@@ -1,4 +1,15 @@
-import { game } from "./main.js";
+import { game, Game } from "./main.js";
+
+/**
+ * Parses a string and replaces any instances of a hashtag followed by a set of numbers with an `<a>` linking to the corresponding GitHub issue
+ * @param input A string of text wherein issues will be replaced
+ * @returns A string of text with hyperlinks to GitHub issues where hashtags are
+ */
+export function parseGithubIssue(input: string): string {
+    return input.replace(/(?<!\\)#(\d+)/g, (_, number) => {
+        return `<a href="${Game.GITHUB_REPO}/issues/${number}" target="_blank">#${number}</a>`;
+    });
+}
 
 export function convertCollectionToArray(HTMLCollection: HTMLCollection): Element[] {
     const array: Element[] = [];
