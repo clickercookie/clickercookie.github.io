@@ -32,7 +32,7 @@ body {
 /* todo 0.7: find why these are here and how we can make their elements assigned to their own specific class instead of making every element have these properties*/
 a {
     font-weight: bold;
-    color: white;
+    color: inherit;
 }
 img {
     display: block;
@@ -534,21 +534,30 @@ dialog::backdrop {
     border: 2px solid white;
 }
 .middle-ul {
-    font-size: 14px;
-    -webkit-user-select: none;
-    user-select: none;
+    font-size: 0.875em;
 }
 .middle-label {
     margin-left: 9px;
 }
 
 /* changelog stuff */
-.changelog-version-heading {
-    font-size: 20px;
-    margin: 6px 0px 8px 9px;
-    text-align: left;
-    -webkit-user-select: none;
-    user-select: none;
+.changelog {
+    .version-heading {
+        font-size: 1.25em;
+        margin: 6px 0px 8px 9px;
+        text-align: left;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    /* notes also have middle-text class */
+    .note {
+        font-size: 0.875em;
+    }
+
+    .subheading {
+        font-size: 1em;
+    }
 }
 
 /* middle button CSS */

@@ -1,4 +1,13 @@
+/** these are all unused except for hotfix
+ * 
+ * also our versioning scheme looks like this:
+ * 
+ * `major.minor.patch-hotfix`
+ */
+type VersionType = "major" | "minor" | "patch" | "hotfix";
+
 interface Changelog {
+    type: VersionType;
     version: string;
     name?: string;
     note?: string;
@@ -11,6 +20,7 @@ interface Changelog {
 
 export const versionChangelogs: Changelog[] = [
     {
+        type: "minor",
         version: "0.1",
         added: [
             "Existence."
@@ -18,6 +28,7 @@ export const versionChangelogs: Changelog[] = [
         release: "March 4th, 2023"
     },
     {
+        type: "patch",
         version: "0.1.1",
         added: [
             "Ranches! Buyable for 1000 cookies for the time being.",
@@ -27,6 +38,7 @@ export const versionChangelogs: Changelog[] = [
         release: "March 9th, 2023"
     },
     {
+        type: "minor",
         version: "0.2",
         added: [
             "A Github page.",
@@ -35,6 +47,7 @@ export const versionChangelogs: Changelog[] = [
         release: "March 16th"
     },
     {
+        type: "patch",
         version: "0.2.1",
         added: [
             "Television!",
@@ -44,6 +57,7 @@ export const versionChangelogs: Changelog[] = [
         release: "March 16th, 2023"
     },
     {
+        type: "patch",
         version: "0.2.2",
         added: [
             "Borders to the left and right sides of the screen.",
@@ -52,6 +66,7 @@ export const versionChangelogs: Changelog[] = [
         release: "March 16th, 2023"
     },
     {
+        type: "minor",
         version: "0.4",
         note: "\"Hey, what happened to 0.3?\" <br>\
                 Well, you see... I made 0.3 while I also had 0.4 content being actively worked on, so I kinda just skipped it because this is a BIG update!",
@@ -65,6 +80,7 @@ export const versionChangelogs: Changelog[] = [
         release: "March 24th, 2023"
     },
     {
+        type: "patch",
         version: "0.4.1",
         added: [
             "Color!",
@@ -80,6 +96,7 @@ export const versionChangelogs: Changelog[] = [
         release: "March 24th, 2023"
     },
     {
+        type: "minor",
         version: "0.5",
         added: [
             "AUTO SAVING!!!",
@@ -106,6 +123,7 @@ export const versionChangelogs: Changelog[] = [
         release: "May 6th, 2023"
     },
     {
+        type: "patch",
         version: "0.5.1",
         name: "Objects Everywhere",
         added: [
@@ -135,6 +153,7 @@ export const versionChangelogs: Changelog[] = [
         release: "May 24th, 2023"
     },
     {
+        type: "patch",
         version: "0.5.2",
         name: "hold the phone",
         added: [
@@ -153,6 +172,7 @@ export const versionChangelogs: Changelog[] = [
         release: "June 23rd, 2023"
     },
     {
+        type: "hotfix", //* this is politically incorrect according to our versioning guidelines but will remain this way for proper coloration in the changelogs
         version: "0.5.2.1",
         name: "the first of many",
         note: "Note: Although 0.1 came out on March 4th, initial public development began on the 3rd, which is why we celebrate today!",
@@ -162,6 +182,7 @@ export const versionChangelogs: Changelog[] = [
         release: "March 3rd, 2024"
     },
     {
+        type: "minor",
         version: "0.6",
         name: "actual upgrades",
         added: [
@@ -199,25 +220,28 @@ export const versionChangelogs: Changelog[] = [
         release: "September 22nd, 2024"
     },
     {
+        type: "hotfix",
         version: "0.6-1",
         name: "warcrimes",
         fixed: [ "Fixed geneva conventions violation (#52)" ],
         release: "March 13th, 2025"
     },
     {
+        type: "minor",
         version: "0.7",
-        note: "Hi. It's hard to explain in a simple changelog how much this update has changed. See everything you're looking at? What is happening behind the scenes for what you're looking at has changed. Virtually every single line of code has had some sort of update.",
+        note: "Hi. It's hard to explain in a simple changelog how much this update has changed. See everything you're looking at? I can confidently say that what is happening behind the scenes for what you're looking at has changed drastically.",
         name: "tbd",
         added: [
             "\"Cookies Per Click\" statistic.",
             "A button in Options to toggle auto-saving (#29)",
             "GitHub issues in changelogs work as hyperlinks, like this one: #13",
             "A \"removed\" section in changelogs",
-            "The white background is now enabled by default."
+            "The white background is now visible by default."
         ],
         changed: [
             "Switched to TypeScript.",
             "Introduced the v4 Saving System (#18)",
+            "Hotfixes are slightly smaller and colored in gray. (#53)",
             "Eliminated inline event handlers, now are handled in init (#27)",
             "The entire modding system. See the GitHub wiki for more details.",
             "Split main.js into multiple script files.",
@@ -247,9 +271,11 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
 
     const newChangelogEntry = document.createElement("div");
     newChangelogEntry.setAttribute("class","changelog");
+    if (logs.type === "hotfix")
+        newChangelogEntry.setAttribute("style", "font-size: 0.85em; color: #9f9f9f");
 
     const versionHeader = document.createElement("h2");
-    versionHeader.setAttribute("class","changelog-version-heading");
+    versionHeader.setAttribute("class", "version-heading");
 
     const releaseDate = (logs.release === undefined) ? "???" : logs.release;
     if (logs.name === undefined)
@@ -260,18 +286,15 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
     
     if (logs.note !== undefined) {
         const note = document.createElement("p");
-        note.setAttribute("class", "middle-text");
-        note.style.fontSize = "14px"; // todo: make css class?
+        note.setAttribute("class", "middle-text note");
         note.innerText = logs.note;
         newChangelogEntry.appendChild(note);
     }
     
     if (logs.added !== undefined) {
         const addedHeader = document.createElement("h3");
-        addedHeader.setAttribute("class","middle-text");
-        addedHeader.setAttribute("style","font-size: 16px;"); // todo: make this a part of a css class maybe probably not
+        addedHeader.setAttribute("class","middle-text subheading");
         addedHeader.innerText = "Added:";
-        // addedHeader.appendChild(document.createTextNode("Added:"));
         newChangelogEntry.appendChild(addedHeader);
 
         const addedList = document.createElement("ul");
@@ -286,8 +309,7 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
     }
     if (logs.changed !== undefined) {
         const changedHeader = document.createElement("h3");
-        changedHeader.setAttribute("class","middle-text");
-        changedHeader.setAttribute("style","font-size: 16px;");
+        changedHeader.setAttribute("class","middle-text subheading");
         changedHeader.innerText = "Changed:";
         newChangelogEntry.appendChild(changedHeader);
 
@@ -303,8 +325,7 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
     }
     if (logs.fixed !== undefined) {
         const fixedHeader = document.createElement("h3");
-        fixedHeader.setAttribute("class","middle-text");
-        fixedHeader.setAttribute("style","font-size: 16px;");
+        fixedHeader.setAttribute("class","middle-text subheading");
         fixedHeader.innerText = "Fixed:";
         newChangelogEntry.appendChild(fixedHeader);
 
