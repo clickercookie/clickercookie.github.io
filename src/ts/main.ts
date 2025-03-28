@@ -326,6 +326,12 @@ export class Game extends SaveProvider {
             }
         }
         this.clickercookie.cookiesPerSecond = cps;
+        
+        let totalUpgradesRegistered = 0;
+        for (let namespace in modHandler.mods) {
+            totalUpgradesRegistered += modHandler.mods[namespace].upgradeHandler.length;
+        }
+        document.getElementById("totalUpgradesCounter").innerText = totalUpgradesRegistered.toString();
 
         Mod.callKooh("loop");
     }
