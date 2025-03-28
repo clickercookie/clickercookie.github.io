@@ -73,7 +73,7 @@ export const popup = {
     simpleHTML: document.getElementById("simplePopup") as HTMLDialogElement,
     advancedHTML: document.getElementById("advancedPopup") as HTMLDialogElement,
 
-    createSimple(x: number, y: number, text: string, noButton: boolean=false, doWhat: string="default", title: string="", backButton: boolean=false, isError: boolean=false) {
+    createSimple(x: number, y: number, text: string, noButton: boolean=false, doWhat: () => void=() => {}, title: string="", backButton: boolean=false, isError: boolean=false) {
         this.simpleHTML.style.display = "flex";
         this.simpleHTML.showModal();
         this.simpleHTML.style.width = `${x}px`;
@@ -107,11 +107,7 @@ export const popup = {
             this.simpleHTML.style.borderColor = "black";
         }
 
-        if (doWhat !== "default") {
-            document.getElementById("simplePopupButton").addEventListener("click", () => {this.simpleHTML.simpleClicked(doWhat)})
-        } else {
-            document.getElementById("simplePopupButton").addEventListener("click", () => {this.simpleHTML.simpleClicked()})
-        }
+        document.getElementById("simplePopupButton").addEventListener("click", doWhat);
     },
 
     destroySimple() {
@@ -120,29 +116,8 @@ export const popup = {
 
         document.getElementById("simplePopupContent").innerHTML = "null";
         document.getElementById("simplePopupButton").style.display = "none";
-    },
-
-    simpleClicked(doWhat: string="default") {
-        switch (doWhat) {
-        case "default":
-            this.destroySimple();
-            break;
-        case "resetSave()":
-            // game.savinator5000.reset(); // TODO: Savinator doesn't have reset yet
-            this.destroySimple();
-            break;
-        case "localStorage.clear()":
-            localStorage.clear();
-            this.destroySimple();
-            location.reload();
-            break;
-        case "reset cookies":
-            game.clickercookie.cookies = 0; //! bad
-            break;
-        default:
-            alert(`Simple Popup doWhat is invalid, value is: ${doWhat} \nPlease report this to the GitHub accessable in the bottom left corner`);
-            this.destroySimple();
-        }
+        document.getElementById("simplePopupButton").replaceWith(document.getElementById("simplePopupButton").cloneNode(true)); //* removes all event listeners
+        document.getElementById("simplePopupButton").addEventListener("click", () => {this.destroySimple()}); // add the destroy listener back so the popup doesn't stick around
     },
 
     createAdvanced(x: number, y: number, html: string) {

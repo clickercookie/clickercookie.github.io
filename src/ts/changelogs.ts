@@ -251,7 +251,7 @@ export const versionChangelogs: Changelog[] = [
             "Logs can now have a \"note\" (it's below the version header)."
         ],
         fixed: [
-            "Resetting save and importing data does not import data. (#13)", // todo
+            "Resetting save and importing data does not import data. (#13)",
             "The \"Import Data\" button is using a browser-specific styling workaround. (#39)",
             "Television description doesn't change with personalization. (#54)",
             "No more HTMLElement.innerHTML where it's not needed, now use innerText. (#43)"

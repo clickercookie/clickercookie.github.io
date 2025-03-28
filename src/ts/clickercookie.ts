@@ -627,7 +627,7 @@ export default class ClickerCookie extends Mod {
         // anniversary
         if (date.getMonth() === 2 && date.getDate() === 3) { // if date is 3/3
             Personalization.setCurrentlyClicked("cake");
-            popup.createSimple(350,175,"It's Clicker Cookie's birthday! \nThe cookie has been replaced with a birthday cake, but you can change it back in Options.",false,"default","woo hoo!");
+            popup.createSimple(350,175,"It's Clicker Cookie's birthday! \nThe cookie has been replaced with a birthday cake, but you can change it back in Options.",false, () => {},"woo hoo!");
         }
     }
 
@@ -635,11 +635,6 @@ export default class ClickerCookie extends Mod {
         // check for stopped cookie production
         if (cookieProductionStopped)
             this.cookies = 0;
-    
-        // log to console in case of error
-        if (this.cookies < 0) {
-            popup.createSimple(300,150,`<i>huh, what just happened?</i> <br> An error occured: ${Personalization.getCurrentlyClickedPlural()} are in negative!<br>Please report this to the GitHub accessable in the bottom left corner`,false,"reset cookies","",false,true);
-        }
 
         // building unlocks
         if (this.totalCookies >= 100) {

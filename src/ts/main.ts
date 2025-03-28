@@ -136,7 +136,7 @@ export class Game extends SaveProvider {
         Mod.callKooh("init"); //* this is done before anything else in Game because ClickerCookie.init adds personalization stuff and that stuff must be registered for a successful load.
         
         if (localStorage.cookies >= 0)
-            popup.createSimple(400,200,"You are using an extremely outdated saving method. You will have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format. Your old save cannot be restored.",false,"localStorage.clear()","Warning",false,false);
+            popup.createSimple(400,200,"You are using an extremely outdated saving method. You will have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format. Your old save cannot be restored.",false,() => {localStorage.clear()},"Warning",false,false);
 
         // todo before 0.7: does betaSave work here? it looks like it does but i need to thoroughly test it
         if (this.savinator5000.getLocalStorageSave() === null) {
@@ -264,12 +264,12 @@ export class Game extends SaveProvider {
         for (let i in convertCollectionToArray(document.getElementsByClassName("middle-x"))) { //? i don't like how we have to do this, can we find another way? maybe somehow only one X button? actually we should probably refactor how the entire middle section works... todo: make an issue for that
             document.getElementsByClassName("middle-x")[i].addEventListener("click", () => {closeMiddle()});
         }
-        document.getElementById("creditsButton").addEventListener("click", () => {popup.createSimple(320,175,'FifthTundraG: Creation<br>potatman4: Playtesting<br>Wolfsarecool44: Playtesting, Emotional Support',false,'default','Credits',false,false)});
+        document.getElementById("creditsButton").addEventListener("click", () => {popup.createSimple(320,175,'FifthTundraG: Creation<br>potatman4: Playtesting<br>Wolfsarecool44: Playtesting, Emotional Support',false,() => {},'Credits',false,false)});
         document.getElementById("backgroundSelect").addEventListener("change", () => {Personalization.setBackground((document.getElementById("backgroundSelect") as HTMLFormElement).value)});
         document.getElementById("currentlyClickedSelect").addEventListener("change", () => {Personalization.setCurrentlyClicked((document.getElementById("currentlyClickedSelect") as HTMLFormElement).value)});
         document.getElementById("saveButton").addEventListener("click", () => {this.savinator5000.save()});
         document.getElementById("loadButton").addEventListener("click", () => {this.savinator5000.load()});
-        document.getElementById("resetSaveButton").addEventListener("click", () => {popup.createSimple(300,150,'Are you sure you want to do this?',false,'resetSave()','Warning',true,true)});
+        document.getElementById("resetSaveButton").addEventListener("click", () => {popup.createSimple(300,150,'Are you sure you want to do this?',false,() => {localStorage.removeItem("newSave"); location.reload()},'Warning',true,true)});
         document.getElementById("exportDataButton").addEventListener("click", () => {this.savinator5000.export()});
         document.getElementById("importDataButton").addEventListener("click", () => {document.getElementById("importDataInput").click()});
         document.getElementById("importDataInput").addEventListener("change", () => {this.savinator5000.import()});
@@ -281,7 +281,7 @@ export class Game extends SaveProvider {
         document.getElementById("upgradesHolder").addEventListener("mouseover", () => {expandUpgradesHolder()});
         document.getElementById("upgradesHolder").addEventListener("mouseout", () => {expandUpgradesHolder(true)});
         // simple popup
-        document.getElementById("simplePopupButton").addEventListener("click", () => {popup.simpleClicked()});
+        document.getElementById("simplePopupButton").addEventListener("click", () => {popup.destroySimple()});
         document.getElementById("simplePopupBackButton").addEventListener("click", () => {popup.destroySimple()});
         // misc
         document.getElementById("cookie").addEventListener("click", () => {this.cookieClicked()});
@@ -498,7 +498,7 @@ function versionSwitch() {
 }
 
 function print() {
-    popup.createSimple(250,150,"it's console.log",false,"default","dum dum",false,true);
+    popup.createSimple(250,150,"it's console.log",false,() => {},"dum dum",false,true);
 }
 
 //
