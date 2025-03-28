@@ -2,14 +2,9 @@ import ClickerCookie from "./clickercookie.js";
 import { capitalize, commaify, clamp } from "./helper.js";
 import { game } from "./main.js";
 import { hideTooltip } from "./tooltip.js";
+import { Handler } from "./handler.js"
 
-export class BuildingHandler {
-    buildings: Building[] = [];
-    
-    register(building: Building) {
-        this.buildings.push(building);
-    }
-}
+export class BuildingHandler extends Handler<Building> {}
 
 export interface BuildingData {
     name: string;

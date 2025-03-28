@@ -208,13 +208,13 @@ export default class ClickerCookie extends Mod {
         this.church = new Building(this, this.BUILDINGS_DATA.church);
         this.church.setVisibility(false);
 
-        this.buildingHandler.register(this.keyboard);
-        this.buildingHandler.register(this.grandpa);
-        this.buildingHandler.register(this.ranch);
-        this.buildingHandler.register(this.television);
-        this.buildingHandler.register(this.worker);
-        this.buildingHandler.register(this.wallet);
-        this.buildingHandler.register(this.church);
+        this.buildingHandler.register("keyboard", this.keyboard);
+        this.buildingHandler.register("grandpa", this.grandpa);
+        this.buildingHandler.register("ranch", this.ranch);
+        this.buildingHandler.register("television", this.television);
+        this.buildingHandler.register("worker", this.worker);
+        this.buildingHandler.register("wallet", this.wallet);
+        this.buildingHandler.register("church", this.church);
 
         // upgrades
         this.UPGRADES_DATA = [
@@ -583,7 +583,7 @@ export default class ClickerCookie extends Mod {
         ];
 
         for (let i in this.UPGRADES_DATA) {
-            this.upgradeHandler.register(new Upgrade(this, this.UPGRADES_DATA[i]));
+            this.upgradeHandler.register(this.UPGRADES_DATA[i].uid, new Upgrade(this, this.UPGRADES_DATA[i]));
         }
 
         Mod.registerKooh("init", () => { this.init() });
@@ -591,14 +591,13 @@ export default class ClickerCookie extends Mod {
         Mod.registerKooh("loop", () => { this.gameLoop() });
         Mod.registerKooh("cps", () => { this.cpsUpdate() });
         Mod.registerKooh("personalization", () => {
-            this.upgradeHandler.getUpgradeFromUID("cckeyboard1").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
-            this.upgradeHandler.getUpgradeFromUID("cckeyboard2").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
-            this.upgradeHandler.getUpgradeFromUID("cckeyboard3").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
-            this.upgradeHandler.getUpgradeFromUID("cckeyboard4").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
-            this.upgradeHandler.getUpgradeFromUID("cckeyboard5").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
+            this.upgradeHandler.getFromUID("cckeyboard1").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
+            this.upgradeHandler.getFromUID("cckeyboard2").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
+            this.upgradeHandler.getFromUID("cckeyboard3").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
+            this.upgradeHandler.getFromUID("cckeyboard4").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
+            this.upgradeHandler.getFromUID("cckeyboard5").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
             
-            // i hate this but whatever
-            this.buildingHandler.buildings[3].quote = `hold infomercials on your ${Personalization.getCurrentlyClickedPlural().toLowerCase()}`;
+            this.buildingHandler.getFromUID("television").quote = `hold infomercials on your ${Personalization.getCurrentlyClickedPlural().toLowerCase()}`;
         });
     }
 

@@ -3,35 +3,21 @@ import { clamp, commaify } from "./helper.js";
 import { hideTooltip } from "./tooltip.js";
 import { game, Game } from "./main.js";
 import ClickerCookie from "./clickercookie.js";
+import { Handler } from "./handler.js";
 
 export interface UpgradeSave {
     unlocked: boolean;
     bought: boolean;
 }
 
-export class UpgradeHandler {
-    private upgrades: Upgrade[] = [];
-
-    register(upgrade: Upgrade) {
-        this.upgrades.push(upgrade);
-    }
-
-    getUpgradeFromUID(uid: string): Upgrade | null {
-        for (let i in this.upgrades) {
-            if (this.upgrades[i].uid === uid) {
-                return this.upgrades[i];
-            }
-        }
-        return null;
-    }
-
+export class UpgradeHandler extends Handler<Upgrade> {
     /**
      * TODO: NEEDS STATISTIC SUPPORT
      * @param statistic Are we destroying all the upgrades in the Statistics page?
      */
     destroyAllUpgrades(statistic: boolean=false) {
-        for (let i in this.upgrades) {
-            this.upgrades[i].destroy();
+        for (const value of this) {
+            value.destroy();
         }
     }
 
@@ -41,33 +27,33 @@ export class UpgradeHandler {
      * This is really only used in the context of loading, wherein unlocked and unbought upgrades will not yet exist.
      * */
     showUnlockedUpgrades() { //? is this still used? isn't this just checkUpgradeAvaliability?
-        for (let i in this.upgrades) {
-            if (this.upgrades[i].unlocked === true && this.upgrades[i].bought !== true) 
+        for (const value of this) {
+            if (value.unlocked === true && value.bought !== true)
                 // new Upgrade(game, game.UPGRADES_DATA[i]);
-                this.upgrades[i].create();
+                value.create();
         }
     }
 
     /**
-     * Goes through every upgrade in {@link UpgradeHandler.upgrades} and check if it's ready to be created. If it is, then set it to unlocked then run the {@link Upgrade.create()} method on it.
+     * Goes through every upgrade registered to the {@link UpgradeHandler} and check if it's ready to be created. If it is, then set it to unlocked then run the {@link Upgrade.create()} method on it.
      * 
      * This is distinct from {@link UpgradeHandler.showUnlockedUpgrades()}, in that the purpose of that function is to create an upgrade if it is unlocked and unbought.
      */
     checkUpgradeAvailability() {
-        for (let i in this.upgrades) {
-            if (this.upgrades[i].building.bought >= this.upgrades[i].buildingsRequired && this.upgrades[i].unlocked === false) {
-                this.upgrades[i].create();
-                this.upgrades[i].unlocked = true;
+        for (const value of this) {
+            if (value.building.bought >= value.buildingsRequired && value.unlocked === false) {
+                value.create();
+                value.unlocked = true;
             }
         }
     }
 
     dumpUpgradesSave() {
         const saveObj: Record<string, UpgradeSave> = {};
-        for (let i in this.upgrades) {
-            saveObj[this.upgrades[i].uid] = {
-                unlocked: this.upgrades[i].unlocked,
-                bought: this.upgrades[i].bought
+        for (const value of this) {
+            saveObj[value.uid] = {
+                unlocked: value.unlocked,
+                bought: value.bought
             }
         }
         return saveObj;
@@ -75,8 +61,8 @@ export class UpgradeHandler {
 
     loadUpgradesSave(saveObj: Record<string, UpgradeSave>) {
         for (let i in saveObj) {
-            this.getUpgradeFromUID(i).bought = saveObj[i].bought;
-            this.getUpgradeFromUID(i).unlocked = saveObj[i].unlocked;
+            this.getFromUID(i).bought = saveObj[i].bought;
+            this.getFromUID(i).unlocked = saveObj[i].unlocked;
         }
     }
 }

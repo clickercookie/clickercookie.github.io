@@ -28,7 +28,7 @@ export class NewMod extends Mod {
             upgradeCost: 8,
             CPSGain: 5
         });
-        this.buildingHandler.register(this.banana);
+        this.buildingHandler.register("banana", this.banana);
 
         this.UPGRADES_DATA = [
             {
@@ -42,7 +42,7 @@ export class NewMod extends Mod {
             }
         ];
         for (let i in this.UPGRADES_DATA) {
-            this.upgradeHandler.register(new Upgrade(game.clickercookie, this.UPGRADES_DATA[i]));
+            this.upgradeHandler.register(this.UPGRADES_DATA[i].uid, new Upgrade(game.clickercookie, this.UPGRADES_DATA[i]));
         }
 
         document.getElementById("cookieCount")!.addEventListener("click", () => {this.superCookies++});

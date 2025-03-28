@@ -313,16 +313,16 @@ export class Game extends SaveProvider {
         // stats that need to be updated beforehand
         let buildingsOwned = 0;
         for (let namespace in modHandler.mods) {
-            for (let i in modHandler.mods[namespace].buildingHandler.buildings) {
-                buildingsOwned += modHandler.mods[namespace].buildingHandler.buildings[i].bought;
+            for (const value of modHandler.mods[namespace].buildingHandler) {
+                buildingsOwned += value.bought;
             }
         }
         this.clickercookie.buildingsOwned = buildingsOwned;
 
         let cps = 0;
         for (let namespace in modHandler.mods) {
-            for (let i in modHandler.mods[namespace].buildingHandler.buildings) {
-                cps += modHandler.mods[namespace].buildingHandler.buildings[i].CPSGiven;
+            for (const value of modHandler.mods[namespace].buildingHandler) {
+                cps += value.CPSGiven;
             }
         }
         this.clickercookie.cookiesPerSecond = cps;
