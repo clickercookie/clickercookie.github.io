@@ -9,7 +9,7 @@ const inDevelopment: boolean = (location.hostname === "localhost" || location.ho
 // Imports
 // ------------------------------------
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
-import { convertCollectionToArray } from "./helper.js";
+import { convertCollectionToArray, object2HTML } from "./helper.js";
 import { Upgrade, updateUpgradesBoughtStatistic, expandUpgradesHolder } from "./upgrades.js";
 import { SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
 import { NewMod } from "./exmod.js";
@@ -79,6 +79,11 @@ export class Game extends SaveProvider {
     public static readonly VERSION_BRANCH: number = versionBranch;
     public static readonly IN_DEVELOPMENT: boolean = inDevelopment;
     public static readonly GITHUB_REPO: string = "https://github.com/clickercookie/clickercookie.github.io";
+    public static readonly CREDITS: Record<string, string> = {
+        "FifthTundraG": "Creation",
+        "potatman4": "Playtesting",
+        "Wolfsarecool44": "Playtesting, Emotional Support"
+    }
 
     static readonly Versions = Versions;
 
@@ -257,7 +262,7 @@ export class Game extends SaveProvider {
         for (let i in convertCollectionToArray(document.getElementsByClassName("middle-x"))) { //? i don't like how we have to do this, can we find another way? maybe somehow only one X button? actually we should probably refactor how the entire middle section works... todo: make an issue for that
             document.getElementsByClassName("middle-x")[i].addEventListener("click", () => {closeMiddle()});
         }
-        document.getElementById("creditsButton").addEventListener("click", () => {new SimplePopup({x: 320, y: 175, text: "FifthTundraG: Creation<br>potatman4: Playtesting<br>Wolfsarecool44: Playtesting, Emotional Support", title: "Credits"})});
+        document.getElementById("creditsButton").addEventListener("click", () => {new SimplePopup({x: 320, y: 175, text: object2HTML(Game.CREDITS), title: "Credits"})});
         document.getElementById("backgroundSelect").addEventListener("change", () => {Personalization.setBackground((document.getElementById("backgroundSelect") as HTMLFormElement).value)});
         document.getElementById("currentlyClickedSelect").addEventListener("change", () => {Personalization.setCurrentlyClicked((document.getElementById("currentlyClickedSelect") as HTMLFormElement).value)});
         document.getElementById("saveButton").addEventListener("click", () => {this.savinator5000.save()});

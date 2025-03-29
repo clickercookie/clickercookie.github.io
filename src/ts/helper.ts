@@ -67,3 +67,22 @@ export function commaify(toComma: number): string {
 export function makeSlightlyImperfectFloatNice(num: number): string {
     return commaify(Math.round(num * 10) / 10)
 }
+
+/**
+ * Takes an object of type {@link Record<string, string>} and returns a representation of that in stringified HTML. Format is like follows:
+ * 
+ * ```
+ * key: value <br>
+ * key2: value2 <br>
+ * key3: value3 <br>
+ * ```
+ * 
+ * @param object The object to htmlify
+ */
+export function object2HTML(object: Record<string, string>): string {
+    let newHTML = "";
+    for (let i in object) {
+        newHTML += `${i}: ${object[i]}<br>`;
+    }
+    return newHTML;
+}
