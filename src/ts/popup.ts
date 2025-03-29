@@ -80,3 +80,26 @@ export class SimplePopup {
         this.html.remove();
     }
 }
+
+export class AdvancedPopup {
+    html: HTMLDialogElement
+
+    constructor(x: number, y: number, html: string) { // todo: possibly add HTMLElement to html instead of just string?
+        this.html = document.createElement("dialog");
+        this.html.className = "popup";
+        this.html.style.display = "flex";
+        this.html.style.width = `${x}px`;
+        this.html.style.height = `${y}px`;
+
+        this.html.innerHTML = html;
+        
+        document.body.appendChild(this.html);
+
+        this.html.showModal(); // html must exist to show modal
+    }
+
+    destroy() {
+        this.html.close();
+        this.html.remove();
+    }
+}

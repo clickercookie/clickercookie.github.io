@@ -67,22 +67,3 @@ export function commaify(toComma: number): string {
 export function makeSlightlyImperfectFloatNice(num: number): string {
     return commaify(Math.round(num * 10) / 10)
 }
-
-//** expect a popup.ts file in the future! */
-export const popup = {
-    advancedHTML: document.getElementById("advancedPopup") as HTMLDialogElement,
-
-    createAdvanced(x: number, y: number, html: string) {
-        this.advancedHTML.style.display = "flex";
-        this.advancedHTML.showModal();
-        this.advancedHTML.style.width = `${x}px`;
-        this.advancedHTML.style.height = `${y}px`;
-
-        this.advancedHTML.innerHTML = html;
-    },
-
-    destroyAdvanced() {
-        this.advancedHTML.close();
-        this.advancedHTML.style.display = "none";
-    }
-};

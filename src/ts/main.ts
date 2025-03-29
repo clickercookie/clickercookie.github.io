@@ -9,7 +9,7 @@ const inDevelopment: boolean = (location.hostname === "localhost" || location.ho
 // Imports
 // ------------------------------------
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
-import { convertCollectionToArray, commaify, popup } from "./helper.js";
+import { convertCollectionToArray } from "./helper.js";
 import { Upgrade, updateUpgradesBoughtStatistic, expandUpgradesHolder } from "./upgrades.js";
 import { SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
 import { NewMod } from "./exmod.js";
@@ -150,20 +150,12 @@ export class Game extends SaveProvider {
         // if saves are old (directly interacts with localStorage because using Savinator.getLocalStorageSave() will make it angry since localStorage doesn't have a Save it has an array)
         if (localStorage.getItem("save") && localStorage.getItem("save")[0] === "[" && Game.VERSION_BRANCH === Game.Versions.MAIN) {
             localStorage.setItem("old05Save", localStorage.getItem("save"));
-            popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3>
-            <p class='popup-text'>so we changed the saving system again, good news, press the button below and it will be transfered to the new format.</p>
-            <div style='display:flex;flex-direction:row;height:40px;'>
-            <button onclick='saves.convert05Save(false)' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>Reformat me!</button>
-            </div>`);
+            new SimplePopup({x: 400, y: 220, text: "so we changed the saving system again, good news, press the button below and it will be transfered to the new format.", title: "oh no", func: () => { saves.convert05Save(this, false) }});
             return "Save the save!";
         }
         if (localStorage.getItem("betaSave") && localStorage.getItem("betaSave")[0] === "[" && Game.VERSION_BRANCH === Game.Versions.BETA) {
             localStorage.setItem("old05BetaSave", localStorage.getItem("betaSave"));
-            popup.createAdvanced(400,220,`<h3 class='simple-popup-title' style='display:block;'>oh no</h3>
-            <p class='popup-text'>so we changed the saving system again, good news, press the button below and it will be transfered to the new format.</p>
-            <div style='display:flex;flex-direction:row;height:40px;'>
-            <button onclick='saves.convert05Save(true)' id='simplePopupButton' class='popup-button' style='margin-top:20px;width:auto;margin-right:3px'>Reformat me!</button>
-            </div>`);
+            new SimplePopup({x: 400, y: 220, text: "so we changed the saving system again, good news, press the button below and it will be transfered to the new format.", title: "oh no", func: () => { saves.convert05Save(this, true) }});
             return "Save the save!";
         }
     

@@ -1,7 +1,6 @@
 import { Building, BuildingHandler } from "./buildings.js";
-import { popup } from "./helper.js";
 import { game } from "./main.js";
-import { SimplePopup } from "./popup.js";
+import { AdvancedPopup, SimplePopup } from "./popup.js";
 import { SaveHandler, SaveProvider } from "./saving.js";
 import { UpgradeHandler } from "./upgrades.js";
 
@@ -175,9 +174,7 @@ export const mods: ModsObject = {
     addModData: function(id: string, data: {initialization(): void}) { // yes i basically stole and renamed this entire function from cookie clicker's Game.registerMod orteil did it better okay i might seem smart but i'm really not.
         // READ THE DOCS!
         if (mods.allMods.includes(id)) {
-            popup.createAdvanced(400,200,"<h3 class='simple-popup-title' style='display:block;'>Error</h3> \
-            <p class='popup-text'>This mod's ID is already present!</p> \
-            <button onclick='helper.popup.destroyAdvanced()' id='simplePopupButton' class='popup-button' style='margin-top:20px;'>OK</button>");
+            new SimplePopup({x: 400, y: 200, title: "Error", text: `The mod ID "${id}" is already present!`});
             mods.numberLoaded--;
             mods.reloadModsLoadedText();
             return false;
@@ -189,7 +186,7 @@ export const mods: ModsObject = {
     },
 
     addClicked: function() {
-        popup.createAdvanced(500,350,`<h3 class='simple-popup-title' style='display:block;'>Add Mod</h3>
+        const popup = new AdvancedPopup(500,350,`<h3 class='simple-popup-title' style='display:block;'>Add Mod</h3>
         <h5 class='popup-text' style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5>
         <h5 class='popup-text' style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5>
         <h5 class='popup-text' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue' target="_blank">read the documentation</a>.</h5>
@@ -204,18 +201,16 @@ export const mods: ModsObject = {
         <p class='popup-text no-display' id='importedMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>Imported!</p>
         <button id='popupAddModButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
         document.getElementById("addModURL").addEventListener("change", () => { this.loadURL((document.getElementById("addModURL") as HTMLInputElement).value) });
-        document.getElementById("popupAddModButton").addEventListener("click", () => { popup.destroyAdvanced() }); //* just to let it be known it's called "popupAddModButton" because "addModButton" is already used by the data button
-        console.log(document.getElementById("addModButton"))
+        document.getElementById("popupAddModButton").addEventListener("click", () => { popup.destroy() }); //* just to let it be known it's called "popupAddModButton" because "addModButton" is already used by the data button
     },
 
     listClicked: function() {
-        popup.createAdvanced(300,350,`<h3 class='simple-popup-title' style='display:block;'>All Mods</h3>
+        const popup = new AdvancedPopup(300,350,`<h3 class='simple-popup-title' style='display:block;'>All Mods</h3>
         <p class='popup-text no-display' id='noModsMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>You have no mods installed!</p>
         <div id='modsList' class='mods-list'></div>
         <small class='popup-text no-display' id='removeModsMessage' style='margin-top:3px;'>To remove mods, refresh your page. (make sure to save!)</small>
         <button id='popupListModsButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
-        document.getElementById("popupListModsButton").addEventListener("click", () => { popup.destroyAdvanced() });    
-
+        document.getElementById("popupListModsButton").addEventListener("click", () => { popup.destroy() });    
         mods.list();
     },
 
