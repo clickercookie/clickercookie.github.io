@@ -1,6 +1,7 @@
 import { Building, BuildingHandler } from "./buildings.js";
 import { popup } from "./helper.js";
 import { game } from "./main.js";
+import { SimplePopup } from "./popup.js";
 import { SaveHandler, SaveProvider } from "./saving.js";
 import { UpgradeHandler } from "./upgrades.js";
 
@@ -98,7 +99,7 @@ export const mods: ModsObject = {
     loadURL: function(url: string) { // todo: could url be a URL type?
         const httpCheck = url.slice(0,4);
         if (httpCheck !== "http") { // we want it to be a url, and this works decently well for detecting it, even if it's not foolproof
-            popup.createSimple(350,175,"This mod's URL is not valid. Please make sure to include \"http://\" or \"https://\" in the URL, if it was not present already.",false,() => {},"Error",false,true);
+            new SimplePopup({x: 350, y: 175, text: "This mod's URL is not valid. Please make sure to include \"http://\" or \"https://\" in the URL, if it was not present already.", title: "Error", isError: true});
             return false;
         } 
     

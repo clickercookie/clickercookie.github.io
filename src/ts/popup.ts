@@ -1,0 +1,82 @@
+interface SimplePopupData {
+    x: number;
+    y: number; 
+    text: string; 
+    /** Will there be a button on the popup? Default: true */
+    button?: boolean;
+    /** Function to run when the OK button is clicked */
+    func?: () => void;
+    /** The popup title. Default is "" (no title) */
+    title?: string;
+    /** Will there be a "Back" button on the popup? Default: false */
+    backButton?: boolean;
+    /** Is the popup an error (will have red border)? Default: false */
+    isError?: boolean;
+}
+
+export class SimplePopup {
+    html: HTMLDialogElement;
+
+    constructor(data: SimplePopupData) {
+        this.html = document.createElement("dialog");
+        this.html.className = "popup";
+        this.html.style.width = `${data.x}px`;
+        this.html.style.height = `${data.y}px`;
+        
+            const title = document.createElement("h3");
+            title.className = "simple-popup-title";
+            if (data.title) {
+                title.style.display = "block";
+                title.innerText = data.title;
+            } else {
+                title.style.display = "none"
+            }
+            this.html.appendChild(title);
+
+            const content = document.createElement("p");
+            content.className = "popup-content";
+            content.innerHTML = data.text;
+            this.html.appendChild(content);
+
+            const buttonDiv = document.createElement("div");
+            buttonDiv.className = "simple-popup-button-div";
+            buttonDiv.style.width = `${data.x}px`;
+
+                const backButton = document.createElement("button");
+                backButton.className = "popup-button";
+                backButton.innerText = "Back";
+                backButton.style.marginRight = "3px";
+                backButton.addEventListener("click", () => { this.destroy() });
+                if (data.backButton)
+                    backButton.style.display = "inline-block";
+                else
+                    backButton.style.display = "none";
+                buttonDiv.appendChild(backButton);
+
+                const button = document.createElement("button");
+                button.className = "popup-button";
+                button.innerText = "OK";
+                button.addEventListener("click", () => { if (data.func !== undefined) data.func(); this.destroy() });
+                if (data.button === false)
+                    button.style.display = "none";
+                else
+                    button.style.display = "inline-block";
+                buttonDiv.appendChild(button);
+            this.html.appendChild(buttonDiv);
+
+        if (data.isError) {
+            this.html.style.borderColor = "red";
+        } else {
+            this.html.style.borderColor = "black";
+        }
+
+        document.body.appendChild(this.html);
+
+        this.html.showModal(); // html must exist to show modal
+    }
+
+    destroy() {
+        this.html.close(); //? do we need this?
+        this.html.remove();
+    }
+}

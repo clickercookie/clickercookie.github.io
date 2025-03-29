@@ -1,4 +1,4 @@
-import { game, Game } from "./main.js";
+import { Game } from "./main.js";
 
 /**
  * Parses a string and replaces any instances of a hashtag followed by a set of numbers with an `<a>` linking to the corresponding GitHub issue
@@ -70,55 +70,7 @@ export function makeSlightlyImperfectFloatNice(num: number): string {
 
 //** expect a popup.ts file in the future! */
 export const popup = {
-    simpleHTML: document.getElementById("simplePopup") as HTMLDialogElement,
     advancedHTML: document.getElementById("advancedPopup") as HTMLDialogElement,
-
-    createSimple(x: number, y: number, text: string, noButton: boolean=false, doWhat: () => void=() => {}, title: string="", backButton: boolean=false, isError: boolean=false) {
-        this.simpleHTML.style.display = "flex";
-        this.simpleHTML.showModal();
-        this.simpleHTML.style.width = `${x}px`;
-        this.simpleHTML.style.height = `${y}px`;
-        
-        document.getElementById("simplePopupContent").innerHTML = text;
-        document.getElementById("simplePopupButtonDiv").style.width = `${x}px`;
-        
-        if (title === "") {
-            document.getElementById("simplePopupTitle").style.display = "none";
-        } else {
-            document.getElementById("simplePopupTitle").style.display = "block";
-            document.getElementById("simplePopupTitle").innerHTML = title;
-        }
-
-        if (noButton) {
-            document.getElementById("simplePopupButton").style.display = "none";
-        } else {
-            document.getElementById("simplePopupButton").style.display = "inline-block";
-        }
-
-        if (backButton) {
-            document.getElementById("simplePopupBackButton").style.display = "inline-block";
-        } else {
-            document.getElementById("simplePopupBackButton").style.display = "none";
-        }
-
-        if (isError) {
-            this.simpleHTML.style.borderColor = "red";
-        } else {
-            this.simpleHTML.style.borderColor = "black";
-        }
-
-        document.getElementById("simplePopupButton").addEventListener("click", doWhat);
-    },
-
-    destroySimple() {
-        this.simpleHTML.style.display = "none";
-        this.simpleHTML.close();
-
-        document.getElementById("simplePopupContent").innerHTML = "null";
-        document.getElementById("simplePopupButton").style.display = "none";
-        document.getElementById("simplePopupButton").replaceWith(document.getElementById("simplePopupButton").cloneNode(true)); //* removes all event listeners
-        document.getElementById("simplePopupButton").addEventListener("click", () => {this.destroySimple()}); // add the destroy listener back so the popup doesn't stick around
-    },
 
     createAdvanced(x: number, y: number, html: string) {
         this.advancedHTML.style.display = "flex";

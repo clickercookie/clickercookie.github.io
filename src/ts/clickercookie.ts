@@ -4,6 +4,7 @@ import { Game } from "./main.js";
 import { Mod } from "./mods.js";
 import { Personalization } from "./personalization.js";
 import { Upgrade, UpgradeData, UpgradeSave } from "./upgrades.js";
+import { SimplePopup } from "./popup.js";
 
 // the description of almost every upgrade is the same, but just in case we want to add more upgrades in the future
 // a "desc" field has been added to the upgrades array. Most upgrade will just reference a this array, though
@@ -627,7 +628,12 @@ export default class ClickerCookie extends Mod {
         // anniversary
         if (date.getMonth() === 2 && date.getDate() === 3) { // if date is 3/3
             Personalization.setCurrentlyClicked("cake");
-            popup.createSimple(350,175,"It's Clicker Cookie's birthday! \nThe cookie has been replaced with a birthday cake, but you can change it back in Options.",false, () => {},"woo hoo!");
+            new SimplePopup({
+                x: 350,
+                y: 175,
+                text: "It's Clicker Cookie's birthday! \nThe cookie has been replaced with a birthday cake, but you can change it back in Options.",
+                title: "woo hoo!"
+            });
         }
     }
 

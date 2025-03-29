@@ -418,7 +418,6 @@ small {
 
 /* Popup CSS */
 .popup {
-    display: none;
     flex-direction: column;
     align-items: center;
     width: 128px;

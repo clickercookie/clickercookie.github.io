@@ -1,4 +1,5 @@
 import { Game, modHandler } from "./main.js";
+import { SimplePopup } from "./popup.js";
 import { Upgrade, updateUpgradesBoughtStatistic } from "./upgrades.js";
 
 export const saves = {} as {
@@ -162,8 +163,7 @@ export class Savinator {
 
             const versionBranchToDisplay = (Game.VERSION_BRANCH === Game.Versions.MAIN) ? "beta" : "main"; //! i don't like this variable
             if (importedData.getHeader().versionBranch !== Game.VERSION_BRANCH) {
-                // helper.popup.createSimple(300,150,`This is a save file from another version branch (${versionBranchToDisplay}), which is incompatible with this version. Please use a different file.`,false,"default","Alert",false,true);
-                alert("blah blah version branch no good yada yada")
+                new SimplePopup({x: 300, y: 150, text: `This is a save file from another version branch (${versionBranchToDisplay}), which is incompatible with this version. Please use a different file.`, title: "Alert", isError: true});
             }
 
             this.save(importedData);
