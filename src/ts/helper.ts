@@ -11,10 +11,13 @@ export function parseGithubIssue(input: string): string {
     });
 }
 
+/**
+ * @deprecated use {@link Array.from}
+ */
 export function convertCollectionToArray(HTMLCollection: HTMLCollection): Element[] {
     const array: Element[] = [];
-    for (let i = 0; i < HTMLCollection.length; i++) {
-        array.push(HTMLCollection[i]);
+    for (const item of HTMLCollection) {
+        array.push(item);
     }
     return array;
 }

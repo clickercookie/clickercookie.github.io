@@ -40,8 +40,8 @@ export class NewMod extends Mod {
                 buildingsRequired: 3
             }
         ];
-        for (let i in this.UPGRADES_DATA) {
-            this.upgradeHandler.register(this.UPGRADES_DATA[i].uid, new Upgrade(game.clickercookie, this.UPGRADES_DATA[i]));
+        for (const upgrade of this.UPGRADES_DATA) {
+            this.upgradeHandler.register(upgrade.uid, new Upgrade(game.clickercookie, upgrade));
         }
 
         document.getElementById("cookieCount")!.addEventListener("click", () => {this.superCookies++});

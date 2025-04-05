@@ -51,7 +51,7 @@ export class Handler<T> implements Iterable<T> {
 
     getFromUID(uid: string): T | undefined {
         if (this.registered[uid] === undefined) {
-            console.warn(`Tried to get object from a Handler with UID "${uid}" that does not exist. Will return %cundefined`, "font-style: italic;");
+            console.warn(`Tried to get object from a Handler with UID "${uid}" that does not exist. Will return %cundefined%c.`, "font-style: italic;", "font-style: default;");
         }
         return this.registered[uid];
     }

@@ -153,8 +153,8 @@ export class Mod extends SaveProvider {
     }
 
     static callKooh(id: Kooh) {
-        for (let i in this.koohs[id]) {
-            this.koohs[id][i]();
+        for (const kooh of this.koohs[id]) {
+            kooh();
         }
     }
 

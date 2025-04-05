@@ -583,8 +583,8 @@ export default class ClickerCookie extends Mod {
             }
         ];
 
-        for (let i in this.UPGRADES_DATA) {
-            this.upgradeHandler.register(this.UPGRADES_DATA[i].uid, new Upgrade(this, this.UPGRADES_DATA[i]));
+        for (const upgrade of this.UPGRADES_DATA) {
+            this.upgradeHandler.register(upgrade.uid, new Upgrade(this, upgrade));
         }
 
         Mod.registerKooh("init", () => { this.init() });
@@ -739,7 +739,7 @@ export default class ClickerCookie extends Mod {
         }
     }
     loadSaveData(saveData: ClickerCookieSaveData) {        
-        for (let i in saveData) {
+        for (const i in saveData) {
             if (i === undefined) {
                 console.warn("During loading a value in saveData was found undefined. Errors will likely follow...");
             }

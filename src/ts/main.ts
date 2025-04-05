@@ -9,7 +9,7 @@ const inDevelopment: boolean = (location.hostname === "localhost" || location.ho
 // Imports
 // ------------------------------------
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
-import { convertCollectionToArray, object2HTML } from "./helper.js";
+import { object2HTML } from "./helper.js";
 import { Upgrade, updateUpgradesBoughtStatistic, expandUpgradesHolder } from "./upgrades.js";
 import { SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
 import { NewMod } from "./exmod.js"; //* note: this import is intentionally left unused so tsc can find this file and compile it
@@ -259,8 +259,8 @@ export class Game extends SaveProvider {
         document.getElementById("optionsButton").addEventListener("click", () => {toggleMiddle("options")});
         document.getElementById("infoButton").addEventListener("click", () => {toggleMiddle("info")});
         // middle content
-        for (let i in convertCollectionToArray(document.getElementsByClassName("middle-x"))) { //? i don't like how we have to do this, can we find another way? maybe somehow only one X button? actually we should probably refactor how the entire middle section works... todo: make an issue for that
-            document.getElementsByClassName("middle-x")[i].addEventListener("click", () => {closeMiddle()});
+        for (const element of Array.from(document.getElementsByClassName("middle-x"))) { //? i don't like how we have to do this, can we find another way? maybe somehow only one X button? actually we should probably refactor how the entire middle section works... todo: make an issue for that
+            element.addEventListener("click", () => {closeMiddle()});
         }
         document.getElementById("creditsButton").addEventListener("click", () => {new SimplePopup({x: 320, y: 175, text: object2HTML(Game.CREDITS), title: "Credits"})});
         document.getElementById("backgroundSelect").addEventListener("change", () => {Personalization.setBackground((document.getElementById("backgroundSelect") as HTMLFormElement).value)});
@@ -532,8 +532,8 @@ setInterval(() => { // auto-saving
 function resizeEventHandler() { // ? is the term "event handler" right?
     // change middle text heights
     const middleTexts = Array.from(document.querySelectorAll(".middle-main"));
-    for (let element in middleTexts) {
-        (middleTexts[element] as HTMLElement).style.height = window.innerHeight - document.getElementById("middleButtons").offsetHeight+"px";
+    for (const element of middleTexts) {
+        (element as HTMLElement).style.height = window.innerHeight - document.getElementById("middleButtons").offsetHeight+"px";
     }
 }
 resizeEventHandler(); // since we do need certain elements like the middle text to have the correct size without having to resize the window, we call this now

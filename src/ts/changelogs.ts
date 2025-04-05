@@ -231,7 +231,7 @@ export const versionChangelogs: Changelog[] = [
     {
         type: "minor",
         version: "0.7",
-        note: "Hi. It's hard to explain in a simple changelog how much this update has changed. See everything you're looking at? I can confidently say that what is happening behind the scenes for what you're looking at has changed drastically.",
+        note: "Hi. It's hard to explain in a simple changelog how much this update has done. See everything you're looking at? I can confidently say that what is happening behind the scenes for what you're looking at has changed drastically.",
         name: "tbd",
         added: [
             "\"Cookies Per Click\" statistic.",
@@ -297,9 +297,9 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
         addedList.setAttribute("class","middle-ul");
         newChangelogEntry.appendChild(addedList);
 
-        for (let i = 0; i < logs.added.length; i++) {
+        for (const item of logs.added) {
             const addedListItem = document.createElement("li");
-            addedListItem.innerHTML = parseGithubIssue(logs.added[i]);
+            addedListItem.innerHTML = parseGithubIssue(item);
             addedList.appendChild(addedListItem);
         }
     }
@@ -313,9 +313,9 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
         changedList.setAttribute("class","middle-ul");
         newChangelogEntry.appendChild(changedList);
 
-        for (let i = 0; i < logs.changed.length; i++) {
+        for (const item of logs.changed) {
             const changedListItem = document.createElement("li");
-            changedListItem.innerHTML = parseGithubIssue(logs.changed[i]);
+            changedListItem.innerHTML = parseGithubIssue(item);
             changedList.appendChild(changedListItem);
         }
     }
@@ -329,9 +329,9 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
         fixedList.setAttribute("class","middle-ul");
         newChangelogEntry.appendChild(fixedList);
 
-        for (let i = 0; i < logs.fixed.length; i++) {
+        for (const item of logs.fixed) {
             const fixedListItem = document.createElement("li");
-            fixedListItem.innerHTML = parseGithubIssue(logs.fixed[i]);
+            fixedListItem.innerHTML = parseGithubIssue(item);
             fixedList.appendChild(fixedListItem);
         }
     }
@@ -346,9 +346,9 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
         removedList.setAttribute("class","middle-ul");
         newChangelogEntry.appendChild(removedList);
 
-        for (let i = 0; i < logs.removed.length; i++) {
+        for (const item of logs.removed) {
             const fixedListItem = document.createElement("li");
-            fixedListItem.innerHTML = parseGithubIssue(logs.removed[i]);
+            fixedListItem.innerHTML = parseGithubIssue(item);
             removedList.appendChild(fixedListItem);
         }
     }

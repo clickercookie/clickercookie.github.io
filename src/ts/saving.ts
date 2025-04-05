@@ -83,14 +83,14 @@ export class Savinator {
             const saveDump = this.saveHandler.dumpSaveData();
             if (this.preserveUnusedNamespacesInSaves && this.getLocalStorageSave() !== null) { // todo: too many localStorageSave.getNamespaces()
                 const localStorageSave = this.getLocalStorageSave();
-                for (let i in localStorageSave.getNamespaces()) {
-                    if (!(localStorageSave.getNamespaces()[i] in saveDump)) {
-                        newSave.addData(localStorageSave.getNamespaces()[i], localStorageSave.getData(localStorageSave.getNamespaces()[i]));
-                        console.log(`Preserved data for ${localStorageSave.getNamespaces()[i]} namespace (unused).`);
+                for (const namespace of localStorageSave.getNamespaces()) {
+                    if (!(namespace in saveDump)) {
+                        newSave.addData(namespace, localStorageSave.getData(namespace));
+                        console.log(`Preserved data for ${namespace} namespace (unused).`);
                     }
                 }
             }
-            for (let i in saveDump) {
+            for (const i in saveDump) {
                 newSave.addData(i, saveDump[i]);
                 console.log(`Added data to save for ${i} namespace.`);
             }
@@ -118,7 +118,7 @@ export class Savinator {
     load() {
         const localStorageSave = this.getLocalStorageSave();
         const providers = this.saveHandler.getProviders();
-        for (let namespace in providers) { //? should this go over providers or the localStorageSave.getNamespaces()? is there any benefit to one or the other?
+        for (const namespace in providers) { //? should this go over providers or the localStorageSave.getNamespaces()? is there any benefit to one or the other?
             if (localStorageSave.getNamespaces().includes(namespace) && namespace !== "game") { // if the provider namespace is present in the local storage save
                 providers[namespace].loadSaveData(localStorageSave.getData(namespace));
                 console.log(`Loaded save data for ${namespace} namespace.`);
@@ -197,15 +197,15 @@ export class SaveHandler {
 
     dumpSaveData(): Record<string, unknown> {
         const saveData: Record<string, unknown> = {};
-        for (let i in this.providers) {
-            saveData[i] = this.providers[i].getSaveData();
+        for (const namespace in this.providers) {
+            saveData[namespace] = this.providers[namespace].getSaveData();
         }
         return saveData;
     }
 
     loggy() {
-        for (let i in this.providers) {
-            console.log(this.providers[i].getSaveData())
+        for (const namespace in this.providers) {
+            console.log(this.providers[namespace].getSaveData())
         }
     }
 
