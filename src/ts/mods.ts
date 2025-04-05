@@ -119,6 +119,7 @@ export class ModHandler extends Handler<Mod> {
      * @param mod 
      */
     override register(uid: string, mod: Mod) {
+        //! below will always warn, should that be changed?
         if (this.getFromUID(uid) !== undefined) { //* do this before registering so we can get a more user-friendly popup than the console.error that we usually get for this type of error
             new SimplePopup({x: 400, y: 200, title: "Error", text: `The mod UID "${uid}" is already present!`});
             return;
