@@ -1,6 +1,5 @@
-import { Game, modHandler } from "./main.js";
+import { Game } from "./main.js";
 import { SimplePopup } from "./popup.js";
-import { Upgrade, updateUpgradesBoughtStatistic } from "./upgrades.js";
 
 export const saves = {} as {
     importedData: any,
@@ -271,35 +270,4 @@ export class Save {
     stringify(): string {
         return JSON.stringify(this.data);
     }
-}
-
-saves.resetSave = function(game: Game) {// todo: this still needs the 0.7 treatment
-    if (Game.VERSION_BRANCH === Game.Versions.MAIN) {
-        localStorage.setItem("save",JSON.stringify(saves.defaultSavedValues));
-    } else {
-        localStorage.setItem("betaSave",JSON.stringify(saves.defaultSavedValues));
-    }
-    // saves.loadSave(game);
-    
-    game.clickercookie.grandpa.unlocked = false;
-    game.clickercookie.ranch.unlocked = false;
-    game.clickercookie.television.unlocked = false;
-    game.clickercookie.worker.unlocked = false;
-    game.clickercookie.wallet.unlocked = false;
-    game.clickercookie.church.unlocked = false;
-
-    for (let i in modHandler.mods) {
-        modHandler.mods[i].upgradeHandler.destroyAllUpgrades();
-    }
-    document.getElementById("upgradesBoughtCounter").innerText = Upgrade.upgradesBought.toString();
-    updateUpgradesBoughtStatistic();
-
-    // document.getElementById("win").style.display = "none";
-
-    game.clickercookie.grandpa.setVisibility(false);
-    game.clickercookie.ranch.setVisibility(false);
-    game.clickercookie.television.setVisibility(false);
-    game.clickercookie.worker.setVisibility(false);
-    game.clickercookie.wallet.setVisibility(false);
-    game.clickercookie.church.setVisibility(false);
 }

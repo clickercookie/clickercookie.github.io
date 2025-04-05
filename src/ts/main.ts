@@ -12,9 +12,9 @@ import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
 import { convertCollectionToArray, object2HTML } from "./helper.js";
 import { Upgrade, updateUpgradesBoughtStatistic, expandUpgradesHolder } from "./upgrades.js";
 import { SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
-import { NewMod } from "./exmod.js";
+import { NewMod } from "./exmod.js"; //* note: this import is intentionally left unused so tsc can find this file and compile it
 import { Personalization } from "./personalization.js";
-import { Mod, ModHandler, mods } from "./mods.js"
+import { Mod, ModHandler } from "./mods.js"
 import ClickerCookie from "./clickercookie.js"
 import { SimplePopup } from "./popup.js";
 
@@ -272,8 +272,8 @@ export class Game extends SaveProvider {
         document.getElementById("importDataButton").addEventListener("click", () => {document.getElementById("importDataInput").click()});
         document.getElementById("importDataInput").addEventListener("change", () => {this.savinator5000.import()});
         document.getElementById("autoSavingToggleSelect").addEventListener("change", () => {this.autoSavingAllowed = ((document.getElementById("autoSavingToggleSelect") as HTMLFormElement).value === "on") ? true : false});;
-        document.getElementById("addModButton").addEventListener("click", () => {mods.addClicked()});
-        document.getElementById("listModsButton").addEventListener("click", () => {mods.listClicked()});
+        document.getElementById("addModButton").addEventListener("click", () => {ModHandler.addButtonClicked()});
+        document.getElementById("listModsButton").addEventListener("click", () => {ModHandler.listButtonClicked()});
         document.getElementById("devModeSelect").addEventListener("change", () => {dev.setDevMode((document.getElementById("devModeSelect") as HTMLFormElement).value)})
         // upgrades holder
         document.getElementById("upgradesHolder").addEventListener("mouseover", () => {expandUpgradesHolder()});
@@ -300,31 +300,31 @@ export class Game extends SaveProvider {
     gameLoop() {
         if (!this.theGameCanLoopBecauseTheInitializationIsCompleted) return;
 
-        for (let i in modHandler.mods) {
-            modHandler.mods[i].upgradeHandler.checkUpgradeAvailability();
+        for (const mod of modHandler) {
+            mod.upgradeHandler.checkUpgradeAvailability();
         }
         
         /*? should these go in clickercookie or game? */
         // stats that need to be updated beforehand
         let buildingsOwned = 0;
-        for (let namespace in modHandler.mods) {
-            for (const value of modHandler.mods[namespace].buildingHandler) {
+        for (const mod of modHandler) {
+            for (const value of mod.buildingHandler) {
                 buildingsOwned += value.bought;
             }
         }
         this.clickercookie.buildingsOwned = buildingsOwned;
 
         let cps = 0;
-        for (let namespace in modHandler.mods) {
-            for (const value of modHandler.mods[namespace].buildingHandler) {
+        for (const mod of modHandler) {
+            for (const value of mod.buildingHandler) {
                 cps += value.CPSGiven;
             }
         }
         this.clickercookie.cookiesPerSecond = cps;
         
         let totalUpgradesRegistered = 0;
-        for (let namespace in modHandler.mods) {
-            totalUpgradesRegistered += modHandler.mods[namespace].upgradeHandler.length;
+        for (const mod of modHandler) {
+            totalUpgradesRegistered += mod.upgradeHandler.length;
         }
         document.getElementById("totalUpgradesCounter").innerText = totalUpgradesRegistered.toString();
 
@@ -361,9 +361,9 @@ export class Game extends SaveProvider {
         Personalization.setBackground(saveData.backgroundName);
 
         // the following doesn't have anything to do with GameSaveData but will be done here because this spot makes the most sense
-        for (let i in modHandler.mods) {
-            modHandler.mods[i].upgradeHandler.destroyAllUpgrades();
-            modHandler.mods[i].upgradeHandler.showUnlockedUpgrades();
+        for (const mod of modHandler) {
+            mod.upgradeHandler.destroyAllUpgrades();
+            mod.upgradeHandler.showUnlockedUpgrades();
         }
         document.getElementById("upgradesBoughtCounter").innerText = Upgrade.upgradesBought.toString();
         updateUpgradesBoughtStatistic();
@@ -508,11 +508,9 @@ tooltip.create = function(x: number, y: number, content: any) {
 console.log(`you seem smart, how 'bout you contribute to the project? ${Game.GITHUB_REPO}`);
 
 export const game = new Game();
-const newMod = new NewMod();
 
 saveHandler.registerProvider("game", game);
-modHandler.register(game.clickercookie);
-modHandler.register(newMod);
+modHandler.register(game.clickercookie.NAMESPACE, game.clickercookie);
 
 // timer things
 setInterval(() => {

@@ -42,6 +42,10 @@ export class Handler<T> implements Iterable<T> {
     }
     
     register(uid: string, object: T) {
+        if (this.registered[uid] !== undefined) {
+            console.error(`Tried to register object with UID "${uid}" to a Handler, but it already exists!`)
+        }
+
         this.registered[uid] = object;
     }
 

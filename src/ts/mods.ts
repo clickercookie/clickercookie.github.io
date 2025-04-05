@@ -1,38 +1,133 @@
 import { Building, BuildingHandler } from "./buildings.js";
-import { game } from "./main.js";
+import { Handler } from "./handler.js";
+import { game, modHandler } from "./main.js";
 import { AdvancedPopup, SimplePopup } from "./popup.js";
 import { SaveHandler, SaveProvider } from "./saving.js";
 import { UpgradeHandler } from "./upgrades.js";
 
-export class ModHandler {
+export class ModHandler extends Handler<Mod> {
+    /* Static Methods */
+    public static loadURL(url: string) {
+        const httpCheck = url.slice(0,4);
+        if (httpCheck !== "http") { // we want it to be a url, and this works decently well for detecting it, even if it's not foolproof
+            new SimplePopup({x: 350, y: 175, text: "This mod's URL is not valid. Please make sure to include \"http://\" or \"https://\" in the URL, if it was not present already.", title: "Error", isError: true});
+            return false;
+        }
+    
+        const file = document.createElement("script");
+        file.setAttribute("src", url);
+        file.setAttribute("type", "module");
+    
+        document.head.appendChild(file);
+
+        (document.getElementById("addModURLForm") as HTMLFormElement).reset();
+        document.getElementById("importedMessage").style.display = "block";
+    
+        game.isModded = true;
+
+        console.log("Loaded mod from URL: "+url);
+    }
+
+    public static loadFile(file: File) {
+        const reader = new FileReader();
+    
+        reader.onerror = (e) => alert(`something broke, don't expect me to fix it :D \nerror: ${e}`);
+    
+        reader.readAsText(file);
+        
+        reader.onloadend = () => {
+            const readFile = reader.result as string;
+            
+            const script = document.createElement("script");
+            script.appendChild(document.createTextNode(readFile));
+            script.setAttribute("type", "module");
+    
+            document.head.appendChild(script);
+    
+            (document.getElementById("addModURLForm") as HTMLFormElement).reset();
+            document.getElementById("importedMessage")!.style.display = "block";
+
+            game.isModded = true;
+
+            console.log("Successfully added mod from file: "+file.name);
+        };
+    }
+
+    public static list() {
+        const numberToList = modHandler.length;
+
+        for (const mod of modHandler) {
+            if (mod.NAMESPACE === "clickercookie") continue; // let's not confuse the end user too much :)
+
+            const newModItem = document.createElement("div");
+            newModItem.className = "popup-text mod-in-list";
+
+                const newModName = document.createElement("p");
+                newModName.innerText = mod.NAMESPACE;
+                newModName.className = "popup-text";
+                newModItem.appendChild(newModName);
+
+            document.getElementById("modsList")!.appendChild(newModItem);
+        }
+
+        if (numberToList === 0) document.getElementById("noModsMessage")!.style.display = "block";
+        if (numberToList > 0) document.getElementById("removeModsMessage")!.style.display = "block";
+    }
+
+    // i dunno where to put these last two
+    static addButtonClicked() {
+        const popup = new AdvancedPopup(500,350,`<h3 class='simple-popup-title' style='display:block;'>Add Mod</h3>
+        <h5 class='popup-text' style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5>
+        <h5 class='popup-text' style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5>
+        <h5 class='popup-text' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue' target="_blank">read the documentation</a>.</h5>
+        <form onsubmit='return false;' id='addModURLForm' style='margin-top:22px;'>
+            <label for='addModURL' class='popup-text'>From URL: </label>
+            <input id='addModURL'>
+        </form>
+        <form>
+            <label for='addModFile' class='popup-text' style='margin-right:0px;'>From File: </label>
+            <input type='file' id='addModFile' accept='.js' class='popup-text' style='width:86px;'>
+        </form>
+        <p class='popup-text no-display' id='importedMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>Imported!</p>
+        <button id='popupAddModButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
+        document.getElementById("addModURL").addEventListener("change", () => { ModHandler.loadURL((document.getElementById("addModURL") as HTMLInputElement).value) });
+        document.getElementById("addModFile").addEventListener("change", () => { ModHandler.loadFile((document.getElementById("addModFile") as HTMLInputElement).files[0]) });
+        document.getElementById("popupAddModButton").addEventListener("click", () => { popup.destroy() }); //* just to let it be known it's called "popupAddModButton" because "addModButton" is already used by the data button
+    }
+    
+    static listButtonClicked() {
+        const popup = new AdvancedPopup(300,350,`<h3 class='simple-popup-title' style='display:block;'>All Mods</h3>
+        <p class='popup-text no-display' id='noModsMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>You have no mods installed!</p>
+        <div id='modsList' class='mods-list'></div>
+        <small class='popup-text no-display' id='removeModsMessage' style='margin-top:3px;'>To remove mods, refresh your page. (make sure to save!)</small>
+        <button id='popupListModsButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
+        document.getElementById("popupListModsButton").addEventListener("click", () => { popup.destroy() });    
+        ModHandler.list();
+    }
+    /* Not Static Methods */
     private saveHandler: SaveHandler;
 
-    readonly mods: Partial<Record<string, Mod>>;
-
     constructor(saveHandler: SaveHandler) {
+        super();
+
         this.saveHandler = saveHandler;
-
-        this.mods = {};
     }
 
-    register(mod: Mod) {
+    /**
+     * 
+     * @param uid SHOULD BE YOUR MOD NAMESPACE!
+     * @param mod 
+     */
+    override register(uid: string, mod: Mod) {
+        if (this.getFromUID(uid) !== undefined) { //* do this before registering so we can get a more user-friendly popup than the console.error that we usually get for this type of error
+            new SimplePopup({x: 400, y: 200, title: "Error", text: `The mod UID "${uid}" is already present!`});
+            return;
+        }
+        
+        super.register(uid, mod);
         this.saveHandler.registerProvider(mod.NAMESPACE, mod);
-        this.mods[mod.NAMESPACE] = mod;
+        document.getElementById("modsNumberLoaded")!.innerText = (modHandler.length - 1).toString(); //* subtract one so we don't show clickercookie (makes more sense to the user)
     }
-}
-
-// This is mostly temporary to get this out of main.ts, modding has yet to have it's turn at a 0.7 refactor.
-interface ModsObject {
-    numberLoaded: number,
-    allMods: string[],
-
-    loadURL(url: string): void,
-    loadFile(): void,
-    list(): void,
-    addModData(id: string, data: any): void,
-    addClicked(): void,
-    listClicked(): void,
-    reloadModsLoadedText(): void
 }
 
 type Kooh = "click" | "cps" | "loop" | "init" | "cps" | "personalization";
@@ -65,8 +160,10 @@ export class Mod extends SaveProvider {
     // -------------------
     // Actual mod stuff
     // -------------------
+    // todo: add metadata for things like mod name and desc to show in the list mods section
+
     /** Mod namespace used for saving */
-    public NAMESPACE: string;
+    public readonly NAMESPACE: string;
 
     /** 
      * When registered, this {@link UpgradeHandler} gets special treatment from {@link Game}, automatically handling things like destruction and unlocks. You probably want to use this. 
@@ -87,134 +184,5 @@ export class Mod extends SaveProvider {
 
         this.upgradeHandler = new UpgradeHandler();
         this.buildingHandler = new BuildingHandler();
-    }
-}
-
-export const mods: ModsObject = {
-    numberLoaded: 0,
-    /** string[] */
-    allMods: [],
-
-    loadURL: function(url: string) { // todo: could url be a URL type?
-        const httpCheck = url.slice(0,4);
-        if (httpCheck !== "http") { // we want it to be a url, and this works decently well for detecting it, even if it's not foolproof
-            new SimplePopup({x: 350, y: 175, text: "This mod's URL is not valid. Please make sure to include \"http://\" or \"https://\" in the URL, if it was not present already.", title: "Error", isError: true});
-            return false;
-        } 
-    
-        const file = document.createElement("script");
-        file.setAttribute("src", url);
-        file.setAttribute("type", "text/javascript");
-        const modId = mods.numberLoaded + 1;
-        file.setAttribute("id", `mod${modId}`);
-    
-        document.head.appendChild(file);
-    
-        (document.getElementById("addModURLForm") as HTMLFormElement).reset();
-        document.getElementById("importedMessage").style.display = "block";
-    
-        mods.numberLoaded++;
-        game.isModded = true;
-        mods.reloadModsLoadedText();
-    },
-
-    loadFile: function() { // add check if mod is valid (mods.addData should return a bool, true for successful)
-        const file = (document.getElementById("addModFile") as HTMLInputElement).files[0];
-        const reader = new FileReader();
-    
-        reader.onerror = (e) => alert(`something broke, don't expect me to fix it :D \nerror: ${e}`);
-    
-        reader.readAsText(file);
-        
-        reader.onloadend = () => {
-            const readFile = reader.result as string;
-            
-            const script = document.createElement("script");
-            script.appendChild(document.createTextNode(readFile));
-            script.setAttribute("type","text/javascript");
-            const modId = mods.numberLoaded + 1;
-            script.setAttribute("id","mod" + modId);
-    
-            document.head.appendChild(script);
-    
-            (document.getElementById("addModURLForm") as HTMLFormElement).reset();
-            document.getElementById("importedMessage")!.style.display = "block";
-    
-            mods.numberLoaded++;
-            game.isModded = true;
-            mods.reloadModsLoadedText();
-        };
-    },
-
-    list: function() {
-        const numberToList = mods.allMods.length;
-    
-        for (let i = 0; i < numberToList; i++) {
-            const newModItem = document.createElement("div");
-            newModItem.setAttribute("class","popup-text mod-in-list");
-            newModItem.setAttribute("id",`modList${i}`);
-    
-            const newModID = document.createElement("small");
-            newModID.appendChild(document.createTextNode(`#${i}`));
-            newModID.setAttribute("class","mod-id popup-text");
-            newModItem.appendChild(newModID);
-    
-            const newModName = document.createElement("p");
-            newModName.appendChild(document.createTextNode(JSON.stringify(mods.allMods[i])));
-            newModName.setAttribute("class","popup-text");
-            newModItem.appendChild(newModName);
-    
-            document.getElementById("modsList")!.appendChild(newModItem);
-        }
-    
-        if (numberToList === 0) document.getElementById("noModsMessage")!.style.display = "block";
-        if (numberToList > 0) document.getElementById("removeModsMessage")!.style.display = "block";
-    },
-
-    addModData: function(id: string, data: {initialization(): void}) { // yes i basically stole and renamed this entire function from cookie clicker's Game.registerMod orteil did it better okay i might seem smart but i'm really not.
-        // READ THE DOCS!
-        if (mods.allMods.includes(id)) {
-            new SimplePopup({x: 400, y: 200, title: "Error", text: `The mod ID "${id}" is already present!`});
-            mods.numberLoaded--;
-            mods.reloadModsLoadedText();
-            return false;
-        }
-        mods.allMods.push(id);
-        game.isModded = true;
-        data.initialization();
-        console.log(`Loaded mod ${id}`);
-    },
-
-    addClicked: function() {
-        const popup = new AdvancedPopup(500,350,`<h3 class='simple-popup-title' style='display:block;'>Add Mod</h3>
-        <h5 class='popup-text' style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5>
-        <h5 class='popup-text' style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5>
-        <h5 class='popup-text' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue' target="_blank">read the documentation</a>.</h5>
-        <form onsubmit='return false;' id='addModURLForm' style='margin-top:22px;'>
-            <label for='addModURL' class='popup-text'>From URL: </label>
-            <input id='addModURL'>
-        </form>
-        <form>
-            <label for='addModFile' class='popup-text' style='margin-right:0px;'>From File: </label>
-            <input type='file' id='addModFile' accept='.js' class='popup-text' style='width:86px;'>
-        </form>
-        <p class='popup-text no-display' id='importedMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>Imported!</p>
-        <button id='popupAddModButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
-        document.getElementById("addModURL").addEventListener("change", () => { this.loadURL((document.getElementById("addModURL") as HTMLInputElement).value) });
-        document.getElementById("popupAddModButton").addEventListener("click", () => { popup.destroy() }); //* just to let it be known it's called "popupAddModButton" because "addModButton" is already used by the data button
-    },
-
-    listClicked: function() {
-        const popup = new AdvancedPopup(300,350,`<h3 class='simple-popup-title' style='display:block;'>All Mods</h3>
-        <p class='popup-text no-display' id='noModsMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>You have no mods installed!</p>
-        <div id='modsList' class='mods-list'></div>
-        <small class='popup-text no-display' id='removeModsMessage' style='margin-top:3px;'>To remove mods, refresh your page. (make sure to save!)</small>
-        <button id='popupListModsButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
-        document.getElementById("popupListModsButton").addEventListener("click", () => { popup.destroy() });    
-        mods.list();
-    },
-
-    reloadModsLoadedText: function() {
-        document.getElementById("modsNumberLoaded")!.innerText = `You have ${mods.numberLoaded} mods loaded!`;
     }
 }

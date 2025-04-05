@@ -1,8 +1,7 @@
 //* This is an example of a mod that supports saving.
 
-// import { saveHandler } from "./main.js";
 import { Building } from "./buildings.js";
-import { game } from "./main.js";
+import { game, modHandler } from "./main.js";
 import { Mod } from "./mods.js";
 import { Upgrade, UpgradeData } from "./upgrades.js";
 
@@ -63,6 +62,6 @@ export class NewMod extends Mod {
     }
 }
 
-// const modProvider = new ModProvider();
+const newmod = new NewMod();
 
-// saveHandler.registerProvider(modProvider.NAMESPACE, modProvider)
+modHandler.register(newmod.NAMESPACE, newmod);
