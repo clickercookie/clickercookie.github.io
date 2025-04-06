@@ -96,6 +96,9 @@ export class AdvancedPopup {
         document.body.appendChild(this.html);
 
         this.html.showModal(); // html must exist to show modal
+        this.html.addEventListener("cancel", () => { //* make the esc key work, for some reason simple popups don't need this
+            this.destroy();
+        });
     }
 
     destroy() {

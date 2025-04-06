@@ -253,6 +253,7 @@ export const versionChangelogs: Changelog[] = [
         fixed: [
             "Resetting save and importing data does not import data. (#13)",
             "The \"Import Data\" button is using a browser-specific styling workaround. (#39)",
+            "Pressing escape on an open advanced popup does not fully close the popup. (#57)",
             "Television description doesn't change with personalization. (#54)",
             "No more HTMLElement.innerHTML where it's not needed, now use innerText. (#43)"
         ],
