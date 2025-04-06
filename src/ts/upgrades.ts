@@ -143,10 +143,9 @@ export class Upgrade {
         this.bought = false;
         this.unlocked = false;
 
-        const icon = data.img; //? does this need to exist?
         /** is already getFile()-ed so don't use getFile() with this variable */
-        const UPGRADE_ICON_PATH = (icon === undefined || icon === null) ? "img/unknown-32-32.png" : `img/upgrades/${icon}`;
-        if (icon === undefined || icon === null) { //* this check is only for undefined/null, a check for if the image file is a 404 is below us
+        const UPGRADE_ICON = (data.img === undefined || data.img === null) ? "img/unknown-32-32.png" : data.img;
+        if (data.img === undefined || data.img === null) { //* this check is only for undefined/null, a check for if the image file is a 404 is below us
             console.warn(`An image file for the "${this.name}" upgrade was not defined. Falling back to the "unknown" image.`);
         }
 
@@ -170,13 +169,13 @@ export class Upgrade {
         // note: the CSS class already defines this as a fallback but even though it does that this will send a warn (which it wouldn't elsewise) so why not also do it this way :-)
         const img = new Image();    
         img.onload = () => {
-            this.html.style.backgroundImage = `url(${UPGRADE_ICON_PATH})`;
+            this.html.style.backgroundImage = `url(${UPGRADE_ICON})`;
         };
         img.onerror = () => {
             this.html.style.backgroundImage = `url(img/unknown-32-32.png)`;
-            console.warn(`Unable to get the image file "${UPGRADE_ICON_PATH}" for the "${this.name}" upgrade (probably 404), falling back to "unknown" image.`);
+            console.warn(`Unable to get the image file "${UPGRADE_ICON}" for the "${this.name}" upgrade (probably 404), falling back to "unknown" image.`);
         };
-        img.src = UPGRADE_ICON_PATH; //* so the onload/onerror events are actually fired
+        img.src = UPGRADE_ICON; //* so the onload/onerror events are actually fired
     }
 
     /**

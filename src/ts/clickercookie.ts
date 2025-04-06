@@ -142,7 +142,7 @@ export default class ClickerCookie extends Mod {
                 quote: "type in cookies",
                 upgradeCost: 15,
                 CPSGain: 0.1,
-                img: "keyboard.png"
+                img: "img/keyboard.png"
             },
             grandpa: {
                 name: "grandpa",
@@ -150,7 +150,7 @@ export default class ClickerCookie extends Mod {
                 quote: "as long as gramps gets a cut",
                 upgradeCost: 100,
                 CPSGain: 1,
-                img: "grandpa.png"
+                img: "img/grandpa.png"
             },
             ranch: {
                 name: "ranch",
@@ -158,7 +158,7 @@ export default class ClickerCookie extends Mod {
                 quote: "not the dressing kind",
                 upgradeCost: 1_100,
                 CPSGain: 8,
-                img: "ranch.png"
+                img: "img/ranch.png"
             },
             television: {
                 name: "television",
@@ -166,7 +166,7 @@ export default class ClickerCookie extends Mod {
                 quote: "hold infomercials on your cookies",
                 upgradeCost: 12_000,
                 CPSGain: 47,
-                img: "tv.png"
+                img: "img/tv.png"
             },
             worker: {
                 name: "worker",
@@ -174,7 +174,7 @@ export default class ClickerCookie extends Mod {
                 quote: "cookies via manual labor",
                 upgradeCost: 130_000,
                 CPSGain: 260,
-                img: "worker.png"
+                img: "img/worker.png"
             },
             wallet: {
                 name: "wallet",
@@ -182,7 +182,7 @@ export default class ClickerCookie extends Mod {
                 quote: "more storage space for your vast amount of cookie income",
                 upgradeCost: 1_400_000,
                 CPSGain: 1_440,
-                img: "wallet.png"
+                img: "img/wallet.png"
             },
             church: {
                 name: "church",
@@ -190,7 +190,7 @@ export default class ClickerCookie extends Mod {
                 quote: "pray to the almighty cookie gods",
                 upgradeCost: 20_000_000,
                 CPSGain: 7_800,
-                img: "church.png"
+                img: "img/church.png"
             }
         };
 
@@ -225,7 +225,7 @@ export default class ClickerCookie extends Mod {
                 name: "Reinforced Keys",
                 quote: "press harder",
                 price: 100,
-                img: "reinforced-keys.png",
+                img: "img/upgrades/reinforced-keys.png",
                 desc: defaultUpgradeDescriptions.keyboard,
                 building: this.keyboard,
                 buildingsRequired: 1,
@@ -236,7 +236,7 @@ export default class ClickerCookie extends Mod {
                 name: "Obsidian Keys",
                 quote: "so heavy they're always pressed",
                 price: 500,
-                img: "obsidian-keys.png",
+                img: "img/upgrades/obsidian-keys.png",
                 desc: defaultUpgradeDescriptions.keyboard,
                 building: this.keyboard,
                 buildingsRequired: 5,
@@ -247,7 +247,7 @@ export default class ClickerCookie extends Mod {
                 name: "Osmium Keys",
                 quote: "that's very heavy",
                 price: 10_000,
-                img: "osmium-keys.png",
+                img: "img/upgrades/osmium-keys.png",
                 desc: defaultUpgradeDescriptions.keyboard,
                 building: this.keyboard,
                 buildingsRequired: 10,
@@ -258,7 +258,7 @@ export default class ClickerCookie extends Mod {
                 name: "10 finger typing",
                 quote: "<i><b>efficiency</b></i>", //? your middle school ict teacher would be so proud
                 price: 100_000,
-                img: "10-finger-typing.png",
+                img: "img/upgrades/10-finger-typing.png",
                 desc: defaultUpgradeDescriptions.keyboard,
                 building: this.keyboard,
                 buildingsRequired: 25,
@@ -269,7 +269,7 @@ export default class ClickerCookie extends Mod {
                 name: "Macros",
                 quote: "why press when you don't have to?",
                 price: 1_000_000,
-                img: "macros.png",
+                img: "img/upgrades/macros.png",
                 desc: defaultUpgradeDescriptions.keyboard,
                 building: this.keyboard,
                 buildingsRequired: 50,
@@ -281,7 +281,7 @@ export default class ClickerCookie extends Mod {
                 name: "Hardwood Walking Stick",
                 quote: "nonna dat softwood junk",
                 price: 1_000,
-                img: "hardwood-walking-stick.png",
+                img: "img/upgrades/hardwood-walking-stick.png",
                 desc: defaultUpgradeDescriptions.grandpa,
                 building: this.grandpa,
                 buildingsRequired: 1
@@ -291,7 +291,7 @@ export default class ClickerCookie extends Mod {
                 name: "Rocking Chair",
                 quote: "newest addition to the porch*", //? because his butt problems weren't bad enough
                 price: 5_000,
-                img: "rocking-chair.png",
+                img: "img/upgrades/rocking-chair.png",
                 desc: defaultUpgradeDescriptions.grandpa,
                 building: this.grandpa,
                 buildingsRequired: 5
@@ -301,7 +301,7 @@ export default class ClickerCookie extends Mod {
                 name: "Reading Glasses",
                 quote: "helps with precise chocolate chip placement",
                 price: 50_000,
-                img: "reading-glasses.png",
+                img: "img/upgrades/reading-glasses.png",
                 desc: defaultUpgradeDescriptions.grandpa,
                 building: this.grandpa,
                 buildingsRequired: 10
@@ -311,7 +311,7 @@ export default class ClickerCookie extends Mod {
                 name: "Dementia Pills",
                 quote: "what was i doing again?",
                 price: 5_000_000,
-                img: "dementia-pills.png",
+                img: "img/upgrades/dementia-pills.png",
                 desc: defaultUpgradeDescriptions.grandpa,
                 building: this.grandpa,
                 buildingsRequired: 25
@@ -321,7 +321,7 @@ export default class ClickerCookie extends Mod {
                 name: "shotgun",
                 quote: "grandpa's precious*",
                 price: 500_000_000,
-                img: "shotgun.png",
+                img: "img/upgrades/shotgun.png",
                 desc: defaultUpgradeDescriptions.grandpa,
                 building: this.grandpa,
                 buildingsRequired: 50
@@ -332,7 +332,7 @@ export default class ClickerCookie extends Mod {
                 name: "Pig Slop",
                 quote: "Wait, what have we been feeding them before now?*",
                 price: 11_000,
-                img: "pig-slop.png",
+                img: "img/upgrades/pig-slop.png",
                 desc: defaultUpgradeDescriptions.ranch,
                 building: this.ranch,
                 buildingsRequired: 1
@@ -342,7 +342,7 @@ export default class ClickerCookie extends Mod {
                 name: "Needle bale",
                 quote: "talk about a hay in a needlestack",
                 price: 55_000,
-                img: "needle-bale.png",
+                img: "img/upgrades/needle-bale.png",
                 desc: defaultUpgradeDescriptions.ranch,
                 building: this.ranch,
                 buildingsRequired: 5
@@ -352,7 +352,7 @@ export default class ClickerCookie extends Mod {
                 name: "Tractors",
                 quote: "eliminating manual labor since 1892",
                 price: 550_000,
-                img: "tractors.png",
+                img: "img/upgrades/tractors.png",
                 desc: defaultUpgradeDescriptions.ranch,
                 building: this.ranch,
                 buildingsRequired: 10
@@ -362,7 +362,7 @@ export default class ClickerCookie extends Mod {
                 name: "Big baconator",
                 quote: "think giant pig mech fueled by potatoes",
                 price: 55_000_000,
-                img: "big-baconator.png",
+                img: "img/upgrades/big-baconator.png",
                 desc: defaultUpgradeDescriptions.ranch,
                 building: this.ranch,
                 buildingsRequired: 25
@@ -372,7 +372,7 @@ export default class ClickerCookie extends Mod {
                 name: "Ranch dressing",
                 quote: "Wrong ranch.",
                 price: 5_500_000_000,
-                img: "ranch-dressing.png",
+                img: "img/upgrades/ranch-dressing.png",
                 desc: defaultUpgradeDescriptions.ranch,
                 building: this.ranch,
                 buildingsRequired: 50
@@ -383,7 +383,7 @@ export default class ClickerCookie extends Mod {
                 name: "Streaming service",
                 quote: "cookie-flix",
                 price: 120_000,
-                img: "streaming-service.png",
+                img: "img/upgrades/streaming-service.png",
                 desc: defaultUpgradeDescriptions.television,
                 building: this.television,
                 buildingsRequired: 1
@@ -393,7 +393,7 @@ export default class ClickerCookie extends Mod {
                 name: "98-inch screen",
                 quote: "unnecessarily large is an understatement.",
                 price: 600_000,
-                img: "98-inch-screen.png",
+                img: "img/upgrades/98-inch-screen.png",
                 desc: defaultUpgradeDescriptions.television,
                 building: this.television,
                 buildingsRequired: 5
@@ -403,7 +403,7 @@ export default class ClickerCookie extends Mod {
                 name: "Surround sound",
                 quote: "it's all around me!",
                 price: 6_000_000,
-                img: "surround-sound.png",
+                img: "img/upgrades/surround-sound.png",
                 desc: defaultUpgradeDescriptions.television,
                 building: this.television,
                 buildingsRequired: 10
@@ -413,7 +413,7 @@ export default class ClickerCookie extends Mod {
                 name: "OLED Display",
                 quote: "s*** it burned in...",
                 price: 60_0000_000,
-                img: "oled-display.png",
+                img: "img/upgrades/oled-display.png",
                 desc: defaultUpgradeDescriptions.television,
                 building: this.television,
                 buildingsRequired: 25
@@ -423,7 +423,7 @@ export default class ClickerCookie extends Mod {
                 name: "8K resolution",
                 quote: "so many pixels!",
                 price: 60_000_000_000,
-                img: "8k-resolution.png",
+                img: "img/upgrades/8k-resolution.png",
                 desc: defaultUpgradeDescriptions.television,
                 building: this.television,
                 buildingsRequired: 50
@@ -434,7 +434,7 @@ export default class ClickerCookie extends Mod {
                 name: "Medkits",
                 quote: "Constant supply of Band-Aids in case of emergency",
                 price: 1_300_000,
-                img: "medkits.png",
+                img: "img/upgrades/medkits.png",
                 desc: defaultUpgradeDescriptions.worker,
                 building: this.worker,
                 buildingsRequired: 1
@@ -444,7 +444,7 @@ export default class ClickerCookie extends Mod {
                 name: "Hard hats",
                 quote: "Keep those skulls safe!*",
                 price: 6_500_000,
-                img: "hard-hats.png",
+                img: "img/upgrades/hard-hats.png",
                 desc: defaultUpgradeDescriptions.worker,
                 building: this.worker,
                 buildingsRequired: 5
@@ -454,7 +454,7 @@ export default class ClickerCookie extends Mod {
                 name: "Fast fingers*",
                 quote: "upmost efficient cookie manufacturing*",
                 price: 65_000_000,
-                img: "fast-fingers.png",
+                img: "img/upgrades/fast-fingers.png",
                 desc: defaultUpgradeDescriptions.worker,
                 building: this.worker,
                 buildingsRequired: 10
@@ -464,7 +464,7 @@ export default class ClickerCookie extends Mod {
                 name: "Weight training",
                 quote: "firmly attach chocolate chips via brute force",
                 price: 6_500_000_000,
-                img: "weight-training.png",
+                img: "img/upgrades/weight-training.png",
                 desc: defaultUpgradeDescriptions.worker,
                 building: this.worker,
                 buildingsRequired: 25
@@ -474,7 +474,7 @@ export default class ClickerCookie extends Mod {
                 name: "Robot workers",
                 quote: "robotic precision",
                 price: 650_000_000_000,
-                img: "robot-workers.png",
+                img: "img/upgrades/robot-workers.png",
                 desc: defaultUpgradeDescriptions.worker,
                 building: this.worker,
                 buildingsRequired: 50
@@ -485,7 +485,7 @@ export default class ClickerCookie extends Mod {
                 name: "200 dollar bills",
                 quote: "I'm sure the federal reserve will be okay with this...*",
                 price: 14_000_000,
-                img: "200-dollar-bills.png",
+                img: "img/upgrades/200-dollar-bills.png",
                 desc: defaultUpgradeDescriptions.wallet,
                 building: this.wallet,
                 buildingsRequired: 1
@@ -495,7 +495,7 @@ export default class ClickerCookie extends Mod {
                 name: "Credit cards",
                 quote: "cookies but digitized",
                 price: 70_000_000,
-                img: "credit-cards.png",
+                img: "img/upgrades/credit-cards.png",
                 desc: defaultUpgradeDescriptions.wallet,
                 building: this.wallet,
                 buildingsRequired: 5
@@ -505,7 +505,7 @@ export default class ClickerCookie extends Mod {
                 name: "Tax refund",
                 quote: "for when you overbake to the IRS*",
                 price: 700_000_000,
-                img: "tax-refund.png",
+                img: "img/upgrades/tax-refund.png",
                 desc: defaultUpgradeDescriptions.wallet,
                 building: this.wallet,
                 buildingsRequired: 10
@@ -515,7 +515,7 @@ export default class ClickerCookie extends Mod {
                 name: "safe",
                 quote: "you can keep your cookies even <b>safe</b>r!!",
                 price: 70_000_000_000,
-                img: "safe.png",
+                img: "img/upgrades/safe.png",
                 desc: defaultUpgradeDescriptions.wallet,
                 building: this.wallet,
                 buildingsRequired: 25
@@ -525,7 +525,7 @@ export default class ClickerCookie extends Mod {
                 name: "Wizard\'s wallet",
                 quote: "<b>infinite</b> storage space*",
                 price: 7_000_000_000_000,
-                img: "wizards-wallet.png",
+                img: "img/upgrades/wizards-wallet.png",
                 desc: defaultUpgradeDescriptions.wallet,
                 building: this.wallet,
                 buildingsRequired: 50
@@ -536,7 +536,7 @@ export default class ClickerCookie extends Mod {
                 name: "the pope",
                 quote: "his holiness will provide many cookies",
                 price: 200_000_000,
-                img: "the-pope.png",
+                img: "img/upgrades/the-pope.png",
                 desc: defaultUpgradeDescriptions.church,
                 building: this.church,
                 buildingsRequired: 1
@@ -546,7 +546,7 @@ export default class ClickerCookie extends Mod {
                 name: "Cookie study",
                 quote: "learning about our baking lord's best recipes",
                 price: 1_000_000_000,
-                img: "cookie-study.png",
+                img: "img/upgrades/cookie-study.png",
                 desc: defaultUpgradeDescriptions.church,
                 building: this.church,
                 buildingsRequired: 5
@@ -556,7 +556,7 @@ export default class ClickerCookie extends Mod {
                 name: "Cookie ritual",
                 quote: "summon cookies from the underworld",
                 price: 10_000_000_000,
-                img: "cookie-ritual.png",
+                img: "img/upgrades/cookie-ritual.png",
                 desc: defaultUpgradeDescriptions.church,
                 building: this.church,
                 buildingsRequired: 10
@@ -566,7 +566,7 @@ export default class ClickerCookie extends Mod {
                 name: "Cookie gods",
                 quote: "Worship them, lest their power overwhelm your mortal form.",
                 price: 1_000_000_000_000,
-                img: "cookie-gods.png",
+                img: "img/upgrades/cookie-gods.png",
                 desc: defaultUpgradeDescriptions.church,
                 building: this.church,
                 buildingsRequired: 25
@@ -576,15 +576,15 @@ export default class ClickerCookie extends Mod {
                 name: "Cible",
                 quote: "Get it? <b>c</b>ookie-b<b>ible</b>!<br><br>I'll see myself out.",
                 price: 100_000_000_000_000,
-                img: "cible.png",
+                img: "img/upgrades/cible.png",
                 desc: defaultUpgradeDescriptions.church,
                 building: this.church,
                 buildingsRequired: 50
             }
         ];
 
-        for (const upgrade of this.UPGRADES_DATA) {
-            this.upgradeHandler.register(upgrade.uid, new Upgrade(this, upgrade));
+        for (const upgradeData of this.UPGRADES_DATA) {
+            this.upgradeHandler.register(upgradeData.uid, new Upgrade(this, upgradeData));
         }
 
         Mod.registerKooh("init", () => { this.init() });

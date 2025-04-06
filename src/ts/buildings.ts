@@ -56,7 +56,7 @@ export class Building {
             const icon = document.createElement("img");
             icon.className = "building-icon";
             if (data.img)
-                icon.src = `img/${data.img}`;
+                icon.src = data.img;
             else
                 icon.src = `img/unknown.png`;
             icon.alt = `${data.name} icon`;
