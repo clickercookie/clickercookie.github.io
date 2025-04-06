@@ -55,10 +55,13 @@ export class Building {
         this.html.addEventListener("mouseout",() => {hideTooltip()});
             const icon = document.createElement("img");
             icon.className = "building-icon";
-            if (data.img)
-                icon.src = data.img;
-            else
-                icon.src = `img/unknown.png`;
+            const BUILDING_ICON_IMG = (data.img) ? data.img : "img/unknown.png";
+            //* Use unknown as a fallback if we can't get the defined image file (404 usually)   
+            icon.onerror = () => {
+                icon.src = "img/unknown.png";
+                console.warn(`Unable to get the image file "${BUILDING_ICON_IMG}" for the "${this.name}" building (probably 404), falling back to "unknown" image.`);
+            };
+            icon.src = BUILDING_ICON_IMG;
             icon.alt = `${data.name} icon`;
             this.html.appendChild(icon);
 

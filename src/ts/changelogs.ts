@@ -249,7 +249,7 @@ export const versionChangelogs: Changelog[] = [
             "Split main.js into multiple script files.",
             "Reorganized the GitHub repo (#35)",
             "Logs can now have a \"note\" (it's below the version header).",
-            "A 404 upgrade icon will now send a warning to the console."
+            "A 404 upgrade or building icon will now send a warning to the console and fallback to unknown."
         ],
         fixed: [
             "Resetting save and importing data does not import data. (#13)",
