@@ -248,7 +248,8 @@ export const versionChangelogs: Changelog[] = [
             "The entire modding system. See the GitHub wiki for more details.",
             "Split main.js into multiple script files.",
             "Reorganized the GitHub repo (#35)",
-            "Logs can now have a \"note\" (it's below the version header)."
+            "Logs can now have a \"note\" (it's below the version header).",
+            "A 404 upgrade icon will now send a warning to the console."
         ],
         fixed: [
             "Resetting save and importing data does not import data. (#13)",

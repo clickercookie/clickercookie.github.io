@@ -63,6 +63,8 @@ enum Versions {
     BETA = 1
 }
 
+type MiddleButton = "stats" | "info" | "options";
+
 interface GameSaveData {
     hasCheated: boolean;
     isModded: boolean;
@@ -147,7 +149,7 @@ export class Game extends SaveProvider {
         // todo before 0.7: does betaSave work here? it looks like it does but i need to thoroughly test it
         if (this.savinator5000.getLocalStorageSave() === null) {
             this.savinator5000.save();
-            console.warn(`save was null and was automatically reset, if this is your first time playing this is an intended behavior.`); // todo: the "save" line should hopefully be the localStorage key
+            console.warn(`${this.savinator5000.saveName} was null and was automatically reset, if this is your first time playing this is an intended behavior.`);
         }
     
         this.savinator5000.load();
@@ -409,16 +411,10 @@ helper.consoleLogDev = function(str: string) {
     if (dev.devMode) console.log(str);
 }
 
-// Popups
-/**
- * **Note: changes to Simple Popups will be coming soon. See #TODO**
- * https://github.com/clickercookie/clickercookie.github.io/wiki/Using-Popups#simple-popups
- */
-
 // ------------------------------------
 // Random Functions
 // ------------------------------------
-function toggleMiddle(param: string) { // TODO 0.7: eliminate unnessesary switch statements and general code, ternary statements might work nice but i'm spitballing here
+function toggleMiddle(param: MiddleButton) { // TODO 0.7: make a cleaner system for this and put it in Game
     const statsMT = document.getElementById("statsMiddleText");
     const infoMT = document.getElementById("infoMiddleText");
     const optionsMT = document.getElementById("optionsMiddleText");
@@ -426,50 +422,43 @@ function toggleMiddle(param: string) { // TODO 0.7: eliminate unnessesary switch
     statsMT.style.display = "none";
     infoMT.style.display = "none";
     optionsMT.style.display = "none";
-    if (param == "stats") {
-        switch (statsUp) { // this should be changed
-        case false:
+    switch (param) {
+    case "stats":
+        if (statsUp) {
+            statsUp = false;
+            optionsMT.style.display = "none";
+            middle.style.background = Personalization.getCurrentBackgroundFile(true);
+        } else {
             optionsUp = false;
             infoUp = false;
             statsUp = true;
             statsMT.style.display = "block";
-            break;
-        case true:
-            statsUp = false;
-            optionsMT.style.display = "none";
-            middle.style.background = Personalization.getCurrentBackgroundFile(true);
-            break;
         }
-    }
-    if (param == "info") {
-        switch (infoUp) {
-        case false:
+        break;
+    case "info":
+        if (infoUp) {
+            infoUp = false;
+            infoMT.style.display = "none";
+            middle.style.background = Personalization.getCurrentBackgroundFile(true);
+        } else {
             statsUp = false;
             optionsUp = false;
             infoUp = true;
             infoMT.style.display = "block";
-            break;
-        case true:
-            infoUp = false;
-            infoMT.style.display = "none";
-            middle.style.background = Personalization.getCurrentBackgroundFile(true);
-            break;
         }
-    }
-    if (param == "options") {
-        switch (optionsUp) {
-        case false:
+        break;
+    case "options":
+        if (optionsUp) {
+            optionsUp = false;
+            optionsMT.style.display = "none";
+            middle.style.background = Personalization.getCurrentBackgroundFile(true);
+        } else {
             statsUp = false;
             infoUp = false;
             optionsUp = true;
             optionsMT.style.display = "block";
-            break;
-        case true:
-            optionsUp = false;
-            optionsMT.style.display = "none";
-            middle.style.background = Personalization.getCurrentBackgroundFile(true);
-            break;
         }
+        break;
     }
 }
 function closeMiddle() {
@@ -502,7 +491,7 @@ const tooltip = {} as {
 tooltip.html = document.getElementById("tooltip") as HTMLDivElement;
 
 tooltip.create = function(x: number, y: number, content: any) {
-    return "this isn't used yet, but 0.6.1 has plans to upgrade the tooltip system, and this will hopefully have functionality";
+    return "this isn't used yet, but 0.7.1 has plans to upgrade the tooltip system, and this will hopefully have functionality";
 }
 
 console.log(`you seem smart, how 'bout you contribute to the project? ${Game.GITHUB_REPO}`);
