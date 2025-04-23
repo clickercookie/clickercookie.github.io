@@ -1,10 +1,11 @@
 import { Building, BuildingData } from "./buildings.js";
 import { commaify, makeSlightlyImperfectFloatNice } from "./helper.js";
-import { Game } from "./main.js";
+import { game, Game } from "./main.js";
 import { Mod } from "./mods.js";
-import { Personalization } from "./personalization.js";
 import { Upgrade, UpgradeData, UpgradeSave } from "./upgrades.js";
 import { SimplePopup } from "./popup.js";
+import { Identifier } from "./handler.js";
+import { Handlers } from "./handlers.js";
 
 // the description of almost every upgrade is the same, but just in case we want to add more upgrades in the future
 // a "desc" field has been added to the upgrades array. Most upgrade will just reference a this array, though
@@ -85,7 +86,7 @@ export default class ClickerCookie extends Mod {
         this.updateStatistics();
     }
     // total cookies
-    public totalCookies: number;
+    public totalCookies: number = 0;
     // cookies per second
     private _cookiesPerSecond: number = 0;
     public get cookiesPerSecond(): number { return this._cookiesPerSecond }
@@ -108,13 +109,6 @@ export default class ClickerCookie extends Mod {
         this._cookieBeenClickedTimes = num;
         this.updateStatistics();
     }
-    // buildings owned
-    private _buildingsOwned: number = 0;
-    public get buildingsOwned() { return this._buildingsOwned }
-    public set buildingsOwned(num: number) {
-        this._buildingsOwned = num;
-        this.updateStatistics();
-    }
 
     // buildings
     public keyboard: Building;
@@ -130,9 +124,9 @@ export default class ClickerCookie extends Mod {
     public readonly BUILDINGS_DATA: Record<string, BuildingData>;
 
     constructor() {
-        super("clickercookie");
+        super("clickercookie", {name: "Clicker Cookie", description: "A totally original game about clicking a cookie.", img: "img/favicon.ico"});
 
-        //* core stuff CANNOT be assigned in the constructor because setters look for personalization stuff that is not loaded from a save yet
+        //* core stuff CANNOT be assigned via setters in the constructor because they look for personalization stuff that is not loaded from a save yet
 
         // buildings and stuff
         this.BUILDINGS_DATA = {
@@ -209,19 +203,19 @@ export default class ClickerCookie extends Mod {
         this.church = new Building(this, this.BUILDINGS_DATA.church);
         this.church.setVisibility(false);
 
-        this.buildingHandler.register("keyboard", this.keyboard);
-        this.buildingHandler.register("grandpa", this.grandpa);
-        this.buildingHandler.register("ranch", this.ranch);
-        this.buildingHandler.register("television", this.television);
-        this.buildingHandler.register("worker", this.worker);
-        this.buildingHandler.register("wallet", this.wallet);
-        this.buildingHandler.register("church", this.church);
+        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "keyboard"), this.keyboard);
+        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "grandpa"), this.grandpa);
+        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "ranch"), this.ranch);
+        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "television"), this.television);
+        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "worker"), this.worker);
+        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "wallet"), this.wallet);
+        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "church"), this.church);
 
         // upgrades
         this.UPGRADES_DATA = [
             // keyboard
             {
-                uid: "cckeyboard1",
+                uid: "keyboard1",
                 name: "Reinforced Keys",
                 quote: "press harder",
                 price: 100,
@@ -232,7 +226,7 @@ export default class ClickerCookie extends Mod {
                 multiplyCookiesPerClick: true
             },
             {
-                uid: "cckeyboard2",
+                uid: "keyboard2",
                 name: "Obsidian Keys",
                 quote: "so heavy they're always pressed",
                 price: 500,
@@ -243,7 +237,7 @@ export default class ClickerCookie extends Mod {
                 multiplyCookiesPerClick: true
             },
             {
-                uid: "cckeyboard3",
+                uid: "keyboard3",
                 name: "Osmium Keys",
                 quote: "that's very heavy",
                 price: 10_000,
@@ -254,7 +248,7 @@ export default class ClickerCookie extends Mod {
                 multiplyCookiesPerClick: true
             },
             {
-                uid: "cckeyboard4",
+                uid: "keyboard4",
                 name: "10 finger typing",
                 quote: "<i><b>efficiency</b></i>", //? your middle school ict teacher would be so proud
                 price: 100_000,
@@ -265,7 +259,7 @@ export default class ClickerCookie extends Mod {
                 multiplyCookiesPerClick: true
             },
             {
-                uid: "cckeyboard5",
+                uid: "keyboard5",
                 name: "Macros",
                 quote: "why press when you don't have to?",
                 price: 1_000_000,
@@ -277,7 +271,7 @@ export default class ClickerCookie extends Mod {
             },
             // grandpa
             {
-                uid: "ccgrandpa1",
+                uid: "grandpa1",
                 name: "Hardwood Walking Stick",
                 quote: "nonna dat softwood junk",
                 price: 1_000,
@@ -287,7 +281,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 1
             },
             {
-                uid: "ccgrandpa2",
+                uid: "grandpa2",
                 name: "Rocking Chair",
                 quote: "newest addition to the porch*", //? because his butt problems weren't bad enough
                 price: 5_000,
@@ -297,7 +291,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 5
             },
             {
-                uid: "ccgrandpa3",
+                uid: "grandpa3",
                 name: "Reading Glasses",
                 quote: "helps with precise chocolate chip placement",
                 price: 50_000,
@@ -307,7 +301,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 10
             },
             {
-                uid: "ccgrandpa4",
+                uid: "grandpa4",
                 name: "Dementia Pills",
                 quote: "what was i doing again?",
                 price: 5_000_000,
@@ -317,7 +311,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 25
             },
             {
-                uid: "ccgrandpa5",
+                uid: "grandpa5",
                 name: "shotgun",
                 quote: "grandpa's precious*",
                 price: 500_000_000,
@@ -328,7 +322,7 @@ export default class ClickerCookie extends Mod {
             },
             // ranch
             {
-                uid: "ccranch1",
+                uid: "ranch1",
                 name: "Pig Slop",
                 quote: "Wait, what have we been feeding them before now?*",
                 price: 11_000,
@@ -338,7 +332,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 1
             },
             {
-                uid: "ccranch2",
+                uid: "ranch2",
                 name: "Needle bale",
                 quote: "talk about a hay in a needlestack",
                 price: 55_000,
@@ -348,7 +342,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 5
             },
             {
-                uid: "ccranch3",
+                uid: "ranch3",
                 name: "Tractors",
                 quote: "eliminating manual labor since 1892",
                 price: 550_000,
@@ -358,7 +352,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 10
             },
             {
-                uid: "ccranch4",
+                uid: "ranch4",
                 name: "Big baconator",
                 quote: "think giant pig mech fueled by potatoes",
                 price: 55_000_000,
@@ -368,7 +362,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 25
             },
             {
-                uid: "ccranch5",
+                uid: "ranch5",
                 name: "Ranch dressing",
                 quote: "Wrong ranch.",
                 price: 5_500_000_000,
@@ -379,7 +373,7 @@ export default class ClickerCookie extends Mod {
             },
             // television
             {
-                uid: "cctelevision1",
+                uid: "television1",
                 name: "Streaming service",
                 quote: "cookie-flix",
                 price: 120_000,
@@ -389,7 +383,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 1
             },
             {
-                uid: "cctelevision2",
+                uid: "television2",
                 name: "98-inch screen",
                 quote: "unnecessarily large is an understatement.",
                 price: 600_000,
@@ -399,7 +393,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 5
             },
             {
-                uid: "cctelevision3",
+                uid: "television3",
                 name: "Surround sound",
                 quote: "it's all around me!",
                 price: 6_000_000,
@@ -409,7 +403,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 10
             },
             {
-                uid: "cctelevision4",
+                uid: "television4",
                 name: "OLED Display",
                 quote: "s*** it burned in...",
                 price: 60_0000_000,
@@ -419,7 +413,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 25
             },
             {
-                uid: "cctelevision5",
+                uid: "television5",
                 name: "8K resolution",
                 quote: "so many pixels!",
                 price: 60_000_000_000,
@@ -430,7 +424,7 @@ export default class ClickerCookie extends Mod {
             },
             // worker
             {
-                uid: "ccworker1",
+                uid: "worker1",
                 name: "Medkits",
                 quote: "Constant supply of Band-Aids in case of emergency",
                 price: 1_300_000,
@@ -440,7 +434,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 1
             },
             {
-                uid: "ccworker2",
+                uid: "worker2",
                 name: "Hard hats",
                 quote: "Keep those skulls safe!*",
                 price: 6_500_000,
@@ -450,7 +444,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 5
             },
             {
-                uid: "ccworker3",
+                uid: "worker3",
                 name: "Fast fingers*",
                 quote: "upmost efficient cookie manufacturing*",
                 price: 65_000_000,
@@ -460,7 +454,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 10
             },
             {
-                uid: "ccworker4",
+                uid: "worker4",
                 name: "Weight training",
                 quote: "firmly attach chocolate chips via brute force",
                 price: 6_500_000_000,
@@ -470,7 +464,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 25
             },
             {
-                uid: "ccworker5",
+                uid: "worker5",
                 name: "Robot workers",
                 quote: "robotic precision",
                 price: 650_000_000_000,
@@ -481,7 +475,7 @@ export default class ClickerCookie extends Mod {
             },
             // wallet
             {
-                uid: "ccwallet1",
+                uid: "wallet1",
                 name: "200 dollar bills",
                 quote: "I'm sure the federal reserve will be okay with this...*",
                 price: 14_000_000,
@@ -491,7 +485,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 1
             },
             {
-                uid: "ccwallet2",
+                uid: "wallet2",
                 name: "Credit cards",
                 quote: "cookies but digitized",
                 price: 70_000_000,
@@ -501,7 +495,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 5
             },
             {
-                uid: "ccwallet3",
+                uid: "wallet3",
                 name: "Tax refund",
                 quote: "for when you overbake to the IRS*",
                 price: 700_000_000,
@@ -511,7 +505,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 10
             },
             {
-                uid: "ccwallet4",
+                uid: "wallet4",
                 name: "safe",
                 quote: "you can keep your cookies even <b>safe</b>r!!",
                 price: 70_000_000_000,
@@ -521,7 +515,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 25
             },
             {
-                uid: "ccwallet5",
+                uid: "wallet5",
                 name: "Wizard\'s wallet",
                 quote: "<b>infinite</b> storage space*",
                 price: 7_000_000_000_000,
@@ -532,7 +526,7 @@ export default class ClickerCookie extends Mod {
             },
             // church
             {
-                uid: "ccchurch1",
+                uid: "church1",
                 name: "the pope",
                 quote: "his holiness will provide many cookies",
                 price: 200_000_000,
@@ -542,7 +536,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 1
             },
             {
-                uid: "ccchurch2",
+                uid: "church2",
                 name: "Cookie study",
                 quote: "learning about our baking lord's best recipes",
                 price: 1_000_000_000,
@@ -552,7 +546,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 5
             },
             {
-                uid: "ccchurch3",
+                uid: "church3",
                 name: "Cookie ritual",
                 quote: "summon cookies from the underworld",
                 price: 10_000_000_000,
@@ -562,7 +556,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 10
             },
             {
-                uid: "ccchurch4",
+                uid: "church4",
                 name: "Cookie gods",
                 quote: "Worship them, lest their power overwhelm your mortal form.",
                 price: 1_000_000_000_000,
@@ -572,7 +566,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 25
             },
             {
-                uid: "ccchurch5",
+                uid: "church5",
                 name: "Cible",
                 quote: "Get it? <b>c</b>ookie-b<b>ible</b>!<br><br>I'll see myself out.",
                 price: 100_000_000_000_000,
@@ -584,7 +578,7 @@ export default class ClickerCookie extends Mod {
         ];
 
         for (const upgradeData of this.UPGRADES_DATA) {
-            this.upgradeHandler.register(upgradeData.uid, new Upgrade(this, upgradeData));
+            Handlers.UPGRADE.register(new Identifier(this.NAMESPACE, upgradeData.uid), new Upgrade(this, upgradeData));
         }
 
         Mod.registerKooh("init", () => { this.init() });
@@ -592,42 +586,43 @@ export default class ClickerCookie extends Mod {
         Mod.registerKooh("loop", () => { this.gameLoop() });
         Mod.registerKooh("cps", () => { this.cpsUpdate() });
         Mod.registerKooh("personalization", () => {
-            this.upgradeHandler.getFromUID("cckeyboard1").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
-            this.upgradeHandler.getFromUID("cckeyboard2").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
-            this.upgradeHandler.getFromUID("cckeyboard3").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
-            this.upgradeHandler.getFromUID("cckeyboard4").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
-            this.upgradeHandler.getFromUID("cckeyboard5").desc = `Multiplys Keyboard and clicking ${Personalization.getCurrentlyClicked().toLowerCase()} production by 2`;
+            Handlers.UPGRADE.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard1")).desc = `Multiplys Keyboard and clicking ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()} production by 2`;
+            Handlers.UPGRADE.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard2")).desc = `Multiplys Keyboard and clicking ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()} production by 2`;
+            Handlers.UPGRADE.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard3")).desc = `Multiplys Keyboard and clicking ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()} production by 2`;
+            Handlers.UPGRADE.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard4")).desc = `Multiplys Keyboard and clicking ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()} production by 2`;
+            Handlers.UPGRADE.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard5")).desc = `Multiplys Keyboard and clicking ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()} production by 2`;
             
-            this.buildingHandler.getFromUID("television").quote = `hold infomercials on your ${Personalization.getCurrentlyClickedPlural().toLowerCase()}`;
+            Handlers.BUILDING.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard")).quote = `type in ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural.toLowerCase()}`;
+            Handlers.BUILDING.getFromIdentifier(new Identifier(this.NAMESPACE, "television")).quote = `hold infomercials on your ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()}`;
         });
     }
 
     init() {
         // Register personalization things (must be before save load because loading requires these to be registered to set them)
-        Personalization.currentlyClickedHandler.register("cookie", {name: "Cookie", namePlural: "Cookies", src: "img/cookie.png"});
-        Personalization.currentlyClickedHandler.register("potato", {name: "Potato", namePlural: "Potatoes", src: "img/potato.png"});
-        Personalization.currentlyClickedHandler.register("strawberry", {name: "Strawberry", namePlural: "Strawberries", src: "img/strawberry.png"});
-        Personalization.currentlyClickedHandler.register("cake", {name: "Cake", namePlural: "Cakes", src: "img/cake.png", circular: false, pixelated: true});
-        Personalization.backgroundHandler.register("blue", {name: "Blue", src: "img/backgrounds/background-blue.png"});
-        Personalization.backgroundHandler.register("green", {name: "Green", src: "img/backgrounds/background-green.png"});
-        Personalization.backgroundHandler.register("gray", {name: "Gray", src: "img/backgrounds/background-gray.png"});
-        Personalization.backgroundHandler.register("purple", {name: "Purple", src: "img/backgrounds/background-purple.png"});
-        Personalization.backgroundHandler.register("darkblue", {name: "Dark Blue", src: "img/backgrounds/background-darkblue.png"});
-        Personalization.backgroundHandler.register("orange", {name: "Orange", src: "img/backgrounds/background-orange.png"});
-        Personalization.backgroundHandler.register("pink", {name: "Pink", src: "img/backgrounds/background-pink.png"});
-        Personalization.backgroundHandler.register("lime", {name: "Lime", src: "img/backgrounds/background-lime.png"});
-        Personalization.backgroundHandler.register("yellow", {name: "Yellow", src: "img/backgrounds/background-yellow.png"});
-        Personalization.backgroundHandler.register("red", {name: "Red", src: "img/backgrounds/background-red.png"});
-        Personalization.backgroundHandler.register("white", {name: "White", src: "img/backgrounds/background-white.png"});
+        Handlers.CURRENTLY_CLICKED.register(new Identifier(this.NAMESPACE, "cookie"), {name: "Cookie", namePlural: "Cookies", src: "img/cookie.png"});
+        Handlers.CURRENTLY_CLICKED.register(new Identifier(this.NAMESPACE, "potato"), {name: "Potato", namePlural: "Potatoes", src: "img/potato.png"});
+        Handlers.CURRENTLY_CLICKED.register(new Identifier(this.NAMESPACE, "strawberry"), {name: "Strawberry", namePlural: "Strawberries", src: "img/strawberry.png"});
+        Handlers.CURRENTLY_CLICKED.register(new Identifier(this.NAMESPACE, "cake"), {name: "Cake", namePlural: "Cakes", src: "img/cake.png", circular: false, pixelated: true});
+        Handlers.BACKGROUND.register(new Identifier(this.NAMESPACE, "blue"), {name: "Blue", src: "img/backgrounds/background-blue.png"});
+        Handlers.BACKGROUND.register(new Identifier(this.NAMESPACE, "green"), {name: "Green", src: "img/backgrounds/background-green.png"});
+        Handlers.BACKGROUND.register(new Identifier(this.NAMESPACE, "gray"), {name: "Gray", src: "img/backgrounds/background-gray.png"});
+        Handlers.BACKGROUND.register(new Identifier(this.NAMESPACE, "purple"), {name: "Purple", src: "img/backgrounds/background-purple.png"});
+        Handlers.BACKGROUND.register(new Identifier(this.NAMESPACE, "darkblue"), {name: "Dark Blue", src: "img/backgrounds/background-darkblue.png"});
+        Handlers.BACKGROUND.register(new Identifier(this.NAMESPACE, "orange"), {name: "Orange", src: "img/backgrounds/background-orange.png"});
+        Handlers.BACKGROUND.register(new Identifier(this.NAMESPACE, "pink"), {name: "Pink", src: "img/backgrounds/background-pink.png"});
+        Handlers.BACKGROUND.register(new Identifier(this.NAMESPACE, "lime"), {name: "Lime", src: "img/backgrounds/background-lime.png"});
+        Handlers.BACKGROUND.register(new Identifier(this.NAMESPACE, "yellow"), {name: "Yellow", src: "img/backgrounds/background-yellow.png"});
+        Handlers.BACKGROUND.register(new Identifier(this.NAMESPACE, "red"), {name: "Red", src: "img/backgrounds/background-red.png"});
+        Handlers.BACKGROUND.register(new Identifier(this.NAMESPACE, "white"), {name: "White", src: "img/backgrounds/background-white.png"});
 
-        Personalization.setCurrentlyClicked("cookie");
-        Personalization.setBackground("blue");
+        Handlers.CURRENTLY_CLICKED.setCurrentlyClicked("clickercookie:cookie");
+        Handlers.BACKGROUND.setBackground("clickercookie:blue");
 
         // Holiday Events
         const date = new Date();
         // anniversary
         if (date.getMonth() === 2 && date.getDate() === 3) { // if date is 3/3
-            Personalization.setCurrentlyClicked("cake");
+            Handlers.CURRENTLY_CLICKED.setCurrentlyClicked("cake");
             new SimplePopup({
                 x: 350,
                 y: 175,
@@ -670,12 +665,12 @@ export default class ClickerCookie extends Mod {
     }
 
     updateStatistics() { // todo: make this only run when the stats page is a. first pulled up, b. continued to be pulled up
-        document.getElementById("cookiesStat").innerText = `${Personalization.getCurrentlyClickedPlural()}: ${makeSlightlyImperfectFloatNice(this.cookies)}`;
-        document.getElementById("allTimeCookies").innerText = `All Time ${Personalization.getCurrentlyClickedPlural()}: ${makeSlightlyImperfectFloatNice(this.totalCookies)}`;
-        document.getElementById("cookiesPerSecondStat").innerText = `${Personalization.getCurrentlyClickedPlural()} Per Second: ${makeSlightlyImperfectFloatNice(this.cookiesPerSecond)}`;
-        document.getElementById("buildingsOwnedStat").innerText = `Buildings Owned: ${commaify(this.buildingsOwned)}`;
-        document.getElementById("cookieBeenClickedTimesStat").innerText = `Total ${Personalization.getCurrentlyClicked()} Clicks: ${this.cookieBeenClickedTimes}`;
-        document.getElementById("cookiesPerClickStat").innerText = `${Personalization.getCurrentlyClickedPlural()} Per Click: ${this.cookiesPerClick}`;
+        document.getElementById("cookiesStat").innerText = `${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural}: ${makeSlightlyImperfectFloatNice(this.cookies)}`;
+        document.getElementById("allTimeCookies").innerText = `All Time ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural}: ${makeSlightlyImperfectFloatNice(this.totalCookies)}`;
+        document.getElementById("cookiesPerSecondStat").innerText = `${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural} Per Second: ${makeSlightlyImperfectFloatNice(this.cookiesPerSecond)}`;
+        document.getElementById("buildingsOwnedStat").innerText = `Buildings Owned: ${commaify(game.buildingsOwned)}`; // todo: should this be in Game? How should statistics actually work at all?
+        document.getElementById("cookieBeenClickedTimesStat").innerText = `Total ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name} Clicks: ${this.cookieBeenClickedTimes}`;
+        document.getElementById("cookiesPerClickStat").innerText = `${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural} Per Click: ${this.cookiesPerClick}`;
     }
 
     cookieClicked() {
@@ -735,7 +730,7 @@ export default class ClickerCookie extends Mod {
 
             /* upgrades */
             upgradesBought: Upgrade.upgradesBought,
-            upgradesSave: this.upgradeHandler.dumpUpgradesSave()
+            upgradesSave: Handlers.UPGRADE.dumpUpgradesSave(this.NAMESPACE)
         }
     }
     loadSaveData(saveData: ClickerCookieSaveData) {        
@@ -795,6 +790,6 @@ export default class ClickerCookie extends Mod {
         this.church.CPSGiven = saveData.churchCPSGiven;
         // ...
 
-        this.upgradeHandler.loadUpgradesSave(saveData.upgradesSave);
+        Handlers.UPGRADE.loadUpgradesSave(this.NAMESPACE, saveData.upgradesSave);
     }
 }

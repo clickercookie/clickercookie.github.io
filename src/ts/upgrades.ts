@@ -3,79 +3,24 @@ import { clamp, commaify } from "./helper.js";
 import { hideTooltip } from "./tooltip.js";
 import { game, Game } from "./main.js";
 import ClickerCookie from "./clickercookie.js";
-import { Handler } from "./handler.js";
 
 export interface UpgradeSave {
     unlocked: boolean;
     bought: boolean;
 }
 
-export class UpgradeHandler extends Handler<Upgrade> {
-    /**
-     * TODO: NEEDS STATISTIC SUPPORT
-     * @param statistic Are we destroying all the upgrades in the Statistics page?
-     */
-    destroyAllUpgrades(statistic: boolean=false) {
-        for (const value of this) {
-            value.destroy();
-        }
-    }
-
-    /** 
-     * This is used to create an upgrade if it is unlocked and not bought. This is distinct from {@link UpgradeHandler.checkUpgradeAvailability()}, in that the purpose of that function is to set it to unlocked if it meets its criteria .
-     * 
-     * This is really only used in the context of loading, wherein unlocked and unbought upgrades will not yet exist.
-     * */
-    showUnlockedUpgrades() { //? is this still used? isn't this just checkUpgradeAvaliability?
-        for (const value of this) {
-            if (value.unlocked === true && value.bought !== true)
-                // new Upgrade(game, game.UPGRADES_DATA[i]);
-                value.create();
-        }
-    }
-
-    /**
-     * Goes through every upgrade registered to the {@link UpgradeHandler} and check if it's ready to be created. If it is, then set it to unlocked then run the {@link Upgrade.create()} method on it.
-     * 
-     * This is distinct from {@link UpgradeHandler.showUnlockedUpgrades()}, in that the purpose of that function is to create an upgrade if it is unlocked and unbought.
-     */
-    checkUpgradeAvailability() {
-        for (const value of this) {
-            if (value.building.bought >= value.buildingsRequired && value.unlocked === false) {
-                value.create();
-                value.unlocked = true;
-            }
-        }
-    }
-
-    dumpUpgradesSave() {
-        const saveObj: Record<string, UpgradeSave> = {};
-        for (const value of this) {
-            saveObj[value.uid] = {
-                unlocked: value.unlocked,
-                bought: value.bought
-            }
-        }
-        return saveObj;
-    }
-
-    loadUpgradesSave(saveObj: Record<string, UpgradeSave>) {
-        for (let i in saveObj) {
-            this.getFromUID(i).bought = saveObj[i].bought;
-            this.getFromUID(i).unlocked = saveObj[i].unlocked;
-        }
-    }
-}
-
 export interface UpgradeData {
-    /** This is used to save unlocked/bought properties for the upgrade, and should be unique and NEVER CHANGE. it can be whatever you want.
+    /** 
+     * This is used to save unlocked/bought properties for the upgrade, and should be unique and NEVER CHANGE. it can be whatever you want.
      * See {@link Game.UPGRADES_DATA} for the reserved ones.
+     * 
+     * todo: with Identifier is this a thing of the past?
      */
     uid: string;
     name: string;
     quote: string;
     price: number;
-    img?: string; //? should this be the full path (ex. img/upgrades/xyz.png) or one that cuts that bit out? (ex. xyz.png (what it currently is))
+    img?: string;
     desc: string;
     building: Building;
     /** The number of buildings bought required to unlock the upgrade */

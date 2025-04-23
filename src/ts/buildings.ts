@@ -2,9 +2,6 @@ import ClickerCookie from "./clickercookie.js";
 import { capitalize, commaify, clamp } from "./helper.js";
 import { game } from "./main.js";
 import { hideTooltip } from "./tooltip.js";
-import { Handler } from "./handler.js"
-
-export class BuildingHandler extends Handler<Building> {}
 
 export interface BuildingData {
     name: string;
@@ -34,6 +31,7 @@ export class Building {
     readonly upgradeCostMultiplier: number;
 
     private _bought: number;
+    /** Number of buildings bought */
     public get bought() { return this._bought }
     public set bought(num: number) {
         this._bought = num;

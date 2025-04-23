@@ -89,3 +89,12 @@ export function object2HTML(object: Record<string, string>): string {
     }
     return newHTML;
 }
+
+/**
+ * Simple function takes a string and wraps it like so: `url(<str>)` so when setting CSS we don't have to use ugly template literals
+ * 
+ * @param str The string to wrap `url()` around
+ */
+export function url(str: string): string {
+    return `url(${str})`;
+}

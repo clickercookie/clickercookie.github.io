@@ -1,5 +1,5 @@
 // ------------------------------------
-// Variable & Object Definitions
+// Version Constants
 // ------------------------------------
 const version: string = "0.7";
 const versionBranch: number = (location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") ? 1 : 0; // 0 is main, 1 is beta
@@ -8,26 +8,18 @@ const inDevelopment: boolean = (location.hostname === "localhost" || location.ho
 // ------------------------------------
 // Imports
 // ------------------------------------
+import { Identifier } from "./handler.js";
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
-import { object2HTML } from "./helper.js";
+import { object2HTML, url } from "./helper.js";
 import { Upgrade, updateUpgradesBoughtStatistic, expandUpgradesHolder } from "./upgrades.js";
-import { SaveHandler, SaveProvider, saves, Savinator } from "./saving.js";
-import { NewMod } from "./exmod.js"; //* note: this import is intentionally left unused so tsc can find this file and compile it
-import { Personalization } from "./personalization.js";
-import { Mod, ModHandler } from "./mods.js"
+import { SaveProvider, saves, Savinator } from "./saving.js";
+import { Background, CurrentlyClickedObject } from "./personalization.js";
+import { Mod } from "./mods.js"
 import ClickerCookie from "./clickercookie.js"
 import { SimplePopup } from "./popup.js";
+import { Handlers, ModHandler } from "./handlers.js";
 
-/**
- * our lord & savior, the save handler
- */
-export const saveHandler = new SaveHandler(); //* this thing's position in the script (where it's defined) may change later on. originally it was with game's declaration but we need it in the Game class so it complained about inability to access a lexical declaration so i moved it up here 
-/**
- * our abstracted lord & savior, the mod handler
- * 
- * temp: Many things with the modding system are pretty much "it's a good idea to do this, but if you don't *want* to you don't have to.". This is different, you **MUST** register with the modProvider.
- */
-export const modHandler = new ModHandler(saveHandler);
+import { NewMod } from "./exmod.js"; //* note: this import is intentionally left unused so tsc can find this file and compile it
 
 // ------------------------------------
 // Variable & Object Definitions
@@ -71,8 +63,8 @@ interface GameSaveData {
     autoSavingAllowed: boolean;
 
     // personalization
-    currentClickedObjectName: string;
-    backgroundName: string;
+    currentlyClickedObjectKey: string;
+    currentBackgroundKey: string;
 }
 
 export class Game extends SaveProvider {
@@ -86,11 +78,21 @@ export class Game extends SaveProvider {
         "potatman4": "Playtesting",
         "Wolfsarecool44": "Playtesting, Emotional Support"
     }
+    public static readonly DEFAULT_BACKGROUND: string = "clickercookie:blue";
+    public static readonly DEFAULT_CURRENTLY_CLICKED_OBJECT: string = "clickercookie:cookie";
 
     static readonly Versions = Versions;
 
     /** Said to be the physical manifestation of the cookie gods themselves... */
     public clickercookie: ClickerCookie;
+
+    // buildings owned
+    private _buildingsOwned: number = 0;
+    public get buildingsOwned() { return this._buildingsOwned }
+    public set buildingsOwned(num: number) {
+        this._buildingsOwned = num;
+        this.clickercookie.updateStatistics();
+    }
 
     // self-explainatory-ish things
     private _hasCheated: boolean;
@@ -135,7 +137,7 @@ export class Game extends SaveProvider {
 
         this.clickercookie = new ClickerCookie();
 
-        this.savinator5000 = new Savinator(saveHandler);
+        this.savinator5000 = new Savinator(Handlers.SAVE);
 
         this.theGameCanLoopBecauseTheInitializationIsCompleted = false;
     }
@@ -265,8 +267,8 @@ export class Game extends SaveProvider {
             element.addEventListener("click", () => {closeMiddle()});
         }
         document.getElementById("creditsButton").addEventListener("click", () => {new SimplePopup({x: 320, y: 175, text: object2HTML(Game.CREDITS), title: "Credits"})});
-        document.getElementById("backgroundSelect").addEventListener("change", () => {Personalization.setBackground((document.getElementById("backgroundSelect") as HTMLFormElement).value)});
-        document.getElementById("currentlyClickedSelect").addEventListener("change", () => {Personalization.setCurrentlyClicked((document.getElementById("currentlyClickedSelect") as HTMLFormElement).value)});
+        document.getElementById("backgroundSelect").addEventListener("change", () => {Handlers.BACKGROUND.setBackground((document.getElementById("backgroundSelect") as HTMLFormElement).value)});
+        document.getElementById("currentlyClickedSelect").addEventListener("change", () => {Handlers.CURRENTLY_CLICKED.setCurrentlyClicked((document.getElementById("currentlyClickedSelect") as HTMLFormElement).value)});
         document.getElementById("saveButton").addEventListener("click", () => {this.savinator5000.save()});
         document.getElementById("loadButton").addEventListener("click", () => {this.savinator5000.load()});
         document.getElementById("resetSaveButton").addEventListener("click", () => {new SimplePopup({x: 300, y: 150, text: "Are you sure you want to do this?", func: () => {localStorage.removeItem("newSave"); location.reload()}, title: "Warning", backButton: true, isError: true})});
@@ -302,33 +304,22 @@ export class Game extends SaveProvider {
     gameLoop() {
         if (!this.theGameCanLoopBecauseTheInitializationIsCompleted) return;
 
-        for (const mod of modHandler) {
-            mod.upgradeHandler.checkUpgradeAvailability();
-        }
+        Handlers.UPGRADE.checkUpgradeAvailability();
         
-        /*? should these go in clickercookie or game? */
         // stats that need to be updated beforehand
         let buildingsOwned = 0;
-        for (const mod of modHandler) {
-            for (const value of mod.buildingHandler) {
-                buildingsOwned += value.bought;
-            }
+        for (const building of Handlers.BUILDING) {
+            buildingsOwned += building.bought;
         }
-        this.clickercookie.buildingsOwned = buildingsOwned;
+        this.buildingsOwned = buildingsOwned;
 
         let cps = 0;
-        for (const mod of modHandler) {
-            for (const value of mod.buildingHandler) {
-                cps += value.CPSGiven;
-            }
+        for (const building of Handlers.BUILDING) {
+            cps += building.CPSGiven;
         }
         this.clickercookie.cookiesPerSecond = cps;
         
-        let totalUpgradesRegistered = 0;
-        for (const mod of modHandler) {
-            totalUpgradesRegistered += mod.upgradeHandler.length;
-        }
-        document.getElementById("totalUpgradesCounter").innerText = totalUpgradesRegistered.toString();
+        document.getElementById("totalUpgradesCounter").innerText = Handlers.UPGRADE.length.toString();
 
         Mod.callKooh("loop");
     }
@@ -348,8 +339,8 @@ export class Game extends SaveProvider {
             autoSavingAllowed: this.autoSavingAllowed,
             
             // personalization
-            currentClickedObjectName: Personalization.getCurrentlyClicked().toLowerCase(),
-            backgroundName: Personalization.currentBackground.name.toLowerCase(), // todo: make better
+            currentlyClickedObjectKey: Handlers.CURRENTLY_CLICKED.getKeyFromValue(Handlers.CURRENTLY_CLICKED.getCurrentlyClicked()),
+            currentBackgroundKey: Handlers.BACKGROUND.getKeyFromValue(Handlers.BACKGROUND.getCurrentBackground()), // todo: make better
         }
     }
 
@@ -358,15 +349,13 @@ export class Game extends SaveProvider {
         this.isModded = saveData.isModded;
         this.autoSavingAllowed = saveData.autoSavingAllowed;
 
-        // personalization
-        Personalization.setCurrentlyClicked(saveData.currentClickedObjectName);
-        Personalization.setBackground(saveData.backgroundName);
+        Handlers.CURRENTLY_CLICKED.setCurrentlyClicked(saveData.currentlyClickedObjectKey);
+        Handlers.BACKGROUND.setBackground(saveData.currentBackgroundKey);
 
         // the following doesn't have anything to do with GameSaveData but will be done here because this spot makes the most sense
-        for (const mod of modHandler) {
-            mod.upgradeHandler.destroyAllUpgrades();
-            mod.upgradeHandler.showUnlockedUpgrades();
-        }
+        Handlers.UPGRADE.destroyAllUpgrades();
+        Handlers.UPGRADE.showUnlockedUpgrades();
+
         document.getElementById("upgradesBoughtCounter").innerText = Upgrade.upgradesBought.toString();
         updateUpgradesBoughtStatistic();
     }
@@ -427,7 +416,7 @@ function toggleMiddle(param: MiddleButton) { // TODO 0.7: make a cleaner system 
         if (statsUp) {
             statsUp = false;
             optionsMT.style.display = "none";
-            middle.style.background = Personalization.getCurrentBackgroundFile(true);
+            middle.style.background = url(Handlers.BACKGROUND.getCurrentBackground().src);
         } else {
             optionsUp = false;
             infoUp = false;
@@ -439,7 +428,7 @@ function toggleMiddle(param: MiddleButton) { // TODO 0.7: make a cleaner system 
         if (infoUp) {
             infoUp = false;
             infoMT.style.display = "none";
-            middle.style.background = Personalization.getCurrentBackgroundFile(true);
+            middle.style.background = url(Handlers.BACKGROUND.getCurrentBackground().src);
         } else {
             statsUp = false;
             optionsUp = false;
@@ -451,7 +440,7 @@ function toggleMiddle(param: MiddleButton) { // TODO 0.7: make a cleaner system 
         if (optionsUp) {
             optionsUp = false;
             optionsMT.style.display = "none";
-            middle.style.background = Personalization.getCurrentBackgroundFile(true);
+            middle.style.background = url(Handlers.BACKGROUND.getCurrentBackground().src);
         } else {
             statsUp = false;
             infoUp = false;
@@ -469,7 +458,7 @@ function closeMiddle() {
     document.getElementById("optionsMiddleText").style.display = "none";
     document.getElementById("statsMiddleText").style.display = "none";
     document.getElementById("infoMiddleText").style.display = "none";
-    document.getElementById("middle").style.background = Personalization.getCurrentBackgroundFile(true);
+    document.getElementById("middle").style.background = url(Handlers.BACKGROUND.getCurrentBackground().src);
 }
 function versionNumberMousedOver(undo=false) {
     if (!undo)
@@ -498,8 +487,8 @@ console.log(`you seem smart, how 'bout you contribute to the project? ${Game.GIT
 
 export const game = new Game();
 
-saveHandler.registerProvider("game", game);
-modHandler.register(game.clickercookie.NAMESPACE, game.clickercookie);
+Handlers.SAVE.registerProvider("game", game);
+Handlers.MOD.register(new Identifier(game.clickercookie.NAMESPACE, "root"), game.clickercookie);
 
 // timer things
 setInterval(() => {
@@ -518,17 +507,17 @@ setInterval(() => { // auto-saving
 
 // Events
 // todo: add to game
-function resizeEventHandler() { // ? is the term "event handler" right?
+function resizeEventListener() {
     // change middle text heights
     const middleTexts = Array.from(document.querySelectorAll(".middle-main"));
     for (const element of middleTexts) {
         (element as HTMLElement).style.height = window.innerHeight - document.getElementById("middleButtons").offsetHeight+"px";
     }
 }
-resizeEventHandler(); // since we do need certain elements like the middle text to have the correct size without having to resize the window, we call this now
-window.addEventListener("resize",resizeEventHandler);
+resizeEventListener(); // since we do need certain elements like the middle text to have the correct size without having to resize the window, we call this now
+window.addEventListener("resize", resizeEventListener);
 
 game.init();
 
 console.log("game:", game);
-console.log("mod handler:", modHandler)
+console.log("mod handler:", Handlers.MOD);

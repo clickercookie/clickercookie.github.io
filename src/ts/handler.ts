@@ -1,62 +1,109 @@
-// iterator junk i don't understand but works
-class BaseIterator<T> implements Iterator<T> {
-    private index: number;
-    private done: boolean;
-
-    constructor(private values: T[]) {
-        this.index = 0;
-        this.done = false;
+export class Handler<T> implements Iterable<T> {
+    /** This stores the stringified Identifier as the key and then the values is obviously T. We store the identifier stringified because objects are never equal so we can't `get()` from the Map without using the same obj reference. */
+    private registered: Map<string, T>;
+    /** the number of registered items in the handler */
+    public get length(): number {
+        return this.registered.size;
     }
 
-    next(): IteratorResult<T, number | undefined> {
-        if (this.done) {
-            return {
-                done: this.done,
-                value: undefined
-            };
+    constructor() {
+        this.registered = new Map();
+    }
+    
+    register(identifier: Identifier, object: T) {
+        const stringifiedIdentifier = identifier.toString();
+        if (this.registered.has(stringifiedIdentifier) !== false) {
+            console.error(`TstringifiedIdentifieried to register object with Identifier "${identifier.toString()}" to a Handler, but it already exists!`);
+            // todo ASAP: should this return?
         }
+        this.registered.set(stringifiedIdentifier, object);
+    }
 
-        if (this.index === this.values.length) {
-            this.done = true;
-            return {
-                done: this.done,
-                value: this.index
-            };
+    /**
+     * If a {@link T} is registered with the given ID than return it, if it's not then return undefined
+     * @param stringIdentifier The identifier to get from
+     */
+    getFromIdentifier(identifier: Identifier): T | undefined {
+        if (identifier === undefined) {
+            console.warn(`Tried to get object from a Handler but identifier was undefined. Will return %cundefined%c.`, "font-style: italic;", "font-style: default;");
+            return undefined;
         }
+        const stringifiedIdentifier = identifier.toString();
+        if (this.registered.has(stringifiedIdentifier) === false) {
+            console.warn(`Tried to get object from a Handler with Identifier "${identifier}" that does not exist. Will return %cundefined%c.`, "font-style: italic;", "font-style: default;");
+        }
+        return this.registered.get(stringifiedIdentifier);
+    }
 
-        const value = this.values[this.index];
-        this.index += 1;
+    /**
+     * Returns a list of {@link T} of a given namespace
+     * @param namespace The namespace to get the {@link T}s of.
+     */
+    getValuesFromNamespace(namespace: string): T[] {
+        return Array.from(this.registered.entries())
+            .filter(([key, _]) => Identifier.fromString(key).namespace === namespace)
+            .map(([_, value]) => value);
+    }
 
-        return {
-            done: false,
-            value
-        };
+    /**
+     * Gets a stringified key from a given registered value
+     * @param value The value to get the key of
+     * @returns The value's key
+     */
+    getKeyFromValue(value: T): string | undefined {
+        for (const [key, val] of this.registered.entries()) {
+            if (val === value) {
+                return key;
+            }
+        }
+        return undefined;
+    }
+
+    [Symbol.iterator](): MapIterator<T> {
+        return this.registered.values();
     }
 }
 
-export class Handler<T> implements Iterable<T> {
-    private registered: Record<string, T> = {};
-    /** the number of registered items in the handler */
-    public get length(): number {
-        return Object.keys(this.registered).length;
-    }
-    
-    register(uid: string, object: T) {
-        if (this.registered[uid] !== undefined) {
-            console.error(`Tried to register object with UID "${uid}" to a Handler, but it already exists!`)
+export class Identifier {
+    /**
+     * Constructs a new {@link Identifier} from a stringified Identifier (from {@link Identifier.toString()}). If the string is not valid then a warning will be logged and `undefined` will be returned.
+     * @param stringified The stringified Identifier
+     * @returns A new {@link Identifier}
+     */
+    static fromString(stringified: string): Identifier | undefined {
+        const regex = /\w+:\w+/;
+        if (!regex.test(stringified)) {
+            console.warn(`Cannot construct a new Identifier from invalid string "${stringified}". Returning %cundefined%c.`, "font-style: italic;", "font-style: default;");
+            return undefined;
         }
 
-        this.registered[uid] = object;
+        const split = stringified.split(":");
+        return new Identifier(split[0], split[1]);
     }
 
-    getFromUID(uid: string): T | undefined {
-        if (this.registered[uid] === undefined) {
-            console.warn(`Tried to get object from a Handler with UID "${uid}" that does not exist. Will return %cundefined%c.`, "font-style: italic;", "font-style: default;");
-        }
-        return this.registered[uid];
+    public readonly namespace: string;
+    public readonly uid: string
+
+    constructor(namespace: string, uid: string) {
+        this.namespace = namespace;
+        this.uid = uid;
     }
 
-    [Symbol.iterator](): BaseIterator<T> {
-        return new BaseIterator(Object.values(this.registered));
+    /**
+     * @returns Format: `namespace:uid`
+     */
+    toString(): string {
+        return `${this.namespace}:${this.uid}`;
+    }
+
+    /**
+     * Since objects are never equal even if their contents are the same, this method must be used for comparison.
+     * @param identifier 
+     */
+    equals(identifier: Identifier) {
+        if (identifier.namespace === this.namespace && identifier.uid === this.uid)
+            return true;
+        else
+            return false;
     }
 }
