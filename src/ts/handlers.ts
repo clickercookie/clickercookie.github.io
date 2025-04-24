@@ -1,13 +1,13 @@
 //* Ideally I would put things like BackgroundHandler in personalization.ts but because of lexical declarations we can't do that without getting circular imports as far as I can tell. This is fine.
 
 import { Building } from "./buildings.js";
-import { Handler, Identifier } from "./handler.js";
+import { Handler, Identifier, UniqueKeyHandler } from "./handler.js";
 import { url } from "./helper.js";
 import { game, Game } from "./main.js";
 import { Mod } from "./mods.js";
 import { Background, CurrentlyClickedObject } from "./personalization.js";
 import { AdvancedPopup, SimplePopup } from "./popup.js";
-import { SaveHandler } from "./saving.js";
+import { SaveProvider } from "./saving.js";
 import { Upgrade, UpgradeSave } from "./upgrades.js";
 
 /* Personalization */
@@ -122,6 +122,16 @@ export class BuildingHandler extends Handler<Building> {}
 
 /* Upgrades */
 export class UpgradeHandler extends Handler<Upgrade> {
+    public get upgradesBought() {
+        let bought = 0;
+        for (const value of this) {
+            if (value.bought === true) {
+                bought++;
+            }
+        }
+        return bought;
+    }
+
     /**
      * TODO: NEEDS STATISTIC SUPPORT
      * @param statistic Are we destroying all the upgrades in the Statistics page?
@@ -184,7 +194,7 @@ export class UpgradeHandler extends Handler<Upgrade> {
 }
 
 /* Mod */
-export class ModHandler extends Handler<Mod> {
+export class ModHandler extends UniqueKeyHandler<Mod> {
     /* Static Methods */
     public static loadURL(url: string) {
         const httpCheck = url.slice(0,4);
@@ -297,30 +307,50 @@ export class ModHandler extends Handler<Mod> {
     }
 
     /**
-     * todo: it makes very little sense to have this be an Identifier and not just a namespace. I guess there's really not a whole lot we can do :(
-     * 
-     * 
+     * Register a mod with this instance's {@link saveHandler}.
      * @param uid SHOULD BE YOUR MOD NAMESPACE!
-     * @param mod 
+     * @param mod Mod.
      */
-    override register(identifier: Identifier, mod: Mod) {
+    override register(key: string, mod: Mod) {
         //! below will always warn, should that be changed?
-        if (this.getFromIdentifier(identifier) !== undefined) { //* do this before registering so we can get a more user-friendly popup than the console.error that we usually get for this type of error
-            new SimplePopup({x: 400, y: 200, title: "Error", text: `The mod UID "${identifier.uid}" is already present!`});
+        if (this.getFromIdentifier(key) !== undefined) { //* do this before registering so we can get a more user-friendly popup than the console.error that we usually get for this type of error
+            new SimplePopup({x: 400, y: 200, title: "Error", text: `The mod namespace "${key}" is already present!`});
             return;
         }
         
-        super.register(identifier, mod);
-        this.saveHandler.registerProvider(mod.NAMESPACE, mod);
+        super.register(key, mod);
+        this.saveHandler.register(mod.NAMESPACE, mod);
         document.getElementById("modsNumberLoaded")!.innerText = (Handlers.MOD.length - 1).toString(); //* subtract one so we don't show clickercookie (makes more sense to the user)
+    }
+}
+
+//* for technical reasons i don't think this can actually be a UniqueKeyHandler :(
+export class SaveHandler {
+    private providers: Record<string, SaveProvider>;
+    constructor() {
+        this.providers = {};
+    }
+
+    dumpSaveData(): Record<string, unknown> {
+        const saveData: Record<string, unknown> = {};
+        for (const namespace in this.providers) {
+            saveData[namespace] = this.providers[namespace].getSaveData();
+        }
+        return saveData;
+    }
+
+    register(namespace: string, provider: SaveProvider) {
+        this.providers[namespace] = provider;
+    }
+
+    getProviders() { //! can we avoid this?
+        return this.providers;
     }
 }
 
 export class Handlers {
     /**
      * our lord & savior, the save handler
-     * 
-     * todo: this is not actually a Handler yet lol
      */
     public static readonly SAVE: SaveHandler = new SaveHandler();
     /**

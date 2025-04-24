@@ -43,7 +43,7 @@ export class Mod extends SaveProvider {
     /** Mod namespace used for saving */
     public readonly NAMESPACE: string;
 
-    constructor(namespace: string, metadata: ModMetadata=undefined) { //? should namespace be a param?
+    constructor(namespace: string, metadata: ModMetadata={name: undefined, description: undefined, img: undefined}) { //? should namespace be a param?
         super();
 
         this.NAMESPACE = namespace;

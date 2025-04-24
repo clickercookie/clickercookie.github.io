@@ -68,4 +68,4 @@ export class NewMod extends Mod {
 
 const newmod = new NewMod();
 
-Handlers.MOD.register(new Identifier(newmod.NAMESPACE, "root"), newmod);
+Handlers.MOD.register(newmod.NAMESPACE, newmod);

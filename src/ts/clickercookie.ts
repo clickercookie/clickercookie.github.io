@@ -729,7 +729,7 @@ export default class ClickerCookie extends Mod {
             churchCPSGiven: this.church.CPSGiven,
 
             /* upgrades */
-            upgradesBought: Upgrade.upgradesBought,
+            upgradesBought: Handlers.UPGRADE.upgradesBought,
             upgradesSave: Handlers.UPGRADE.dumpUpgradesSave(this.NAMESPACE)
         }
     }

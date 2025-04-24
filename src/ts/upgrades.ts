@@ -3,6 +3,7 @@ import { clamp, commaify } from "./helper.js";
 import { hideTooltip } from "./tooltip.js";
 import { game, Game } from "./main.js";
 import ClickerCookie from "./clickercookie.js";
+import { Handlers } from "./handlers.js";
 
 export interface UpgradeSave {
     unlocked: boolean;
@@ -54,8 +55,6 @@ export function updateUpgradesBoughtStatistic() {
 }
 
 export class Upgrade {
-    public static upgradesBought: number = 0;
-
     private clickercookie: ClickerCookie;
 
     uid: string;
@@ -138,7 +137,6 @@ export class Upgrade {
         this.bought = true;
         this.hovered(); //? i don't remember why this is here but i know it's important just trust me
         this.destroy();
-        Upgrade.upgradesBought++;
         
         this.building.CPSGiven *= 2;
         this.building.CPSGain *= 2;
@@ -146,7 +144,7 @@ export class Upgrade {
 
         expandUpgradesHolder(); // sometimes the upgrade holder has one too many rows because of weird onmouseover & onmousemove behavior, this prevents that
 
-        document.getElementById("upgradesBoughtCounter")!.innerText = Upgrade.upgradesBought.toString();
+        document.getElementById("upgradesBoughtCounter")!.innerText = Handlers.UPGRADE.upgradesBought.toString();
 
         updateUpgradesBoughtStatistic();
     }

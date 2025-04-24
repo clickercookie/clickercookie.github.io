@@ -13,7 +13,7 @@ export class Handler<T> implements Iterable<T> {
     register(identifier: Identifier, object: T) {
         const stringifiedIdentifier = identifier.toString();
         if (this.registered.has(stringifiedIdentifier) !== false) {
-            console.error(`TstringifiedIdentifieried to register object with Identifier "${identifier.toString()}" to a Handler, but it already exists!`);
+            console.error(`Tried to register object with Identifier "${identifier.toString()}" to a Handler, but it already exists!`);
             // todo ASAP: should this return?
         }
         this.registered.set(stringifiedIdentifier, object);
@@ -43,6 +43,63 @@ export class Handler<T> implements Iterable<T> {
         return Array.from(this.registered.entries())
             .filter(([key, _]) => Identifier.fromString(key).namespace === namespace)
             .map(([_, value]) => value);
+    }
+
+    /**
+     * Gets a stringified key from a given registered value
+     * @param value The value to get the key of
+     * @returns The value's key
+     */
+    getKeyFromValue(value: T): string | undefined {
+        for (const [key, val] of this.registered.entries()) {
+            if (val === value) {
+                return key;
+            }
+        }
+        return undefined;
+    }
+
+    [Symbol.iterator](): MapIterator<T> {
+        return this.registered.values();
+    }
+}
+
+/**
+ * This handler does not use {@link Identifier}s and instead uses unique strings.
+ */
+export class UniqueKeyHandler<T> implements Iterable<T> {
+    private registered: Map<string, T>;
+    /** the number of registered items in the handler */
+    public get length(): number {
+        return this.registered.size;
+    }
+
+    constructor() {
+        this.registered = new Map();
+    }
+    
+    register(key: string, object: T) {
+        if (this.registered.has(key) !== false) {
+            console.error(`Tried to register object with key "${key}" to a UniqueKeyHandler, but it already exists!`);
+            // todo ASAP: should this return?
+        }
+        this.registered.set(key, object);
+    }
+
+    /**
+     * If a {@link T} is registered with the given ID than return it, if it's not then return undefined
+     * @param key The key to get from
+     */
+    getFromIdentifier(key: string): T | undefined {
+        if (key === undefined) {
+            console.warn(`Tried to get object from a UniqueKeyHandler but key was undefined. Will return %cundefined%c.`, "font-style: italic;", "font-style: default;");
+            return undefined;
+        }
+        if (this.registered.has(key) === false) {
+            console.warn(`Tried to get object from a UniqueKeyHandler with key "${key}" that does not exist. Will return %cundefined%c.`, "font-style: italic;", "font-style: default;");
+        }
+
+        return this.registered.get(key);
     }
 
     /**

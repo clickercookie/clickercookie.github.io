@@ -356,7 +356,7 @@ export class Game extends SaveProvider {
         Handlers.UPGRADE.destroyAllUpgrades();
         Handlers.UPGRADE.showUnlockedUpgrades();
 
-        document.getElementById("upgradesBoughtCounter").innerText = Upgrade.upgradesBought.toString();
+        document.getElementById("upgradesBoughtCounter").innerText = Handlers.UPGRADE.upgradesBought.toString();
         updateUpgradesBoughtStatistic();
     }
 }
@@ -487,8 +487,8 @@ console.log(`you seem smart, how 'bout you contribute to the project? ${Game.GIT
 
 export const game = new Game();
 
-Handlers.SAVE.registerProvider("game", game);
-Handlers.MOD.register(new Identifier(game.clickercookie.NAMESPACE, "root"), game.clickercookie);
+Handlers.SAVE.register("game", game);
+Handlers.MOD.register(game.clickercookie.NAMESPACE, game.clickercookie);
 
 // timer things
 setInterval(() => {

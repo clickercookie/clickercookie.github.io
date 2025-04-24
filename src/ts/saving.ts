@@ -1,3 +1,4 @@
+import { SaveHandler } from "./handlers.js";
 import { Game } from "./main.js";
 import { SimplePopup } from "./popup.js";
 
@@ -189,36 +190,6 @@ export class SaveProvider {
 
     }
 }
-export class SaveHandler {
-    private providers: Record<string, SaveProvider>;
-    constructor() {
-        this.providers = {};
-    }
-
-    dumpSaveData(): Record<string, unknown> {
-        const saveData: Record<string, unknown> = {};
-        for (const namespace in this.providers) {
-            saveData[namespace] = this.providers[namespace].getSaveData();
-        }
-        return saveData;
-    }
-
-    loggy() {
-        for (const namespace in this.providers) {
-            console.log(this.providers[namespace].getSaveData())
-        }
-    }
-
-    registerProvider(namespace: string, provider: SaveProvider) {
-        this.providers[namespace] = provider;
-    }
-
-    // todo: i don't like this, i don't know if i really want anyone to be able to interact with anything from game like this.
-    getProviders() {
-        return this.providers;
-    }
-}
-
 
 interface SaveDataHeader {
     version: string;
