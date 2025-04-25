@@ -2,34 +2,6 @@ import { SaveHandler } from "./handlers.js";
 import { Game } from "./main.js";
 import { SimplePopup } from "./popup.js";
 
-export const saves = {} as {
-    importedData: any,
-    allToSave: any[]
-    defaultSavedValues: Record<string, any>,
-    resetSave(game: Game): void,
-    convert05Save(game: Game, isBeta?: boolean, isBetaSaveOld?: boolean): void
-};
-saves.allToSave = ["core.cookies", "core.totalCookies", "core.cookiesPerSecond", // List of every variable that should be saved, in no particular order.
-    "keyboard.CPSGiven","grandpa.CPSGiven","ranch.CPSGiven","television.CPSGiven","worker.CPSGiven","wallet.CPSGiven","church.CPSGiven",
-    "keyboard.bought","grandpa.bought","ranch.bought","television.bought","worker.bought","wallet.bought","church.bought",
-    "keyboard.CPSGain","grandpa.CPSGain","ranch.CPSGain","television.CPSGain","worker.CPSGain","wallet.CPSGain","church.CPSGain",
-    "keyboard.upgradeCost","grandpa.upgradeCost","ranch.upgradeCost","television.upgradeCost","worker.upgradeCost","wallet.upgradeCost","church.upgradeCost",
-    "upgrades.upgradesBought",
-    "core.cookiesPerClick","core.cookieBeenClickedTimes","core.buildingsOwned","hasCheated","won","isModded","versionBranch"
-];
-saves.defaultSavedValues = { // Should be self-explanatory. Doesn't have to be ordered like allToSave, but I would appreciate if it was.
-    "core.cookies":0, "core.totalCookies":0, "core.cookiesPerSecond":0,
-    "keyboard.CPSGiven":0,"grandpa.CPSGiven":0,"ranch.CPSGiven":0,"television.CPSGiven":0,"worker.CPSGiven":0,"wallet.CPSGiven":0,"church.CPSGiven":0,
-    "keyboard.bought":0,"grandpa.bought":0,"ranch.bought":0,"television.bought":0,"worker.bought":0,"wallet.bought":0,"church.bought":0,
-    "keyboard.CPSGain":0.1,"grandpa.CPSGain":1,"ranch.CPSGain":8,"television.CPSGain":47,"worker.CPSGain":260,"wallet.CPSGain":1440,"church.CPSGain":7800,
-    "keyboard.upgradeCost":15,"grandpa.upgradeCost":100,"ranch.upgradeCost":1100,"television.upgradeCost":12000,"worker.upgradeCost":130000,"wallet.upgradeCost":1400000,"church.upgradeCost":20000000,
-    "Upgrade.upgradesBought":0,
-    "core.cookiesPerClick":1,"core.cookieBeenClickedTimes":0,"core.buildingsOwned":0,"hasCheated":false,"won":0,"isModded":false,"versionBranch":null
-};
-
-// ------------------------------------
-// Saving
-// ------------------------------------
 export class Savinator {
     private saveHandler: SaveHandler
 
@@ -173,6 +145,12 @@ export class Savinator {
 
         reader.readAsText(file);
     }
+
+    reset() {
+        localStorage.removeItem(this.saveName);
+        localStorage.removeItem(this.betaSaveName);
+        location.reload();
+    }
 }
 
 export class SaveProvider {
@@ -186,7 +164,7 @@ export class SaveProvider {
     /**
      * Whatever you do to load your savadata, do it here. Whenever {@link Savinator.load} is run, any {@link SaveProvider} registered in Savinator's {@link Savinator.saveHandler} will have this function run.
      */
-    loadSaveData(saveData: unknown) {
+    loadSaveData(saveData: unknown): void {
 
     }
 }
@@ -241,4 +219,8 @@ export class Save {
     stringify(): string {
         return JSON.stringify(this.data);
     }
+}
+
+export function convert05Save(game: Game, isBeta?: boolean, isBetaSaveOld?: boolean): void {
+    throw new Error("0.5 save conversion is not implimented.");
 }

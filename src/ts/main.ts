@@ -12,7 +12,7 @@ import { Identifier } from "./handler.js";
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
 import { object2HTML, url } from "./helper.js";
 import { Upgrade, updateUpgradesBoughtStatistic, expandUpgradesHolder } from "./upgrades.js";
-import { SaveProvider, saves, Savinator } from "./saving.js";
+import { convert05Save, SaveProvider, Savinator } from "./saving.js";
 import { Background, CurrentlyClickedObject } from "./personalization.js";
 import { Mod } from "./mods.js"
 import ClickerCookie from "./clickercookie.js"
@@ -159,12 +159,12 @@ export class Game extends SaveProvider {
         // if saves are old (directly interacts with localStorage because using Savinator.getLocalStorageSave() will make it angry since localStorage doesn't have a Save it has an array)
         if (localStorage.getItem("save") && localStorage.getItem("save")[0] === "[" && Game.VERSION_BRANCH === Game.Versions.MAIN) {
             localStorage.setItem("old05Save", localStorage.getItem("save"));
-            new SimplePopup({x: 400, y: 220, text: "so we changed the saving system again, good news, press the button below and it will be transfered to the new format.", title: "oh no", func: () => { saves.convert05Save(this, false) }});
+            new SimplePopup({x: 400, y: 220, text: "so we changed the saving system again, good news, press the button below and it will be transfered to the new format.", title: "oh no", func: () => { convert05Save(this, false) }});
             return "Save the save!";
         }
         if (localStorage.getItem("betaSave") && localStorage.getItem("betaSave")[0] === "[" && Game.VERSION_BRANCH === Game.Versions.BETA) {
             localStorage.setItem("old05BetaSave", localStorage.getItem("betaSave"));
-            new SimplePopup({x: 400, y: 220, text: "so we changed the saving system again, good news, press the button below and it will be transfered to the new format.", title: "oh no", func: () => { saves.convert05Save(this, true) }});
+            new SimplePopup({x: 400, y: 220, text: "so we changed the saving system again, good news, press the button below and it will be transfered to the new format.", title: "oh no", func: () => { convert05Save(this, true) }});
             return "Save the save!";
         }
     
@@ -207,7 +207,7 @@ export class Game extends SaveProvider {
     
             const devResetButton = document.createElement("button");
             devResetButton.appendChild(document.createTextNode("Reset Sava Data"));
-            devResetButton.addEventListener("click", () => {saves.resetSave(this)});
+            devResetButton.addEventListener("click", () => {this.savinator5000.reset()});
             devDiv.appendChild(devResetButton);
     
             const br1 = document.createElement("br");
@@ -271,7 +271,7 @@ export class Game extends SaveProvider {
         document.getElementById("currentlyClickedSelect").addEventListener("change", () => {Handlers.CURRENTLY_CLICKED.setCurrentlyClicked((document.getElementById("currentlyClickedSelect") as HTMLFormElement).value)});
         document.getElementById("saveButton").addEventListener("click", () => {this.savinator5000.save()});
         document.getElementById("loadButton").addEventListener("click", () => {this.savinator5000.load()});
-        document.getElementById("resetSaveButton").addEventListener("click", () => {new SimplePopup({x: 300, y: 150, text: "Are you sure you want to do this?", func: () => {localStorage.removeItem("newSave"); location.reload()}, title: "Warning", backButton: true, isError: true})});
+        document.getElementById("resetSaveButton").addEventListener("click", () => {new SimplePopup({x: 300, y: 150, text: "Are you sure you want to do this?", func: () => { this.savinator5000.reset() }, title: "Warning", backButton: true, isError: true})});
         document.getElementById("exportDataButton").addEventListener("click", () => {this.savinator5000.export()});
         document.getElementById("importDataButton").addEventListener("click", () => {document.getElementById("importDataInput").click()});
         document.getElementById("importDataInput").addEventListener("change", () => {this.savinator5000.import()});
