@@ -244,6 +244,7 @@ export const versionChangelogs: Changelog[] = [
             "Switched to TypeScript.",
             "Introduced the v4 Saving System (#18)",
             "Hotfixes are slightly smaller and colored in gray. (#53)",
+            "Loading a save now resets the auto-saving interval (#47)",
             "Eliminated inline event handlers, now are handled in init (#27)",
             "The entire modding system. See the GitHub wiki for more details.",
             "Split main.js into multiple script files.",

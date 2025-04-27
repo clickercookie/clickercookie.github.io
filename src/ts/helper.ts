@@ -98,3 +98,41 @@ export function object2HTML(object: Record<string, string>): string {
 export function url(str: string): string {
     return `url(${str})`;
 }
+
+/**
+ * Modified from this StackOverflow answer: https://stackoverflow.com/a/8126515
+ */
+export class Interval {
+    private interval: number;
+
+    handler: () => void;
+    timeout: number;
+    constructor(handler: () => void, timeout: number = 0) {
+        this.interval = setInterval(handler, timeout);
+
+        this.handler = handler;
+        this.timeout = timeout;
+    }
+
+    start() {
+        if (!this.interval) {
+            this.stop();
+            this.interval = setInterval(this.handler, this.timeout);
+        }
+        return this;
+    }
+
+    stop() {
+        if (this.interval) {
+            clearInterval(this.interval);
+            this.interval = null;
+        }
+        return this;
+    }
+
+    reset(newTimeout: number = this.timeout) {
+        console.log(this.timeout);
+        this.timeout = newTimeout;
+        return this.stop().start();
+    }
+}

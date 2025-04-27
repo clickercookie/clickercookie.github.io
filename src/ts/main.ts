@@ -8,12 +8,10 @@ const inDevelopment: boolean = (location.hostname === "localhost" || location.ho
 // ------------------------------------
 // Imports
 // ------------------------------------
-import { Identifier } from "./handler.js";
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
-import { object2HTML, url } from "./helper.js";
-import { Upgrade, updateUpgradesBoughtStatistic, expandUpgradesHolder } from "./upgrades.js";
+import { Interval, object2HTML, url } from "./helper.js";
+import { updateUpgradesBoughtStatistic, expandUpgradesHolder } from "./upgrades.js";
 import { convert05Save, SaveProvider, Savinator } from "./saving.js";
-import { Background, CurrentlyClickedObject } from "./personalization.js";
 import { Mod } from "./mods.js"
 import ClickerCookie from "./clickercookie.js"
 import { SimplePopup } from "./popup.js";
@@ -122,6 +120,19 @@ export class Game extends SaveProvider {
     };
 
     public theGameCanLoopBecauseTheInitializationIsCompleted: boolean;
+
+    //* The following intervals will be started once init() completes!
+    public readonly AUTOSAVE_INTERVAL = new Interval(() => {
+        if (!this.autoSavingAllowed) return false;
+
+        this.savinator5000.save();
+    }, 60 * 1000).stop();
+    public readonly GAME_LOOP_INTERVAL = new Interval(() => {
+        this.gameLoop();
+    }, 1).stop();
+    public readonly CPS_INTERVAL = new Interval(() => {
+        this.cookiesPerSecondUpdate();
+    }, 1000).stop();
 
     constructor() {
         super();
@@ -296,6 +307,11 @@ export class Game extends SaveProvider {
             if (inDevelopment && !mobile)
                 document.getElementById("mousePosDevText").innerText = `Mouse Pos: (${game.mousePos.x}, ${game.mousePos.y})`;
         });
+
+        // start intervals (should be right at the end)
+        this.AUTOSAVE_INTERVAL.start();
+        this.CPS_INTERVAL.start();
+        this.GAME_LOOP_INTERVAL.start();
 
         this.theGameCanLoopBecauseTheInitializationIsCompleted = true;
         console.log("Successfully completed initialization.");
@@ -489,21 +505,6 @@ export const game = new Game();
 
 Handlers.SAVE.register("game", game);
 Handlers.MOD.register(game.clickercookie.NAMESPACE, game.clickercookie);
-
-// timer things
-setInterval(() => {
-    game.cookiesPerSecondUpdate();
-}, 1000);
-setInterval(() => {
-    if (game.theGameCanLoopBecauseTheInitializationIsCompleted) {
-        game.gameLoop();
-    }
-}, 1);
-setInterval(() => { // auto-saving
-    if (!game.autoSavingAllowed) return false;
-
-    game.savinator5000.save();
-}, 60 * 1000); // 60s
 
 // Events
 // todo: add to game
