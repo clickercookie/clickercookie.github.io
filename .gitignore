@@ -1,4 +1,6 @@
-public/*.js
+public/**/*.js
+public/beta
+public/develop
 
 .DS_Store
 .DS_Store?

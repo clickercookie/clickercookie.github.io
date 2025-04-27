@@ -1,4 +1,4 @@
-import { Game } from "./main.js";
+import { Game, VersionBranch } from "./main.js";
 
 /**
  * Parses a string and replaces any instances of a hashtag followed by a set of numbers with an `<a>` linking to the corresponding GitHub issue
@@ -133,5 +133,23 @@ export class Interval {
     reset(newTimeout: number = this.timeout) {
         this.timeout = newTimeout;
         return this.stop().start();
+    }
+}
+
+/**
+ * Serves as a replacement for a large switch/ternary statement for returning a value based on the current {@link VersionBranch}.
+ * @param main The value to return if the current version branch is main
+ * @param beta Value if beta
+ * @param develop Value if develop
+ * @returns One of the three given parameters depending on the current version branch.
+ */
+export function branchQuickSwitch(main: any, beta: any, develop: any) {
+    switch (Game.VERSION_BRANCH) {
+    case VersionBranch.MAIN:
+        return main;
+    case VersionBranch.BETA:
+        return beta;
+    case VersionBranch.DEVELOP:
+        return develop;
     }
 }

@@ -26,7 +26,7 @@
                 <a href="404.html" target="_blank" id="githubHyperlink"> <!-- this HREF is changed programmatically in main.ts in the event of a fork and a different GitHub repo link. -->
                     <img class="github" src="img/github-mark.svg" alt="github">
                 </a>
-                <h5 id="versionNumber" class="version-number pointer">Version: null</h5>
+                <h5 class="version-number pointer">Version: <span id="versionNumber">null</span></h5>
                 <div id="versionSwitchInfo" class="version-switch-info">
                     <p style="margin:0px; color:black; text-align:center;" id="versionSwitchInfoText">Clicking this will switch to the null branch.</p>
                 </div>
@@ -116,7 +116,7 @@
                 </div>
                 <form id="autoSavingToggleForm">
                     <label for="autoSavingToggleSelect" class="middle-label">Auto Saving: </label>
-                    <select class="pointer" id="autoSavingToggleSelect">
+                    <select class="pointer" id="autoSavingToggleSelect"> <!-- should this be a checkbox? -->
                         <option value="on">On</option>
                         <option value="off">Off</option>
                     </select>

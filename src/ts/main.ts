@@ -1,23 +1,26 @@
-// ------------------------------------
-// Version Constants
-// ------------------------------------
-const version: string = "0.7";
-const versionBranch: number = (location.pathname == "/beta/beta" || location.pathname == "/beta/beta.html") ? 1 : 0; // 0 is main, 1 is beta
-const inDevelopment: boolean = (location.hostname === "localhost" || location.hostname === "127.0.0.1") ? true : false; // automatically toggles if hosted on the local machine
+/*
+Bonjour! This is a totally original game about clicking a cookie. Tread carefully...
 
-// ------------------------------------
-// Imports
-// ------------------------------------
+If you're a modder, read the docs here: https://github.com/clickercookie/clickercookie.github.io/wiki/Modding
+
+If you're not a modder, still read the docs here: https://github.com/clickercookie/clickercookie.github.io/wiki/Modding
+*/
+
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
-import { Interval, object2HTML, url } from "./helper.js";
+import { branchQuickSwitch, Interval, object2HTML, url } from "./helper.js";
 import { updateUpgradesBoughtStatistic, expandUpgradesHolder } from "./upgrades.js";
-import { convert05Save, SaveProvider, Savinator } from "./saving.js";
+import { SaveProvider, Savinator } from "./saving.js";
 import { Mod } from "./mods.js"
 import ClickerCookie from "./clickercookie.js"
 import { SimplePopup } from "./popup.js";
 import { Handlers, ModHandler } from "./handlers.js";
 
 import { NewMod } from "./exmod.js"; //* note: this import is intentionally left unused so tsc can find this file and compile it
+
+// ------------------------------------
+// Version Constants
+// ------------------------------------
+const version: string = "0.7";
 
 // ------------------------------------
 // Variable & Object Definitions
@@ -53,7 +56,7 @@ window.addEventListener("mousemove", (event) => {
     mousePos.x = event.clientX;
     mousePos.y = event.clientY;
     
-    if (inDevelopment && !mobile)
+    if (Game.IN_DEVELOPMENT && !mobile)
         document.getElementById("mousePosDevText").innerText = `Mouse Pos: (${mousePos.x}, ${mousePos.y})`;
 });
 
@@ -61,9 +64,10 @@ const helper = {} as {
     consoleLogDev(str: string): void
 };
 
-enum Versions {
+export enum VersionBranch {
     MAIN = 0,
-    BETA = 1
+    BETA = 1,
+    DEVELOP = 2
 }
 
 type MiddleButton = "stats" | "info" | "options";
@@ -81,8 +85,8 @@ interface GameSaveData {
 export class Game extends SaveProvider {
     // Important game-wide constants
     public static readonly VERSION: string = version;
-    public static readonly VERSION_BRANCH: number = versionBranch;
-    public static readonly IN_DEVELOPMENT: boolean = inDevelopment;
+    public static readonly VERSION_BRANCH: VersionBranch = (location.pathname == "/develop/index.html" || location.pathname == "/develop") ? 2 : (location.pathname == "/beta/index.html" || location.pathname == "/beta") ? 1 : 0;
+    public static readonly IN_DEVELOPMENT: boolean = (location.hostname === "localhost" || location.hostname === "127.0.0.1") ? true : false; // automatically toggles if hosted locally
     public static readonly GITHUB_REPO: string = "https://github.com/clickercookie/clickercookie.github.io";
     public static readonly CREDITS: Record<string, string> = {
         "FifthTundraG": "Creation",
@@ -92,7 +96,6 @@ export class Game extends SaveProvider {
     public static readonly DEFAULT_BACKGROUND: string = "clickercookie:blue";
     public static readonly DEFAULT_CURRENTLY_CLICKED_OBJECT: string = "clickercookie:cookie";
 
-    public static readonly Versions = Versions;
     public static getMousePosition(): MousePosition {
         return mousePos;
     }
@@ -175,39 +178,33 @@ export class Game extends SaveProvider {
         // todo before 0.7: does betaSave work here? it looks like it does but i need to thoroughly test it
         if (this.savinator5000.getLocalStorageSave() === null) {
             this.savinator5000.save();
-            console.warn(`${this.savinator5000.saveName} was null and was automatically reset, if this is your first time playing this is an intended behavior.`);
+            console.warn(`${this.savinator5000.currentSaveName} was null and was automatically reset, if this is your first time playing this is an intended behavior.`);
         }
     
         this.savinator5000.load();
     
         // if saves are old (directly interacts with localStorage because using Savinator.getLocalStorageSave() will make it angry since localStorage doesn't have a Save it has an array)
-        if (localStorage.getItem("save") && localStorage.getItem("save")[0] === "[" && Game.VERSION_BRANCH === Game.Versions.MAIN) {
-            localStorage.setItem("old05Save", localStorage.getItem("save"));
-            new SimplePopup({x: 400, y: 220, text: "so we changed the saving system again, good news, press the button below and it will be transfered to the new format.", title: "oh no", func: () => { convert05Save(this, false) }});
+        if (localStorage.getItem(this.savinator5000.currentSaveName) && localStorage.getItem(this.savinator5000.currentSaveName)[0] === "[" && Game.VERSION_BRANCH === VersionBranch.MAIN) {
+            localStorage.setItem(`old05${this.savinator5000.currentSaveName}`, localStorage.getItem(this.savinator5000.currentSaveName));
+            new SimplePopup({x: 400, y: 220, text: "You are using a save from the 0.5 release cycle. 0.5 save transfer is no longer supported. Pressing the button below will reset your save.", title: "sorry", func: () => { this.savinator5000.reset(); }});
             return "Save the save!";
         }
-        if (localStorage.getItem("betaSave") && localStorage.getItem("betaSave")[0] === "[" && Game.VERSION_BRANCH === Game.Versions.BETA) {
-            localStorage.setItem("old05BetaSave", localStorage.getItem("betaSave"));
-            new SimplePopup({x: 400, y: 220, text: "so we changed the saving system again, good news, press the button below and it will be transfered to the new format.", title: "oh no", func: () => { convert05Save(this, true) }});
-            return "Save the save!";
-        }
-    
+
+        // todo asap: 0.6 save transfer
+
         updateUpgradesBoughtStatistic();
 
-        // set the total upgrades bought counter in the Statistics screen
-        // document.getElementById("totalUpgradesCounter").innerText = this.upgrades.length.toString(); //! this is no longer working!!!!!!!!!!!!
-    
-        // change version branch specific stuff
+        /* change version branch specific stuff */
         // change title
-        document.title = (Game.VERSION_BRANCH === Game.Versions.MAIN) ? "Clicker Cookie" : "Clicker Cookie Beta";
+        document.title = branchQuickSwitch("Clicker Cookie", "Clicker Cookie Beta", "Clicker Cookie Develop");
         // change version displayed
-        document.getElementById("versionNumber").innerText = (Game.VERSION_BRANCH) ? `Version: ${Game.VERSION} Beta` : `Version: ${Game.VERSION}`;
-        document.getElementById("versionSwitchInfoText").innerText = (Game.VERSION_BRANCH === Game.Versions.MAIN) ? "Clicking this will switch to the beta branch" : "Clicking this will switch to the main branch";
-        if (Game.VERSION_BRANCH === Game.Versions.BETA) // show the developer mode switch
+        document.getElementById("versionNumber").innerText = branchQuickSwitch(Game.VERSION, `${Game.VERSION} Beta`, `${Game.VERSION} Develop`);
+        document.getElementById("versionSwitchInfoText").innerText = (Game.VERSION_BRANCH === VersionBranch.MAIN) ? "Clicking this will switch to the beta branch" : "Clicking this will switch to the main branch";
+        if (Game.VERSION_BRANCH === VersionBranch.BETA || Game.VERSION_BRANCH === VersionBranch.DEVELOP) // show the developer mode switch
             document.getElementById("devForm").style.display = "block";
         
         if (Game.IN_DEVELOPMENT)
-            document.title = "Clicker Cookie Dev";
+            document.title = `cc_${Game.VERSION}_${Game.VERSION_BRANCH}_dev`;
 
         // set the bottom left github repo icon to link to the github repo
         (document.getElementById("githubHyperlink") as HTMLAnchorElement).href = Game.GITHUB_REPO;
@@ -480,7 +477,7 @@ function versionNumberMousedOver(undo=false) {
         document.getElementById("versionSwitchInfo").style.display = "none";
 }
 function versionSwitch() {
-    window.location.href = (Game.VERSION_BRANCH === Game.Versions.MAIN) ? "/beta/beta.html" : "/";
+    window.location.href = (Game.VERSION_BRANCH === VersionBranch.MAIN) ? "/beta" : "/";
 }
 
 //

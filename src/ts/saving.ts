@@ -1,5 +1,6 @@
 import { SaveHandler } from "./handlers.js";
-import { Game } from "./main.js";
+import { branchQuickSwitch } from "./helper.js";
+import { Game, VersionBranch } from "./main.js";
 import { SimplePopup } from "./popup.js";
 
 export class Savinator {
@@ -8,6 +9,11 @@ export class Savinator {
     // these are useful for debugging when i need to change the name of the local storage key temporarily
     saveName: string;
     betaSaveName: string;
+    developSaveName: string;
+
+    public get currentSaveName() {
+        return branchQuickSwitch(this.saveName, this.betaSaveName, this.developSaveName);
+    }
 
     /** If this value is false, when you save when a mod is registered with the saveHandler, then reload the page to a state where it isn't, a save will overwrite that mod's data. */
     preserveUnusedNamespacesInSaves: boolean;
@@ -16,33 +22,22 @@ export class Savinator {
 
         this.preserveUnusedNamespacesInSaves = true;
 
-        this.saveName = "newSave";
-        this.betaSaveName = "newBetaSave";
+        this.saveName = "save";
+        this.betaSaveName = "betaSave";
+        this.developSaveName = "developSave";
     }
 
     // these two methods could probably be static
     setLocalStorageSave(value: string) {
-        if (Game.VERSION_BRANCH === Game.Versions.MAIN)
-            localStorage.setItem(this.saveName, value);
-        else
-            localStorage.setItem(this.betaSaveName, value);
+        localStorage.setItem(this.currentSaveName, value);
     }
 
-    getLocalStorageSave(): Save | null { // todo: this function looks ugly
-        if (Game.VERSION_BRANCH === Game.Versions.MAIN) {
-            if (localStorage.getItem(this.saveName) === null) {
-                return null;
-            } else {
-                return new Save(JSON.parse(localStorage.getItem(this.saveName))); // add error checking, this assumes newSave is a save, it might not be!
-            }
+    getLocalStorageSave(): Save | null {
+        if (localStorage.getItem(this.currentSaveName) === null) {
+            return null;
         } else {
-            if (localStorage.getItem(this.betaSaveName) === null) {
-                return null;
-            } else {
-                return new Save(JSON.parse(localStorage.getItem(this.betaSaveName)));
-            }
+            return new Save(JSON.parse(localStorage.getItem(this.currentSaveName))); // add error checking, this assumes newSave is a save, it might not be!
         }
-            
     }
 
     /**
@@ -107,7 +102,7 @@ export class Savinator {
 
     export() {
         this.save(); //? should we do this? can we do it a different way that would be better?
-        const dataJSON = (Game.VERSION_BRANCH === Game.Versions.MAIN) ? localStorage.getItem("newSave") : localStorage.getItem("newBetaSave");
+        const dataJSON = localStorage.getItem(this.currentSaveName);
 
         const textToBLOB = new Blob([dataJSON], { type: "text/plain" });
 
@@ -135,7 +130,7 @@ export class Savinator {
             // helper.consoleLogDev("imported data: ");
             // helper.consoleLogDev(importedData.toString());
 
-            const versionBranchToDisplay = (Game.VERSION_BRANCH === Game.Versions.MAIN) ? "beta" : "main"; //! i don't like this variable
+            const versionBranchToDisplay = branchQuickSwitch("main", "beta", "develop");
             if (importedData.getHeader().versionBranch !== Game.VERSION_BRANCH) {
                 new SimplePopup({x: 300, y: 150, text: `This is a save file from another version branch (${versionBranchToDisplay}), which is incompatible with this version. Please use a different file.`, title: "Alert", isError: true});
             }
@@ -150,7 +145,7 @@ export class Savinator {
 
     reset() {
         localStorage.removeItem(this.saveName);
-        localStorage.removeItem(this.betaSaveName);
+        localStorage.removeItem(this.developSaveName);
         location.reload();
     }
 }
@@ -173,7 +168,7 @@ export class SaveProvider {
 
 interface SaveDataHeader {
     version: string;
-    versionBranch: number;
+    versionBranch: VersionBranch;
     format: number
 }
 
@@ -223,6 +218,6 @@ export class Save {
     }
 }
 
-export function convert05Save(game: Game, isBeta?: boolean, isBetaSaveOld?: boolean): void {
-    throw new Error("0.5 save conversion is not implimented.");
+export function convert06Save(save: string) {
+    
 }

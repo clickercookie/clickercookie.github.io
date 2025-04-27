@@ -34,11 +34,6 @@ a {
     font-weight: bold;
     color: inherit;
 }
-img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
 ul {
     margin-top: 6px;
     margin-bottom: 6px;
@@ -180,31 +175,6 @@ small {
     background-image: url(img/backgrounds/background-blue.png);
 }
 
-.version-number {
-    position: absolute;
-    left: 50px;
-    top: 9.5px;
-    margin: 0px;
-    font-size: 20px;
-    color: white;
-    font-family: monospace;
-    text-shadow: 0px 1px 4px black;
-}
-
-.version-switch-info {
-    display: none;
-    position: absolute;
-    bottom: 30px;
-    left: 48px;
-    width: 85px;
-    height: 35px;
-    border: 3px solid black;
-    font-size: 10px;
-    color: black;
-    background-color: var(--colored-container);
-}
-
-
 /* divs */
 .buildings-wrapper {
     float: right;
@@ -279,7 +249,7 @@ small {
     position: absolute;
     left: 0px;
     bottom: 0px;
-    width: 312px;
+    width: inherit;
     height: 40px;
 }
 .github {
@@ -287,6 +257,28 @@ small {
     position: absolute;
     left: -28px;
     bottom: -28px;
+}
+.version-number {
+    position: absolute;
+    left: 50px;
+    top: 9.5px;
+    margin: 0px;
+    font-size: 20px;
+    color: white;
+    font-family: monospace;
+    text-shadow: 0px 1px 4px black;
+}
+.version-switch-info {
+    display: none;
+    position: absolute;
+    bottom: 30px;
+    left: 48px;
+    width: 85px;
+    height: 35px;
+    border: 3px solid black;
+    font-size: 10px;
+    color: black;
+    background-color: var(--colored-container);
 }
 
 /* universal building css */
