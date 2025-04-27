@@ -1,5 +1,5 @@
 import { Building } from "./buildings.js";
-import { clamp, commaify } from "./helper.js";
+import { clamp, commaify, url } from "./helper.js";
 import { hideTooltip } from "./tooltip.js";
 import { Game } from "./main.js";
 import ClickerCookie from "./clickercookie.js";
@@ -45,13 +45,14 @@ export function expandUpgradesHolder(retract: boolean=false) {
     holder.style.height = `${size}px`;
 }
 
-export function updateUpgradesBoughtStatistic() {
-    // this.destroyAll(true); // would create duplicates of the same upgrade without this
-    // for (let i = 0; i < upgrades.bought.length; i++) {
-    //     if (upgrades.bought[i] != 1) continue;
+export function updateStatisticUpgrades() {
+    for (const upgrade of Handlers.UPGRADE) {
+        upgrade.destroyStatistic();
 
-    //     upgrades.create(i,true);
-    // }
+        if (upgrade.bought === false) continue;
+
+        upgrade.createStatistic();
+    }
 }
 
 export class Upgrade {
@@ -71,6 +72,7 @@ export class Upgrade {
     unlocked: boolean;
 
     html: HTMLDivElement;
+    statisticHTML: HTMLDivElement;
     constructor(clickercookie: ClickerCookie, data: UpgradeData) {
         this.clickercookie = clickercookie
         
@@ -93,6 +95,7 @@ export class Upgrade {
             console.warn(`An image file for the "${this.name}" upgrade was not defined. Falling back to the "unknown" image.`);
         }
 
+        /* Setup main HTML */
         this.html = document.createElement("div"); //* this will be appended to the upgradesHolder in this.create()
         this.html.setAttribute("class","upgrade");
         // upgrade.setAttribute("id",`notathingrn${this.name}`);
@@ -109,14 +112,23 @@ export class Upgrade {
             hideTooltip();
         });
 
+        /* Setup statistic HTML */
+        this.statisticHTML = document.createElement("div");
+        this.statisticHTML.className = "upgrade-stats pointer";
+        this.statisticHTML.addEventListener("mouseover", () => { this.hovered(true) });
+        this.statisticHTML.addEventListener("mousemove", () => { this.hovered(true) });
+        this.statisticHTML.addEventListener("mouseout", () => { hideTooltip() });
+
         //* Use unknown-32-32 as a fallback if we can't get the defined image file (404 usually)
         // note: the CSS class already defines this as a fallback but even though it does that this will send a warn (which it wouldn't elsewise) so why not also do it this way :-)
         const img = new Image();    
         img.onload = () => {
-            this.html.style.backgroundImage = `url(${UPGRADE_ICON})`;
+            this.html.style.backgroundImage = url(UPGRADE_ICON);
+            this.statisticHTML.style.backgroundImage = url(UPGRADE_ICON);
         };
         img.onerror = () => {
-            this.html.style.backgroundImage = `url(img/unknown-32-32.png)`;
+            this.html.style.backgroundImage = url("img/unknown-32-32.png");
+            this.statisticHTML.style.backgroundImage = url("img/unknown-32-32.png");
             console.warn(`Unable to get the image file "${UPGRADE_ICON}" for the "${this.name}" upgrade (probably 404), falling back to "unknown" image.`);
         };
         img.src = UPGRADE_ICON; //* so the onload/onerror events are actually fired
@@ -128,6 +140,10 @@ export class Upgrade {
      */
     create(element: HTMLElement=document.getElementById("upgradesHolder")) {
         element!.appendChild(this.html);
+    }
+
+    createStatistic() {
+        document.getElementById("upgradesBoughtStatsHolder").appendChild(this.statisticHTML);
     }
 
     clicked() {
@@ -146,10 +162,10 @@ export class Upgrade {
 
         document.getElementById("upgradesBoughtCounter")!.innerText = Handlers.UPGRADE.upgradesBought.toString();
 
-        updateUpgradesBoughtStatistic();
+        updateStatisticUpgrades(); // we don't run createStatistic() here and instead run this so that the order shown in the upgrades menu is correct
     }
 
-    hovered() { // todo: this is very similar to Building.hovered
+    hovered(statistic: boolean=false) { // todo: this is very similar to Building.hovered
         const tooltip = document.getElementById("tooltip")!;
 
         document.getElementById("tooltipProduces")!.style.display = "none";
@@ -162,23 +178,27 @@ export class Upgrade {
         document.getElementById("tooltipQuote")!.innerHTML = `<i>\"${this.quote}\"</i>`;
 
         tooltip.style.display = "block";
-        tooltip.style.right = "346px";
-        // clamping allows between 0 and the height of the window minus the height of the box. also add one from the height of the box because it doesn't work correctly normally, idk why
-        //! this uses game but shouldn't with the tooltip refactor
-        tooltip.style.top = clamp(Game.getMousePosition().y - tooltip.offsetHeight/2,0,window.innerHeight-(tooltip.offsetHeight + 1))+"px";
-        tooltip.style.left = "auto"; // when tooltip is a statistic it sets the left property because it won't work correctly with right, this resets that
-        tooltip.style.borderRightWidth = "0px";
+        const mousePos = Game.getMousePosition();
+        if (statistic) { // todo: make the tooltip clamp here
+            tooltip.style.left = `${mousePos.x}px`;
+            tooltip.style.top = `${mousePos.y - tooltip.offsetHeight}px`;  // it's minus offsetHeight because we don't want the cursor touching the tooltip
+            tooltip.style.borderRightWidth = "3px";
+        } else {
+            tooltip.style.right = "346px";
+            // clamping allows between 0 and the height of the window minus the height of the box. also add one from the height of the box because it doesn't work correctly normally, idk why
+            tooltip.style.top = clamp(mousePos.y - tooltip.offsetHeight/2,0,window.innerHeight-(tooltip.offsetHeight + 1))+"px";
+            tooltip.style.left = "auto"; // when tooltip is a statistic it sets the left property because it won't work correctly with right, this resets that
+            tooltip.style.borderRightWidth = "0px";
+        }
     }
 
     destroy() {
         this.html.remove();
         hideTooltip(); // hide the tooltip so it doesn't stick around after you buy the upgrade
     }
+
+    destroyStatistic() {
+        this.statisticHTML.remove();
+        hideTooltip(); // if you're somehow hovering it lol
+    }
 }
-
-// export class UpgradeStatistic extends Upgrade {
-
-//     constructor(game: Game, data: UpgradeData) {
-//         super(game, data);
-//     }
-// }

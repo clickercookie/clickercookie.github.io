@@ -8,7 +8,7 @@ If you're not a modder, still read the docs here: https://github.com/clickercook
 
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
 import { branchQuickSwitch, Interval, object2HTML, url } from "./helper.js";
-import { updateUpgradesBoughtStatistic, expandUpgradesHolder } from "./upgrades.js";
+import { updateStatisticUpgrades, expandUpgradesHolder } from "./upgrades.js";
 import { SaveProvider, Savinator } from "./saving.js";
 import { Mod } from "./mods.js"
 import ClickerCookie from "./clickercookie.js"
@@ -192,7 +192,7 @@ export class Game extends SaveProvider {
 
         // todo asap: 0.6 save transfer
 
-        updateUpgradesBoughtStatistic();
+        updateStatisticUpgrades();
 
         /* change version branch specific stuff */
         // change title
@@ -327,7 +327,7 @@ export class Game extends SaveProvider {
         Handlers.UPGRADE.showUnlockedUpgrades();
 
         document.getElementById("upgradesBoughtCounter").innerText = Handlers.UPGRADE.upgradesBought.toString();
-        updateUpgradesBoughtStatistic();
+        updateStatisticUpgrades();
     }
 }
 
