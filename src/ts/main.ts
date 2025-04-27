@@ -44,6 +44,19 @@ let optionsUp = false;
 // misc
 let mobile: boolean; // defined in initialization
 
+interface MousePosition {
+    x: number;
+    y: number;
+}
+const mousePos: MousePosition = {x: undefined, y: undefined};
+window.addEventListener("mousemove", (event) => {
+    mousePos.x = event.clientX;
+    mousePos.y = event.clientY;
+    
+    if (inDevelopment && !mobile)
+        document.getElementById("mousePosDevText").innerText = `Mouse Pos: (${mousePos.x}, ${mousePos.y})`;
+});
+
 const helper = {} as {
     consoleLogDev(str: string): void
 };
@@ -79,7 +92,15 @@ export class Game extends SaveProvider {
     public static readonly DEFAULT_BACKGROUND: string = "clickercookie:blue";
     public static readonly DEFAULT_CURRENTLY_CLICKED_OBJECT: string = "clickercookie:cookie";
 
-    static readonly Versions = Versions;
+    public static readonly Versions = Versions;
+    public static getMousePosition(): MousePosition {
+        return mousePos;
+    }
+
+    private static readonly _INSTANCE = new Game();
+    public static getInstance() {
+        return this._INSTANCE;
+    }
 
     /** Said to be the physical manifestation of the cookie gods themselves... */
     public clickercookie: ClickerCookie;
@@ -298,15 +319,6 @@ export class Game extends SaveProvider {
         document.getElementById("versionNumber").addEventListener("click", () => {versionSwitch()});
         document.getElementById("versionNumber").addEventListener("mouseover", () => {versionNumberMousedOver()});
         document.getElementById("versionNumber").addEventListener("mouseout", () => {versionNumberMousedOver(true)});
-        // window events
-        window.addEventListener("mousemove", (event) => {
-            game.mousePos = {
-                x: event.clientX,
-                y: event.clientY
-            }
-            if (inDevelopment && !mobile)
-                document.getElementById("mousePosDevText").innerText = `Mouse Pos: (${game.mousePos.x}, ${game.mousePos.y})`;
-        });
 
         // start intervals (should be right at the end)
         this.AUTOSAVE_INTERVAL.start();
@@ -398,15 +410,15 @@ dev.setDevMode = function(value: boolean | "on" | "off") {
 dev.setCookies = function(number: number) {
     if (!dev.devMode) return "You need developer mode ON to run this command.";
 
-    game.clickercookie.cookies = number;
-    game.clickercookie.totalCookies =+ number;
-    game.hasCheated = true;
+    Game.getInstance().clickercookie.cookies = number;
+    Game.getInstance().clickercookie.totalCookies =+ number;
+    Game.getInstance().hasCheated = true;
 }
 dev.setCPS = function(number: number) {
     if (!dev.devMode) return "You need developer mode ON to run this command.";
 
     dev.CPSGiven = number;
-    game.hasCheated = true;
+    Game.getInstance().hasCheated = true;
 }
 
 // ------------------------------------
@@ -501,10 +513,8 @@ tooltip.create = function(x: number, y: number, content: any) {
 
 console.log(`you seem smart, how 'bout you contribute to the project? ${Game.GITHUB_REPO}`);
 
-export const game = new Game();
-
-Handlers.SAVE.register("game", game);
-Handlers.MOD.register(game.clickercookie.NAMESPACE, game.clickercookie);
+Handlers.SAVE.register("game", Game.getInstance());
+Handlers.MOD.register(Game.getInstance().clickercookie.NAMESPACE, Game.getInstance().clickercookie);
 
 // Events
 // todo: add to game
@@ -518,7 +528,7 @@ function resizeEventListener() {
 resizeEventListener(); // since we do need certain elements like the middle text to have the correct size without having to resize the window, we call this now
 window.addEventListener("resize", resizeEventListener);
 
-game.init();
+Game.getInstance().init();
 
-console.log("game:", game);
+console.log("game:", Game.getInstance());
 console.log("mod handler:", Handlers.MOD);

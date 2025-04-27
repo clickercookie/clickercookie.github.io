@@ -3,7 +3,7 @@
 import { Building } from "./buildings.js";
 import { Handler, Identifier, UniqueKeyHandler } from "./handler.js";
 import { url } from "./helper.js";
-import { game, Game } from "./main.js";
+import { Game } from "./main.js";
 import { Mod } from "./mods.js";
 import { Background, CurrentlyClickedObject } from "./personalization.js";
 import { AdvancedPopup, SimplePopup } from "./popup.js";
@@ -212,7 +212,7 @@ export class ModHandler extends UniqueKeyHandler<Mod> {
         (document.getElementById("addModURLForm") as HTMLFormElement).reset();
         document.getElementById("importedMessage").style.display = "block";
     
-        game.isModded = true;
+        Game.getInstance().isModded = true;
 
         console.log("Loaded mod from URL: "+url);
     }
@@ -236,7 +236,7 @@ export class ModHandler extends UniqueKeyHandler<Mod> {
             (document.getElementById("addModURLForm") as HTMLFormElement).reset();
             document.getElementById("importedMessage")!.style.display = "block";
 
-            game.isModded = true;
+            Game.getInstance().isModded = true;
 
             console.log("Successfully added mod from file: "+file.name);
         };

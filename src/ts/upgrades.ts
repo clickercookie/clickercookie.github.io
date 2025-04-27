@@ -1,7 +1,7 @@
 import { Building } from "./buildings.js";
 import { clamp, commaify } from "./helper.js";
 import { hideTooltip } from "./tooltip.js";
-import { game, Game } from "./main.js";
+import { Game } from "./main.js";
 import ClickerCookie from "./clickercookie.js";
 import { Handlers } from "./handlers.js";
 
@@ -165,7 +165,7 @@ export class Upgrade {
         tooltip.style.right = "346px";
         // clamping allows between 0 and the height of the window minus the height of the box. also add one from the height of the box because it doesn't work correctly normally, idk why
         //! this uses game but shouldn't with the tooltip refactor
-        tooltip.style.top = clamp(game.mousePos.y - tooltip.offsetHeight/2,0,window.innerHeight-(tooltip.offsetHeight + 1))+"px";
+        tooltip.style.top = clamp(Game.getMousePosition().y - tooltip.offsetHeight/2,0,window.innerHeight-(tooltip.offsetHeight + 1))+"px";
         tooltip.style.left = "auto"; // when tooltip is a statistic it sets the left property because it won't work correctly with right, this resets that
         tooltip.style.borderRightWidth = "0px";
     }

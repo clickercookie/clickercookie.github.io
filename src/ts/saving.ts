@@ -1,5 +1,5 @@
 import { SaveHandler } from "./handlers.js";
-import { game, Game } from "./main.js";
+import { Game } from "./main.js";
 import { SimplePopup } from "./popup.js";
 
 export class Savinator {
@@ -102,7 +102,7 @@ export class Savinator {
             console.log(`Loaded save data for game namespace.`);
         }
 
-        game.AUTOSAVE_INTERVAL.reset();
+        Game.getInstance().AUTOSAVE_INTERVAL.reset();
     }
 
     export() {
