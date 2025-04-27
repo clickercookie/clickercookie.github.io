@@ -222,55 +222,15 @@ export class Game extends SaveProvider {
             devDiv.setAttribute("style","padding-left: 3px;");
             
             const devWarning = document.createElement("h4");
-            devWarning.appendChild(document.createTextNode("localhost detected, options below"));
+            devWarning.innerText = "localhost detected, options below";
             devWarning.setAttribute("style","color:black;");
             devDiv.appendChild(devWarning);
     
-            const devResetButton = document.createElement("button");
-            devResetButton.appendChild(document.createTextNode("Reset Sava Data"));
-            devResetButton.addEventListener("click", () => {this.savinator5000.reset()});
-            devDiv.appendChild(devResetButton);
-    
-            const br1 = document.createElement("br");
-            devDiv.appendChild(br1);
-    
             const mousePos = document.createElement("p");
-            mousePos.appendChild(document.createTextNode("Mouse Pos: (?, ?)"));
+            mousePos.innerText = "Mouse Pos: (?, ?)";
             mousePos.setAttribute("id","mousePosDevText");
             mousePos.setAttribute("style","margin-bottom:0px;");
             devDiv.appendChild(mousePos);
-    
-            const br2 = document.createElement("br");
-            devDiv.appendChild(br2);
-    
-            const devLoadButton = document.createElement("button");
-            devLoadButton.appendChild(document.createTextNode("Force Load Save"));
-            devLoadButton.addEventListener("click", () => {this.savinator5000.load()});
-            devDiv.appendChild(devLoadButton);
-    
-            const br3 = document.createElement("br");
-            devDiv.appendChild(br3);
-    
-            const mobileOn = document.createElement("button");
-            mobileOn.appendChild(document.createTextNode("Goto Mobile Mode"));
-            const mobileOnHyperlink = document.createElement("a");
-            mobileOnHyperlink.setAttribute("href","../mobile/mobile.html");
-            mobileOnHyperlink.appendChild(mobileOn);
-            devDiv.appendChild(mobileOnHyperlink);
-    
-            const br4 = document.createElement("br");
-            devDiv.appendChild(br4);
-    
-            const toggleSaving = document.createElement("button");
-            toggleSaving.appendChild(document.createTextNode("Toggle Auto-Saving"));
-            toggleSaving.addEventListener("click", () => {dev.toggleSaving()});
-            toggleSaving.setAttribute("style","margin-bottom:0px;");
-            devDiv.appendChild(toggleSaving);
-            const currentSavingStatus = document.createElement("p");
-            currentSavingStatus.appendChild(document.createTextNode("saving: true"));
-            currentSavingStatus.setAttribute("id","currentSavingStatus");
-            currentSavingStatus.setAttribute("style","margin-bottom:0px;");
-            devDiv.appendChild(currentSavingStatus);
     
             document.getElementById("leftSide").insertBefore(devDiv, document.getElementById("leftSidePush"));
     
