@@ -422,6 +422,7 @@ small {
 dialog::backdrop {
     background-color: black;
     opacity: 50%;
+    opacity: var(--dialog-backdrop-opacity); /* for programmatic modification */
 }
 .simple-popup-button-div {
     display: flex;

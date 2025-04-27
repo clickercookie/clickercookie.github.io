@@ -38,6 +38,7 @@ export class Mod extends SaveProvider {
     // -------------------
     // Actual mod stuff
     // -------------------
+    /** See #61 for how this will be used */
     public readonly METADATA: ModMetadata;
 
     /** Mod namespace used for saving */

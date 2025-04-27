@@ -81,10 +81,21 @@ export class SimplePopup {
     }
 }
 
+export interface AdvancedPopupOptions {
+    /** The `opacity` percentage of the dialog backdrop. Default: 50 */
+    filterLevel?: number;
+    /** The padding to apply to the popup HTML, in `px` */
+    innerPadding?: number;
+}
+const defaultValues: Required<AdvancedPopupOptions> = {
+    filterLevel: 50,
+    innerPadding: 0
+}
+
 export class AdvancedPopup {
     html: HTMLDialogElement
 
-    constructor(x: number, y: number, html: string) { // todo: possibly add HTMLElement to html instead of just string?
+    constructor(x: number, y: number, html: string, options: AdvancedPopupOptions=undefined) { // todo: possibly add HTMLElement to html instead of just string?
         this.html = document.createElement("dialog");
         this.html.className = "popup";
         this.html.style.display = "flex";
@@ -92,6 +103,14 @@ export class AdvancedPopup {
         this.html.style.height = `${y}px`;
 
         this.html.innerHTML = html;
+
+        const filledOptions = {
+            ...defaultValues,
+            ...options
+        };
+
+        this.html.style.padding = filledOptions.innerPadding+"px";
+        this.html.style.setProperty("--dialog-backdrop-opacity", filledOptions.filterLevel+"%");
         
         document.body.appendChild(this.html);
 
