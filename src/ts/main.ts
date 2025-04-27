@@ -105,14 +105,6 @@ export class Game extends SaveProvider {
     /** Said to be the physical manifestation of the cookie gods themselves... */
     public clickercookie: ClickerCookie;
 
-    // buildings owned
-    private _buildingsOwned: number = 0;
-    public get buildingsOwned() { return this._buildingsOwned }
-    public set buildingsOwned(num: number) {
-        this._buildingsOwned = num;
-        this.clickercookie.updateStatistics();
-    }
-
     // self-explainatory-ish things
     private _hasCheated: boolean;
     public get hasCheated() { return this._hasCheated }
@@ -333,13 +325,6 @@ export class Game extends SaveProvider {
         if (!this.theGameCanLoopBecauseTheInitializationIsCompleted) return;
 
         Handlers.UPGRADE.checkUpgradeAvailability();
-        
-        // stats that need to be updated beforehand
-        let buildingsOwned = 0;
-        for (const building of Handlers.BUILDING) {
-            buildingsOwned += building.bought;
-        }
-        this.buildingsOwned = buildingsOwned;
 
         let cps = 0;
         for (const building of Handlers.BUILDING) {

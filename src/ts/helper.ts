@@ -131,7 +131,6 @@ export class Interval {
     }
 
     reset(newTimeout: number = this.timeout) {
-        console.log(this.timeout);
         this.timeout = newTimeout;
         return this.stop().start();
     }

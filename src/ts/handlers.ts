@@ -118,7 +118,15 @@ export class CurrentlyClickedHandler extends Handler<CurrentlyClickedObject> {
 }
 
 /* Buildings*/
-export class BuildingHandler extends Handler<Building> {}
+export class BuildingHandler extends Handler<Building> {
+    public get buildingsOwned(): number {
+        let bought = 0;
+        for (const value of this) {
+            bought += value.bought;
+        }
+        return bought;
+    }
+}
 
 /* Upgrades */
 export class UpgradeHandler extends Handler<Upgrade> {

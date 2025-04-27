@@ -668,7 +668,7 @@ export default class ClickerCookie extends Mod {
         document.getElementById("cookiesStat").innerText = `${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural}: ${makeSlightlyImperfectFloatNice(this.cookies)}`;
         document.getElementById("allTimeCookies").innerText = `All Time ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural}: ${makeSlightlyImperfectFloatNice(this.totalCookies)}`;
         document.getElementById("cookiesPerSecondStat").innerText = `${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural} Per Second: ${makeSlightlyImperfectFloatNice(this.cookiesPerSecond)}`;
-        document.getElementById("buildingsOwnedStat").innerText = `Buildings Owned: ${commaify(Game.getInstance().buildingsOwned)}`; // todo: should this be in Game? How should statistics actually work at all?
+        document.getElementById("buildingsOwnedStat").innerText = `Buildings Owned: ${commaify(Handlers.BUILDING.buildingsOwned)}`; // todo: should this be in Game? How should statistics actually work at all?
         document.getElementById("cookieBeenClickedTimesStat").innerText = `Total ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name} Clicks: ${this.cookieBeenClickedTimes}`;
         document.getElementById("cookiesPerClickStat").innerText = `${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural} Per Click: ${this.cookiesPerClick}`;
     }
