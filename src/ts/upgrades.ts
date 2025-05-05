@@ -11,12 +11,7 @@ export interface UpgradeSave {
 }
 
 export interface UpgradeData {
-    /** 
-     * This is used to save unlocked/bought properties for the upgrade, and should be unique and NEVER CHANGE. it can be whatever you want.
-     * See {@link Game.UPGRADES_DATA} for the reserved ones.
-     * 
-     * todo: with Identifier is this a thing of the past?
-     */
+    /** A convenience property to make looping over an array filled with data much easier by already providing a UID to the Identifier constructor (see upgrade registration in {@link ClickerCookie.init} to better understand). **This is not used anywhere in the codebase.** */
     uid: string;
     name: string;
     quote: string;
@@ -58,7 +53,6 @@ export function updateStatisticUpgrades() {
 export class Upgrade {
     private clickercookie: ClickerCookie;
 
-    uid: string;
     name: string;
     quote: string;
     price: number;
@@ -76,7 +70,6 @@ export class Upgrade {
     constructor(clickercookie: ClickerCookie, data: UpgradeData) {
         this.clickercookie = clickercookie
         
-        this.uid = data.uid;
         this.name = data.name;
         this.quote = data.quote;
         this.price = data.price;

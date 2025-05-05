@@ -8,7 +8,7 @@ If you're not a modder, still read the docs here: https://github.com/clickercook
 
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
 import { branchQuickSwitch, Interval, object2HTML, url } from "./helper.js";
-import { updateStatisticUpgrades, expandUpgradesHolder } from "./upgrades.js";
+import { updateStatisticUpgrades, expandUpgradesHolder, UpgradeSave } from "./upgrades.js";
 import { SaveProvider, Savinator } from "./saving.js";
 import { Mod } from "./mods.js"
 import ClickerCookie from "./clickercookie.js"
@@ -91,6 +91,8 @@ interface GameSaveData {
     // personalization
     currentlyClickedObjectKey: string;
     currentBackgroundKey: string;
+
+    upgradesSave: Record<string, UpgradeSave>
 }
 
 export class Game extends SaveProvider {
@@ -322,6 +324,8 @@ export class Game extends SaveProvider {
             // personalization
             currentlyClickedObjectKey: Handlers.CURRENTLY_CLICKED.getKeyFromValue(Handlers.CURRENTLY_CLICKED.getCurrentlyClicked()),
             currentBackgroundKey: Handlers.BACKGROUND.getKeyFromValue(Handlers.BACKGROUND.getCurrentBackground()), // todo: make better
+        
+            upgradesSave: Handlers.UPGRADE.dumpSave()
         }
     }
 
@@ -334,6 +338,8 @@ export class Game extends SaveProvider {
         Handlers.BACKGROUND.setBackground(saveData.currentBackgroundKey);
 
         // the following doesn't have anything to do with GameSaveData but will be done here because this spot makes the most sense
+        Handlers.UPGRADE.loadUpgradesSave(saveData.upgradesSave);
+
         Handlers.UPGRADE.destroyAllUpgrades();
         Handlers.UPGRADE.showUnlockedUpgrades();
 

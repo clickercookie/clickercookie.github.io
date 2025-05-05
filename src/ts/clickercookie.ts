@@ -60,10 +60,6 @@ interface ClickerCookieSaveData {
     churchesBought: number;
     churchCPSGain: number;
     churchCPSGiven: number;
-
-    /* upgrades */
-    upgradesBought: number;
-    upgradesSave: Record<string, UpgradeSave>;
 }
 
 export default class ClickerCookie extends Mod {
@@ -711,11 +707,7 @@ export default class ClickerCookie extends Mod {
             // church
             churchesBought: this.church.bought,
             churchCPSGain: this.church.CPSGain,
-            churchCPSGiven: this.church.CPSGiven,
-
-            /* upgrades */
-            upgradesBought: Handlers.UPGRADE.upgradesBought,
-            upgradesSave: Handlers.UPGRADE.dumpUpgradesSave(this.NAMESPACE)
+            churchCPSGiven: this.church.CPSGiven
         }
     }
     loadSaveData(saveData: ClickerCookieSaveData) {        
@@ -767,7 +759,5 @@ export default class ClickerCookie extends Mod {
         this.church.CPSGain = saveData.churchCPSGain;
         this.church.CPSGiven = saveData.churchCPSGiven;
         // ...
-
-        Handlers.UPGRADE.loadUpgradesSave(this.NAMESPACE, saveData.upgradesSave);
     }
 }

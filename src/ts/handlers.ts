@@ -178,14 +178,14 @@ export class UpgradeHandler extends Handler<Upgrade> {
     }
 
     /**
-     * Dumps savedata for a given namespace
-     * @param namespace The namespace to dump the savadata of
-     * @returns savedata
+     * Dumps savedata for all registered upgrades
+     * @param namespace Optional: if present only dump savedata from this namespace
+     * @returns savedata as obj in following format: `stringifiedIdentifier: UpgradeSave`
      */
-    dumpUpgradesSave(namespace: string) {
+    dumpSave(namespace: string=undefined) {
         const saveObj: Record<string, UpgradeSave> = {};
-        for (const value of this.getValuesFromNamespace(namespace)) {
-            saveObj[value.uid] = {
+        for (const value of (namespace === undefined) ? this : this.getValuesFromNamespace(namespace)) {
+            saveObj[this.getKeyFromValue(value)] = {
                 unlocked: value.unlocked,
                 bought: value.bought
             }
@@ -193,10 +193,19 @@ export class UpgradeHandler extends Handler<Upgrade> {
         return saveObj;
     }
 
-    loadUpgradesSave(namespace: string, saveObj: Record<string, UpgradeSave>) { // todo: test if works
-        for (let i in saveObj) {
-            this.getFromIdentifier(new Identifier(namespace, i)).bought = saveObj[i].bought;
-            this.getFromIdentifier(new Identifier(namespace, i)).unlocked = saveObj[i].unlocked;
+    /**
+     * Load save data for all registered upgrades
+     * @param saveObj The save object to load the data of
+     * @param namespace Optional: if present will only load data for upgrades of a given namespace.
+     */
+    loadUpgradesSave(saveObj: Record<string, UpgradeSave>, namespace: string=undefined) { // todo: test if works
+        for (const stringifiedIdentifier in saveObj) {
+            const id = Identifier.fromString(stringifiedIdentifier);
+
+            if (namespace !== undefined && id.namespace !== namespace) continue;
+
+            this.getFromIdentifier(id).bought = saveObj[stringifiedIdentifier].bought;
+            this.getFromIdentifier(id).unlocked = saveObj[stringifiedIdentifier].unlocked;
         }
     }
 }
