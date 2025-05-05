@@ -4,9 +4,12 @@ import { Game } from "./main.js";
 import { hideTooltip } from "./tooltip.js";
 
 export interface BuildingData {
+    /** Display name for your building. Should be capitialized.*/
     name: string;
+    /** *Plural* display name for your building. Should be capitialized.*/
     namePlural: string;
     quote: string;
+    /** Base upgrade cost for the building. */
     upgradeCost: number;
     CPSGain: number;
     img?: string;
@@ -20,11 +23,14 @@ export class Building {
     name: string;
     namePlural: string;
     quote: string;
-    private _upgradeCost: number;
-    public get upgradeCost() { return this._upgradeCost }
-    public set upgradeCost(num: number) {
-        this._upgradeCost = num;
-        document.getElementById(`${this.name}Cost`).innerText = commaify(this._upgradeCost);
+    readonly baseUpgradeCost: number;
+    /** Upgrade cost is obtained programmatically using the base cost, multiplier, and number bought. */
+    public get upgradeCost() {
+        let cost = this.baseUpgradeCost;
+        for (let i = 0; i < this.bought; i++) {
+            cost = Math.floor(cost * this.upgradeCostMultiplier);
+        }
+        return cost;
     }
     CPSGiven: number;
     CPSGain: number;
@@ -36,9 +42,10 @@ export class Building {
     public set bought(num: number) {
         this._bought = num;
         document.getElementById(`${this.namePlural}Bought`).innerText = commaify(this._bought);
+
+        document.getElementById(`${this.name}Cost`).innerText = commaify(this.upgradeCost); //? does this make sense here?
     }
     unlocked: boolean;
-    plural: "s" | "es";
 
     html: HTMLDivElement;
     constructor(clickercookie: ClickerCookie, data: BuildingData) {
@@ -68,7 +75,7 @@ export class Building {
                 const namePriceDiv = document.createElement("div");
                     const buildingName = document.createElement("p");
                     buildingName.className = "building-name";
-                    buildingName.innerText = capitalize(data.name);
+                    buildingName.innerText = data.name;
                     namePriceDiv.appendChild(buildingName);
 
                     const buildingPrice = document.createElement("p");
@@ -94,7 +101,7 @@ export class Building {
         this.name = data.name;
         this.namePlural = data.namePlural;
         this.quote = data.quote;
-        this.upgradeCost = data.upgradeCost;
+        this.baseUpgradeCost = data.upgradeCost;
         this.CPSGiven = 0;
         this.CPSGain = data.CPSGain;
         if (data.upgradeCostMultiplier)
@@ -103,8 +110,8 @@ export class Building {
             this.upgradeCostMultiplier = 1.15;
 
         //* if upgradeCost is too low, Math.floor'ing it after multiplying it by upgradeCostMultiplier can actually just get you the same upgradeCost as before. warn in console if this will happen, but don't throw an error in case it's intended or smth stupid
-        if (Math.floor(this.upgradeCost * this.upgradeCostMultiplier) === this.upgradeCost) {
-            console.warn(`${this.name} upgrade cost is too low to increase after buy. Increase BuildingData.upgradeCost or BuildingData.upgradeCostMultiplier.`)
+        if (Math.floor(this.baseUpgradeCost * this.upgradeCostMultiplier) === this.baseUpgradeCost) {
+            console.warn(`${this.name} base upgrade cost is too low to increase after buy. Increase BuildingData.upgradeCost or BuildingData.upgradeCostMultiplier.`)
         }
 
         this.bought = 0;
@@ -114,8 +121,6 @@ export class Building {
     buy() {
         if (this._clickercookie.cookies >= this.upgradeCost) {
             this._clickercookie.cookies -= this.upgradeCost;
-            this.upgradeCost *= this.upgradeCostMultiplier;
-            this.upgradeCost = Math.floor(this.upgradeCost);
             this.bought++;
             this.CPSGiven += this.CPSGain;
             this.hovered();

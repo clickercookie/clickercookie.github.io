@@ -35,37 +35,30 @@ interface ClickerCookieSaveData {
     // keyboard
     keyboardsBought: number;
     keyboardCPSGain: number;
-    keyboardUpgradeCost: number;
     keyboardCPSGiven: number;
     // grandpa
     grandpasBought: number;
     grandpaCPSGain: number;
-    grandpaUpgradeCost: number;
     grandpaCPSGiven: number;
     // ranch
     ranchesBought: number;
     ranchCPSGain: number;
-    ranchUpgradeCost: number;
     ranchCPSGiven: number;
     // television
     televisionsBought: number;
     televisionCPSGain: number;
-    televisionUpgradeCost: number;
     televisionCPSGiven: number; 
     // worker
     workersBought: number;
     workerCPSGain: number;
-    workerUpgradeCost: number;
     workerCPSGiven: number;
     // wallet
     walletsBought: number;
     walletCPSGain: number;
-    walletUpgradeCost: number;
     walletCPSGiven: number; 
     // church
     churchesBought: number;
     churchCPSGain: number;
-    churchUpgradeCost: number;
     churchCPSGiven: number;
 
     /* upgrades */
@@ -131,56 +124,56 @@ export default class ClickerCookie extends Mod {
         // buildings and stuff
         this.BUILDINGS_DATA = {
             keyboard: {
-                name: "keyboard",
-                namePlural: "keyboards",
+                name: "Keyboard",
+                namePlural: "Keyboards",
                 quote: "type in cookies",
                 upgradeCost: 15,
                 CPSGain: 0.1,
                 img: "img/keyboard.png"
             },
             grandpa: {
-                name: "grandpa",
-                namePlural: "grandpas",
+                name: "Grandpa",
+                namePlural: "Grandpas",
                 quote: "as long as gramps gets a cut",
                 upgradeCost: 100,
                 CPSGain: 1,
                 img: "img/grandpa.png"
             },
             ranch: {
-                name: "ranch",
-                namePlural: "ranches",
+                name: "Ranch",
+                namePlural: "Ranches",
                 quote: "not the dressing kind",
                 upgradeCost: 1_100,
                 CPSGain: 8,
                 img: "img/ranch.png"
             },
             television: {
-                name: "television",
-                namePlural: "televisions",
+                name: "Television",
+                namePlural: "Televisions",
                 quote: "hold infomercials on your cookies",
                 upgradeCost: 12_000,
                 CPSGain: 47,
                 img: "img/tv.png"
             },
             worker: {
-                name: "worker",
-                namePlural: "workers",
+                name: "Worker",
+                namePlural: "Workers",
                 quote: "cookies via manual labor",
                 upgradeCost: 130_000,
                 CPSGain: 260,
                 img: "img/worker.png"
             },
             wallet: {
-                name: "wallet",
-                namePlural: "wallets",
+                name: "Wallet",
+                namePlural: "Wallets",
                 quote: "more storage space for your vast amount of cookie income",
                 upgradeCost: 1_400_000,
                 CPSGain: 1_440,
                 img: "img/wallet.png"
             },
             church: {
-                name: "church",
-                namePlural: "churches",
+                name: "Church",
+                namePlural: "Churches",
                 quote: "pray to the almighty cookie gods",
                 upgradeCost: 20_000_000,
                 CPSGain: 7_800,
@@ -202,14 +195,6 @@ export default class ClickerCookie extends Mod {
         this.wallet.setVisibility(false);
         this.church = new Building(this, this.BUILDINGS_DATA.church);
         this.church.setVisibility(false);
-
-        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "keyboard"), this.keyboard);
-        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "grandpa"), this.grandpa);
-        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "ranch"), this.ranch);
-        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "television"), this.television);
-        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "worker"), this.worker);
-        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "wallet"), this.wallet);
-        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "church"), this.church);
 
         // upgrades
         this.UPGRADES_DATA = [
@@ -577,11 +562,6 @@ export default class ClickerCookie extends Mod {
             }
         ];
 
-        for (const upgradeData of this.UPGRADES_DATA) {
-            Handlers.UPGRADE.register(new Identifier(this.NAMESPACE, upgradeData.uid), new Upgrade(this, upgradeData));
-        }
-
-        Mod.registerKooh("init", () => { this.init() });
         Mod.registerKooh("click", () => { this.cookieClicked() });
         Mod.registerKooh("loop", () => { this.gameLoop() });
         Mod.registerKooh("cps", () => { this.cpsUpdate() });
@@ -593,11 +573,23 @@ export default class ClickerCookie extends Mod {
             Handlers.UPGRADE.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard5")).desc = `Multiplys Keyboard and clicking ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()} production by 2`;
             
             Handlers.BUILDING.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard")).quote = `type in ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural.toLowerCase()}`;
-            Handlers.BUILDING.getFromIdentifier(new Identifier(this.NAMESPACE, "television")).quote = `hold infomercials on your ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()}`;
+            Handlers.BUILDING.getFromIdentifier(new Identifier(this.NAMESPACE, "television")).quote = `hold infomercials on your ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural.toLowerCase()}`;
         });
     }
 
     init() {
+        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "keyboard"), this.keyboard);
+        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "grandpa"), this.grandpa);
+        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "ranch"), this.ranch);
+        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "television"), this.television);
+        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "worker"), this.worker);
+        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "wallet"), this.wallet);
+        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "church"), this.church);
+
+        for (const upgradeData of this.UPGRADES_DATA) {
+            Handlers.UPGRADE.register(new Identifier(this.NAMESPACE, upgradeData.uid), new Upgrade(this, upgradeData));
+        }
+
         // Register personalization things (must be before save load because loading requires these to be registered to set them)
         Handlers.CURRENTLY_CLICKED.register(new Identifier(this.NAMESPACE, "cookie"), {name: "Cookie", namePlural: "Cookies", src: "img/cookie.png"});
         Handlers.CURRENTLY_CLICKED.register(new Identifier(this.NAMESPACE, "potato"), {name: "Potato", namePlural: "Potatoes", src: "img/potato.png"});
@@ -695,37 +687,30 @@ export default class ClickerCookie extends Mod {
             // keyboard
             keyboardsBought: this.keyboard.bought,
             keyboardCPSGain: this.keyboard.CPSGain,
-            keyboardUpgradeCost: this.keyboard.upgradeCost,
             keyboardCPSGiven: this.keyboard.CPSGiven,
             // grandpa
             grandpasBought: this.grandpa.bought,
             grandpaCPSGain: this.grandpa.CPSGain,
-            grandpaUpgradeCost: this.grandpa.upgradeCost,
             grandpaCPSGiven: this.grandpa.CPSGiven,
             // ranch
             ranchesBought: this.ranch.bought,
             ranchCPSGain: this.ranch.CPSGain,
-            ranchUpgradeCost: this.ranch.upgradeCost,
             ranchCPSGiven: this.ranch.CPSGiven,
             // television
             televisionsBought: this.television.bought,
             televisionCPSGain: this.television.CPSGain,
-            televisionUpgradeCost: this.television.upgradeCost,
             televisionCPSGiven: this.television.CPSGiven,
             // worker
             workersBought: this.worker.bought,
             workerCPSGain: this.worker.CPSGain,
-            workerUpgradeCost: this.worker.upgradeCost,
             workerCPSGiven: this.worker.CPSGiven,
             // wallet
             walletsBought: this.wallet.bought,
             walletCPSGain: this.wallet.CPSGain,
-            walletUpgradeCost: this.wallet.upgradeCost,
             walletCPSGiven: this.wallet.CPSGiven,
             // church
             churchesBought: this.church.bought,
             churchCPSGain: this.church.CPSGain,
-            churchUpgradeCost: this.church.upgradeCost,
             churchCPSGiven: this.church.CPSGiven,
 
             /* upgrades */
@@ -756,37 +741,30 @@ export default class ClickerCookie extends Mod {
         // keyboard
         this.keyboard.bought = saveData.keyboardsBought;
         this.keyboard.CPSGain = saveData.keyboardCPSGain;
-        this.keyboard.upgradeCost = saveData.keyboardUpgradeCost;
         this.keyboard.CPSGiven = saveData.keyboardCPSGiven;
         // grandpa
         this.grandpa.bought = saveData.grandpasBought;
         this.grandpa.CPSGain = saveData.grandpaCPSGain;
-        this.grandpa.upgradeCost = saveData.grandpaUpgradeCost;
         this.grandpa.CPSGiven = saveData.grandpaCPSGiven;
         // ranch
         this.ranch.bought = saveData.ranchesBought;
         this.ranch.CPSGain = saveData.ranchCPSGain;
-        this.ranch.upgradeCost = saveData.ranchUpgradeCost;
         this.ranch.CPSGiven = saveData.ranchCPSGiven;
         // television
         this.television.bought = saveData.televisionsBought;
         this.television.CPSGain = saveData.televisionCPSGain;
-        this.television.upgradeCost = saveData.televisionUpgradeCost;
         this.television.CPSGiven = saveData.televisionCPSGiven;
         // worker
         this.worker.bought = saveData.workersBought;
         this.worker.CPSGain = saveData.workerCPSGain;
-        this.worker.upgradeCost = saveData.workerUpgradeCost;
         this.worker.CPSGiven = saveData.workerCPSGiven;
         // wallet
         this.wallet.bought = saveData.walletsBought;
         this.wallet.CPSGain = saveData.walletCPSGain;
-        this.wallet.upgradeCost = saveData.walletUpgradeCost;
         this.wallet.CPSGiven = saveData.walletCPSGiven;
         // church
         this.church.bought = saveData.churchesBought;
         this.church.CPSGain = saveData.churchCPSGain;
-        this.church.upgradeCost = saveData.churchUpgradeCost;
         this.church.CPSGiven = saveData.churchCPSGiven;
         // ...
 

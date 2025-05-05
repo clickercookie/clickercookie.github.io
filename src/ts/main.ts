@@ -47,6 +47,7 @@ let optionsUp = false;
 // misc
 let mobile: boolean; // defined in initialization
 
+// Global Events
 interface MousePosition {
     x: number;
     y: number;
@@ -59,6 +60,16 @@ window.addEventListener("mousemove", (event) => {
     if (Game.IN_DEVELOPMENT && !mobile)
         document.getElementById("mousePosDevText").innerText = `Mouse Pos: (${mousePos.x}, ${mousePos.y})`;
 });
+
+function resizeEventListener() {
+    // change middle text heights
+    const middleTexts = Array.from(document.querySelectorAll(".middle-main"));
+    for (const element of middleTexts) {
+        (element as HTMLElement).style.height = window.innerHeight - document.getElementById("middleButtons").offsetHeight+"px";
+    }
+}
+resizeEventListener(); // since we do need certain elements like the middle text to have the correct size without having to resize the window, we call this now
+window.addEventListener("resize", resizeEventListener);
 
 const helper = {} as {
     consoleLogDev(str: string): void
@@ -170,7 +181,7 @@ export class Game extends SaveProvider {
     }
 
     init() {
-        Mod.callKooh("init"); //* this is done before anything else in Game because ClickerCookie.init adds personalization stuff and that stuff must be registered for a successful load.
+        //* note: always ensure that the init() method for all mods is loading before Game is. this is the case by default.
         
         if (localStorage.cookies >= 0)
             new SimplePopup({x: 400, y: 200, text: "You are using an extremely outdated saving method. You will have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format. Your old save cannot be restored.", func: () => { localStorage.clear() }, title: "Warning"});
@@ -458,17 +469,7 @@ console.log(`you seem smart, how 'bout you contribute to the project? ${Game.GIT
 Handlers.SAVE.register("game", Game.getInstance());
 Handlers.MOD.register(Game.getInstance().clickercookie.NAMESPACE, Game.getInstance().clickercookie);
 
-// Events
-// todo: add to game
-function resizeEventListener() {
-    // change middle text heights
-    const middleTexts = Array.from(document.querySelectorAll(".middle-main"));
-    for (const element of middleTexts) {
-        (element as HTMLElement).style.height = window.innerHeight - document.getElementById("middleButtons").offsetHeight+"px";
-    }
-}
-resizeEventListener(); // since we do need certain elements like the middle text to have the correct size without having to resize the window, we call this now
-window.addEventListener("resize", resizeEventListener);
+// todo: load saved mods here
 
 Game.getInstance().init();
 

@@ -1,6 +1,6 @@
 //* This is an example of a mod that supports saving.
 
-import { Building } from "./buildings.js";
+import { Building, BuildingData } from "./buildings.js";
 import { Identifier } from "./handler.js";
 import { Game } from "./main.js";
 import { Mod } from "./mods.js";
@@ -30,7 +30,6 @@ export class NewMod extends Mod {
             CPSGain: 5,
             img: "https://www.minecraft.net/content/dam/minecraftnet/franchise/logos/minecraft-creeper-face.jpg" // lol
         });
-        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "banana"), this.banana);
 
         this.UPGRADES_DATA = [
             {
@@ -44,15 +43,20 @@ export class NewMod extends Mod {
                 img: "https://cdn.modrinth.com/data/AANobbMI/295862f4724dc3f78df3447ad6072b2dcd3ef0c9_96.webp" // lol
             }
         ];
-        for (const upgradeData of this.UPGRADES_DATA) {
-            Handlers.UPGRADE.register(new Identifier(this.NAMESPACE, upgradeData.uid), new Upgrade(Game.getInstance().clickercookie, upgradeData));
-        }
-
+        
         document.getElementById("cookieCount")!.addEventListener("click", () => {this.superCookies++});
 
         Mod.registerKooh("click", () => {
             console.log("Hello from "+this.NAMESPACE+"!");
         });
+    }
+
+    init() {
+        Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "banana"), this.banana);
+
+        for (const upgradeData of this.UPGRADES_DATA) {
+            Handlers.UPGRADE.register(new Identifier(this.NAMESPACE, upgradeData.uid), new Upgrade(Game.getInstance().clickercookie, upgradeData));
+        }
     }
 
     getSaveData(): ModSave {

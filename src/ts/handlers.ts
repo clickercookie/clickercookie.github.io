@@ -17,7 +17,7 @@ export class BackgroundHandler extends Handler<Background> {
     /**
      * {@link Handler.register} with modifications to add a new {@link HTMLSelectElement} to the `backgroundSelect`.
      * 
-     * @param uid UID for the handler. **Will be {@link HTMLSelectElement.value} for `backgroundSelect`**.
+     * @param identifier Identifier for the handler. **Stringified version will be {@link HTMLSelectElement.value} for `backgroundSelect`**.
      */
     override register(identifier: Identifier, background: Background) {
         super.register(identifier, background);
@@ -329,6 +329,7 @@ export class ModHandler extends UniqueKeyHandler<Mod> {
         super.register(key, mod);
         this.saveHandler.register(mod.NAMESPACE, mod);
         document.getElementById("modsNumberLoaded")!.innerText = (Handlers.MOD.length - 1).toString(); //* subtract one so we don't show clickercookie (makes more sense to the user)
+        mod.init();
     }
 }
 

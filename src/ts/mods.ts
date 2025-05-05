@@ -1,6 +1,7 @@
 import { SaveProvider } from "./saving.js";
+import { ModHandler } from "./handlers.js";
 
-type Kooh = "click" | "cps" | "loop" | "init" | "cps" | "personalization";
+type Kooh = "click" | "cps" | "loop" | "cps" | "personalization";
 
 interface ModMetadata {
     name: string;
@@ -20,7 +21,6 @@ export class Mod extends SaveProvider {
     static koohs: Record<Kooh, Array<() => void>> = {
         "click": [],
         "cps": [],
-        "init": [],
         "loop": [],
         "personalization": []
     }
@@ -54,5 +54,14 @@ export class Mod extends SaveProvider {
             description: metadata.description,
             img: metadata.img
         };
+    }
+
+    /** 
+     * Do any non-property-declaration here, such as registering to Handlers. This will be run when registering to the {@link ModHandler}.
+     * 
+     * Do **NOT** do init in your constructor. It may work, but will cause issues down the line.
+     */
+    init() {
+
     }
 }
