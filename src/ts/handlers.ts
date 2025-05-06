@@ -347,27 +347,17 @@ export class ModHandler extends UniqueKeyHandler<Mod> {
     }
 }
 
-//* for technical reasons i don't think this can actually be a UniqueKeyHandler :(
-export class SaveHandler {
-    private providers: Record<string, SaveProvider>;
-    constructor() {
-        this.providers = {};
-    }
-
+export class SaveHandler extends UniqueKeyHandler<SaveProvider> {
     dumpSaveData(): Record<string, unknown> {
         const saveData: Record<string, unknown> = {};
-        for (const namespace in this.providers) {
-            saveData[namespace] = this.providers[namespace].getSaveData();
+        for (const namespace in this.registered) {
+            saveData[namespace] = this.registered.get(namespace).getSaveData();
         }
         return saveData;
     }
 
-    register(namespace: string, provider: SaveProvider) {
-        this.providers[namespace] = provider;
-    }
-
     getProviders() { //! can we avoid this?
-        return this.providers;
+        return this.registered;
     }
 }
 

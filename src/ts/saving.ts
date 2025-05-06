@@ -88,12 +88,12 @@ export class Savinator {
         const providers = this.saveHandler.getProviders();
         for (const namespace in providers) { //? should this go over providers or the localStorageSave.getNamespaces()? is there any benefit to one or the other?
             if (localStorageSave.getNamespaces().includes(namespace) && namespace !== "game") { // if the provider namespace is present in the local storage save
-                providers[namespace].loadSaveData(localStorageSave.getData(namespace));
+                providers.get(namespace).loadSaveData(localStorageSave.getData(namespace));
                 console.log(`Loaded save data for ${namespace} namespace.`);
             }
         }
-        if (providers["game"] !== undefined) { // game should always be there, but just in case it isn't we check
-            providers["game"].loadSaveData(localStorageSave.getData("game"));
+        if (providers.get("game") !== undefined) { // game should always be there, but just in case it isn't we check
+            providers.get("game").loadSaveData(localStorageSave.getData("game"));
             console.log(`Loaded save data for game namespace.`);
         }
 

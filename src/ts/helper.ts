@@ -12,17 +12,6 @@ export function parseGithubIssue(input: string): string {
 }
 
 /**
- * @deprecated use {@link Array.from}
- */
-export function convertCollectionToArray(HTMLCollection: HTMLCollection): Element[] {
-    const array: Element[] = [];
-    for (const item of HTMLCollection) {
-        array.push(item);
-    }
-    return array;
-}
-
-/**
  * Clamps a number to a specified minimum/maximum
  * @param value The number you're clamping
  * @param minimum The minimum the number can be
@@ -168,4 +157,4 @@ export function countVisibleChildren(element: HTMLElement): number {
       }
     }
     return count;
-  }
+}

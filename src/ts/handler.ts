@@ -1,6 +1,6 @@
 export class Handler<T> implements Iterable<T> {
     /** This stores the stringified Identifier as the key and then the values is obviously T. We store the identifier stringified because objects are never equal so we can't `get()` from the Map without using the same obj reference. */
-    private registered: Map<string, T>;
+    protected registered: Map<string, T>;
     /** the number of registered items in the handler */
     public get length(): number {
         return this.registered.size;
@@ -68,7 +68,7 @@ export class Handler<T> implements Iterable<T> {
  * This handler does not use {@link Identifier}s and instead uses unique strings.
  */
 export class UniqueKeyHandler<T> implements Iterable<T> {
-    private registered: Map<string, T>;
+    protected registered: Map<string, T>;
     /** the number of registered items in the handler */
     public get length(): number {
         return this.registered.size;

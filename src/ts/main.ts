@@ -22,30 +22,14 @@ import { NewMod } from "./exmod.js"; //* note: this import is intentionally left
 // ------------------------------------
 const version: string = "0.7";
 
-// ------------------------------------
-// Variable & Object Definitions
-// ------------------------------------
-// dev variables
+// temp dev variables
 const dev = {} as {
     devMode: boolean,
-    CPSGiven: number,
 
-    setDevMode(value: boolean | "on" | "off"): void,
-    setCookies(number: number): void,
-    setCPS(number: number): void,
-    toggleSaving(): void
+    setDevMode(value: boolean | "on" | "off"): void
 };
 
 dev.devMode = false;
-dev.CPSGiven = 0;
-
-// middle other occupiers
-let statsUp = false;
-let infoUp = false;
-let optionsUp = false;
-
-// misc
-let mobile: boolean; // defined in initialization
 
 // Global Events
 interface MousePosition {
@@ -57,7 +41,7 @@ window.addEventListener("mousemove", (event) => {
     mousePos.x = event.clientX;
     mousePos.y = event.clientY;
     
-    if (Game.IN_DEVELOPMENT && !mobile)
+    if (Game.IN_DEVELOPMENT)
         document.getElementById("mousePosDevText").innerText = `Mouse Pos: (${mousePos.x}, ${mousePos.y})`;
 });
 
@@ -116,6 +100,24 @@ export class Game extends SaveProvider {
     private static readonly _INSTANCE = new Game();
     public static getInstance() {
         return this._INSTANCE;
+    }
+
+    /**
+     * Switches the current {@link window.location.href} to a given {@link VersionBranch}
+     * @param branch The branch to switch to
+     */
+    public static switchToBranch(branch: VersionBranch) {
+        switch (branch) {
+        case VersionBranch.MAIN:
+            window.location.href = "/";
+            break;
+        case VersionBranch.BETA:
+            window.location.href = "/beta";
+            break;
+        case VersionBranch.DEVELOP:
+            window.location.href = "/develop";
+            break;
+        }
     }
 
     /** Said to be the physical manifestation of the cookie gods themselves... */
@@ -260,7 +262,7 @@ export class Game extends SaveProvider {
         document.getElementById("infoButton").addEventListener("click", () => {this.toggleMiddle("info")});
         // middle content
         for (const element of Array.from(document.getElementsByClassName("middle-x"))) { //? i don't like how we have to do this, can we find another way? maybe somehow only one X button? actually we should probably refactor how the entire middle section works... todo: make an issue for that
-            element.addEventListener("click", () => {closeMiddle()});
+            element.addEventListener("click", () => {this.toggleMiddle("none")});
         }
         document.getElementById("creditsButton").addEventListener("click", () => {new SimplePopup({x: 320, y: 175, text: object2HTML(Game.CREDITS), title: "Credits"})});
         document.getElementById("backgroundSelect").addEventListener("change", () => {Handlers.BACKGROUND.setBackground((document.getElementById("backgroundSelect") as HTMLFormElement).value)});
@@ -280,7 +282,12 @@ export class Game extends SaveProvider {
         document.getElementById("upgradesHolder").addEventListener("mouseout", () => {expandUpgradesHolder(true)});
         // misc
         document.getElementById("cookie").addEventListener("click", () => {this.cookieClicked()});
-        document.getElementById("versionNumber").addEventListener("click", () => {versionSwitch()});
+        if (Game.VERSION_BRANCH === VersionBranch.MAIN) {
+            document.getElementById("versionNumber").addEventListener("click", () => { Game.switchToBranch(VersionBranch.BETA) });
+        } else { // develop or beta
+            document.getElementById("versionNumber").addEventListener("click", () => { Game.switchToBranch(VersionBranch.MAIN) });
+        }
+        
         document.getElementById("versionNumber").addEventListener("mouseover", () => {versionNumberMousedOver()});
         document.getElementById("versionNumber").addEventListener("mouseout", () => {versionNumberMousedOver(true)});
 
@@ -329,7 +336,7 @@ export class Game extends SaveProvider {
             text.style.display = "none";
         }
 
-        if (this.currentMiddleState === middleButton) {
+        if (this.currentMiddleState === middleButton || middleButton === "none") {
             this.currentMiddleState = "none";
             // we already set display to none on all our things
         } else { // middle state is something else
@@ -393,24 +400,11 @@ dev.setDevMode = function(value: boolean | "on" | "off") {
 // ------------------------------------
 // Random Functions
 // ------------------------------------
-function closeMiddle() {
-    optionsUp = false;
-    infoUp = false;
-    statsUp = false;
-
-    document.getElementById("optionsMiddleText").style.display = "none";
-    document.getElementById("statsMiddleText").style.display = "none";
-    document.getElementById("infoMiddleText").style.display = "none";
-    document.getElementById("middle").style.background = url(Handlers.BACKGROUND.getCurrentBackground().src);
-}
 function versionNumberMousedOver(undo=false) {
     if (!undo)
         document.getElementById("versionSwitchInfo").style.display = "block";
     else
         document.getElementById("versionSwitchInfo").style.display = "none";
-}
-function versionSwitch() {
-    window.location.href = (Game.VERSION_BRANCH === VersionBranch.MAIN) ? "/beta" : "/";
 }
 
 console.log(`you seem smart, how 'bout you contribute to the project? ${Game.GITHUB_REPO}`);
