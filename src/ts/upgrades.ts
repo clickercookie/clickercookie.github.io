@@ -11,8 +11,6 @@ export interface UpgradeSave {
 }
 
 export interface UpgradeData {
-    /** A convenience property to make looping over an array filled with data much easier by already providing a UID to the Identifier constructor (see upgrade registration in {@link ClickerCookie.init} to better understand). **This is not used anywhere in the codebase.** */
-    uid: string;
     name: string;
     quote: string;
     price: number;

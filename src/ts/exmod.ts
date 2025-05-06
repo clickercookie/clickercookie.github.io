@@ -16,7 +16,7 @@ export class NewMod extends Mod {
 
     banana: Building;
 
-    private readonly UPGRADES_DATA: UpgradeData[];
+    private readonly UPGRADES_DATA: Record<string, UpgradeData>;
     constructor() {
         super("modname");
 
@@ -31,9 +31,8 @@ export class NewMod extends Mod {
             img: "https://www.minecraft.net/content/dam/minecraftnet/franchise/logos/minecraft-creeper-face.jpg" // lol
         });
 
-        this.UPGRADES_DATA = [
-            {
-                uid: "newmod-xyz1",
+        this.UPGRADES_DATA = {
+            "newmod-xyz1": {
                 name: "xyz upgrade",
                 quote: "so funy haha",
                 price: 69,
@@ -42,7 +41,7 @@ export class NewMod extends Mod {
                 buildingsRequired: 3,
                 img: "https://cdn.modrinth.com/data/AANobbMI/295862f4724dc3f78df3447ad6072b2dcd3ef0c9_96.webp" // lol
             }
-        ];
+        };
         
         document.getElementById("cookieCount")!.addEventListener("click", () => {this.superCookies++});
 
@@ -54,8 +53,8 @@ export class NewMod extends Mod {
     init() {
         Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "banana"), this.banana);
 
-        for (const upgradeData of this.UPGRADES_DATA) {
-            Handlers.UPGRADE.register(new Identifier(this.NAMESPACE, upgradeData.uid), new Upgrade(Game.getInstance().clickercookie, upgradeData));
+        for (const uid in this.UPGRADES_DATA) {
+            Handlers.UPGRADE.register(new Identifier(this.NAMESPACE, uid), new Upgrade(Game.getInstance().clickercookie, this.UPGRADES_DATA[uid]));
         }
     }
 

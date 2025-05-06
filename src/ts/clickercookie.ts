@@ -109,7 +109,7 @@ export default class ClickerCookie extends Mod {
     public church: Building;
 
     // upgrades
-    public readonly UPGRADES_DATA: UpgradeData[];
+    public readonly UPGRADES_DATA: Record<string, UpgradeData>;
     public readonly BUILDINGS_DATA: Record<string, BuildingData>;
 
     constructor() {
@@ -193,10 +193,9 @@ export default class ClickerCookie extends Mod {
         this.church.setVisibility(false);
 
         // upgrades
-        this.UPGRADES_DATA = [
+        this.UPGRADES_DATA = {
             // keyboard
-            {
-                uid: "keyboard1",
+            "keyboard1": {
                 name: "Reinforced Keys",
                 quote: "press harder",
                 price: 100,
@@ -206,8 +205,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 1,
                 multiplyCookiesPerClick: true
             },
-            {
-                uid: "keyboard2",
+            "keyboard2": {
                 name: "Obsidian Keys",
                 quote: "so heavy they're always pressed",
                 price: 500,
@@ -217,8 +215,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 5,
                 multiplyCookiesPerClick: true
             },
-            {
-                uid: "keyboard3",
+            "keyboard3": {
                 name: "Osmium Keys",
                 quote: "that's very heavy",
                 price: 10_000,
@@ -228,8 +225,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 10,
                 multiplyCookiesPerClick: true
             },
-            {
-                uid: "keyboard4",
+            "keyboard4": {
                 name: "10 finger typing",
                 quote: "<i><b>efficiency</b></i>", //? your middle school ict teacher would be so proud
                 price: 100_000,
@@ -239,8 +235,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 25,
                 multiplyCookiesPerClick: true
             },
-            {
-                uid: "keyboard5",
+            "keyboard5": {
                 name: "Macros",
                 quote: "why press when you don't have to?",
                 price: 1_000_000,
@@ -251,8 +246,7 @@ export default class ClickerCookie extends Mod {
                 multiplyCookiesPerClick: true
             },
             // grandpa
-            {
-                uid: "grandpa1",
+            "grandpa1": {
                 name: "Hardwood Walking Stick",
                 quote: "nonna dat softwood junk",
                 price: 1_000,
@@ -261,8 +255,7 @@ export default class ClickerCookie extends Mod {
                 building: this.grandpa,
                 buildingsRequired: 1
             },
-            {
-                uid: "grandpa2",
+            "grandpa2": {
                 name: "Rocking Chair",
                 quote: "newest addition to the porch*", //? because his butt problems weren't bad enough
                 price: 5_000,
@@ -271,8 +264,7 @@ export default class ClickerCookie extends Mod {
                 building: this.grandpa,
                 buildingsRequired: 5
             },
-            {
-                uid: "grandpa3",
+            "grandpa3": {
                 name: "Reading Glasses",
                 quote: "helps with precise chocolate chip placement",
                 price: 50_000,
@@ -281,8 +273,7 @@ export default class ClickerCookie extends Mod {
                 building: this.grandpa,
                 buildingsRequired: 10
             },
-            {
-                uid: "grandpa4",
+            "grandpa4": {
                 name: "Dementia Pills",
                 quote: "what was i doing again?",
                 price: 5_000_000,
@@ -291,8 +282,7 @@ export default class ClickerCookie extends Mod {
                 building: this.grandpa,
                 buildingsRequired: 25
             },
-            {
-                uid: "grandpa5",
+            "grandpa5": {
                 name: "shotgun",
                 quote: "grandpa's precious*",
                 price: 500_000_000,
@@ -302,8 +292,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 50
             },
             // ranch
-            {
-                uid: "ranch1",
+            "ranch1": {
                 name: "Pig Slop",
                 quote: "Wait, what have we been feeding them before now?*",
                 price: 11_000,
@@ -312,8 +301,7 @@ export default class ClickerCookie extends Mod {
                 building: this.ranch,
                 buildingsRequired: 1
             },
-            {
-                uid: "ranch2",
+            "ranch2": {
                 name: "Needle bale",
                 quote: "talk about a hay in a needlestack",
                 price: 55_000,
@@ -322,8 +310,7 @@ export default class ClickerCookie extends Mod {
                 building: this.ranch,
                 buildingsRequired: 5
             },
-            {
-                uid: "ranch3",
+            "ranch3": {
                 name: "Tractors",
                 quote: "eliminating manual labor since 1892",
                 price: 550_000,
@@ -332,8 +319,7 @@ export default class ClickerCookie extends Mod {
                 building: this.ranch,
                 buildingsRequired: 10
             },
-            {
-                uid: "ranch4",
+            "ranch4": {
                 name: "Big baconator",
                 quote: "think giant pig mech fueled by potatoes",
                 price: 55_000_000,
@@ -342,8 +328,7 @@ export default class ClickerCookie extends Mod {
                 building: this.ranch,
                 buildingsRequired: 25
             },
-            {
-                uid: "ranch5",
+            "ranch5": {
                 name: "Ranch dressing",
                 quote: "Wrong ranch.",
                 price: 5_500_000_000,
@@ -353,8 +338,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 50
             },
             // television
-            {
-                uid: "television1",
+            "television1": {
                 name: "Streaming service",
                 quote: "cookie-flix",
                 price: 120_000,
@@ -363,8 +347,7 @@ export default class ClickerCookie extends Mod {
                 building: this.television,
                 buildingsRequired: 1
             },
-            {
-                uid: "television2",
+            "television2": {
                 name: "98-inch screen",
                 quote: "unnecessarily large is an understatement.",
                 price: 600_000,
@@ -373,8 +356,7 @@ export default class ClickerCookie extends Mod {
                 building: this.television,
                 buildingsRequired: 5
             },
-            {
-                uid: "television3",
+            "television3": {
                 name: "Surround sound",
                 quote: "it's all around me!",
                 price: 6_000_000,
@@ -383,8 +365,7 @@ export default class ClickerCookie extends Mod {
                 building: this.television,
                 buildingsRequired: 10
             },
-            {
-                uid: "television4",
+            "television4": {
                 name: "OLED Display",
                 quote: "s*** it burned in...",
                 price: 60_0000_000,
@@ -393,8 +374,7 @@ export default class ClickerCookie extends Mod {
                 building: this.television,
                 buildingsRequired: 25
             },
-            {
-                uid: "television5",
+            "television5": {
                 name: "8K resolution",
                 quote: "so many pixels!",
                 price: 60_000_000_000,
@@ -404,8 +384,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 50
             },
             // worker
-            {
-                uid: "worker1",
+            "worker1": {
                 name: "Medkits",
                 quote: "Constant supply of Band-Aids in case of emergency",
                 price: 1_300_000,
@@ -414,8 +393,7 @@ export default class ClickerCookie extends Mod {
                 building: this.worker,
                 buildingsRequired: 1
             },
-            {
-                uid: "worker2",
+            "worker2": {
                 name: "Hard hats",
                 quote: "Keep those skulls safe!*",
                 price: 6_500_000,
@@ -424,8 +402,7 @@ export default class ClickerCookie extends Mod {
                 building: this.worker,
                 buildingsRequired: 5
             },
-            {
-                uid: "worker3",
+            "worker3": {
                 name: "Fast fingers*",
                 quote: "upmost efficient cookie manufacturing*",
                 price: 65_000_000,
@@ -434,8 +411,7 @@ export default class ClickerCookie extends Mod {
                 building: this.worker,
                 buildingsRequired: 10
             },
-            {
-                uid: "worker4",
+            "worker4": {
                 name: "Weight training",
                 quote: "firmly attach chocolate chips via brute force",
                 price: 6_500_000_000,
@@ -444,8 +420,7 @@ export default class ClickerCookie extends Mod {
                 building: this.worker,
                 buildingsRequired: 25
             },
-            {
-                uid: "worker5",
+            "worker5": {
                 name: "Robot workers",
                 quote: "robotic precision",
                 price: 650_000_000_000,
@@ -455,8 +430,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 50
             },
             // wallet
-            {
-                uid: "wallet1",
+            "wallet1": {
                 name: "200 dollar bills",
                 quote: "I'm sure the federal reserve will be okay with this...*",
                 price: 14_000_000,
@@ -465,8 +439,7 @@ export default class ClickerCookie extends Mod {
                 building: this.wallet,
                 buildingsRequired: 1
             },
-            {
-                uid: "wallet2",
+            "wallet2": {
                 name: "Credit cards",
                 quote: "cookies but digitized",
                 price: 70_000_000,
@@ -475,8 +448,7 @@ export default class ClickerCookie extends Mod {
                 building: this.wallet,
                 buildingsRequired: 5
             },
-            {
-                uid: "wallet3",
+            "wallet3": {
                 name: "Tax refund",
                 quote: "for when you overbake to the IRS*",
                 price: 700_000_000,
@@ -485,8 +457,7 @@ export default class ClickerCookie extends Mod {
                 building: this.wallet,
                 buildingsRequired: 10
             },
-            {
-                uid: "wallet4",
+            "wallet4": {
                 name: "safe",
                 quote: "you can keep your cookies even <b>safe</b>r!!",
                 price: 70_000_000_000,
@@ -495,8 +466,7 @@ export default class ClickerCookie extends Mod {
                 building: this.wallet,
                 buildingsRequired: 25
             },
-            {
-                uid: "wallet5",
+            "wallet5": {
                 name: "Wizard\'s wallet",
                 quote: "<b>infinite</b> storage space*",
                 price: 7_000_000_000_000,
@@ -506,8 +476,7 @@ export default class ClickerCookie extends Mod {
                 buildingsRequired: 50
             },
             // church
-            {
-                uid: "church1",
+            "church1": {
                 name: "the pope",
                 quote: "his holiness will provide many cookies",
                 price: 200_000_000,
@@ -516,8 +485,7 @@ export default class ClickerCookie extends Mod {
                 building: this.church,
                 buildingsRequired: 1
             },
-            {
-                uid: "church2",
+            "church2": {
                 name: "Cookie study",
                 quote: "learning about our baking lord's best recipes",
                 price: 1_000_000_000,
@@ -526,8 +494,7 @@ export default class ClickerCookie extends Mod {
                 building: this.church,
                 buildingsRequired: 5
             },
-            {
-                uid: "church3",
+            "church3": {
                 name: "Cookie ritual",
                 quote: "summon cookies from the underworld",
                 price: 10_000_000_000,
@@ -536,8 +503,7 @@ export default class ClickerCookie extends Mod {
                 building: this.church,
                 buildingsRequired: 10
             },
-            {
-                uid: "church4",
+            "church4": {
                 name: "Cookie gods",
                 quote: "Worship them, lest their power overwhelm your mortal form.",
                 price: 1_000_000_000_000,
@@ -546,8 +512,7 @@ export default class ClickerCookie extends Mod {
                 building: this.church,
                 buildingsRequired: 25
             },
-            {
-                uid: "church5",
+            "church5": {
                 name: "Cible",
                 quote: "Get it? <b>c</b>ookie-b<b>ible</b>!<br><br>I'll see myself out.",
                 price: 100_000_000_000_000,
@@ -556,7 +521,7 @@ export default class ClickerCookie extends Mod {
                 building: this.church,
                 buildingsRequired: 50
             }
-        ];
+        };
 
         Mod.registerKooh("click", () => { this.cookieClicked() });
         Mod.registerKooh("loop", () => { this.gameLoop() });
@@ -582,8 +547,8 @@ export default class ClickerCookie extends Mod {
         Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "wallet"), this.wallet);
         Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "church"), this.church);
 
-        for (const upgradeData of this.UPGRADES_DATA) {
-            Handlers.UPGRADE.register(new Identifier(this.NAMESPACE, upgradeData.uid), new Upgrade(this, upgradeData));
+        for (const uid in this.UPGRADES_DATA) {
+            Handlers.UPGRADE.register(new Identifier(this.NAMESPACE, uid), new Upgrade(this, this.UPGRADES_DATA[uid]));
         }
 
         // Register personalization things (must be before save load because loading requires these to be registered to set them)
