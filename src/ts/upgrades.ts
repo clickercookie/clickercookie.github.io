@@ -1,5 +1,5 @@
 import { Building } from "./buildings.js";
-import { clamp, commaify, url } from "./helper.js";
+import { clamp, commaify, countVisibleChildren, url } from "./helper.js";
 import { hideTooltip } from "./tooltip.js";
 import { Game } from "./main.js";
 import ClickerCookie from "./clickercookie.js";
@@ -26,7 +26,7 @@ export interface UpgradeData {
 }
 
 export function expandUpgradesHolder(retract: boolean=false) {
-    const upgradesShown = document.getElementById("upgradesHolder").children.length;
+    const upgradesShown = countVisibleChildren(document.getElementById("upgradesHolder"));
 
     const rowsOfUpgrades = Math.ceil(upgradesShown / 5);
 
@@ -38,16 +38,6 @@ export function expandUpgradesHolder(retract: boolean=false) {
     }
     const size = (rowsOfUpgrades === 0) ? holderHeight : holderHeight * rowsOfUpgrades;
     holder.style.height = `${size}px`;
-}
-
-export function updateStatisticUpgrades() {
-    for (const upgrade of Handlers.UPGRADE) {
-        upgrade.destroyStatistic();
-
-        if (upgrade.bought === false) continue;
-
-        upgrade.createStatistic();
-    }
 }
 
 export class Upgrade {
@@ -125,17 +115,9 @@ export class Upgrade {
             console.warn(`Unable to get the image file "${UPGRADE_ICON}" for the "${this.name}" upgrade (probably 404), falling back to "unknown" image.`);
         };
         img.src = UPGRADE_ICON; //* so the onload/onerror events are actually fired
-    }
 
-    /**
-     * Appends `this.html` (the upgrade) to `element`.
-     * @param element The element to append to. Should pretty much always be the upgrades holder.
-     */
-    create(element: HTMLElement=document.getElementById("upgradesHolder")) {
-        element!.appendChild(this.html);
-    }
-
-    createStatistic() {
+        // create it
+        document.getElementById("upgradesHolder").appendChild(this.html);
         document.getElementById("upgradesBoughtStatsHolder").appendChild(this.statisticHTML);
     }
 
@@ -145,7 +127,7 @@ export class Upgrade {
         this.clickercookie.cookies -= this.price;
         this.bought = true;
         this.hovered(); //? i don't remember why this is here but i know it's important just trust me
-        this.destroy();
+        this.setVisibility(false);
         
         this.building.CPSGiven *= 2;
         this.building.CPSGain *= 2;
@@ -155,7 +137,7 @@ export class Upgrade {
 
         document.getElementById("upgradesBoughtCounter")!.innerText = Handlers.UPGRADE.upgradesBought.toString();
 
-        updateStatisticUpgrades(); // we don't run createStatistic() here and instead run this so that the order shown in the upgrades menu is correct
+        Handlers.UPGRADE.updateStatisticUpgrades(); // we don't run createStatistic() here and instead run this so that the order shown in the upgrades menu is correct
     }
 
     hovered(statistic: boolean=false) { // todo: this is very similar to Building.hovered
@@ -185,13 +167,10 @@ export class Upgrade {
         }
     }
 
-    destroy() {
-        this.html.remove();
-        hideTooltip(); // hide the tooltip so it doesn't stick around after you buy the upgrade
+    setVisibility(bool: boolean) {
+        this.html.style.display = bool ? "inline-block" : "none";
     }
-
-    destroyStatistic() {
-        this.statisticHTML.remove();
-        hideTooltip(); // if you're somehow hovering it lol
+    setStatisticVisibility(bool: boolean) {
+        this.statisticHTML.style.display = bool ? "block" : "none";
     }
 }

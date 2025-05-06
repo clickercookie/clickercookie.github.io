@@ -153,3 +153,19 @@ export function branchQuickSwitch(main: any, beta: any, develop: any) {
         return develop;
     }
 }
+
+/**
+ * Counts the number of visible children (`display` CSS property is not equal to `none`) in a given element
+ * @param element The element to count the visible children of
+ * @returns The number of visible children
+ */
+export function countVisibleChildren(element: HTMLElement): number {
+    let count = 0;
+    for (const child of element.children) {
+      const style = window.getComputedStyle(child);
+      if (style.display !== "none") {
+        count++;
+      }
+    }
+    return count;
+  }

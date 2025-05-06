@@ -140,13 +140,19 @@ export class UpgradeHandler extends Handler<Upgrade> {
         return bought;
     }
 
-    /**
-     * TODO: NEEDS STATISTIC SUPPORT
-     * @param statistic Are we destroying all the upgrades in the Statistics page?
-     */
-    destroyAllUpgrades(statistic: boolean=false) {
+    updateStatisticUpgrades() {
+        for (const upgrade of this) {
+            upgrade.setStatisticVisibility(false);
+    
+            if (upgrade.bought === false) continue;
+    
+            upgrade.setStatisticVisibility(true);
+        }
+    }
+
+    destroyAllUpgrades() {
         for (const value of this) {
-            value.destroy();
+            value.setVisibility(false);
         }
     }
 
@@ -155,11 +161,10 @@ export class UpgradeHandler extends Handler<Upgrade> {
      * 
      * This is really only used in the context of loading, wherein unlocked and unbought upgrades will not yet exist.
      * */
-    showUnlockedUpgrades() { //? is this still used? isn't this just checkUpgradeAvaliability?
+    showUnlockedUpgrades() { //? can we just combine this with checkUpgradeAvailability?
         for (const value of this) {
             if (value.unlocked === true && value.bought !== true)
-                // new Upgrade(game, game.UPGRADES_DATA[i]);
-                value.create();
+                value.setVisibility(true);
         }
     }
 
@@ -171,7 +176,7 @@ export class UpgradeHandler extends Handler<Upgrade> {
     checkUpgradeAvailability() {
         for (const value of this) {
             if (value.building.bought >= value.buildingsRequired && value.unlocked === false) {
-                value.create();
+                value.setVisibility(true);
                 value.unlocked = true;
             }
         }
@@ -194,11 +199,11 @@ export class UpgradeHandler extends Handler<Upgrade> {
     }
 
     /**
-     * Load save data for all registered upgrades
+     * Apply save data state to all registered upgrades
      * @param saveObj The save object to load the data of
      * @param namespace Optional: if present will only load data for upgrades of a given namespace.
      */
-    loadUpgradesSave(saveObj: Record<string, UpgradeSave>, namespace: string=undefined) { // todo: test if works
+    loadSave(saveObj: Record<string, UpgradeSave>, namespace: string=undefined) {
         for (const stringifiedIdentifier in saveObj) {
             const id = Identifier.fromString(stringifiedIdentifier);
 

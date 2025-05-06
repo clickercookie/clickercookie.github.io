@@ -8,7 +8,7 @@ If you're not a modder, still read the docs here: https://github.com/clickercook
 
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
 import { branchQuickSwitch, Interval, object2HTML, url } from "./helper.js";
-import { updateStatisticUpgrades, expandUpgradesHolder, UpgradeSave } from "./upgrades.js";
+import { expandUpgradesHolder, UpgradeSave } from "./upgrades.js";
 import { SaveProvider, Savinator } from "./saving.js";
 import { Mod } from "./mods.js"
 import ClickerCookie from "./clickercookie.js"
@@ -205,7 +205,7 @@ export class Game extends SaveProvider {
 
         // todo asap: 0.6 save transfer
 
-        updateStatisticUpgrades();
+        Handlers.UPGRADE.updateStatisticUpgrades();
 
         /* change version branch specific stuff */
         // change title
@@ -338,13 +338,13 @@ export class Game extends SaveProvider {
         Handlers.BACKGROUND.setBackground(saveData.currentBackgroundKey);
 
         // the following doesn't have anything to do with GameSaveData but will be done here because this spot makes the most sense
-        Handlers.UPGRADE.loadUpgradesSave(saveData.upgradesSave);
+        Handlers.UPGRADE.loadSave(saveData.upgradesSave);
 
         Handlers.UPGRADE.destroyAllUpgrades();
         Handlers.UPGRADE.showUnlockedUpgrades();
 
         document.getElementById("upgradesBoughtCounter").innerText = Handlers.UPGRADE.upgradesBought.toString();
-        updateStatisticUpgrades();
+        Handlers.UPGRADE.updateStatisticUpgrades();
     }
 }
 
