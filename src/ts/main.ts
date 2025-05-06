@@ -81,7 +81,7 @@ export enum VersionBranch {
     DEVELOP = 2
 }
 
-type MiddleButton = "stats" | "info" | "options";
+type MiddleState = "none" | "stats" | "info" | "options";
 
 interface GameSaveData {
     hasCheated: boolean;
@@ -142,6 +142,8 @@ export class Game extends SaveProvider {
     }
 
     public savinator5000: Savinator;
+
+    public currentMiddleState: MiddleState;
 
     public mousePos: {
         x: number,
@@ -253,9 +255,9 @@ export class Game extends SaveProvider {
 
         // ------- Event Listeners (very long) -------
         // Middle buttons
-        document.getElementById("statsButton").addEventListener("click", () => {toggleMiddle("stats")});
-        document.getElementById("optionsButton").addEventListener("click", () => {toggleMiddle("options")});
-        document.getElementById("infoButton").addEventListener("click", () => {toggleMiddle("info")});
+        document.getElementById("statsButton").addEventListener("click", () => {this.toggleMiddle("stats")});
+        document.getElementById("optionsButton").addEventListener("click", () => {this.toggleMiddle("options")});
+        document.getElementById("infoButton").addEventListener("click", () => {this.toggleMiddle("info")});
         // middle content
         for (const element of Array.from(document.getElementsByClassName("middle-x"))) { //? i don't like how we have to do this, can we find another way? maybe somehow only one X button? actually we should probably refactor how the entire middle section works... todo: make an issue for that
             element.addEventListener("click", () => {closeMiddle()});
@@ -315,6 +317,27 @@ export class Game extends SaveProvider {
         Mod.callKooh("click");
     }
 
+    toggleMiddle(middleButton: MiddleState) {
+        const middleTexts: Partial<Record<MiddleState, HTMLElement>> = {
+            "info": document.getElementById("infoMiddleText"),
+            "options": document.getElementById("optionsMiddleText"),
+            "stats": document.getElementById("statsMiddleText")
+        }
+        
+        // set display none on all text
+        for (const text of Object.values(middleTexts)) {
+            text.style.display = "none";
+        }
+
+        if (this.currentMiddleState === middleButton) {
+            this.currentMiddleState = "none";
+            // we already set display to none on all our things
+        } else { // middle state is something else
+            middleTexts[middleButton].style.display = "block";
+            this.currentMiddleState = middleButton;
+        }
+    }
+
     getSaveData(): GameSaveData {
         return {
             hasCheated: this.hasCheated,
@@ -366,77 +389,10 @@ dev.setDevMode = function(value: boolean | "on" | "off") {
         (document.getElementById("devModeSelect") as HTMLSelectElement).disabled = true;
     }
 }
-dev.setCookies = function(number: number) {
-    if (!dev.devMode) return "You need developer mode ON to run this command.";
-
-    Game.getInstance().clickercookie.cookies = number;
-    Game.getInstance().clickercookie.totalCookies =+ number;
-    Game.getInstance().hasCheated = true;
-}
-dev.setCPS = function(number: number) {
-    if (!dev.devMode) return "You need developer mode ON to run this command.";
-
-    dev.CPSGiven = number;
-    Game.getInstance().hasCheated = true;
-}
-
-// ------------------------------------
-// Helper Functions
-// ------------------------------------
-helper.consoleLogDev = function(str: string) {
-    if (dev.devMode) console.log(str);
-}
 
 // ------------------------------------
 // Random Functions
 // ------------------------------------
-function toggleMiddle(param: MiddleButton) { // TODO 0.7: make a cleaner system for this and put it in Game
-    const statsMT = document.getElementById("statsMiddleText");
-    const infoMT = document.getElementById("infoMiddleText");
-    const optionsMT = document.getElementById("optionsMiddleText");
-    const middle = document.getElementById("middle");
-    statsMT.style.display = "none";
-    infoMT.style.display = "none";
-    optionsMT.style.display = "none";
-    switch (param) {
-    case "stats":
-        if (statsUp) {
-            statsUp = false;
-            optionsMT.style.display = "none";
-            middle.style.background = url(Handlers.BACKGROUND.getCurrentBackground().src);
-        } else {
-            optionsUp = false;
-            infoUp = false;
-            statsUp = true;
-            statsMT.style.display = "block";
-        }
-        break;
-    case "info":
-        if (infoUp) {
-            infoUp = false;
-            infoMT.style.display = "none";
-            middle.style.background = url(Handlers.BACKGROUND.getCurrentBackground().src);
-        } else {
-            statsUp = false;
-            optionsUp = false;
-            infoUp = true;
-            infoMT.style.display = "block";
-        }
-        break;
-    case "options":
-        if (optionsUp) {
-            optionsUp = false;
-            optionsMT.style.display = "none";
-            middle.style.background = url(Handlers.BACKGROUND.getCurrentBackground().src);
-        } else {
-            statsUp = false;
-            infoUp = false;
-            optionsUp = true;
-            optionsMT.style.display = "block";
-        }
-        break;
-    }
-}
 function closeMiddle() {
     optionsUp = false;
     infoUp = false;
@@ -455,19 +411,6 @@ function versionNumberMousedOver(undo=false) {
 }
 function versionSwitch() {
     window.location.href = (Game.VERSION_BRANCH === VersionBranch.MAIN) ? "/beta" : "/";
-}
-
-//
-// Tooltip stuffs
-//
-const tooltip = {} as {
-    html: HTMLDivElement,
-    create(x: number, y: number, content: any): string
-};
-tooltip.html = document.getElementById("tooltip") as HTMLDivElement;
-
-tooltip.create = function(x: number, y: number, content: any) {
-    return "this isn't used yet, but 0.7.1 has plans to upgrade the tooltip system, and this will hopefully have functionality";
 }
 
 console.log(`you seem smart, how 'bout you contribute to the project? ${Game.GITHUB_REPO}`);
