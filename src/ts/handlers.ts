@@ -3,7 +3,7 @@
 import { Building } from "./buildings.js";
 import { Handler, Identifier, UniqueKeyHandler } from "./handler.js";
 import { url } from "./helper.js";
-import { Game } from "./main.js";
+import { Game, GameSaveData } from "./main.js";
 import { Mod } from "./mods.js";
 import { Background, CurrentlyClickedObject } from "./personalization.js";
 import { AdvancedPopup, SimplePopup } from "./popup.js";
@@ -209,6 +209,8 @@ export class UpgradeHandler extends Handler<Upgrade> {
 
             if (namespace !== undefined && id.namespace !== namespace) continue;
 
+            if (this.getFromIdentifier(id) === undefined) continue; // if upgrades are not registered we obviously can't load them. todo: should this warn?
+
             this.getFromIdentifier(id).bought = saveObj[stringifiedIdentifier].bought;
             this.getFromIdentifier(id).unlocked = saveObj[stringifiedIdentifier].unlocked;
         }
@@ -236,6 +238,9 @@ export class ModHandler extends UniqueKeyHandler<Mod> {
     
         Game.getInstance().isModded = true;
 
+        // load game save data to todo: write
+        Game.getInstance().loadSaveData(Game.getInstance().savinator5000.getLocalStorageSave().getData("game") as GameSaveData);
+
         console.log("Loaded mod from URL: "+url);
     }
 
@@ -259,6 +264,9 @@ export class ModHandler extends UniqueKeyHandler<Mod> {
             document.getElementById("importedMessage")!.style.display = "block";
 
             Game.getInstance().isModded = true;
+
+            // load game save data to todo: write
+            Game.getInstance().loadSaveData(Game.getInstance().savinator5000.getLocalStorageSave().getData("game") as GameSaveData)
 
             console.log("Successfully added mod from file: "+file.name);
         };
@@ -350,7 +358,7 @@ export class ModHandler extends UniqueKeyHandler<Mod> {
 export class SaveHandler extends UniqueKeyHandler<SaveProvider> {
     dumpSaveData(): Record<string, unknown> {
         const saveData: Record<string, unknown> = {};
-        for (const namespace in this.registered) {
+        for (const namespace of this.registered.keys()) {
             saveData[namespace] = this.registered.get(namespace).getSaveData();
         }
         return saveData;

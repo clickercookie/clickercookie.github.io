@@ -86,10 +86,11 @@ export class Savinator {
     load() {
         const localStorageSave = this.getLocalStorageSave();
         const providers = this.saveHandler.getProviders();
-        for (const namespace in providers) { //? should this go over providers or the localStorageSave.getNamespaces()? is there any benefit to one or the other?
-            if (localStorageSave.getNamespaces().includes(namespace) && namespace !== "game") { // if the provider namespace is present in the local storage save
-                providers.get(namespace).loadSaveData(localStorageSave.getData(namespace));
-                console.log(`Loaded save data for ${namespace} namespace.`);
+        for (const provider of this.saveHandler) {
+            const namespace = this.saveHandler.getKeyFromValue(provider);
+            if (localStorageSave.getNamespaces().includes(namespace) && namespace !== "game") {
+                provider.loadSaveData(localStorageSave.getData(namespace));
+                console.log(`Loaded save data for "${namespace}" namespace.`);
             }
         }
         if (providers.get("game") !== undefined) { // game should always be there, but just in case it isn't we check
@@ -200,11 +201,15 @@ export class Save {
         this.data.data[namespace] = value;
     }
 
-    getData(namespace: string): unknown {
-        if (this.data.data[namespace] === undefined || this.data.data[namespace] === null) 
-            throw new Error(`Tried to obtain data from a Save with a namespace (${namespace}) that does not exist on the save.`);
-
-        return this.data.data[namespace];
+    getData(namespace: string=undefined): unknown {
+        if (namespace) {
+            if (this.data.data[namespace] === undefined || this.data.data[namespace] === null) 
+                throw new Error(`Tried to obtain data from a Save with a namespace (${namespace}) that does not exist on the save.`);
+    
+            return this.data.data[namespace];
+        } else {
+            return this.data.data;
+        }
     }
     getHeader() {
         return this.data.header;

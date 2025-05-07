@@ -23,7 +23,7 @@ const defaultUpgradeDescriptions = {
 let cookieProductionStopped = false;
 
 interface ClickerCookieSaveData {
-    version: string;
+    version: number;
 
     // core
     cookies: number;
@@ -639,7 +639,7 @@ export default class ClickerCookie extends Mod {
     // ------------ All of ClickerCookie's SaveProvider stuff ------------
     getSaveData(): ClickerCookieSaveData {
         return {
-            version: Game.VERSION,
+            version: 0, // todo: this will be 1 when full release
             cookies: this.cookies,
             totalCookies: this.totalCookies,
             cookiesPerClick: this.cookiesPerClick,

@@ -67,7 +67,7 @@ export enum VersionBranch {
 
 type MiddleState = "none" | "stats" | "info" | "options";
 
-interface GameSaveData {
+export interface GameSaveData {
     hasCheated: boolean;
     isModded: boolean;
     autoSavingAllowed: boolean;
@@ -346,6 +346,9 @@ export class Game extends SaveProvider {
     }
 
     getSaveData(): GameSaveData {
+        /** savedata is null on first boot */
+        const originalUpgradeSave = (this.savinator5000.getLocalStorageSave()) ? (this.savinator5000.getLocalStorageSave().getData("game") as GameSaveData).upgradesSave : {}
+
         return {
             hasCheated: this.hasCheated,
             isModded: this.isModded,
@@ -355,7 +358,10 @@ export class Game extends SaveProvider {
             currentlyClickedObjectKey: Handlers.CURRENTLY_CLICKED.getKeyFromValue(Handlers.CURRENTLY_CLICKED.getCurrentlyClicked()),
             currentBackgroundKey: Handlers.BACKGROUND.getKeyFromValue(Handlers.BACKGROUND.getCurrentBackground()), // todo: make better
         
-            upgradesSave: Handlers.UPGRADE.dumpSave()
+            upgradesSave: { // merge to preserve unregistered upgrades
+                ...originalUpgradeSave,
+                ...Handlers.UPGRADE.dumpSave()
+            }
         }
     }
 
