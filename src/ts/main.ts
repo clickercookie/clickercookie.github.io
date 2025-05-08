@@ -16,6 +16,7 @@ import { SimplePopup } from "./popup.js";
 import { Handlers, ModHandler } from "./handlers.js";
 
 import { NewMod } from "./exmod.js"; //* note: this import is intentionally left unused so tsc can find this file and compile it
+import { BuildingSave } from "./buildings.js";
 
 // ------------------------------------
 // Version Constants
@@ -76,7 +77,8 @@ export interface GameSaveData {
     currentlyClickedObjectKey: string;
     currentBackgroundKey: string;
 
-    upgradesSave: Record<string, UpgradeSave>
+    upgradesSave: Record<string, UpgradeSave>;
+    buildingsSave: Record<string, BuildingSave>;
 }
 
 export class Game extends SaveProvider {
@@ -152,7 +154,7 @@ export class Game extends SaveProvider {
         y: number
     };
 
-    public theGameCanLoopBecauseTheInitializationIsCompleted: boolean;
+    public initialized: boolean;
 
     //* The following intervals will be started once init() completes!
     public readonly AUTOSAVE_INTERVAL = new Interval(() => {
@@ -183,7 +185,7 @@ export class Game extends SaveProvider {
 
         this.savinator5000 = new Savinator(Handlers.SAVE);
 
-        this.theGameCanLoopBecauseTheInitializationIsCompleted = false;
+        this.initialized = false;
     }
 
     init() {
@@ -296,12 +298,12 @@ export class Game extends SaveProvider {
         this.CPS_INTERVAL.start();
         this.GAME_LOOP_INTERVAL.start();
 
-        this.theGameCanLoopBecauseTheInitializationIsCompleted = true;
+        this.initialized= true;
         console.log("Successfully completed initialization.");
     }
 
     gameLoop() {
-        if (!this.theGameCanLoopBecauseTheInitializationIsCompleted) return;
+        if (!this.initialized) return;
 
         Handlers.UPGRADE.checkUpgradeAvailability();
 
@@ -347,7 +349,8 @@ export class Game extends SaveProvider {
 
     getSaveData(): GameSaveData {
         /** savedata is null on first boot */
-        const originalUpgradeSave = (this.savinator5000.getLocalStorageSave()) ? (this.savinator5000.getLocalStorageSave().getData("game") as GameSaveData).upgradesSave : {}
+        const originalUpgradeSave = (this.savinator5000.getLocalStorageSave()) ? (this.savinator5000.getLocalStorageSave().getData("game") as GameSaveData).upgradesSave : {};
+        const originalBuildingSave = (this.savinator5000.getLocalStorageSave()) ? (this.savinator5000.getLocalStorageSave().getData("game") as GameSaveData).buildingsSave : {};
 
         return {
             hasCheated: this.hasCheated,
@@ -361,6 +364,10 @@ export class Game extends SaveProvider {
             upgradesSave: { // merge to preserve unregistered upgrades
                 ...originalUpgradeSave,
                 ...Handlers.UPGRADE.dumpSave()
+            },
+            buildingsSave: {
+                ...originalBuildingSave,
+                ...Handlers.BUILDING.dumpSave()
             }
         }
     }
@@ -375,6 +382,7 @@ export class Game extends SaveProvider {
 
         // the following doesn't have anything to do with GameSaveData but will be done here because this spot makes the most sense
         Handlers.UPGRADE.loadSave(saveData.upgradesSave);
+        Handlers.BUILDING.loadSave(saveData.buildingsSave);
 
         Handlers.UPGRADE.destroyAllUpgrades();
         Handlers.UPGRADE.showUnlockedUpgrades();

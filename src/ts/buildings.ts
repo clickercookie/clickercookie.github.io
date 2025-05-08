@@ -1,6 +1,7 @@
 import ClickerCookie from "./clickercookie.js";
 import { capitalize, commaify, clamp } from "./helper.js";
 import { Game } from "./main.js";
+import { SaveProvider } from "./saving.js";
 import { hideTooltip } from "./tooltip.js";
 
 export interface BuildingData {
@@ -17,7 +18,13 @@ export interface BuildingData {
     upgradeCostMultiplier?: number;
 }
 
-export class Building {
+export interface BuildingSave {
+    bought: number;
+    CPSGain: number;
+    CPSGiven: number;
+}
+
+export class Building extends SaveProvider {
     private _clickercookie: ClickerCookie;
 
     name: string;
@@ -49,6 +56,8 @@ export class Building {
 
     html: HTMLDivElement;
     constructor(clickercookie: ClickerCookie, data: BuildingData) {
+        super();
+
         this._clickercookie = clickercookie;
 
         // setup HTML (uses indentation to show structure)
@@ -163,5 +172,19 @@ export class Building {
 
     destroy() {
         this.html.remove();
+    }
+
+    getSaveData(): BuildingSave {
+        return {
+            bought: this.bought,
+            CPSGain: this.CPSGain,
+            CPSGiven: this.CPSGiven
+        }
+    }
+
+    loadSaveData(saveData: BuildingSave) {
+        this.bought = saveData.bought;
+        this.CPSGain = saveData.CPSGain;
+        this.CPSGiven = saveData.CPSGiven
     }
 }

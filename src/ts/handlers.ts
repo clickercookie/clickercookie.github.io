@@ -1,6 +1,6 @@
 //* Ideally I would put things like BackgroundHandler in personalization.ts but because of lexical declarations we can't do that without getting circular imports as far as I can tell. This is fine.
 
-import { Building } from "./buildings.js";
+import { Building, BuildingSave } from "./buildings.js";
 import { Handler, Identifier, UniqueKeyHandler } from "./handler.js";
 import { url } from "./helper.js";
 import { Game, GameSaveData } from "./main.js";
@@ -126,6 +126,38 @@ export class BuildingHandler extends Handler<Building> {
         }
         return bought;
     }
+
+    /**
+     * Dumps savedata for all registered buildings
+     * @param namespace Optional: if present only dump savedata from this namespace
+     * @returns savedata as obj in following format: `stringifiedIdentifier: BuildingSave`
+     */
+    dumpSave(namespace: string=undefined) {
+        const saveObj: Record<string, BuildingSave> = {};
+        for (const value of (namespace === undefined) ? this : this.getValuesFromNamespace(namespace)) {
+            saveObj[this.getKeyFromValue(value)] = value.getSaveData();
+        }
+        return saveObj;
+    }
+
+    /**
+     * Apply save data state to all registered buildings
+     * @param saveObj The save object to load the data of
+     * @param namespace Optional: if present will only load data for buildings of a given namespace.
+     */
+    loadSave(saveObj: Record<string, BuildingSave>, namespace: string=undefined) {
+        for (const stringifiedIdentifier in saveObj) {
+            const id = Identifier.fromString(stringifiedIdentifier);
+
+            if (namespace !== undefined && id.namespace !== namespace) continue;
+
+            const building = this.getFromIdentifier(id);
+
+            if (building === undefined) continue; // if buildings are not registered we obviously can't load them. todo: should this warn?
+
+            building.loadSaveData(saveObj[stringifiedIdentifier]);
+        }
+    }
 }
 
 /* Upgrades */
@@ -238,9 +270,6 @@ export class ModHandler extends UniqueKeyHandler<Mod> {
     
         Game.getInstance().isModded = true;
 
-        // load game save data to todo: write
-        Game.getInstance().loadSaveData(Game.getInstance().savinator5000.getLocalStorageSave().getData("game") as GameSaveData);
-
         console.log("Loaded mod from URL: "+url);
     }
 
@@ -264,9 +293,6 @@ export class ModHandler extends UniqueKeyHandler<Mod> {
             document.getElementById("importedMessage")!.style.display = "block";
 
             Game.getInstance().isModded = true;
-
-            // load game save data to todo: write
-            Game.getInstance().loadSaveData(Game.getInstance().savinator5000.getLocalStorageSave().getData("game") as GameSaveData)
 
             console.log("Successfully added mod from file: "+file.name);
         };
@@ -347,11 +373,15 @@ export class ModHandler extends UniqueKeyHandler<Mod> {
             new SimplePopup({x: 400, y: 200, title: "Error", text: `The mod namespace "${key}" is already present!`});
             return;
         }
+
+        if (Game.getInstance().initialized) Game.getInstance().savinator5000.save(); // save and load to save any changes made since last save and load so that buildings and upgrades will be loaded for the mod we just added
         
         super.register(key, mod);
         this.saveHandler.register(mod.NAMESPACE, mod);
         document.getElementById("modsNumberLoaded")!.innerText = (Handlers.MOD.length - 1).toString(); //* subtract one so we don't show clickercookie (makes more sense to the user)
-        mod.init();
+        mod.init(); // register their stuff
+
+        if (Game.getInstance().initialized) Game.getInstance().savinator5000.load();
     }
 }
 

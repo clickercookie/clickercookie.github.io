@@ -30,36 +30,6 @@ interface ClickerCookieSaveData {
     totalCookies: number;
     cookiesPerClick: number;
     cookieBeenClickedTimes: number;
-
-    /* buildings */
-    // keyboard
-    keyboardsBought: number;
-    keyboardCPSGain: number;
-    keyboardCPSGiven: number;
-    // grandpa
-    grandpasBought: number;
-    grandpaCPSGain: number;
-    grandpaCPSGiven: number;
-    // ranch
-    ranchesBought: number;
-    ranchCPSGain: number;
-    ranchCPSGiven: number;
-    // television
-    televisionsBought: number;
-    televisionCPSGain: number;
-    televisionCPSGiven: number; 
-    // worker
-    workersBought: number;
-    workerCPSGain: number;
-    workerCPSGiven: number;
-    // wallet
-    walletsBought: number;
-    walletCPSGain: number;
-    walletCPSGiven: number; 
-    // church
-    churchesBought: number;
-    churchCPSGain: number;
-    churchCPSGiven: number;
 }
 
 export default class ClickerCookie extends Mod {
@@ -643,45 +613,10 @@ export default class ClickerCookie extends Mod {
             cookies: this.cookies,
             totalCookies: this.totalCookies,
             cookiesPerClick: this.cookiesPerClick,
-            cookieBeenClickedTimes: this.cookieBeenClickedTimes,
-            /* buildings */
-            // keyboard
-            keyboardsBought: this.keyboard.bought,
-            keyboardCPSGain: this.keyboard.CPSGain,
-            keyboardCPSGiven: this.keyboard.CPSGiven,
-            // grandpa
-            grandpasBought: this.grandpa.bought,
-            grandpaCPSGain: this.grandpa.CPSGain,
-            grandpaCPSGiven: this.grandpa.CPSGiven,
-            // ranch
-            ranchesBought: this.ranch.bought,
-            ranchCPSGain: this.ranch.CPSGain,
-            ranchCPSGiven: this.ranch.CPSGiven,
-            // television
-            televisionsBought: this.television.bought,
-            televisionCPSGain: this.television.CPSGain,
-            televisionCPSGiven: this.television.CPSGiven,
-            // worker
-            workersBought: this.worker.bought,
-            workerCPSGain: this.worker.CPSGain,
-            workerCPSGiven: this.worker.CPSGiven,
-            // wallet
-            walletsBought: this.wallet.bought,
-            walletCPSGain: this.wallet.CPSGain,
-            walletCPSGiven: this.wallet.CPSGiven,
-            // church
-            churchesBought: this.church.bought,
-            churchCPSGain: this.church.CPSGain,
-            churchCPSGiven: this.church.CPSGiven
+            cookieBeenClickedTimes: this.cookieBeenClickedTimes
         }
     }
-    loadSaveData(saveData: ClickerCookieSaveData) {        
-        for (const i in saveData) {
-            if (i === undefined) {
-                console.warn("During loading a value in saveData was found undefined. Errors will likely follow...");
-            }
-        }
-        
+    loadSaveData(saveData: ClickerCookieSaveData) {
         this.grandpa.setVisibility(false);
         this.ranch.setVisibility(false);
         this.television.setVisibility(false);
@@ -693,36 +628,5 @@ export default class ClickerCookie extends Mod {
         this.totalCookies = saveData.totalCookies;
         this.cookiesPerClick = saveData.cookiesPerClick;
         this.cookieBeenClickedTimes = saveData.cookieBeenClickedTimes;
-
-        /* buildings */
-        // keyboard
-        this.keyboard.bought = saveData.keyboardsBought;
-        this.keyboard.CPSGain = saveData.keyboardCPSGain;
-        this.keyboard.CPSGiven = saveData.keyboardCPSGiven;
-        // grandpa
-        this.grandpa.bought = saveData.grandpasBought;
-        this.grandpa.CPSGain = saveData.grandpaCPSGain;
-        this.grandpa.CPSGiven = saveData.grandpaCPSGiven;
-        // ranch
-        this.ranch.bought = saveData.ranchesBought;
-        this.ranch.CPSGain = saveData.ranchCPSGain;
-        this.ranch.CPSGiven = saveData.ranchCPSGiven;
-        // television
-        this.television.bought = saveData.televisionsBought;
-        this.television.CPSGain = saveData.televisionCPSGain;
-        this.television.CPSGiven = saveData.televisionCPSGiven;
-        // worker
-        this.worker.bought = saveData.workersBought;
-        this.worker.CPSGain = saveData.workerCPSGain;
-        this.worker.CPSGiven = saveData.workerCPSGiven;
-        // wallet
-        this.wallet.bought = saveData.walletsBought;
-        this.wallet.CPSGain = saveData.walletCPSGain;
-        this.wallet.CPSGiven = saveData.walletCPSGiven;
-        // church
-        this.church.bought = saveData.churchesBought;
-        this.church.CPSGain = saveData.churchCPSGain;
-        this.church.CPSGiven = saveData.churchCPSGiven;
-        // ...
     }
 }

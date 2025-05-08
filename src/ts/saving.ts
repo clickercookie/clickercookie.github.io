@@ -151,6 +151,7 @@ export class Savinator {
     }
 }
 
+// todo: change the documentation of this class to reflect additional uses, such as Building
 export class SaveProvider {
     /**
      * If registered with a {@link SaveHandler}, it will use whatever this function returns as the savedata.
