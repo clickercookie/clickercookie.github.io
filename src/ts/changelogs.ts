@@ -46,7 +46,7 @@ export const versionChangelogs: Changelog[] = [
             "A Github page.",
             "Version number."
         ],
-        release: "March 16th"
+        release: "March 16th, 2023"
     },
     {
         type: "patch",
@@ -258,7 +258,8 @@ export const versionChangelogs: Changelog[] = [
             "The \"Import Data\" button is using a browser-specific styling workaround. (#39)",
             "Pressing escape on an open advanced popup does not fully close the popup. (#57)",
             "Television description doesn't change with personalization. (#54)",
-            "No more HTMLElement.innerHTML where it's not needed, now use innerText. (#43)"
+            "No more HTMLElement.innerHTML where it's not needed, now use innerText. (#43)",
+            "Version 0.2 changelog did not have a release year."
         ],
         removed: [
             "Removed the mobile version due to the extreme amount of work required to upkeep it alongside the main version. (#36)",
