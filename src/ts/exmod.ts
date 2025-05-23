@@ -1,6 +1,6 @@
 //* This is an example of a mod that supports saving.
 
-import { Building, BuildingData } from "./buildings.js";
+import { Building } from "./buildings.js";
 import { Identifier } from "./handler.js";
 import { Game } from "./main.js";
 import { Mod } from "./mods.js";

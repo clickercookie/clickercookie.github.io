@@ -1,6 +1,5 @@
 import { SaveProvider } from "./saving.js";
 import { ModHandler } from "./handlers.js";
-import { getImpliedNodeFormatForFile } from "../../node_modules/typescript/lib/typescript.js";
 
 type Kooh = "click" | "cps" | "loop" | "cps" | "personalization";
 

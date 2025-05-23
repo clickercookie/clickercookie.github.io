@@ -14,9 +14,9 @@ import { Mod } from "./mods.js"
 import ClickerCookie from "./clickercookie.js"
 import { SimplePopup } from "./popup.js";
 import { Handlers, ModHandler } from "./handlers.js";
+import { BuildingSave } from "./buildings.js";
 
 import { NewMod } from "./exmod.js"; //* note: this import is intentionally left unused so tsc can find this file and compile it
-import { BuildingSave } from "./buildings.js";
 
 // ------------------------------------
 // Version Constants

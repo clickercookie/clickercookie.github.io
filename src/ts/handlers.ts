@@ -3,7 +3,7 @@
 import { Building, BuildingSave } from "./buildings.js";
 import { Handler, Identifier, UniqueKeyHandler } from "./handler.js";
 import { url } from "./helper.js";
-import { Game, GameSaveData } from "./main.js";
+import { Game } from "./main.js";
 import { Mod } from "./mods.js";
 import { Background, CurrentlyClickedObject } from "./personalization.js";
 import { AdvancedPopup, SimplePopup } from "./popup.js";

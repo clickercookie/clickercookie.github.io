@@ -1,6 +1,5 @@
 import { Building, BuildingData } from "./buildings.js";
 import { commaify, makeSlightlyImperfectFloatNice } from "./helper.js";
-import { Game } from "./main.js";
 import { Mod } from "./mods.js";
 import { Upgrade, UpgradeData, UpgradeSave } from "./upgrades.js";
 import { SimplePopup } from "./popup.js";
