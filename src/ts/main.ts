@@ -81,7 +81,7 @@ export interface GameSaveData {
     buildingsSave: Record<string, BuildingSave>;
 }
 
-export class Game extends SaveProvider {
+export class Game implements SaveProvider<GameSaveData> {
     // Important game-wide constants
     public static readonly VERSION: string = version;
     public static readonly VERSION_BRANCH: VersionBranch = (location.pathname == "/develop/index.html" || location.pathname == "/develop") ? 2 : (location.pathname == "/beta/index.html" || location.pathname == "/beta") ? 1 : 0;
@@ -170,8 +170,6 @@ export class Game extends SaveProvider {
     }, 1000).stop();
 
     constructor() {
-        super();
-
         this.mousePos = {
             x: 0,
             y: 0

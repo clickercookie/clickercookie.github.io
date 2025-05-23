@@ -11,7 +11,7 @@ interface ModSave {
     superCookies: number;
 }
 
-export class NewMod extends Mod {
+export class NewMod extends Mod<ModSave> {
     superCookies: number;
 
     banana: Building;

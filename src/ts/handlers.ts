@@ -222,10 +222,7 @@ export class UpgradeHandler extends Handler<Upgrade> {
     dumpSave(namespace: string=undefined) {
         const saveObj: Record<string, UpgradeSave> = {};
         for (const value of (namespace === undefined) ? this : this.getValuesFromNamespace(namespace)) {
-            saveObj[this.getKeyFromValue(value)] = {
-                unlocked: value.unlocked,
-                bought: value.bought
-            }
+            saveObj[this.getKeyFromValue(value)] = value.getSaveData();
         }
         return saveObj;
     }
@@ -243,14 +240,13 @@ export class UpgradeHandler extends Handler<Upgrade> {
 
             if (this.getFromIdentifier(id) === undefined) continue; // if upgrades are not registered we obviously can't load them. todo: should this warn?
 
-            this.getFromIdentifier(id).bought = saveObj[stringifiedIdentifier].bought;
-            this.getFromIdentifier(id).unlocked = saveObj[stringifiedIdentifier].unlocked;
+            this.getFromIdentifier(id).loadSaveData(saveObj[stringifiedIdentifier])
         }
     }
 }
 
 /* Mod */
-export class ModHandler extends UniqueKeyHandler<Mod> {
+export class ModHandler extends UniqueKeyHandler<Mod<any>> {
     /* Static Methods */
     public static loadURL(url: string) {
         const httpCheck = url.slice(0,4);
@@ -367,7 +363,7 @@ export class ModHandler extends UniqueKeyHandler<Mod> {
      * @param uid SHOULD BE YOUR MOD NAMESPACE!
      * @param mod Mod.
      */
-    override register(key: string, mod: Mod) {
+    override register(key: string, mod: Mod<any>) {
         //! below will always warn, should that be changed?
         if (this.getFromIdentifier(key) !== undefined) { //* do this before registering so we can get a more user-friendly popup than the console.error that we usually get for this type of error
             new SimplePopup({x: 400, y: 200, title: "Error", text: `The mod namespace "${key}" is already present!`});
@@ -385,7 +381,7 @@ export class ModHandler extends UniqueKeyHandler<Mod> {
     }
 }
 
-export class SaveHandler extends UniqueKeyHandler<SaveProvider> {
+export class SaveHandler extends UniqueKeyHandler<SaveProvider<any>> {
     dumpSaveData(): Record<string, unknown> {
         const saveData: Record<string, unknown> = {};
         for (const namespace of this.registered.keys()) {

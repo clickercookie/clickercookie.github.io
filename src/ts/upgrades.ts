@@ -4,6 +4,7 @@ import { hideTooltip } from "./tooltip.js";
 import { Game } from "./main.js";
 import ClickerCookie from "./clickercookie.js";
 import { Handlers } from "./handlers.js";
+import { SaveProvider } from "./saving.js";
 
 export interface UpgradeSave {
     unlocked: boolean;
@@ -38,7 +39,7 @@ export function expandUpgradesHolder(retract: boolean=false) {
     holder.style.height = `${size}px`;
 }
 
-export class Upgrade {
+export class Upgrade implements SaveProvider<UpgradeSave> {
     private clickercookie: ClickerCookie;
 
     name: string;
@@ -170,5 +171,17 @@ export class Upgrade {
     }
     setStatisticVisibility(bool: boolean) {
         this.statisticHTML.style.display = bool ? "block" : "none";
+    }
+
+    getSaveData(): UpgradeSave {
+        return {
+            unlocked: this.unlocked,
+            bought: this.bought
+        }
+    }
+
+    loadSaveData(saveData: UpgradeSave): void {
+        this.unlocked = saveData.unlocked;
+        this.bought = saveData.bought;
     }
 }

@@ -24,7 +24,7 @@ export interface BuildingSave {
     CPSGiven: number;
 }
 
-export class Building extends SaveProvider {
+export class Building implements SaveProvider<BuildingSave> {
     private _clickercookie: ClickerCookie;
 
     name: string;
@@ -56,8 +56,6 @@ export class Building extends SaveProvider {
 
     html: HTMLDivElement;
     constructor(clickercookie: ClickerCookie, data: BuildingData) {
-        super();
-
         this._clickercookie = clickercookie;
 
         // setup HTML (uses indentation to show structure)

@@ -32,7 +32,7 @@ interface ClickerCookieSaveData {
     cookieBeenClickedTimes: number;
 }
 
-export default class ClickerCookie extends Mod {
+export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
     /* core stuff */
     // cookies
     private _cookies: number = 0;

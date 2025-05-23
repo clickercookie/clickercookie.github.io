@@ -1,5 +1,6 @@
 import { SaveProvider } from "./saving.js";
 import { ModHandler } from "./handlers.js";
+import { getImpliedNodeFormatForFile } from "../../node_modules/typescript/lib/typescript.js";
 
 type Kooh = "click" | "cps" | "loop" | "cps" | "personalization";
 
@@ -14,7 +15,7 @@ interface ModMetadata {
 /**
  * Provides high-level abstractions for mod developers to work with
  */
-export class Mod extends SaveProvider {
+export class Mod<T> implements SaveProvider<T> {
     // ------------------
     // Koohs
     // ------------------
@@ -45,8 +46,6 @@ export class Mod extends SaveProvider {
     public readonly NAMESPACE: string;
 
     constructor(namespace: string, metadata: ModMetadata={name: undefined, description: undefined, img: undefined}) { //? should namespace be a param?
-        super();
-
         this.NAMESPACE = namespace;
 
         this.METADATA = {
@@ -64,4 +63,10 @@ export class Mod extends SaveProvider {
     init() {
 
     }
+
+    /* we need these two to correctly impliment SaveProvider but they still are only used when overriden */
+    getSaveData(): T {
+        return undefined;
+    }
+    loadSaveData(saveData: T): void {}
 }

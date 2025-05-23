@@ -151,21 +151,21 @@ export class Savinator {
     }
 }
 
-// todo: change the documentation of this class to reflect additional uses, such as Building
-export class SaveProvider {
+/**
+ * Represents an object that can save/load its own data. 
+ * 
+ * This includes features such as buildings, upgrades, and even mods themselves.
+ */
+export interface SaveProvider<T> {
     /**
-     * If registered with a {@link SaveHandler}, it will use whatever this function returns as the savedata.
+     * This should return your objects savedata, to then be loaded in {@link loadSaveData()}.
      * @returns Anything you want. You will be responsible for parsing whatever the save data is, personally I like saving it as an object, but anything works. You can even do it Orteil-style with pipes and junk (if you know, you know).
      */
-    getSaveData(): unknown {
-        return undefined;
-    }
+    getSaveData(): T;
     /**
-     * Whatever you do to load your savadata, do it here. Whenever {@link Savinator.load} is run, any {@link SaveProvider} registered in Savinator's {@link Savinator.saveHandler} will have this function run.
+     * Whatever you do to load your savadata, do it here. This will be whatever was returned from {@link getSaveData()}.
      */
-    loadSaveData(saveData: unknown): void {
-
-    }
+    loadSaveData(saveData: T): void;
 }
 
 interface SaveDataHeader {
