@@ -89,11 +89,13 @@ export class Game implements SaveProvider<GameSaveData> {
     public static readonly GITHUB_REPO: string = "https://github.com/clickercookie/clickercookie.github.io";
     public static readonly CREDITS: Record<string, string> = {
         "FifthTundraG": "Creation",
-        "potatman4": "Playtesting",
+        "potatman4": "Supreme Musical Overlord",
         "Wolfsarecool44": "Playtesting, Emotional Support"
     }
     public static readonly DEFAULT_BACKGROUND: string = "clickercookie:blue";
     public static readonly DEFAULT_CURRENTLY_CLICKED_OBJECT: string = "clickercookie:cookie";
+
+    public static backgroundMusic: HTMLAudioElement = new Audio(); // todo: can we make this better or this fine
 
     public static getMousePosition(): MousePosition {
         return mousePos;

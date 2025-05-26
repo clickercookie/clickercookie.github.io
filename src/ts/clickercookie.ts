@@ -5,6 +5,7 @@ import { Upgrade, UpgradeData, UpgradeSave } from "./upgrades.js";
 import { SimplePopup } from "./popup.js";
 import { Identifier } from "./handler.js";
 import { Handlers } from "./handlers.js";
+import { Game } from "./main.js";
 
 // the description of almost every upgrade is the same, but just in case we want to add more upgrades in the future
 // a "desc" field has been added to the upgrades array. Most upgrade will just reference a this array, though
@@ -551,6 +552,34 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 text: "It's Clicker Cookie's birthday! \nThe cookie has been replaced with a birthday cake, but you can change it back in Options.",
                 title: "woo hoo!"
             });
+        }
+
+        if (date.getMonth() === 3 && date.getDate() == 1) {
+            Mod.registerKooh("click", () => {
+                if (Game.backgroundMusic.src.split("/").at(-1) === "aprilfools.mp3") return; // todo: can we make this a bit less janky or smth
+                Game.backgroundMusic = new Audio("/sfx/aprilfools.mp3");
+                console.log();
+                Game.backgroundMusic.volume = 0.5;
+                Game.backgroundMusic.play();
+                Game.backgroundMusic.addEventListener("ended", () => {
+                    Game.backgroundMusic.play();
+                });
+            });
+
+            const filter = document.createElement("div");
+            filter.style.position = "absolute";
+            filter.style.width = "100%";
+            filter.style.height = "100%";
+            filter.style.pointerEvents = "none";
+            filter.style.backgroundColor = "red";
+            filter.style.opacity = "70%";
+
+            document.body.appendChild(filter);
+
+            const message = document.createElement("h3");
+            message.innerText = "happy april fools";
+            message.style.marginLeft = "auto"; // centers it the way god intended
+            document.getElementsByClassName("left-middle-buttons")[0].after(message);
         }
     }
 

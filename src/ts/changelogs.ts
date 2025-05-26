@@ -236,6 +236,7 @@ export const versionChangelogs: Changelog[] = [
         added: [
             "\"Cookies Per Click\" statistic.",
             "A button in Options to toggle auto-saving (#29)",
+            "April Fools event",
             "GitHub issues in changelogs work as hyperlinks, like this one: #13",
             "A \"removed\" section in changelogs",
             "Advanced popups now have options (#32)",
