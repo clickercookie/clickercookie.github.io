@@ -1,4 +1,5 @@
-import { SaveHandler } from "./handlers.js";
+import { Identifier } from "./handler.js";
+import { Handlers, SaveHandler } from "./handlers.js";
 import { branchQuickSwitch } from "./helper.js";
 import { Game, VersionBranch } from "./main.js";
 import { SimplePopup } from "./popup.js";
@@ -36,7 +37,14 @@ export class Savinator {
         if (localStorage.getItem(this.currentSaveName) === null) {
             return null;
         } else {
-            return new Save(JSON.parse(localStorage.getItem(this.currentSaveName))); // add error checking, this assumes newSave is a save, it might not be!
+            const parsedSave = JSON.parse(localStorage.getItem(this.currentSaveName));
+
+            if (!Save.isValidSave(parsedSave)) {
+                console.warn("Savinator tried to get a Save from localStorage but the value was not a valid save. Returning null.");
+                return null;
+            }
+
+            return new Save(parsedSave);
         }
     }
 
@@ -180,6 +188,22 @@ interface SaveData {
 }
 
 export class Save {
+    /**
+     * Tests if a given object is a valid {@link Save}, and returns a boolean based on if it is
+     * @param save The *object* to test the validity of
+     */
+    static isValidSave(save: any) {
+        try {
+            if (save["header"]["version"] || save["header"]["versionBranch"] || save["header"]["format"] || save["data"]) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch {
+            return false;
+        }
+    }
+
     static VERSION_FORMAT = 4;
 
     private data: SaveData; //? this is private, which is why we have so many get() methods. should it just be public?
@@ -224,6 +248,143 @@ export class Save {
     }
 }
 
+/*
+example 0.6 save:
+{"core.cookies":247199.30000003485,"core.totalCookies":251800.30000003646,"core.cookiesPerSecond":29.2,"keyboard.CPSGiven":0.2,"grandpa.CPSGiven":5,"ranch.CPSGiven":24,"television.CPSGiven":0,"worker.CPSGiven":0,"wallet.CPSGiven":0,"church.CPSGiven":0,"keyboard.bought":1,"grandpa.bought":5,"ranch.bought":3,"television.bought":0,"worker.bought":0,"wallet.bought":0,"church.bought":0,"keyboard.CPSGain":0.2,"grandpa.CPSGain":1,"ranch.CPSGain":8,"television.CPSGain":47,"worker.CPSGain":260,"wallet.CPSGain":1440,"church.CPSGain":7800,"keyboard.upgradeCost":17,"grandpa.upgradeCost":197,"ranch.upgradeCost":1672,"television.upgradeCost":12000,"worker.upgradeCost":130000,"wallet.upgradeCost":1400000,"church.upgradeCost":20000000,"upgrades.unlocked":[1,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"upgrades.bought":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"upgrades.upgradesBought":1,"core.cookiesPerClick":2,"core.cookieBeenClickedTimes":30,"core.buildingsOwned":9,"hasCheated":false,"won":0,"isModded":false,"versionBranch":0}
+*/
+
+/**
+ * Takes in a given 0.6 save and manually applies its data, then does a normal save and refreshes the page.
+ * @param save The direct local storage key, i.e a stringified object
+ */
 export function convert06Save(save: string) {
-    
+    const parsedSave: Record<string, any> = JSON.parse(save);
+
+    // todo: should we do versionbranch shenanigans?
+
+    const game = Game.getInstance();
+
+    game.clickercookie.cookies = parsedSave["core.cookies"];
+    game.clickercookie.totalCookies = parsedSave["core.totalCookies"];
+    game.clickercookie.cookiesPerSecond = parsedSave["core.cookiesPerSecond"];
+    /* buildings */
+    //* we do not need to load upgrade cost, it is calculated programmatically
+    // keyboard
+    game.clickercookie.keyboard.CPSGiven = parsedSave["keyboard.CPSGiven"];
+    game.clickercookie.keyboard.CPSGain = parsedSave["keyboard.CPSGain"];
+    game.clickercookie.keyboard.bought = parsedSave["keyboard.bought"];
+    // grandpa
+    game.clickercookie.grandpa.CPSGiven = parsedSave["grandpa.CPSGiven"];
+    game.clickercookie.grandpa.CPSGain = parsedSave["grandpa.CPSGain"];
+    game.clickercookie.grandpa.bought = parsedSave["grandpa.bought"];
+    // ranch
+    game.clickercookie.ranch.CPSGiven = parsedSave["ranch.CPSGiven"];
+    game.clickercookie.ranch.CPSGain = parsedSave["ranch.CPSGain"];
+    game.clickercookie.ranch.bought = parsedSave["ranch.bought"];
+    // television
+    game.clickercookie.television.CPSGiven = parsedSave["television.CPSGiven"];
+    game.clickercookie.television.CPSGain = parsedSave["television.CPSGain"];
+    game.clickercookie.television.bought = parsedSave["television.bought"];
+    // worker
+    game.clickercookie.worker.CPSGiven = parsedSave["worker.CPSGiven"];
+    game.clickercookie.worker.CPSGain = parsedSave["worker.CPSGain"];
+    game.clickercookie.worker.bought = parsedSave["worker.bought"];
+    // wallet
+    game.clickercookie.wallet.CPSGiven = parsedSave["wallet.CPSGiven"];
+    game.clickercookie.wallet.CPSGain = parsedSave["wallet.CPSGain"];
+    game.clickercookie.wallet.bought = parsedSave["wallet.bought"];
+    // church
+    game.clickercookie.church.CPSGiven = parsedSave["church.CPSGiven"];
+    game.clickercookie.church.CPSGain = parsedSave["church.CPSGain"];
+    game.clickercookie.church.bought = parsedSave["church.bought"];
+
+    /* upgrades */
+    //* important note: we prefix each assignment with !! since these value are numbers and we need them to be booleans. one ! will negate the value and another ! will negate it again, leaving us with the same boolean but instead of a number it's a real boolean. if you don't understand write !!0 and !!1 inside of devtools and see what comes out  
+    // keyboard
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard1")).unlocked = !!parsedSave["upgrades.unlocked"][0];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard1")).bought = !!parsedSave["upgrades.bought"][0];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard2")).unlocked = !!parsedSave["upgrades.unlocked"][1];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard2")).bought = !!parsedSave["upgrades.bought"][1];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard3")).unlocked = !!parsedSave["upgrades.unlocked"][2];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard3")).bought = !!parsedSave["upgrades.bought"][2];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard4")).unlocked = !!parsedSave["upgrades.unlocked"][3];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard4")).bought = !!parsedSave["upgrades.bought"][3];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard5")).unlocked = !!parsedSave["upgrades.unlocked"][4];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard5")).bought = !!parsedSave["upgrades.bought"][4];
+    // grandpa
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa1")).unlocked = !!parsedSave["upgrades.unlocked"][5];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa1")).bought = !!parsedSave["upgrades.bought"][5];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa2")).unlocked = !!parsedSave["upgrades.unlocked"][6];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa2")).bought = !!parsedSave["upgrades.bought"][6];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa3")).unlocked = !!parsedSave["upgrades.unlocked"][7];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa3")).bought = !!parsedSave["upgrades.bought"][7];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa4")).unlocked = !!parsedSave["upgrades.unlocked"][8];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa4")).bought = !!parsedSave["upgrades.bought"][8];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa5")).unlocked = !!parsedSave["upgrades.unlocked"][9];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa5")).bought = !!parsedSave["upgrades.bought"][9];
+    // ranch
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch1")).unlocked = !!parsedSave["upgrades.unlocked"][10];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch1")).bought = !!parsedSave["upgrades.bought"][10];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch2")).unlocked = !!parsedSave["upgrades.unlocked"][11];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch2")).bought = !!parsedSave["upgrades.bought"][11];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch3")).unlocked = !!parsedSave["upgrades.unlocked"][12];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch3")).bought = !!parsedSave["upgrades.bought"][12];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch4")).unlocked = !!parsedSave["upgrades.unlocked"][13];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch4")).bought = !!parsedSave["upgrades.bought"][13];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch5")).unlocked = !!parsedSave["upgrades.unlocked"][14];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch5")).bought = !!parsedSave["upgrades.bought"][14];
+    // television
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television1")).unlocked = !!parsedSave["upgrades.unlocked"][15];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television1")).bought = !!parsedSave["upgrades.bought"][15];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television2")).unlocked = !!parsedSave["upgrades.unlocked"][16];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television2")).bought = !!parsedSave["upgrades.bought"][16];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television3")).unlocked = !!parsedSave["upgrades.unlocked"][17];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television3")).bought = !!parsedSave["upgrades.bought"][17];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television4")).unlocked = !!parsedSave["upgrades.unlocked"][18];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television4")).bought = !!parsedSave["upgrades.bought"][18];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television5")).unlocked = !!parsedSave["upgrades.unlocked"][19];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television5")).bought = !!parsedSave["upgrades.bought"][19];
+    // worker
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker1")).unlocked = !!parsedSave["upgrades.unlocked"][20];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker1")).bought = !!parsedSave["upgrades.bought"][20];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker2")).unlocked = !!parsedSave["upgrades.unlocked"][21];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker2")).bought = !!parsedSave["upgrades.bought"][21];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker3")).unlocked = !!parsedSave["upgrades.unlocked"][22];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker3")).bought = !!parsedSave["upgrades.bought"][22];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker4")).unlocked = !!parsedSave["upgrades.unlocked"][23];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker4")).bought = !!parsedSave["upgrades.bought"][23];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker5")).unlocked = !!parsedSave["upgrades.unlocked"][24];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker5")).bought = !!parsedSave["upgrades.bought"][24];
+    // wallet
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet1")).unlocked = !!parsedSave["upgrades.unlocked"][25];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet1")).bought = !!parsedSave["upgrades.bought"][25];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet2")).unlocked = !!parsedSave["upgrades.unlocked"][26];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet2")).bought = !!parsedSave["upgrades.bought"][26];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet3")).unlocked = !!parsedSave["upgrades.unlocked"][27];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet3")).bought = !!parsedSave["upgrades.bought"][27];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet4")).unlocked = !!parsedSave["upgrades.unlocked"][28];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet4")).bought = !!parsedSave["upgrades.bought"][28];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet5")).unlocked = !!parsedSave["upgrades.unlocked"][29];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet5")).bought = !!parsedSave["upgrades.bought"][29];
+    // church
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church1")).unlocked = !!parsedSave["upgrades.unlocked"][30];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church1")).bought = !!parsedSave["upgrades.bought"][30];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church2")).unlocked = !!parsedSave["upgrades.unlocked"][31];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church2")).bought = !!parsedSave["upgrades.bought"][31];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church3")).unlocked = !!parsedSave["upgrades.unlocked"][32];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church3")).bought = !!parsedSave["upgrades.bought"][32];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church4")).unlocked = !!parsedSave["upgrades.unlocked"][33];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church4")).bought = !!parsedSave["upgrades.bought"][33];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church5")).unlocked = !!parsedSave["upgrades.unlocked"][34];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church5")).bought = !!parsedSave["upgrades.bought"][34];
+
+    game.clickercookie.cookiesPerClick = parsedSave["core.cookiesPerClick"];
+    game.clickercookie.cookieBeenClickedTimes = parsedSave["core.cookieBeenClickedTimes"];
+    game.hasCheated = !!parsedSave["hasCheated"];
+    game.isModded = !!parsedSave["isModded"];
+    // no won
+
+    game.savinator5000.preserveUnusedNamespacesInSaves = false;
+    game.savinator5000.save();
+    location.reload(); // probably not required, but this will ensure nothing goes wrong
 }

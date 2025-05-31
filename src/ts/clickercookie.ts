@@ -1,7 +1,7 @@
 import { Building, BuildingData } from "./buildings.js";
 import { commaify, makeSlightlyImperfectFloatNice } from "./helper.js";
 import { Mod } from "./mods.js";
-import { Upgrade, UpgradeData, UpgradeSave } from "./upgrades.js";
+import { Upgrade, UpgradeData } from "./upgrades.js";
 import { SimplePopup } from "./popup.js";
 import { Identifier } from "./handler.js";
 import { Handlers } from "./handlers.js";
@@ -17,9 +17,6 @@ const defaultUpgradeDescriptions = {
     wallet: "Multiplys Wallet production by 2",
     church: "Multiplys Church production by 2"
 };
-
-/** why does this exist? */ 
-let cookieProductionStopped = false;
 
 interface ClickerCookieSaveData {
     version: number;
@@ -78,7 +75,9 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
     public church: Building;
 
     // upgrades
+    /** key is registry UID, value is data */
     public readonly UPGRADES_DATA: Record<string, UpgradeData>;
+    /** key is registry UID, value is data */
     public readonly BUILDINGS_DATA: Record<string, BuildingData>;
 
     constructor() {
@@ -555,10 +554,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
     }
 
     gameLoop() {
-        // check for stopped cookie production
-        if (cookieProductionStopped)
-            this.cookies = 0;
-
+        // todo: this should be handled by a callback func in building data
         // building unlocks
         if (this.totalCookies >= 100) {
             this.grandpa.unlocked = true;

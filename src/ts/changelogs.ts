@@ -1,6 +1,7 @@
 import { parseGithubIssue } from "./helper.js";
 
-/** these are all unused except for hotfix
+/** 
+ * these are all unused except for hotfix
  * 
  * also our versioning scheme looks like this:
  * 

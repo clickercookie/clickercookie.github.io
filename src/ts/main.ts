@@ -9,7 +9,7 @@ If you're not a modder, still read the docs here: https://github.com/clickercook
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
 import { branchQuickSwitch, Interval, object2HTML, url } from "./helper.js";
 import { expandUpgradesHolder, UpgradeSave } from "./upgrades.js";
-import { SaveProvider, Savinator } from "./saving.js";
+import { convert06Save, SaveProvider, Savinator } from "./saving.js";
 import { Mod } from "./mods.js"
 import ClickerCookie from "./clickercookie.js"
 import { SimplePopup } from "./popup.js";
@@ -42,7 +42,7 @@ window.addEventListener("mousemove", (event) => {
     mousePos.x = event.clientX;
     mousePos.y = event.clientY;
     
-    if (Game.IN_DEVELOPMENT)
+    if (Game.IN_DEVELOPMENT && document.getElementById("mousePosDevText")) // in case dev text doesn't exist for some reason idk
         document.getElementById("mousePosDevText").innerText = `Mouse Pos: (${mousePos.x}, ${mousePos.y})`;
 });
 
@@ -55,10 +55,6 @@ function resizeEventListener() {
 }
 resizeEventListener(); // since we do need certain elements like the middle text to have the correct size without having to resize the window, we call this now
 window.addEventListener("resize", resizeEventListener);
-
-const helper = {} as {
-    consoleLogDev(str: string): void
-};
 
 export enum VersionBranch {
     MAIN = 0,
@@ -189,25 +185,45 @@ export class Game implements SaveProvider<GameSaveData> {
     init() {
         //* note: always ensure that the init() method for all mods is loading before Game is. this is the case by default.
         
+        /* check for old saves (typically directly interacts with localStorage because using Savinator.getLocalStorageSave() will make it angry since localStorage doesn't have a Save it has some other data) */
+        // wow that's old
         if (localStorage.cookies >= 0)
             new SimplePopup({x: 400, y: 200, text: "You are using an extremely outdated saving method. You will have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format. Your old save cannot be restored.", func: () => { localStorage.clear() }, title: "Warning"});
-
-        // todo before 0.7: does betaSave work here? it looks like it does but i need to thoroughly test it
-        if (this.savinator5000.getLocalStorageSave() === null) {
-            this.savinator5000.save();
-            console.warn(`${this.savinator5000.currentSaveName} was null and was automatically reset, if this is your first time playing this is an intended behavior.`);
-        }
     
-        this.savinator5000.load();
-    
-        // if saves are old (directly interacts with localStorage because using Savinator.getLocalStorageSave() will make it angry since localStorage doesn't have a Save it has an array)
+        // 0.5 save 
         if (localStorage.getItem(this.savinator5000.currentSaveName) && localStorage.getItem(this.savinator5000.currentSaveName)[0] === "[" && Game.VERSION_BRANCH === VersionBranch.MAIN) {
             localStorage.setItem(`old05${this.savinator5000.currentSaveName}`, localStorage.getItem(this.savinator5000.currentSaveName));
             new SimplePopup({x: 400, y: 220, text: "You are using a save from the 0.5 release cycle. 0.5 save transfer is no longer supported. Pressing the button below will reset your save.", title: "sorry", func: () => { this.savinator5000.reset(); }});
             return "Save the save!";
         }
 
-        // todo asap: 0.6 save transfer
+        // 0.6 save
+        // todo: needs to be thoroughly playtested
+        // todo: do these need to be nested or was this just 11:00 programming moment and i wasn't thinking
+        if (typeof JSON.parse(localStorage.getItem(this.savinator5000.currentSaveName)) === "object") {
+            if (JSON.parse(localStorage.getItem(this.savinator5000.currentSaveName))["core.cookies"]) {
+                console.log("0.6 save detected, prompting user to transfer save.")
+                new SimplePopup({
+                    x: 400,
+                    y: 220,
+                    text: "You are using a save from the 0.6 release cycle. Pressing the button below will transfer your save to the new format.",
+                    title: "yay new update!",
+                    func: () => {
+                        console.log("Beginning 0.6 save transfer process.")
+                        convert06Save(localStorage.getItem(this.savinator5000.currentSaveName));
+                    }
+                });
+                return false;
+            }
+        }
+
+        // todo before 0.7: does betaSave work here? it looks like it does but i need to thoroughly test it
+        if (this.savinator5000.getLocalStorageSave() === null) {
+            this.savinator5000.save();
+            console.warn(`${this.savinator5000.currentSaveName} was null and was automatically reset, if this is your first time playing this is an intended behavior.`);
+        }
+
+        this.savinator5000.load();
 
         Handlers.UPGRADE.updateStatisticUpgrades();
 
@@ -227,7 +243,7 @@ export class Game implements SaveProvider<GameSaveData> {
         (document.getElementById("githubHyperlink") as HTMLAnchorElement).href = Game.GITHUB_REPO;
     
         // Changelog Entries, AKA NOT the messiest place ever.
-        // this loop goes from big to small because the function needs to be ran from the latest version to the oldest
+        //* this loop goes from big to small because the function needs to be ran from the latest version to the oldest
         for (let entry = versionChangelogs.length - 1; entry >= 0; entry--) {
             createChangelogEntry(versionChangelogs[entry]);
         }
@@ -296,8 +312,8 @@ export class Game implements SaveProvider<GameSaveData> {
         this.CPS_INTERVAL.start();
         this.GAME_LOOP_INTERVAL.start();
 
-        this.initialized= true;
-        console.log("Successfully completed initialization.");
+        this.initialized = true;
+        console.log("Successfully completed game initialization.");
     }
 
     gameLoop() {
@@ -346,7 +362,7 @@ export class Game implements SaveProvider<GameSaveData> {
     }
 
     getSaveData(): GameSaveData {
-        /** savedata is null on first boot */
+        /** savedata is null on first boot, so we use a ternary statement */
         const originalUpgradeSave = (this.savinator5000.getLocalStorageSave()) ? (this.savinator5000.getLocalStorageSave().getData("game") as GameSaveData).upgradesSave : {};
         const originalBuildingSave = (this.savinator5000.getLocalStorageSave()) ? (this.savinator5000.getLocalStorageSave().getData("game") as GameSaveData).buildingsSave : {};
 
@@ -430,3 +446,10 @@ Game.getInstance().init();
 
 console.log("game:", Game.getInstance());
 console.log("mod handler:", Handlers.MOD);
+console.log("handlers:", Handlers);
+
+declare global {
+    interface Window { handlers: any; }
+}
+
+window.handlers = Handlers;

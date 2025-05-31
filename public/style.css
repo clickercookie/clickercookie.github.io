@@ -29,7 +29,7 @@ body {
     -webkit-touch-callout: none; /* yes its a mobile thing in the desktop version but its here anyway in case mobile breaks idk */
 }
 
-/* todo 0.7: find why these are here and how we can make their elements assigned to their own specific class instead of making every element have these properties*/
+/* todo 0.7.1: find why these are here and how we can make their elements assigned to their own specific class instead of making every element have these properties*/
 a {
     font-weight: bold;
     color: inherit;
@@ -43,7 +43,7 @@ small {
     margin-right: auto;
 }
 
-/* todo 0.7: i don't like these anymore, keep a few like pointer and no-display but remove stuff like red.  */
+/* todo 0.7.1: i don't like these anymore, keep a few like pointer and no-display but remove stuff like red.  */
 /* helper classes */
 .no-display {
     display: none;

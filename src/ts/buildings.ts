@@ -5,9 +5,9 @@ import { SaveProvider } from "./saving.js";
 import { hideTooltip } from "./tooltip.js";
 
 export interface BuildingData {
-    /** Display name for your building. Should be capitialized.*/
+    /** Display name for your building. Should be capitialized. */
     name: string;
-    /** *Plural* display name for your building. Should be capitialized.*/
+    /** *Plural* display name for your building. Should be capitialized. */
     namePlural: string;
     quote: string;
     /** Base upgrade cost for the building. */
@@ -55,6 +55,7 @@ export class Building implements SaveProvider<BuildingSave> {
     unlocked: boolean;
 
     html: HTMLDivElement;
+    // todo: clickercookie should not be passed as a parameter
     constructor(clickercookie: ClickerCookie, data: BuildingData) {
         this._clickercookie = clickercookie;
 
