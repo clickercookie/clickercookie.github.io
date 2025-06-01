@@ -38,7 +38,7 @@ export class NewMod extends Mod<ModSave> {
                 price: 69,
                 desc: "multiplies stuff and stuff",
                 building: this.banana,
-                buildingsRequired: 3,
+                condition() { return (this.building.bought >= 3) ? true : false },
                 img: "https://cdn.modrinth.com/data/AANobbMI/295862f4724dc3f78df3447ad6072b2dcd3ef0c9_96.webp" // lol
             }
         };

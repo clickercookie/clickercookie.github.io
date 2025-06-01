@@ -161,6 +161,11 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
         this.church.setVisibility(false);
 
         // upgrades
+        const keyboardBoughtFunc = () => {
+            this.cookiesPerClick *= 2;
+            this.UPGRADES_DATA["keyboard1"].building
+        }
+
         this.UPGRADES_DATA = {
             // keyboard
             "keyboard1": {
@@ -170,8 +175,8 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/reinforced-keys.png",
                 desc: defaultUpgradeDescriptions.keyboard,
                 building: this.keyboard,
-                buildingsRequired: 1,
-                multiplyCookiesPerClick: true
+                condition() { return (this.building.bought >= 1) ? true : false },
+                bought: keyboardBoughtFunc
             },
             "keyboard2": {
                 name: "Obsidian Keys",
@@ -180,8 +185,8 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/obsidian-keys.png",
                 desc: defaultUpgradeDescriptions.keyboard,
                 building: this.keyboard,
-                buildingsRequired: 5,
-                multiplyCookiesPerClick: true
+                condition() { return (this.building.bought >= 5) ? true : false },
+                bought: keyboardBoughtFunc
             },
             "keyboard3": {
                 name: "Osmium Keys",
@@ -190,8 +195,8 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/osmium-keys.png",
                 desc: defaultUpgradeDescriptions.keyboard,
                 building: this.keyboard,
-                buildingsRequired: 10,
-                multiplyCookiesPerClick: true
+                condition() { return (this.building.bought >= 10) ? true : false },
+                bought: keyboardBoughtFunc
             },
             "keyboard4": {
                 name: "10 finger typing",
@@ -200,8 +205,8 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/10-finger-typing.png",
                 desc: defaultUpgradeDescriptions.keyboard,
                 building: this.keyboard,
-                buildingsRequired: 25,
-                multiplyCookiesPerClick: true
+                condition() { return (this.building.bought >= 25) ? true : false },
+                bought: keyboardBoughtFunc
             },
             "keyboard5": {
                 name: "Macros",
@@ -210,8 +215,8 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/macros.png",
                 desc: defaultUpgradeDescriptions.keyboard,
                 building: this.keyboard,
-                buildingsRequired: 50,
-                multiplyCookiesPerClick: true
+                condition() { return (this.building.bought >= 50) ? true : false },
+                bought: keyboardBoughtFunc
             },
             // grandpa
             "grandpa1": {
@@ -221,7 +226,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/hardwood-walking-stick.png",
                 desc: defaultUpgradeDescriptions.grandpa,
                 building: this.grandpa,
-                buildingsRequired: 1
+                condition() { return this.building.bought >= 1 ? true : false }
             },
             "grandpa2": {
                 name: "Rocking Chair",
@@ -230,7 +235,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/rocking-chair.png",
                 desc: defaultUpgradeDescriptions.grandpa,
                 building: this.grandpa,
-                buildingsRequired: 5
+                condition() { return this.building.bought >= 5 ? true : false }
             },
             "grandpa3": {
                 name: "Reading Glasses",
@@ -239,7 +244,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/reading-glasses.png",
                 desc: defaultUpgradeDescriptions.grandpa,
                 building: this.grandpa,
-                buildingsRequired: 10
+                condition() { return this.building.bought >= 10 ? true : false }
             },
             "grandpa4": {
                 name: "Dementia Pills",
@@ -248,7 +253,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/dementia-pills.png",
                 desc: defaultUpgradeDescriptions.grandpa,
                 building: this.grandpa,
-                buildingsRequired: 25
+                condition() { return this.building.bought >= 25 ? true : false }
             },
             "grandpa5": {
                 name: "shotgun",
@@ -257,7 +262,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/shotgun.png",
                 desc: defaultUpgradeDescriptions.grandpa,
                 building: this.grandpa,
-                buildingsRequired: 50
+                condition() { return this.building.bought >= 50 ? true : false }
             },
             // ranch
             "ranch1": {
@@ -267,7 +272,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/pig-slop.png",
                 desc: defaultUpgradeDescriptions.ranch,
                 building: this.ranch,
-                buildingsRequired: 1
+                condition() { return this.building.bought >= 1 ? true : false}
             },
             "ranch2": {
                 name: "Needle bale",
@@ -276,7 +281,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/needle-bale.png",
                 desc: defaultUpgradeDescriptions.ranch,
                 building: this.ranch,
-                buildingsRequired: 5
+                condition() { return this.building.bought >= 5 ? true : false}
             },
             "ranch3": {
                 name: "Tractors",
@@ -285,7 +290,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/tractors.png",
                 desc: defaultUpgradeDescriptions.ranch,
                 building: this.ranch,
-                buildingsRequired: 10
+                condition() { return this.building.bought >= 10 ? true : false}
             },
             "ranch4": {
                 name: "Big baconator",
@@ -294,7 +299,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/big-baconator.png",
                 desc: defaultUpgradeDescriptions.ranch,
                 building: this.ranch,
-                buildingsRequired: 25
+                condition() { return this.building.bought >= 25 ? true : false}
             },
             "ranch5": {
                 name: "Ranch dressing",
@@ -303,7 +308,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/ranch-dressing.png",
                 desc: defaultUpgradeDescriptions.ranch,
                 building: this.ranch,
-                buildingsRequired: 50
+                condition() { return this.building.bought >= 50 ? true : false}
             },
             // television
             "television1": {
@@ -313,7 +318,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/streaming-service.png",
                 desc: defaultUpgradeDescriptions.television,
                 building: this.television,
-                buildingsRequired: 1
+                condition() { return this.building.bought >= 1 ? true : false}
             },
             "television2": {
                 name: "98-inch screen",
@@ -322,7 +327,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/98-inch-screen.png",
                 desc: defaultUpgradeDescriptions.television,
                 building: this.television,
-                buildingsRequired: 5
+                condition() { return this.building.bought >= 5 ? true : false}
             },
             "television3": {
                 name: "Surround sound",
@@ -331,7 +336,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/surround-sound.png",
                 desc: defaultUpgradeDescriptions.television,
                 building: this.television,
-                buildingsRequired: 10
+                condition() { return this.building.bought >= 10 ? true : false}
             },
             "television4": {
                 name: "OLED Display",
@@ -340,7 +345,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/oled-display.png",
                 desc: defaultUpgradeDescriptions.television,
                 building: this.television,
-                buildingsRequired: 25
+                condition() { return this.building.bought >= 25 ? true : false}
             },
             "television5": {
                 name: "8K resolution",
@@ -349,7 +354,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/8k-resolution.png",
                 desc: defaultUpgradeDescriptions.television,
                 building: this.television,
-                buildingsRequired: 50
+                condition() { return this.building.bought >= 50 ? true : false}
             },
             // worker
             "worker1": {
@@ -359,7 +364,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/medkits.png",
                 desc: defaultUpgradeDescriptions.worker,
                 building: this.worker,
-                buildingsRequired: 1
+                condition() { return this.building.bought >= 1 ? true : false}
             },
             "worker2": {
                 name: "Hard hats",
@@ -368,7 +373,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/hard-hats.png",
                 desc: defaultUpgradeDescriptions.worker,
                 building: this.worker,
-                buildingsRequired: 5
+                condition() { return this.building.bought >= 5 ? true : false}
             },
             "worker3": {
                 name: "Fast fingers*",
@@ -377,7 +382,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/fast-fingers.png",
                 desc: defaultUpgradeDescriptions.worker,
                 building: this.worker,
-                buildingsRequired: 10
+                condition() { return this.building.bought >= 10 ? true : false}
             },
             "worker4": {
                 name: "Weight training",
@@ -386,7 +391,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/weight-training.png",
                 desc: defaultUpgradeDescriptions.worker,
                 building: this.worker,
-                buildingsRequired: 25
+                condition() { return this.building.bought >= 25 ? true : false}
             },
             "worker5": {
                 name: "Robot workers",
@@ -395,7 +400,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/robot-workers.png",
                 desc: defaultUpgradeDescriptions.worker,
                 building: this.worker,
-                buildingsRequired: 50
+                condition() { return this.building.bought >= 50 ? true : false}
             },
             // wallet
             "wallet1": {
@@ -405,7 +410,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/200-dollar-bills.png",
                 desc: defaultUpgradeDescriptions.wallet,
                 building: this.wallet,
-                buildingsRequired: 1
+                condition() { return this.building.bought >= 1 ? true : false}
             },
             "wallet2": {
                 name: "Credit cards",
@@ -414,7 +419,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/credit-cards.png",
                 desc: defaultUpgradeDescriptions.wallet,
                 building: this.wallet,
-                buildingsRequired: 5
+                condition() { return this.building.bought >= 5 ? true : false}
             },
             "wallet3": {
                 name: "Tax refund",
@@ -423,7 +428,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/tax-refund.png",
                 desc: defaultUpgradeDescriptions.wallet,
                 building: this.wallet,
-                buildingsRequired: 10
+                condition() { return this.building.bought >= 10 ? true : false}
             },
             "wallet4": {
                 name: "safe",
@@ -432,7 +437,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/safe.png",
                 desc: defaultUpgradeDescriptions.wallet,
                 building: this.wallet,
-                buildingsRequired: 25
+                condition() { return this.building.bought >= 25 ? true : false}
             },
             "wallet5": {
                 name: "Wizard\'s wallet",
@@ -441,7 +446,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/wizards-wallet.png",
                 desc: defaultUpgradeDescriptions.wallet,
                 building: this.wallet,
-                buildingsRequired: 50
+                condition() { return this.building.bought >= 50 ? true : false}
             },
             // church
             "church1": {
@@ -451,7 +456,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/the-pope.png",
                 desc: defaultUpgradeDescriptions.church,
                 building: this.church,
-                buildingsRequired: 1
+                condition() { return this.building.bought >= 1 ? true : false}
             },
             "church2": {
                 name: "Cookie study",
@@ -460,7 +465,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/cookie-study.png",
                 desc: defaultUpgradeDescriptions.church,
                 building: this.church,
-                buildingsRequired: 5
+                condition() { return this.building.bought >= 5 ? true : false}
             },
             "church3": {
                 name: "Cookie ritual",
@@ -469,7 +474,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/cookie-ritual.png",
                 desc: defaultUpgradeDescriptions.church,
                 building: this.church,
-                buildingsRequired: 10
+                condition() { return this.building.bought >= 10 ? true : false}
             },
             "church4": {
                 name: "Cookie gods",
@@ -478,7 +483,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/cookie-gods.png",
                 desc: defaultUpgradeDescriptions.church,
                 building: this.church,
-                buildingsRequired: 25
+                condition() { return this.building.bought >= 25 ? true : false}
             },
             "church5": {
                 name: "Cible",
@@ -487,7 +492,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 img: "img/upgrades/cible.png",
                 desc: defaultUpgradeDescriptions.church,
                 building: this.church,
-                buildingsRequired: 50
+                condition() { return this.building.bought >= 50 ? true : false}
             }
         };
 

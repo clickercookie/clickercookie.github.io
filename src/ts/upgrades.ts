@@ -18,10 +18,18 @@ export interface UpgradeData {
     img?: string;
     desc: string;
     building: Building;
-    /** The number of buildings bought required to unlock the upgrade */
-    buildingsRequired: number;
-    /** This is mostly just here for the keyboard as a kinda workaround lol */
-    multiplyCookiesPerClick?: boolean;
+    /**
+     * Return a boolean for whether the upgrade may be unlocked, i.e `if building.bought >= 5 return true, else return false`
+     * 
+     * Will be run automatically in game loop and unlock status will be set accordingly.
+     * @param game Game
+     */
+    condition(game: Game): boolean;
+    /**
+     * Function to run when the upgrade is bought. By default, if this is not declared, then multiply the {@link Building.CPSGain} of our {@link building} by 2.
+     * @param game Game
+     */
+    bought?(game: Game): void;
 }
 
 export function expandUpgradesHolder(retract: boolean=false) {
@@ -48,8 +56,8 @@ export class Upgrade implements SaveProvider<UpgradeSave> {
     img: string;
     desc: string;
     building: Building;
-    buildingsRequired: number;
-    multiplyCookiesPerClick: boolean;
+    onBuy: (game: Game) => void;
+    condition: (game: Game) => boolean;
 
     bought: boolean;
     unlocked: boolean;
@@ -65,8 +73,8 @@ export class Upgrade implements SaveProvider<UpgradeSave> {
         this.img = data.img;
         this.desc = data.desc;
         this.building = data.building;
-        this.buildingsRequired = data.buildingsRequired;
-        this.multiplyCookiesPerClick = data.multiplyCookiesPerClick;
+        this.onBuy = data.bought;
+        this.condition = data.condition;
 
         this.bought = false;
         this.unlocked = false;
@@ -128,9 +136,12 @@ export class Upgrade implements SaveProvider<UpgradeSave> {
         this.hovered(); //? i don't remember why this is here but i know it's important just trust me
         this.setVisibility(false);
         
-        this.building.CPSGiven *= 2;
-        this.building.CPSGain *= 2;
-        if (this.multiplyCookiesPerClick) this.clickercookie.cookiesPerClick *= 2;
+        if (this.onBuy) {
+            this.onBuy(Game.getInstance());
+        } else {
+            this.building.CPSGiven *= 2;
+            this.building.CPSGain *= 2;
+        }
 
         expandUpgradesHolder(); // sometimes the upgrade holder has one too many rows because of weird onmouseover & onmousemove behavior, this prevents that
 

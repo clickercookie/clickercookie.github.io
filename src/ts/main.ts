@@ -200,8 +200,9 @@ export class Game implements SaveProvider<GameSaveData> {
         // 0.6 save
         // todo: needs to be thoroughly playtested
         // todo: do these need to be nested or was this just 11:00 programming moment and i wasn't thinking
-        if (typeof JSON.parse(localStorage.getItem(this.savinator5000.currentSaveName)) === "object") {
-            if (JSON.parse(localStorage.getItem(this.savinator5000.currentSaveName))["core.cookies"]) {
+        const parsedCurrentSave = JSON.parse(localStorage.getItem(this.savinator5000.currentSaveName));
+        if (typeof parsedCurrentSave === "object" && parsedCurrentSave !== null) {
+            if (parsedCurrentSave["core.cookies"]) {
                 console.log("0.6 save detected, prompting user to transfer save.")
                 new SimplePopup({
                     x: 400,

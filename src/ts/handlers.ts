@@ -207,7 +207,7 @@ export class UpgradeHandler extends Handler<Upgrade> {
      */
     checkUpgradeAvailability() {
         for (const value of this) {
-            if (value.building.bought >= value.buildingsRequired && value.unlocked === false) {
+            if (value.condition(Game.getInstance()) && value.unlocked === false) {
                 value.setVisibility(true);
                 value.unlocked = true;
             }
