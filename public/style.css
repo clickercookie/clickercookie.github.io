@@ -2,6 +2,7 @@
 :root {
     --brown-border: rgb(121, 77, 46);
     --colored-container: rgb(255, 243, 209);
+    --dialog-backdrop-opacity: 50%; /* default value for dialog opacity if something goes wrong (and for simple popups :D) */
 }
 
 /* basic basis for most html elements */
