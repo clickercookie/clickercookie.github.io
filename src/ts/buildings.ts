@@ -16,6 +16,12 @@ export interface BuildingData {
     img?: string;
     /** Default is 1.15 */
     upgradeCostMultiplier?: number;
+    /** 
+     * Returns a boolean based on whether the building may be unlocked.
+     * 
+     * Will be run automatically in game loop and visibility will be set accordingly.
+     */
+    condition(game: Game): boolean;
 }
 
 export interface BuildingSave {
@@ -42,6 +48,7 @@ export class Building implements SaveProvider<BuildingSave> {
     CPSGiven: number;
     CPSGain: number;
     readonly upgradeCostMultiplier: number;
+    condition: (game: Game) => boolean;
 
     private _bought: number;
     /** Number of buildings bought */
@@ -52,7 +59,13 @@ export class Building implements SaveProvider<BuildingSave> {
 
         document.getElementById(`${this.name}Cost`).innerText = commaify(this.upgradeCost); //? does this make sense here?
     }
-    unlocked: boolean;
+    private _unlocked: boolean;
+    public get unlocked() { return this._unlocked }
+    public set unlocked(bool: boolean) {
+        this._unlocked = bool;
+
+        this.html.style.display = bool ? "block" : "none";
+    }
 
     html: HTMLDivElement;
     // todo: clickercookie should not be passed as a parameter
@@ -116,6 +129,7 @@ export class Building implements SaveProvider<BuildingSave> {
             this.upgradeCostMultiplier = data.upgradeCostMultiplier;
         else
             this.upgradeCostMultiplier = 1.15;
+        this.condition = data.condition;
 
         //* if upgradeCost is too low, Math.floor'ing it after multiplying it by upgradeCostMultiplier can actually just get you the same upgradeCost as before. warn in console if this will happen, but don't throw an error in case it's intended or smth stupid
         if (Math.floor(this.baseUpgradeCost * this.upgradeCostMultiplier) === this.baseUpgradeCost) {
@@ -163,10 +177,6 @@ export class Building implements SaveProvider<BuildingSave> {
         document.getElementById("tooltipProducing").innerHTML = `Producing: ${buildingInfoProducing} CPS`;
     
         tooltip.style.display = "block";
-    }
-
-    setVisibility(bool: boolean) {
-        this.html.style.display = bool ? "block" : "none";
     }
 
     destroy() {

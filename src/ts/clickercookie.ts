@@ -93,7 +93,8 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 quote: "type in cookies",
                 upgradeCost: 15,
                 CPSGain: 0.1,
-                img: "img/keyboard.png"
+                img: "img/keyboard.png",
+                condition() { return true; }
             },
             grandpa: {
                 name: "Grandpa",
@@ -101,7 +102,8 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 quote: "as long as gramps gets a cut",
                 upgradeCost: 100,
                 CPSGain: 1,
-                img: "img/grandpa.png"
+                img: "img/grandpa.png",
+                condition(game) { return (game.clickercookie.totalCookies >= 100) ? true : false }
             },
             ranch: {
                 name: "Ranch",
@@ -109,7 +111,8 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 quote: "not the dressing kind",
                 upgradeCost: 1_100,
                 CPSGain: 8,
-                img: "img/ranch.png"
+                img: "img/ranch.png",
+                condition(game) { return (game.clickercookie.totalCookies >= 700) ? true : false }
             },
             television: {
                 name: "Television",
@@ -117,7 +120,8 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 quote: "hold infomercials on your cookies",
                 upgradeCost: 12_000,
                 CPSGain: 47,
-                img: "img/tv.png"
+                img: "img/tv.png",
+                condition(game) { return (game.clickercookie.totalCookies >= 8_000) ? true : false }
             },
             worker: {
                 name: "Worker",
@@ -125,7 +129,8 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 quote: "cookies via manual labor",
                 upgradeCost: 130_000,
                 CPSGain: 260,
-                img: "img/worker.png"
+                img: "img/worker.png",
+                condition(game) { return (game.clickercookie.totalCookies >= 80_000) ? true : false }
             },
             wallet: {
                 name: "Wallet",
@@ -133,7 +138,8 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 quote: "more storage space for your vast amount of cookie income",
                 upgradeCost: 1_400_000,
                 CPSGain: 1_440,
-                img: "img/wallet.png"
+                img: "img/wallet.png",
+                condition(game) { return (game.clickercookie.totalCookies >= 700_000) ? true : false }
             },
             church: {
                 name: "Church",
@@ -141,24 +147,18 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 quote: "pray to the almighty cookie gods",
                 upgradeCost: 20_000_000,
                 CPSGain: 7_800,
-                img: "img/church.png"
+                img: "img/church.png",
+                condition(game) { return (game.clickercookie.totalCookies >= 15_000_000) ? true : false }
             }
         };
 
-        this.keyboard = new Building(this, this.BUILDINGS_DATA.keyboard);
-        this.keyboard.unlocked = true;
+        this.keyboard = new Building(this, this.BUILDINGS_DATA.keyboard); // conditional returns true by default
         this.grandpa = new Building(this, this.BUILDINGS_DATA.grandpa);
-        this.grandpa.setVisibility(false);
         this.ranch = new Building(this, this.BUILDINGS_DATA.ranch);
-        this.ranch.setVisibility(false);
         this.television = new Building(this, this.BUILDINGS_DATA.television);
-        this.television.setVisibility(false);
         this.worker = new Building(this, this.BUILDINGS_DATA.worker);
-        this.worker.setVisibility(false);
         this.wallet = new Building(this, this.BUILDINGS_DATA.wallet);
-        this.wallet.setVisibility(false);
         this.church = new Building(this, this.BUILDINGS_DATA.church);
-        this.church.setVisibility(false);
 
         // upgrades
         const keyboardBoughtFunc = () => {
@@ -497,7 +497,6 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
         };
 
         Mod.registerKooh("click", () => { this.cookieClicked() });
-        Mod.registerKooh("loop", () => { this.gameLoop() });
         Mod.registerKooh("cps", () => { this.cpsUpdate() });
         Mod.registerKooh("personalization", () => {
             Handlers.UPGRADE.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard1")).desc = `Multiplys Keyboard and clicking ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()} production by 2`;
@@ -558,35 +557,6 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
         }
     }
 
-    gameLoop() {
-        // todo: this should be handled by a callback func in building data
-        // building unlocks
-        if (this.totalCookies >= 100) {
-            this.grandpa.unlocked = true;
-            this.grandpa.setVisibility(true);
-        }
-        if (this.totalCookies >= 700) {
-            this.ranch.unlocked = true;
-            this.ranch.setVisibility(true);
-        }
-        if (this.totalCookies >= 8000) {
-            this.television.unlocked = true;
-            this.television.setVisibility(true);
-        }
-        if (this.totalCookies >= 80000) {
-            this.worker.unlocked = true;
-            this.worker.setVisibility(true);
-        }
-        if (this.totalCookies >= 700000) {
-            this.wallet.unlocked = true;
-            this.wallet.setVisibility(true);
-        }
-        if (this.totalCookies >= 15000000) {
-            this.church.unlocked = true;
-            this.church.setVisibility(true);
-        }
-    }
-
     updateStatistics() { // todo: make this only run when the stats page is a. first pulled up, b. continued to be pulled up
         document.getElementById("cookiesStat").innerText = `${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural}: ${makeSlightlyImperfectFloatNice(this.cookies)}`;
         document.getElementById("allTimeCookies").innerText = `All Time ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural}: ${makeSlightlyImperfectFloatNice(this.totalCookies)}`;
@@ -617,13 +587,6 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
         }
     }
     loadSaveData(saveData: ClickerCookieSaveData) {
-        this.grandpa.setVisibility(false);
-        this.ranch.setVisibility(false);
-        this.television.setVisibility(false);
-        this.worker.setVisibility(false);
-        this.wallet.setVisibility(false);
-        this.church.setVisibility(false);
-
         this.cookies = saveData.cookies;
         this.totalCookies = saveData.totalCookies;
         this.cookiesPerClick = saveData.cookiesPerClick;

@@ -28,7 +28,8 @@ export class NewMod extends Mod<ModSave> {
             quote: "i love anana",
             upgradeCost: 8,
             CPSGain: 5,
-            img: "https://www.minecraft.net/content/dam/minecraftnet/franchise/logos/minecraft-creeper-face.jpg" // lol
+            img: "https://www.minecraft.net/content/dam/minecraftnet/franchise/logos/minecraft-creeper-face.jpg", // lol
+            condition() { return true; }
         });
 
         this.UPGRADES_DATA = {

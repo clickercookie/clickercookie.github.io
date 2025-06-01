@@ -321,6 +321,7 @@ export class Game implements SaveProvider<GameSaveData> {
         if (!this.initialized) return;
 
         Handlers.UPGRADE.checkUpgradeAvailability();
+        Handlers.BUILDING.updateBuildingsUnlocked();
 
         let cps = 0;
         for (const building of Handlers.BUILDING) {

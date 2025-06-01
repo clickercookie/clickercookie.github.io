@@ -128,6 +128,19 @@ export class BuildingHandler extends Handler<Building> {
     }
 
     /**
+     * Iterates through every building registered to this handler and checks if it meets its own unlock condition. If it does, set its unlock status to true. If it does not, set it to false.
+     */
+    updateBuildingsUnlocked() {
+        for (const value of this) {
+            if (value.condition(Game.getInstance())) {
+                value.unlocked = true;
+            } else {
+                value.unlocked = false;
+            }
+        }
+    }
+
+    /**
      * Dumps savedata for all registered buildings
      * @param namespace Optional: if present only dump savedata from this namespace
      * @returns savedata as obj in following format: `stringifiedIdentifier: BuildingSave`
