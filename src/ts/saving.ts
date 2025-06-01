@@ -153,8 +153,7 @@ export class Savinator {
     }
 
     reset() {
-        localStorage.removeItem(this.saveName);
-        localStorage.removeItem(this.developSaveName);
+        localStorage.removeItem(this.currentSaveName);
         location.reload();
     }
 }
