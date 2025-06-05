@@ -93,7 +93,6 @@ export class Savinator {
      */
     load() {
         const localStorageSave = this.getLocalStorageSave();
-        const providers = this.saveHandler.getProviders();
         for (const provider of this.saveHandler) {
             const namespace = this.saveHandler.getKeyFromValue(provider);
             if (localStorageSave.getNamespaces().includes(namespace) && namespace !== "game") {
@@ -101,8 +100,8 @@ export class Savinator {
                 console.log(`Loaded save data for "${namespace}" namespace.`);
             }
         }
-        if (providers.get("game") !== undefined) { // game should always be there, but just in case it isn't we check
-            providers.get("game").loadSaveData(localStorageSave.getData("game"));
+        if (this.saveHandler.getFromIdentifier("game") !== undefined) { // game should always be there, but just in case it isn't we check
+            this.saveHandler.getFromIdentifier("game").loadSaveData(localStorageSave.getData("game"));
             console.log(`Loaded save data for game namespace.`);
         }
 

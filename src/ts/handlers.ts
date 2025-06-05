@@ -402,10 +402,6 @@ export class SaveHandler extends UniqueKeyHandler<SaveProvider<any>> {
         }
         return saveData;
     }
-
-    getProviders() { //! can we avoid this?
-        return this.registered;
-    }
 }
 
 export class Handlers {
