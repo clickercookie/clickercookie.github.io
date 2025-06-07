@@ -1,6 +1,6 @@
 export class Handler<T> implements Iterable<T> {
     /** This stores the stringified Identifier as the key and then the values is obviously T. We store the identifier stringified because objects are never equal so we can't `get()` from the Map without using the same obj reference. */
-    protected registered: Map<string, T>;
+    protected registered: Map<StringifiedIdentifier, T>;
     /** the number of registered items in the handler */
     public get length(): number {
         return this.registered.size;
@@ -11,7 +11,7 @@ export class Handler<T> implements Iterable<T> {
     }
     
     register(identifier: Identifier, object: T) {
-        const stringifiedIdentifier = identifier.toString();
+        const stringifiedIdentifier: StringifiedIdentifier = identifier.toString();
         if (this.registered.has(stringifiedIdentifier) !== false) {
             console.error(`Tried to register object with Identifier "${identifier.toString()}" to a Handler, but it already exists!`);
             // todo ASAP: should this return?
@@ -28,7 +28,7 @@ export class Handler<T> implements Iterable<T> {
             console.warn(`Tried to get object from a Handler but identifier was undefined. Will return %cundefined%c.`, "font-style: italic;", "font-style: default;");
             return undefined;
         }
-        const stringifiedIdentifier = identifier.toString();
+        const stringifiedIdentifier: StringifiedIdentifier = identifier.toString();
         if (this.registered.has(stringifiedIdentifier) === false) {
             console.warn(`Tried to get object from a Handler with Identifier "${identifier}" that does not exist. Will return %cundefined%c.`, "font-style: italic;", "font-style: default;");
         }
@@ -46,11 +46,11 @@ export class Handler<T> implements Iterable<T> {
     }
 
     /**
-     * Gets a stringified key from a given registered value
+     * Gets a stringified identifier from a given registered value
      * @param value The value to get the key of
      * @returns The value's key
      */
-    getKeyFromValue(value: T): string | undefined {
+    getIdentifierFromValue(value: T): StringifiedIdentifier | undefined {
         for (const [key, val] of this.registered.entries()) {
             if (val === value) {
                 return key;
@@ -90,7 +90,7 @@ export class UniqueKeyHandler<T> implements Iterable<T> {
      * If a {@link T} is registered with the given ID than return it, if it's not then return undefined
      * @param key The key to get from
      */
-    getFromIdentifier(key: string): T | undefined {
+    getFromKey(key: string): T | undefined {
         if (key === undefined) {
             console.warn(`Tried to get object from a UniqueKeyHandler but key was undefined. Will return %cundefined%c.`, "font-style: italic;", "font-style: default;");
             return undefined;
@@ -107,7 +107,7 @@ export class UniqueKeyHandler<T> implements Iterable<T> {
      * @param value The value to get the key of
      * @returns The value's key
      */
-    getKeyFromValue(value: T): string | undefined {
+    getKeyFromValue(value: T): StringifiedIdentifier | undefined {
         for (const [key, val] of this.registered.entries()) {
             if (val === value) {
                 return key;
@@ -127,7 +127,7 @@ export class Identifier {
      * @param stringified The stringified Identifier
      * @returns A new {@link Identifier}
      */
-    static fromString(stringified: string): Identifier | undefined {
+    static fromString(stringified: StringifiedIdentifier): Identifier | undefined {
         const regex = /\w+:\w+/;
         if (!regex.test(stringified)) {
             console.warn(`Cannot construct a new Identifier from invalid string "${stringified}". Returning %cundefined%c.`, "font-style: italic;", "font-style: default;");
@@ -149,7 +149,7 @@ export class Identifier {
     /**
      * @returns Format: `namespace:uid`
      */
-    toString(): string {
+    toString(): StringifiedIdentifier {
         return `${this.namespace}:${this.uid}`;
     }
 
@@ -164,3 +164,6 @@ export class Identifier {
             return false;
     }
 }
+
+/** An alias for a `string` that exists to make typing more clear to the user whenever a stringified identifier is involved, as there are obviously requirements expected in that case that need to be clearly shown to the user to avoid errors. */
+export type StringifiedIdentifier = string;

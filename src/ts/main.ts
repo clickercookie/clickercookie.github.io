@@ -17,6 +17,7 @@ import { Handlers, ModHandler } from "./handlers.js";
 import { BuildingSave } from "./buildings.js";
 
 import { NewMod } from "./exmod.js"; //* note: this import is intentionally left unused so tsc can find this file and compile it
+import { StringifiedIdentifier } from "./handler.js";
 
 // ------------------------------------
 // Version Constants
@@ -65,8 +66,8 @@ export enum VersionBranch {
 type MiddleState = "none" | "stats" | "info" | "options";
 
 export interface GameSaveData {
-    hasCheated: boolean;
-    isModded: boolean;
+    cheated: boolean;
+    modded: boolean;
     autoSavingAllowed: boolean;
 
     // personalization
@@ -88,8 +89,8 @@ export class Game implements SaveProvider<GameSaveData> {
         "potatman4": "Playtesting",
         "Wolfsarecool44": "Playtesting, Emotional Support"
     }
-    public static readonly DEFAULT_BACKGROUND: string = "clickercookie:blue";
-    public static readonly DEFAULT_CURRENTLY_CLICKED_OBJECT: string = "clickercookie:cookie";
+    public static readonly DEFAULT_BACKGROUND: StringifiedIdentifier = "clickercookie:blue";
+    public static readonly DEFAULT_CURRENTLY_CLICKED_OBJECT: StringifiedIdentifier = "clickercookie:cookie";
 
     public static getMousePosition(): MousePosition {
         return mousePos;
@@ -122,17 +123,17 @@ export class Game implements SaveProvider<GameSaveData> {
     public clickercookie: ClickerCookie;
 
     // self-explainatory-ish things
-    private _hasCheated: boolean;
-    public get hasCheated() { return this._hasCheated }
-    public set hasCheated(bool: boolean) {
-        this._hasCheated = bool;
-        document.getElementById("ifCheatedStat").style.display = (this._hasCheated) ? "block" : "none";
+    private _cheated: boolean;
+    public get cheated() { return this._cheated }
+    public set cheated(bool: boolean) {
+        this._cheated = bool;
+        document.getElementById("ifCheatedStat").style.display = (this._cheated) ? "block" : "none";
     }
-    private _isModded: boolean;
-    public get isModded() { return this._isModded }
-    public set isModded(bool: boolean) {
-        this._isModded = bool;
-        document.getElementById("ifModdedStat").style.display = (this._isModded) ? "block" : "none";
+    private _modded: boolean;
+    public get modded() { return this._modded }
+    public set modded(bool: boolean) {
+        this._modded = bool;
+        document.getElementById("ifModdedStat").style.display = (this._modded) ? "block" : "none";
     }
     private _autoSavingAllowed: boolean;
     public get autoSavingAllowed(): boolean { return this._autoSavingAllowed }
@@ -171,8 +172,8 @@ export class Game implements SaveProvider<GameSaveData> {
             y: 0
         };
 
-        this.hasCheated = false;
-        this.isModded = false;
+        this.cheated = false;
+        this.modded = false;
         this.autoSavingAllowed = true;
 
         this.clickercookie = new ClickerCookie();
@@ -369,13 +370,13 @@ export class Game implements SaveProvider<GameSaveData> {
         const originalBuildingSave = (this.savinator5000.getLocalStorageSave()) ? (this.savinator5000.getLocalStorageSave().getData("game") as GameSaveData).buildingsSave : {};
 
         return {
-            hasCheated: this.hasCheated,
-            isModded: this.isModded,
+            cheated: this.cheated,
+            modded: this.modded,
             autoSavingAllowed: this.autoSavingAllowed,
             
             // personalization
-            currentlyClickedObjectKey: Handlers.CURRENTLY_CLICKED.getKeyFromValue(Handlers.CURRENTLY_CLICKED.getCurrentlyClicked()),
-            currentBackgroundKey: Handlers.BACKGROUND.getKeyFromValue(Handlers.BACKGROUND.getCurrentBackground()), // todo: make better
+            currentlyClickedObjectKey: Handlers.CURRENTLY_CLICKED.getIdentifierFromValue(Handlers.CURRENTLY_CLICKED.getCurrentlyClicked()),
+            currentBackgroundKey: Handlers.BACKGROUND.getIdentifierFromValue(Handlers.BACKGROUND.getCurrentBackground()), // todo: make better
         
             upgradesSave: { // merge to preserve unregistered upgrades
                 ...originalUpgradeSave,
@@ -389,8 +390,8 @@ export class Game implements SaveProvider<GameSaveData> {
     }
 
     loadSaveData(saveData: GameSaveData): void {
-        this.hasCheated = saveData.hasCheated;
-        this.isModded = saveData.isModded;
+        this.cheated = saveData.cheated;
+        this.modded = saveData.modded;
         this.autoSavingAllowed = saveData.autoSavingAllowed;
 
         Handlers.CURRENTLY_CLICKED.setCurrentlyClicked(saveData.currentlyClickedObjectKey);

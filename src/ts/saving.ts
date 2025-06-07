@@ -100,8 +100,8 @@ export class Savinator {
                 console.log(`Loaded save data for "${namespace}" namespace.`);
             }
         }
-        if (this.saveHandler.getFromIdentifier("game") !== undefined) { // game should always be there, but just in case it isn't we check
-            this.saveHandler.getFromIdentifier("game").loadSaveData(localStorageSave.getData("game"));
+        if (this.saveHandler.getFromKey("game") !== undefined) { // game should always be there, but just in case it isn't we check
+            this.saveHandler.getFromKey("game").loadSaveData(localStorageSave.getData("game"));
             console.log(`Loaded save data for game namespace.`);
         }
 
@@ -378,8 +378,8 @@ export function convert06Save(save: string) {
 
     game.clickercookie.cookiesPerClick = parsedSave["core.cookiesPerClick"];
     game.clickercookie.cookieBeenClickedTimes = parsedSave["core.cookieBeenClickedTimes"];
-    game.hasCheated = !!parsedSave["hasCheated"];
-    game.isModded = !!parsedSave["isModded"];
+    game.cheated = !!parsedSave["hasCheated"];
+    game.modded = !!parsedSave["isModded"];
     // no won
 
     game.savinator5000.preserveUnusedNamespacesInSaves = false;

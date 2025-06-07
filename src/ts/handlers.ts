@@ -1,7 +1,7 @@
 //* Ideally I would put things like BackgroundHandler in personalization.ts but because of lexical declarations we can't do that without getting circular imports as far as I can tell. This is fine.
 
 import { Building, BuildingSave } from "./buildings.js";
-import { Handler, Identifier, UniqueKeyHandler } from "./handler.js";
+import { Handler, Identifier, StringifiedIdentifier, UniqueKeyHandler } from "./handler.js";
 import { url } from "./helper.js";
 import { Game } from "./main.js";
 import { Mod } from "./mods.js";
@@ -39,7 +39,7 @@ export class BackgroundHandler extends Handler<Background> {
      * This method kinda sucks but we need it to work this way because of how {@link HTMLSelectElement}s work
      * @param value The UID of whatever {@link Background} we want from {@link backgroundHandler}. Usually `backgroundSelect`'s `value`
      */
-    setBackground(stringifiedIdentifier: string) {
+    setBackground(stringifiedIdentifier: StringifiedIdentifier) {
         const foundObject = Handlers.BACKGROUND.getFromIdentifier(Identifier.fromString(stringifiedIdentifier));
         if (foundObject) {
             this.currentBackground = foundObject;
@@ -89,7 +89,7 @@ export class CurrentlyClickedHandler extends Handler<CurrentlyClickedObject> {
      * This method kinda sucks but we need it to work this way because of how {@link HTMLSelectElement}s work
      * @param stringifiedIdentifier The stringified identifier of whatever {@link Background} we want from {@link currentlyClickedHandler}. Usually `currentlyClickedSelect`'s `value`
      */
-    setCurrentlyClicked(stringifiedIdentifier: string): void {
+    setCurrentlyClicked(stringifiedIdentifier: StringifiedIdentifier): void {
         const foundObject = Handlers.CURRENTLY_CLICKED.getFromIdentifier(Identifier.fromString(stringifiedIdentifier));
         if (foundObject) {
             this.currentlyClicked = foundObject;
@@ -146,9 +146,9 @@ export class BuildingHandler extends Handler<Building> {
      * @returns savedata as obj in following format: `stringifiedIdentifier: BuildingSave`
      */
     dumpSave(namespace: string=undefined) {
-        const saveObj: Record<string, BuildingSave> = {};
+        const saveObj: Record<StringifiedIdentifier, BuildingSave> = {};
         for (const value of (namespace === undefined) ? this : this.getValuesFromNamespace(namespace)) {
-            saveObj[this.getKeyFromValue(value)] = value.getSaveData();
+            saveObj[this.getIdentifierFromValue(value)] = value.getSaveData();
         }
         return saveObj;
     }
@@ -158,7 +158,7 @@ export class BuildingHandler extends Handler<Building> {
      * @param saveObj The save object to load the data of
      * @param namespace Optional: if present will only load data for buildings of a given namespace.
      */
-    loadSave(saveObj: Record<string, BuildingSave>, namespace: string=undefined) {
+    loadSave(saveObj: Record<StringifiedIdentifier, BuildingSave>, namespace: string=undefined) {
         for (const stringifiedIdentifier in saveObj) {
             const id = Identifier.fromString(stringifiedIdentifier);
 
@@ -233,9 +233,9 @@ export class UpgradeHandler extends Handler<Upgrade> {
      * @returns savedata as obj in following format: `stringifiedIdentifier: UpgradeSave`
      */
     dumpSave(namespace: string=undefined) {
-        const saveObj: Record<string, UpgradeSave> = {};
+        const saveObj: Record<StringifiedIdentifier, UpgradeSave> = {};
         for (const value of (namespace === undefined) ? this : this.getValuesFromNamespace(namespace)) {
-            saveObj[this.getKeyFromValue(value)] = value.getSaveData();
+            saveObj[this.getIdentifierFromValue(value)] = value.getSaveData();
         }
         return saveObj;
     }
@@ -245,7 +245,7 @@ export class UpgradeHandler extends Handler<Upgrade> {
      * @param saveObj The save object to load the data of
      * @param namespace Optional: if present will only load data for upgrades of a given namespace.
      */
-    loadSave(saveObj: Record<string, UpgradeSave>, namespace: string=undefined) {
+    loadSave(saveObj: Record<StringifiedIdentifier, UpgradeSave>, namespace: string=undefined) {
         for (const stringifiedIdentifier in saveObj) {
             const id = Identifier.fromString(stringifiedIdentifier);
 
@@ -277,7 +277,7 @@ export class ModHandler extends UniqueKeyHandler<Mod<any>> {
         (document.getElementById("addModURLForm") as HTMLFormElement).reset();
         document.getElementById("importedMessage").style.display = "block";
     
-        Game.getInstance().isModded = true;
+        Game.getInstance().modded = true;
 
         console.log("Loaded mod from URL: "+url);
     }
@@ -301,7 +301,7 @@ export class ModHandler extends UniqueKeyHandler<Mod<any>> {
             (document.getElementById("addModURLForm") as HTMLFormElement).reset();
             document.getElementById("importedMessage")!.style.display = "block";
 
-            Game.getInstance().isModded = true;
+            Game.getInstance().modded = true;
 
             console.log("Successfully added mod from file: "+file.name);
         };
@@ -378,7 +378,7 @@ export class ModHandler extends UniqueKeyHandler<Mod<any>> {
      */
     override register(key: string, mod: Mod<any>) {
         //! below will always warn, should that be changed?
-        if (this.getFromIdentifier(key) !== undefined) { //* do this before registering so we can get a more user-friendly popup than the console.error that we usually get for this type of error
+        if (this.getFromKey(key) !== undefined) { //* do this before registering so we can get a more user-friendly popup than the console.error that we usually get for this type of error
             new SimplePopup({x: 400, y: 200, title: "Error", text: `The mod namespace "${key}" is already present!`});
             return;
         }
