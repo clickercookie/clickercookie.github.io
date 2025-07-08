@@ -520,7 +520,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
         Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "church"), this.church);
 
         for (const uid in this.UPGRADES_DATA) {
-            Handlers.UPGRADE.register(new Identifier(this.NAMESPACE, uid), new Upgrade(this, this.UPGRADES_DATA[uid]));
+            Handlers.UPGRADE.register(new Identifier(this.NAMESPACE, uid), new Upgrade(this.UPGRADES_DATA[uid]));
         }
 
         // Register personalization things (must be before save load because loading requires these to be registered to set them)

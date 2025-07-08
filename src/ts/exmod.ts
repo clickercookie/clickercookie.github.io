@@ -55,7 +55,7 @@ export class NewMod extends Mod<ModSave> {
         Handlers.BUILDING.register(new Identifier(this.NAMESPACE, "banana"), this.banana);
 
         for (const uid in this.UPGRADES_DATA) {
-            Handlers.UPGRADE.register(new Identifier(this.NAMESPACE, uid), new Upgrade(Game.getInstance().clickercookie, this.UPGRADES_DATA[uid]));
+            Handlers.UPGRADE.register(new Identifier(this.NAMESPACE, uid), new Upgrade(this.UPGRADES_DATA[uid]));
         }
     }
 

@@ -48,8 +48,6 @@ export function expandUpgradesHolder(retract: boolean=false) {
 }
 
 export class Upgrade implements SaveProvider<UpgradeSave> {
-    private clickercookie: ClickerCookie;
-
     name: string;
     quote: string;
     price: number;
@@ -64,9 +62,7 @@ export class Upgrade implements SaveProvider<UpgradeSave> {
 
     html: HTMLDivElement;
     statisticHTML: HTMLDivElement;
-    constructor(clickercookie: ClickerCookie, data: UpgradeData) {
-        this.clickercookie = clickercookie
-        
+    constructor(data: UpgradeData) {
         this.name = data.name;
         this.quote = data.quote;
         this.price = data.price;
@@ -129,9 +125,11 @@ export class Upgrade implements SaveProvider<UpgradeSave> {
     }
 
     clicked() {
-        if (this.clickercookie.cookies < this.price) return;
+        const clickercookie = Game.getInstance().clickercookie;
 
-        this.clickercookie.cookies -= this.price;
+        if (clickercookie.cookies < this.price) return;
+
+        clickercookie.cookies -= this.price;
         this.bought = true;
         this.hovered(); //? i don't remember why this is here but i know it's important just trust me
         this.setVisibility(false);
