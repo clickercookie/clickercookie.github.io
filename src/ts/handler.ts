@@ -1,3 +1,5 @@
+import { StringifiedIdentifier } from "./helper.js";
+
 export class Handler<T> implements Iterable<T> {
     /** This stores the stringified Identifier as the key and then the values is obviously T. We store the identifier stringified because objects are never equal so we can't `get()` from the Map without using the same obj reference. */
     protected registered: Map<StringifiedIdentifier, T>;
@@ -164,6 +166,3 @@ export class Identifier {
             return false;
     }
 }
-
-/** An alias for a `string` that exists to make typing more clear to the user whenever a stringified identifier is involved, as there are obviously requirements expected in that case that need to be clearly shown to the user to avoid errors. */
-export type StringifiedIdentifier = string;

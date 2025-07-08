@@ -1,8 +1,8 @@
 //* Ideally I would put things like BackgroundHandler in personalization.ts but because of lexical declarations we can't do that without getting circular imports as far as I can tell. This is fine.
 
 import { Building, BuildingSave } from "./buildings.js";
-import { Handler, Identifier, StringifiedIdentifier, UniqueKeyHandler } from "./handler.js";
-import { url } from "./helper.js";
+import { Handler, Identifier, UniqueKeyHandler } from "./handler.js";
+import { StringifiedIdentifier, url } from "./helper.js";
 import { Game } from "./main.js";
 import { Mod } from "./mods.js";
 import { Background, CurrentlyClickedObject } from "./personalization.js";

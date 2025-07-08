@@ -7,7 +7,7 @@ If you're not a modder, still read the docs here: https://github.com/clickercook
 */
 
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
-import { branchQuickSwitch, Interval, object2HTML, url } from "./helper.js";
+import { branchQuickSwitch, Interval, object2HTML, StringifiedIdentifier, url } from "./helper.js";
 import { expandUpgradesHolder, UpgradeSave } from "./upgrades.js";
 import { convert06Save, SaveProvider, Savinator } from "./saving.js";
 import { Mod } from "./mods.js"
@@ -17,7 +17,6 @@ import { Handlers, ModHandler } from "./handlers.js";
 import { BuildingSave } from "./buildings.js";
 
 import { NewMod } from "./exmod.js"; //* note: this import is intentionally left unused so tsc can find this file and compile it
-import { StringifiedIdentifier } from "./handler.js";
 
 // ------------------------------------
 // Version Constants

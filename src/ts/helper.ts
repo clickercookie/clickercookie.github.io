@@ -158,3 +158,6 @@ export function countVisibleChildren(element: HTMLElement): number {
     }
     return count;
 }
+
+/** An alias for a `string` that exists to make typing more clear to the user whenever a stringified identifier is involved, as there are obviously requirements expected in that case that need to be clearly shown to the user to avoid errors. */
+export type StringifiedIdentifier = string;
