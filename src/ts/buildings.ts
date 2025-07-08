@@ -31,8 +31,6 @@ export interface BuildingSave {
 }
 
 export class Building implements SaveProvider<BuildingSave> {
-    private _clickercookie: ClickerCookie;
-
     name: string;
     namePlural: string;
     quote: string;
@@ -68,10 +66,7 @@ export class Building implements SaveProvider<BuildingSave> {
     }
 
     html: HTMLDivElement;
-    // todo: clickercookie should not be passed as a parameter
-    constructor(clickercookie: ClickerCookie, data: BuildingData) {
-        this._clickercookie = clickercookie;
-
+    constructor(data: BuildingData) {
         // setup HTML (uses indentation to show structure)
         this.html = document.createElement("div");
         this.html.className = "building";
@@ -141,8 +136,10 @@ export class Building implements SaveProvider<BuildingSave> {
     }
 
     buy() {
-        if (this._clickercookie.cookies >= this.upgradeCost) {
-            this._clickercookie.cookies -= this.upgradeCost;
+        const game = Game.getInstance(); //? should we do this? historically clickercookie was a parameter but i threw that out for easier creation; perhaps we can figure another method out?
+
+        if (game.clickercookie.cookies >= this.upgradeCost) {
+            game.clickercookie.cookies -= this.upgradeCost;
             this.bought++;
             this.CPSGiven += this.CPSGain;
             this.hovered();

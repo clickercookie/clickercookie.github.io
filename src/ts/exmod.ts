@@ -22,7 +22,7 @@ export class NewMod extends Mod<ModSave> {
 
         this.superCookies = 5;
 
-        this.banana = new Building(Game.getInstance().clickercookie, {
+        this.banana = new Building({
             name: "banaan",
             namePlural: "many bannaa",
             quote: "i love anana",

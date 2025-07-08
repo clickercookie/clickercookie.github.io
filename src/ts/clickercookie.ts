@@ -152,13 +152,13 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
             }
         };
 
-        this.keyboard = new Building(this, this.BUILDINGS_DATA.keyboard); // conditional returns true by default
-        this.grandpa = new Building(this, this.BUILDINGS_DATA.grandpa);
-        this.ranch = new Building(this, this.BUILDINGS_DATA.ranch);
-        this.television = new Building(this, this.BUILDINGS_DATA.television);
-        this.worker = new Building(this, this.BUILDINGS_DATA.worker);
-        this.wallet = new Building(this, this.BUILDINGS_DATA.wallet);
-        this.church = new Building(this, this.BUILDINGS_DATA.church);
+        this.keyboard = new Building(this.BUILDINGS_DATA.keyboard); // conditional returns true by default
+        this.grandpa = new Building(this.BUILDINGS_DATA.grandpa);
+        this.ranch = new Building(this.BUILDINGS_DATA.ranch);
+        this.television = new Building(this.BUILDINGS_DATA.television);
+        this.worker = new Building(this.BUILDINGS_DATA.worker);
+        this.wallet = new Building(this.BUILDINGS_DATA.wallet);
+        this.church = new Building(this.BUILDINGS_DATA.church);
 
         // upgrades
         const keyboardBoughtFunc = () => {
