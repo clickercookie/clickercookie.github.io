@@ -1,34 +1,82 @@
-name: Build and deploy
-on: [push]
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches:
+      - release
+      - beta
+      - develop
+
 permissions:
   contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Create output directory
+        run: mkdir -p site/beta site/develop
 
-      - name: Install and build
+      # --- RELEASE (root) ---
+      - name: Checkout release
+        uses: actions/checkout@v4
+        with:
+          ref: release
+          path: release
+
+      - name: Build release
         run: |
+          cd release
           npm ci
           npm run build
+          cp -r public/* ../site
 
-      - name: Upload artifact
+      # --- BETA ---
+      - name: Checkout beta
+        uses: actions/checkout@v4
+        with:
+          ref: beta
+          path: beta
+
+      - name: Build beta
+        run: |
+          cd beta
+          npm ci
+          npm run build
+          cp -r public/* ../site/beta/
+
+      # --- DEVELOP ---
+      - name: Checkout develop
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+          path: develop
+
+      - name: Build develop
+        run: |
+          cd develop
+          npm ci
+          npm run build
+          cp -r public/* ../site/develop/
+
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          name: github-pages
-          path: ./public
+          path: site
+
   deploy:
     needs: build
-    if: success() && github.ref == 'refs/heads/release'
     permissions:
       pages: write      # to deploy to Pages
       id-token: write   # to verify the deployment originates from an appropriate source
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-      
+
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
