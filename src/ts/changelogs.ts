@@ -71,8 +71,7 @@ export const versionChangelogs: Changelog[] = [
     {
         type: "minor",
         version: "0.4",
-        note: "\"Hey, what happened to 0.3?\" <br>\
-                Well, you see... I made 0.3 while I also had 0.4 content being actively worked on, so I kinda just skipped it because this is a BIG update!",
+        note: "\"Hey, what happened to 0.3?\" / Well, you see... I made 0.3 while I also had 0.4 content being actively worked on, so I kinda just skipped it because this is a BIG update!",
         added: [
             "Final major buildings (Wallet & Church).",
             "Upgrades! Only first level upgrades are currently available, excluding the keyboard which has 2 upgrades.",
@@ -232,7 +231,7 @@ export const versionChangelogs: Changelog[] = [
     {
         type: "minor",
         version: "0.7",
-        note: "Hi. It's hard to explain in a simple changelog how much this update has done. See everything you're looking at? I can confidently say that what is happening behind the scenes for what you're looking at has changed drastically.",
+        note: "Hi. It's hard to explain in a simple changelog how much this update has done. See everything you're looking at? I can confidently say that what is happening behind the scenes for what you're looking at is completely overhauled.",
         name: "the boilerplate update",
         added: [
             "\"Cookies Per Click\" statistic.",
@@ -264,7 +263,8 @@ export const versionChangelogs: Changelog[] = [
         ],
         removed: [
             "Removed the mobile version due to the extreme amount of work required to upkeep it alongside the main version. (#36)",
-        ]
+        ],
+        release: "December 29th, 2025"
     }
 ];
 
