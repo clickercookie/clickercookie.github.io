@@ -67,7 +67,7 @@ export interface GameSaveData {
 export class Game implements SaveProvider<GameSaveData> {
     // --- Important game-wide constants ---
     public static readonly VERSION: string = "0.7";
-    public static readonly VERSION_BRANCH: VersionBranch = (location.pathname == "/develop/index.html" || location.pathname == "/develop") ? 2 : (location.pathname == "/beta/index.html" || location.pathname == "/beta") ? 1 : 0;
+    public static readonly VERSION_BRANCH: VersionBranch = (location.pathname == "/develop/index.html" || location.pathname == "/develop" || location.pathname == "/develop/") ? 2 : (location.pathname == "/beta/index.html" || location.pathname == "/beta" || location.pathname == "/beta/") ? 1 : 0;
     public static readonly IN_DEVELOPMENT: boolean = (location.hostname === "localhost" || location.hostname === "127.0.0.1") ? true : false; // automatically toggles if hosted locally
     public static readonly GITHUB_REPO: string = "https://github.com/clickercookie/clickercookie.github.io";
     public static readonly CREDITS: Record<string, string> = {
@@ -218,9 +218,7 @@ export class Game implements SaveProvider<GameSaveData> {
         // change version displayed
         document.getElementById("versionNumber").innerText = branchQuickSwitch(Game.VERSION, `${Game.VERSION} Beta`, `${Game.VERSION} Develop`);
         document.getElementById("versionSwitchInfoText").innerText = (Game.VERSION_BRANCH === VersionBranch.MAIN) ? "Clicking this will switch to the beta branch" : "Clicking this will switch to the main branch";
-        if (Game.VERSION_BRANCH === VersionBranch.BETA || Game.VERSION_BRANCH === VersionBranch.DEVELOP) // show the developer mode switch
-            document.getElementById("devForm").style.display = "block";
-        
+
         if (Game.IN_DEVELOPMENT)
             document.title = `cc_${Game.VERSION}_${Game.VERSION_BRANCH}_dev`;
 
@@ -280,13 +278,13 @@ export class Game implements SaveProvider<GameSaveData> {
         // misc
         document.getElementById("cookie").addEventListener("click", () => {this.cookieClicked()});
         if (Game.VERSION_BRANCH === VersionBranch.MAIN) {
-            document.getElementById("versionNumber").addEventListener("click", () => { Game.switchToBranch(VersionBranch.BETA) });
+            document.getElementById("versionNumberHolder").addEventListener("click", () => { Game.switchToBranch(VersionBranch.BETA) });
         } else { // develop or beta
-            document.getElementById("versionNumber").addEventListener("click", () => { Game.switchToBranch(VersionBranch.MAIN) });
+            document.getElementById("versionNumberHolder").addEventListener("click", () => { Game.switchToBranch(VersionBranch.MAIN) });
         }
-        
-        document.getElementById("versionNumber").addEventListener("mouseover", () => {versionNumberMousedOver()});
-        document.getElementById("versionNumber").addEventListener("mouseout", () => {versionNumberMousedOver(true)});
+
+        document.getElementById("versionNumberHolder").addEventListener("mouseover", () => {versionNumberMousedOver()});
+        document.getElementById("versionNumberHolder").addEventListener("mouseout", () => {versionNumberMousedOver(true)});
 
         // start intervals (should be right at the end)
         this.AUTOSAVE_INTERVAL.start();
