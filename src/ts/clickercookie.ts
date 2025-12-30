@@ -579,7 +579,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
     // ------------ All of ClickerCookie's SaveProvider stuff ------------
     getSaveData(): ClickerCookieSaveData {
         return {
-            version: 0, // todo: this will be 1 when full release
+            version: 1,
             cookies: this.cookies,
             totalCookies: this.totalCookies,
             cookiesPerClick: this.cookiesPerClick,

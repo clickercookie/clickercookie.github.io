@@ -233,7 +233,7 @@ export const versionChangelogs: Changelog[] = [
         type: "minor",
         version: "0.7",
         note: "Hi. It's hard to explain in a simple changelog how much this update has done. See everything you're looking at? I can confidently say that what is happening behind the scenes for what you're looking at has changed drastically.",
-        name: "tbd",
+        name: "the boilerplate update",
         added: [
             "\"Cookies Per Click\" statistic.",
             "A button in Options to toggle auto-saving (#29)",

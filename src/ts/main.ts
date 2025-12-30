@@ -18,20 +18,6 @@ import { BuildingSave } from "./buildings.js";
 
 import { NewMod } from "./exmod.js"; //* note: this import is intentionally left unused so tsc can find this file and compile it
 
-// ------------------------------------
-// Version Constants
-// ------------------------------------
-const version: string = "0.7";
-
-// temp dev variables
-const dev = {} as {
-    devMode: boolean,
-
-    setDevMode(value: boolean | "on" | "off"): void
-};
-
-dev.devMode = false;
-
 // Global Events
 interface MousePosition {
     x: number;
@@ -41,7 +27,7 @@ const mousePos: MousePosition = {x: undefined, y: undefined};
 window.addEventListener("mousemove", (event) => {
     mousePos.x = event.clientX;
     mousePos.y = event.clientY;
-    
+
     if (Game.IN_DEVELOPMENT && document.getElementById("mousePosDevText")) // in case dev text doesn't exist for some reason idk
         document.getElementById("mousePosDevText").innerText = `Mouse Pos: (${mousePos.x}, ${mousePos.y})`;
 });
@@ -65,6 +51,7 @@ export enum VersionBranch {
 type MiddleState = "none" | "stats" | "info" | "options";
 
 export interface GameSaveData {
+    version: number;
     cheated: boolean;
     modded: boolean;
     autoSavingAllowed: boolean;
@@ -78,8 +65,8 @@ export interface GameSaveData {
 }
 
 export class Game implements SaveProvider<GameSaveData> {
-    // Important game-wide constants
-    public static readonly VERSION: string = version;
+    // --- Important game-wide constants ---
+    public static readonly VERSION: string = "0.7";
     public static readonly VERSION_BRANCH: VersionBranch = (location.pathname == "/develop/index.html" || location.pathname == "/develop") ? 2 : (location.pathname == "/beta/index.html" || location.pathname == "/beta") ? 1 : 0;
     public static readonly IN_DEVELOPMENT: boolean = (location.hostname === "localhost" || location.hostname === "127.0.0.1") ? true : false; // automatically toggles if hosted locally
     public static readonly GITHUB_REPO: string = "https://github.com/clickercookie/clickercookie.github.io";
@@ -188,7 +175,7 @@ export class Game implements SaveProvider<GameSaveData> {
         /* check for old saves (typically directly interacts with localStorage because using Savinator.getLocalStorageSave() will make it angry since localStorage doesn't have a Save it has some other data) */
         // wow that's old
         if (localStorage.cookies >= 0)
-            new SimplePopup({x: 400, y: 200, text: "You are using an extremely outdated saving method. You will have issues with saving now that the new one is implimented. Clicking below will reset your save to the new format. Your old save cannot be restored.", func: () => { localStorage.clear() }, title: "Warning"});
+            new SimplePopup({x: 400, y: 200, text: "You are using an extremely outdated saving method. You will have issues with saving now that the new one is implemented. Clicking below will reset your save to the new format. Your old save cannot be restored.", func: () => { localStorage.clear() }, title: "Warning"});
     
         // 0.5 save 
         if (localStorage.getItem(this.savinator5000.currentSaveName) && localStorage.getItem(this.savinator5000.currentSaveName)[0] === "[" && Game.VERSION_BRANCH === VersionBranch.MAIN) {
@@ -198,8 +185,6 @@ export class Game implements SaveProvider<GameSaveData> {
         }
 
         // 0.6 save
-        // todo: needs to be thoroughly playtested
-        // todo: do these need to be nested or was this just 11:00 programming moment and i wasn't thinking
         const parsedCurrentSave = JSON.parse(localStorage.getItem(this.savinator5000.currentSaveName));
         if (typeof parsedCurrentSave === "object" && parsedCurrentSave !== null) {
             if (parsedCurrentSave["core.cookies"]) {
@@ -218,7 +203,6 @@ export class Game implements SaveProvider<GameSaveData> {
             }
         }
 
-        // todo before 0.7: does betaSave work here? it looks like it does but i need to thoroughly test it
         if (this.savinator5000.getLocalStorageSave() === null) {
             this.savinator5000.save();
             console.warn(`${this.savinator5000.currentSaveName} was null and was automatically reset, if this is your first time playing this is an intended behavior.`);
@@ -267,9 +251,6 @@ export class Game implements SaveProvider<GameSaveData> {
             devDiv.appendChild(mousePos);
     
             document.getElementById("leftSide").insertBefore(devDiv, document.getElementById("leftSidePush"));
-    
-            dev.setDevMode(true);
-            document.getElementById("offSelectionDev").innerText = "Overwritten";
         }
 
         // ------- Event Listeners (very long) -------
@@ -293,7 +274,6 @@ export class Game implements SaveProvider<GameSaveData> {
         document.getElementById("autoSavingToggleSelect").addEventListener("change", () => {this.autoSavingAllowed = ((document.getElementById("autoSavingToggleSelect") as HTMLFormElement).value === "on") ? true : false});;
         document.getElementById("addModButton").addEventListener("click", () => {ModHandler.addButtonClicked()});
         document.getElementById("listModsButton").addEventListener("click", () => {ModHandler.listButtonClicked()});
-        document.getElementById("devModeSelect").addEventListener("change", () => {dev.setDevMode((document.getElementById("devModeSelect") as HTMLFormElement).value)})
         // upgrades holder
         document.getElementById("upgradesHolder").addEventListener("mouseover", () => {expandUpgradesHolder()});
         document.getElementById("upgradesHolder").addEventListener("mouseout", () => {expandUpgradesHolder(true)});
@@ -369,6 +349,7 @@ export class Game implements SaveProvider<GameSaveData> {
         const originalBuildingSave = (this.savinator5000.getLocalStorageSave()) ? (this.savinator5000.getLocalStorageSave().getData("game") as GameSaveData).buildingsSave : {};
 
         return {
+            version: 1,
             cheated: this.cheated,
             modded: this.modded,
             autoSavingAllowed: this.autoSavingAllowed,
@@ -408,28 +389,7 @@ export class Game implements SaveProvider<GameSaveData> {
     }
 }
 
-// dev commands
-/**
- * Sets the developer mode status
- * @param value Can either be 1 or "on" to set to True | 0 or "off" to set to False. The "on" and "off" options are there because of the "devForm" submission
- */
-dev.setDevMode = function(value: boolean | "on" | "off") {
-    if (value === "on")
-        dev.devMode = true;
-    else if (value === "off")
-        dev.devMode = false;
-    else
-        dev.devMode = value;
-
-    if (dev.devMode === true) {
-        console.log("Developer Mode activated.");
-        (document.getElementById("devModeSelect") as HTMLSelectElement).disabled = true;
-    }
-}
-
-// ------------------------------------
 // Random Functions
-// ------------------------------------
 function versionNumberMousedOver(undo=false) {
     if (!undo)
         document.getElementById("versionSwitchInfo").style.display = "block";
@@ -442,16 +402,12 @@ console.log(`you seem smart, how 'bout you contribute to the project? ${Game.GIT
 Handlers.SAVE.register("game", Game.getInstance());
 Handlers.MOD.register(Game.getInstance().clickercookie.NAMESPACE, Game.getInstance().clickercookie);
 
-// todo: load saved mods here
+// todo: load saved mods here, see #67
 
 Game.getInstance().init();
 
-console.log("game:", Game.getInstance());
-console.log("mod handler:", Handlers.MOD);
-console.log("handlers:", Handlers);
-
+// this is kind of a "dev" thing but is an obscure enough piece of very useful functionality that it should be in release
 declare global {
     interface Window { handlers: any; }
 }
-
 window.handlers = Handlers;

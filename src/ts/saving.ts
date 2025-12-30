@@ -57,7 +57,7 @@ export class Savinator {
         if (save === undefined) {
             const newSave = new Save();
             const saveDump = this.saveHandler.dumpSaveData();
-            if (this.preserveUnusedNamespacesInSaves && this.getLocalStorageSave() !== null) { // todo: too many localStorageSave.getNamespaces()
+            if (this.preserveUnusedNamespacesInSaves && this.getLocalStorageSave() !== null) {
                 const localStorageSave = this.getLocalStorageSave();
                 for (const namespace of localStorageSave.getNamespaces()) {
                     if (!(namespace in saveDump)) {
@@ -246,19 +246,12 @@ export class Save {
     }
 }
 
-/*
-example 0.6 save:
-{"core.cookies":247199.30000003485,"core.totalCookies":251800.30000003646,"core.cookiesPerSecond":29.2,"keyboard.CPSGiven":0.2,"grandpa.CPSGiven":5,"ranch.CPSGiven":24,"television.CPSGiven":0,"worker.CPSGiven":0,"wallet.CPSGiven":0,"church.CPSGiven":0,"keyboard.bought":1,"grandpa.bought":5,"ranch.bought":3,"television.bought":0,"worker.bought":0,"wallet.bought":0,"church.bought":0,"keyboard.CPSGain":0.2,"grandpa.CPSGain":1,"ranch.CPSGain":8,"television.CPSGain":47,"worker.CPSGain":260,"wallet.CPSGain":1440,"church.CPSGain":7800,"keyboard.upgradeCost":17,"grandpa.upgradeCost":197,"ranch.upgradeCost":1672,"television.upgradeCost":12000,"worker.upgradeCost":130000,"wallet.upgradeCost":1400000,"church.upgradeCost":20000000,"upgrades.unlocked":[1,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"upgrades.bought":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"upgrades.upgradesBought":1,"core.cookiesPerClick":2,"core.cookieBeenClickedTimes":30,"core.buildingsOwned":9,"hasCheated":false,"won":0,"isModded":false,"versionBranch":0}
-*/
-
 /**
  * Takes in a given 0.6 save and manually applies its data, then does a normal save and refreshes the page.
  * @param save The direct local storage key, i.e a stringified object
  */
 export function convert06Save(save: string) {
     const parsedSave: Record<string, any> = JSON.parse(save);
-
-    // todo: should we do versionbranch shenanigans?
 
     const game = Game.getInstance();
 
