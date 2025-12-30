@@ -17,19 +17,6 @@
                 width: 100vw; height: 100lvh;}
             #wdyd {margin-bottom:0px;}
         </style>
-        <script defer>
-            let cookies = 404;
-    
-            document.getElementById("cookie").addEventListener("click", () => {
-                if (cookies < 424) {
-                    cookies++;
-                }
-                if (cookies === 424) {
-                    document.getElementById("wdyd").innerText = "that's enough";
-                }
-                document.getElementById("big404").innerText = cookies;
-            });
-        </script>
     </head>
     <body>
         <div class="background">
@@ -41,5 +28,18 @@
                 <button><a href="https://clickercookie.github.io/">resume clicking</a></button>
             </div>
         </div>
+        <script>
+            let cookies = 404;
+
+            document.getElementById("cookie").addEventListener("click", () => {
+                if (cookies < 424) {
+                    cookies++;
+                }
+                if (cookies === 424) {
+                    document.getElementById("wdyd").innerText = "that's enough";
+                }
+                document.getElementById("big404").innerText = cookies;
+            });
+        </script>
     </body>
 </html>
