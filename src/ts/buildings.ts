@@ -1,20 +1,19 @@
-import ClickerCookie from "./clickercookie.js";
 import { capitalize, commaify, clamp } from "./helper.js";
 import { Game } from "./main.js";
 import { SaveProvider } from "./saving.js";
 import { hideTooltip } from "./tooltip.js";
 
 export interface BuildingData {
-    /** Display name for your building. Should be capitialized. */
+    /** Display name for your building. Should be capitalized. */
     name: string;
-    /** *Plural* display name for your building. Should be capitialized. */
+    /** *Plural* display name for your building. Should be capitalized. */
     namePlural: string;
     quote: string;
-    /** Base upgrade cost for the building. */
+    /** Base upgrade cost for the building. Multiplied by {@link upgradeCostMultiplier} when building is bought. */
     upgradeCost: number;
     CPSGain: number;
     img?: string;
-    /** Default is 1.15 */
+    /** How much {@link upgradeCost} is multiplied by when building is bought. Default is 1.15 */
     upgradeCostMultiplier?: number;
     /** 
      * Returns a boolean based on whether the building may be unlocked.

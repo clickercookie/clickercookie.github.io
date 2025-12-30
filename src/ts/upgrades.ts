@@ -2,7 +2,6 @@ import { Building } from "./buildings.js";
 import { clamp, commaify, countVisibleChildren, url } from "./helper.js";
 import { hideTooltip } from "./tooltip.js";
 import { Game } from "./main.js";
-import ClickerCookie from "./clickercookie.js";
 import { Handlers } from "./handlers.js";
 import { SaveProvider } from "./saving.js";
 

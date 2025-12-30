@@ -175,8 +175,11 @@ export interface SaveProvider<T> {
 }
 
 interface SaveDataHeader {
+    /** Current game version ({@link Game.VERSION}) */
     version: string;
+    /** Current game version branch ({@link Game.VERSION_BRANCH}) */
     versionBranch: VersionBranch;
+    /** Format for this save. Currently is always set to `4` but major updates to the spec will increment this. */
     format: number
 }
 

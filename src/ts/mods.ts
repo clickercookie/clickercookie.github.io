@@ -1,7 +1,20 @@
 import { SaveProvider } from "./saving.js";
-import { ModHandler } from "./handlers.js";
+import { ModHandler, BackgroundHandler, CurrentlyClickedHandler } from "./handlers.js";
+import { Game } from "./main.js"
 
-type Kooh = "click" | "cps" | "loop" | "cps" | "personalization";
+/**
+ * Koohs ("hooks" spelled backwards) serve as events that mods can register functions to be called on. Register functions using {@link Mod.registerKooh}.
+ *
+ * These will all automatically be called by {@link Game} at the appropriate times. Usually, you should not need to call these manually.
+ *
+ * | Kooh            | When is it called? |
+ * | --------------- | ------------- |
+ * | click           | When the cookie is clicked ({@link Game.cookieClicked()}) |
+ * | cps             | When CPS is given ({@link Game.cookiesPerSecondUpdate()}) |
+ * | loop            | Called in game loop ({@link Game.gameLoop()}) |
+ * | personalization | Whenever a personalization option is changed ({@link BackgroundHandler.setBackground()}, {@link CurrentlyClickedHandler.setCurrentlyClicked()}) |
+ */
+type Kooh = "click" | "cps" | "loop" | "personalization";
 
 interface ModMetadata {
     name: string;
@@ -12,7 +25,7 @@ interface ModMetadata {
 }
 
 /**
- * Provides high-level abstractions for mod developers to work with
+ * Provides high-level abstractions for mod developers to work with. [Read the docs.](https://github.com/clickercookie/clickercookie.github.io/wiki/Modding)
  */
 export class Mod<T> implements SaveProvider<T> {
     // ------------------
@@ -44,7 +57,7 @@ export class Mod<T> implements SaveProvider<T> {
     /** Mod namespace used for saving */
     public readonly NAMESPACE: string;
 
-    constructor(namespace: string, metadata: ModMetadata={name: undefined, description: undefined, img: undefined}) { //? should namespace be a param?
+    constructor(namespace: string, metadata: ModMetadata={name: undefined, description: undefined, img: undefined}) {
         this.NAMESPACE = namespace;
 
         this.METADATA = {

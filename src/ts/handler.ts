@@ -1,5 +1,19 @@
 import { StringifiedIdentifier } from "./helper.js";
 
+/**
+ * Handlers are the core feature for all content in the game. They store and manage different types of objects, such as buildings, upgrades, mods, and more.
+ *
+ * Each handler uses {@link Identifier}s to uniquely identify and retrieve objects (with the exception of {@link UniqueKeyHandler}s).
+ *
+ * Globally accessible handlers are stored in the {@link Handlers} class. These handlers are treated specially throughout the codebase to manage their respective content types. Generally, you will not create your own handlers if you are making a mod that does not drastically modify the game's core systems.
+ *
+ * Handlers can also be iterated over like so:
+ * ```ts
+ * for (const obj of handler) {
+ *     console.log(obj);
+ * }
+ * ```
+ */
 export class Handler<T> implements Iterable<T> {
     /** This stores the stringified Identifier as the key and then the values is obviously T. We store the identifier stringified because objects are never equal so we can't `get()` from the Map without using the same obj reference. */
     protected registered: Map<StringifiedIdentifier, T>;
@@ -123,6 +137,13 @@ export class UniqueKeyHandler<T> implements Iterable<T> {
     }
 }
 
+/**
+ * A unique identifier, usually for objects registered to {@link Handler}s.
+ *
+ * Identifiers are core to avoiding name collisions. If two mods were to register a building with the name `farm` then they would conflict with each other. The solution is to add a "namespace" such that these identifiers become `mod1:farm` and `mod2:farm`.
+ *
+ * If you are familiar with Minecraft mods these are functionally identical to how they are implemented there.
+ */
 export class Identifier {
     /**
      * Constructs a new {@link Identifier} from a stringified Identifier (from {@link Identifier.toString()}). If the string is not valid then a warning will be logged and `undefined` will be returned.
