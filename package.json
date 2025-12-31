@@ -4,7 +4,7 @@
   "description": "A totally original game about clicking a cookie",
   "main": "main.ts",
   "scripts": {
-    "build": "npx tsc --build",
+    "build": "npx tsc --build && sass src/scss/main.scss public/style.css --no-source-map",
     "clean": "npx tsc --build --clean"
   },
   "repository": {
