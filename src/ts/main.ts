@@ -66,7 +66,7 @@ export interface GameSaveData {
 
 export class Game implements SaveProvider<GameSaveData> {
     // --- Important game-wide constants ---
-    public static readonly VERSION: string = "0.7";
+    public static readonly VERSION: string = "0.7.1";
     public static readonly VERSION_BRANCH: VersionBranch = (location.pathname == "/develop/index.html" || location.pathname == "/develop" || location.pathname == "/develop/") ? 2 : (location.pathname == "/beta/index.html" || location.pathname == "/beta" || location.pathname == "/beta/") ? 1 : 0;
     public static readonly IN_DEVELOPMENT: boolean = (location.hostname === "localhost" || location.hostname === "127.0.0.1") ? true : false; // automatically toggles if hosted locally
     public static readonly GITHUB_REPO: string = "https://github.com/clickercookie/clickercookie.github.io";

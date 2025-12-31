@@ -13,10 +13,12 @@ The game is available at [clickercookie.github.io](https://clickercookie.github.
 ## Contributing
 ### Dependencies
 Run `npm install` to install dependencies.
+
+You will also need to [install Sass](https://sass-lang.com/install/). Dart Sass is recommended, but you can also install the pure JavaScript implementation with `npm install -g sass`.
 ### Building
-Run `npm run build` to compile, `.js` files will be placed under the `public/` directory. You can then create a local web server (something like `npx serve`) and navigate to that directory.
+Run `npm run build` to compile, `.js` and `.css` files will be placed under the `public/` directory. You can then create a local web server (something like `npx serve`) and navigate to that directory.
 ### Creating a "dev" environment
-I am royally terrible at writing NPM scripts, so we don't really have an `npm run dev` like some other projects do. Instead, we run `npx serve` and `npx tsc --watch` in two different terminals (lol). This may change later.
+I am royally terrible at writing NPM scripts, so we don't really have an `npm run dev` like some other projects do. Instead, we run `npx serve`, `npx tsc --watch`, and `sass src/scss/main.scss public/style.css --no-source-map --watch` in three different terminals (lol). This may change later.
 
 ## Licensing
 This project is licensed under the GNU GPL-3.0 License - see the LICENSE file for details.
