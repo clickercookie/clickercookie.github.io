@@ -110,7 +110,7 @@ export class AdvancedPopup {
         };
 
         this.html.style.padding = filledOptions.innerPadding+"px";
-        this.html.style.setProperty("--dialog-backdrop-opacity", filledOptions.filterLevel+"%"); // todo ASAP: fix
+        this.html.style.setProperty("--dialog-backdrop-opacity", filledOptions.filterLevel+"%");
 
         document.body.appendChild(this.html);
 

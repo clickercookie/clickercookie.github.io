@@ -1,7 +1,11 @@
 /* variables (mainly for colors) */
 $brown-border: rgb(121, 77, 46);
 $colored-container: rgb(255, 243, 209);
-$dialog-backdrop-opacity: 50%; /* default value for dialog opacity if something goes wrong (and for simple popups :D) */
+
+// non-SCSS variables that are used for anything that needs to be modified programmatically
+:root {
+    --dialog-backdrop-opacity: 50%; /* default value for dialog opacity if something goes wrong (and for simple popups :D) */
+}
 
 @use "buildings.scss";
 
@@ -27,7 +31,7 @@ body {
 
     /* no select for images */
     -webkit-user-drag: none;
-    -webkit-touch-callout: none; /* yes its a mobile thing in the desktop version but its here anyway in case mobile breaks idk */
+    -webkit-touch-callout: none; /* mobile-only */
 }
 
 /* todo 0.7.1: find why these are here and how we can make their elements assigned to their own specific class instead of making every element have these properties*/
@@ -367,7 +371,7 @@ small {
 dialog::backdrop {
     background-color: black;
     opacity: 50%;
-    opacity: $dialog-backdrop-opacity; /* for programmatic modification todo: fix */
+    opacity: var(--dialog-backdrop-opacity); /* for programmatic modification */
 }
 .simple-popup-button-div {
     display: flex;
