@@ -99,14 +99,11 @@ export class Building implements SaveProvider<BuildingSave> {
                     namePriceDiv.appendChild(buildingPrice);
                 buildingContent.appendChild(namePriceDiv);
 
-                const buildingsBoughtWrapper = document.createElement("div");
-                buildingsBoughtWrapper.className = "buildings-bought-wrapper";
-                    const buildingsBought = document.createElement("p");
-                    buildingsBought.className = "buildings-bought";
-                    buildingsBought.id = `${data.namePlural}Bought`;
-                    buildingsBought.innerText = "0";
-                    buildingsBoughtWrapper.appendChild(buildingsBought);
-                buildingContent.appendChild(buildingsBoughtWrapper);
+                const buildingsBought = document.createElement("p");
+                buildingsBought.className = "buildings-bought";
+                buildingsBought.id = `${data.namePlural}Bought`;
+                buildingsBought.innerText = "0";
+                buildingContent.appendChild(buildingsBought);
             this.html.appendChild(buildingContent);
         document.getElementById("buildingsWrapper").appendChild(this.html);
         // end setup HTML
