@@ -33,3 +33,19 @@ dialog::backdrop {
     margin-bottom: 7px;
     font-size: 17px;
 }
+
+/* List Mods Popup */
+.mods-list {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.mod-in-list {
+    height: 35px;
+    float: left;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background-color: rgb(215, 215, 215);
+}

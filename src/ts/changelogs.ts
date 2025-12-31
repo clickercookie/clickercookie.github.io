@@ -269,7 +269,7 @@ export const versionChangelogs: Changelog[] = [
 ];
 
 export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make this look nicer, but lets be honest it's gonna stay this way
-    const changelog = document.querySelector(".changelog-wrapper");
+    const changelog = document.getElementById("changelogWrapper");
 
     const newChangelogEntry = document.createElement("div");
     newChangelogEntry.setAttribute("class","changelog");

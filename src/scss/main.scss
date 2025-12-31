@@ -95,6 +95,266 @@ small {
     display: flex;
     flex-direction: column;
     background-image: url(img/backgrounds/background-blue.png);
+
+    // cookie stuff
+    .cookie {
+        width: 257px;
+        height: 257px;
+        margin: 12px auto 12px auto; /* margin left and right are set to auto so it centers */
+        animation: cookie-unhover 0.15s ease-out;
+        border-radius: 128px;
+    }
+    .cookie-noanimation {
+        margin-top: 12px;
+        margin-bottom: 12px;
+        width: 257px;
+        height: 257px;
+        border-radius: 128px;
+    }
+    .cookie:hover {
+        animation: cookie-hover 0.15s ease-out;
+        animation-fill-mode: forwards;
+    }
+    .cookie:active {
+        animation: cookie-clicked 0.2s ease-out;
+        animation-fill-mode: forwards;
+    }
+    @keyframes cookie-hover {
+        from {scale: 100%;}
+        to {scale: 102%;}
+    }
+    @keyframes cookie-unhover {
+        to {scale: 100%;}
+        from {scale: 102%;}
+    }
+    @keyframes cookie-clicked {
+        0% {scale: 100%;}
+        100% {scale: 98%;}
+    }
+
+    .cookie-counter-wrapper {
+        background-color: rgba(0, 0, 0, 0.4);
+
+        .cookie-counter {
+            margin-top: 4px;
+            margin-bottom: 4px;
+            font-size: 18px;
+            color: white;
+            text-shadow: variables.$shadow;
+            text-align: center;
+        }
+
+        .cookies-per-second-counter {
+            margin-top: 4px;
+            margin-bottom: 4px;
+            font-size: 14px;
+            color: white;
+            text-shadow: variables.$shadow;
+            text-align: center;
+        }
+    }
+
+    .saving-indicator {
+        position: absolute;
+        bottom: 20px;
+        left: 3px;
+        font-size: 20px;
+        opacity: 0;
+        transition: opacity 0.5s;
+        transition-timing-function: ease-out;
+    }
+
+    .left-side-push { // todo 0.7.1: i can't figure out for the life of me how to get rid of this class without breaking stuff but we need to
+        width: 320px;
+    }
+
+    .social-links {
+        position: absolute;
+        left: 0px;
+        bottom: 0px;
+        width: inherit;
+        height: 40px;
+
+        img {
+            scale: 30%;
+            position: absolute;
+            left: -28px;
+            bottom: -28px;
+        }
+
+        .version-number-holder {
+            position: absolute;
+            left: 50px;
+            top: 9.5px;
+            margin: 0px;
+            font-size: 18px;
+            color: white;
+            font-family: monospace;
+            text-shadow: variables.$shadow;
+        }
+
+        .version-switch-info {
+            display: none;
+            position: absolute;
+            bottom: 30px;
+            left: 48px;
+            width: 85px;
+            height: 35px;
+            border: 3px solid black;
+            font-size: 10px;
+            color: black;
+            background-color: variables.$colored-container;
+        }
+    }
+}
+
+.middle {
+    flex: auto;
+    height: 100vh;
+    background: url(img/backgrounds/background-blue.png);
+
+    .middle-buttons { // todo 0.7.1: these are a disaster and should probably be completely reworked
+        display: flex;
+        height: 100px;
+        border: 0px solid variables.$brown-border;
+        border-bottom-width: 8px;
+
+        .left-middle-buttons {
+            display: flex;
+            flex-direction: column;
+        }
+        .right-middle-buttons {
+            float: right;
+            margin-left: auto;
+            height: 50px;
+        }
+        .middle-button-name {
+            margin: 0px;
+            text-align: center;
+            margin-top: 12px;
+            font-size: 24px;
+            font-family: "Lucida Console", "Courier New", monospace;
+            color: white;
+            text-shadow: variables.$shadow;
+        }
+
+        .middle-button-base {
+            width: 110px;
+            height: 50px;
+            border: 2px solid black;
+            margin-left: auto;
+            background-color: variables.$colored-container;
+            color: black; /* this wasn't nessesary until 6/3/23? idk why */
+        }
+        .info-button {
+            border-right-width: 0px;
+            height: 48px;
+            float: right;
+        }
+        .options-button {
+            border-top-width: 0px;
+            border-bottom-width: 0px;
+            border-left-width: 0px;
+            float: left;
+        }
+        .stats-button {
+            border-left-width: 0px;
+            float: left;
+        }
+    }
+
+    /* Middle Text */
+    .middle-main {
+        display: none;
+        position: relative; /* right now this is only used to make the X button not push the middle text to the left, i don't think it does anything else */
+        color: white;
+        overflow-y: auto;
+        height: 86%;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.2), transparent 25%),
+            linear-gradient(to left, rgba(0, 0, 0, 0.2), transparent 25%),
+            linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent 25%),
+            linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent 25%),
+            radial-gradient(transparent 80%, rgba(4, 4, 4, 0.3)),
+            url("img/dark-noise.png");
+
+        // todo: these classes can likely be removed and just replaced with their actual elements
+        .middle-title {
+            font-size: 35px;
+            font-family: monospace;
+            margin-top: 12px;
+            margin-bottom: 15px;
+            text-decoration: underline;
+            text-underline-offset: 0.15em;
+            font-weight: bold;
+            text-align: center;
+        }
+        .middle-subtitle {
+            font-size: 26px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin-top: 12px;
+            margin-bottom: 15px;
+            margin-left: 9px;
+            font-weight: bold;
+            text-align: left;
+        }
+        .middle-text {
+            margin-left: 9px;
+            margin-bottom: 6px;
+            margin-top: 6px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .middle-text-gray {
+            margin-left: 7px;
+            margin-bottom: 6px;
+            margin-top: 6px;
+            color: gray;
+            font-family: Arial, Helvetica, sans-serif;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+        .middle-x {
+            height: 48px;
+            width: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            background-color: black;
+            border: 2px solid white;
+        }
+        .middle-ul {
+            font-size: 0.875em;
+        }
+        .middle-label {
+            margin-left: 9px;
+        }
+        .data-button {
+            margin-left: 9px;
+            margin-bottom: 4px;
+        }
+
+        // only in Info
+        .changelog {
+            .version-heading {
+                font-size: 1.25em;
+                margin: 6px 0px 8px 9px;
+                text-align: left;
+                -webkit-user-select: none;
+                user-select: none;
+            }
+
+            /* notes also have middle-text class */
+            .note {
+                font-size: 0.875em;
+            }
+
+            .subheading {
+                font-size: 1em;
+            }
+        }
+    }
 }
 
 .right-side {
@@ -107,308 +367,32 @@ small {
     display: flex;
     flex-direction: column;
     background-image: url(img/backgrounds/background-blue.png);
-}
 
-.middle {
-    flex: auto;
-    height: 100vh;
-    background: url(img/backgrounds/background-blue.png);
-}
-
-.cookie {
-    width: 257px;
-    height: 257px;
-    margin: 12px auto 12px auto; /* margin left and right are set to auto so it centers */
-    animation: cookie-unhover 0.15s ease-out;
-    border-radius: 128px;
-}
-.cookie-noanimation {
-    margin-top: 12px;
-    margin-bottom: 12px;
-    width: 257px;
-    height: 257px;
-    border-radius: 128px;
-}
-.cookie:hover {
-    animation: cookie-hover 0.15s ease-out;
-    animation-fill-mode: forwards;
-}
-.cookie:active {
-    animation: cookie-clicked 0.2s ease-out;
-    animation-fill-mode: forwards;
-}
-@keyframes cookie-hover {
-    from {scale: 100%;}
-    to {scale: 102%;}
-}
-@keyframes cookie-unhover {
-    to {scale: 100%;}
-    from {scale: 102%;}
-}
-@keyframes cookie-clicked {
-    0% {scale: 100%;}
-    100% {scale: 98%;}
-}
-
-.cookie-counter {
-    margin-top: 4px;
-    margin-bottom: 4px;
-    font-size: 18px;
-    color: white;
-    text-shadow: variables.$shadow;
-    text-align: center;
-}
-
-.cookies-per-second-counter {
-    margin-top: 4px;
-    margin-bottom: 4px;
-    font-size: 14px;
-    color: white;
-    text-shadow: variables.$shadow;
-    text-align: center;
-}
-
-.cookie-counter-wrapper {
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-.middle-buttons {
-    display: flex;
-    height: 100px;
-    border: 0px solid variables.$brown-border;
-    border-bottom-width: 8px;
-    background-image: url(img/backgrounds/background-blue.png);
-}
-
-/* divs */
-.buildings-wrapper {
-    float: right;
-    margin-top: 6px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 4px;
-}
-
-/* social links stuff */
-.social-links {
-    position: absolute;
-    left: 0px;
-    bottom: 0px;
-    width: inherit;
-    height: 40px;
-}
-.github {
-    scale: 30%;
-    position: absolute;
-    left: -28px;
-    bottom: -28px;
-}
-.version-number-holder {
-    position: absolute;
-    left: 50px;
-    top: 9.5px;
-    margin: 0px;
-    font-size: 18px;
-    color: white;
-    font-family: monospace;
-    text-shadow: variables.$shadow;
-}
-.version-switch-info {
-    display: none;
-    position: absolute;
-    bottom: 30px;
-    left: 48px;
-    width: 85px;
-    height: 35px;
-    border: 3px solid black;
-    font-size: 10px;
-    color: black;
-    background-color: variables.$colored-container;
-}
-
-/* middle buttons */
-.left-middle-buttons {
-    display: flex;
-    flex-direction: column;
-}
-.right-middle-buttons {
-    float: right;
-    margin-left: auto;
-    height: 50px;
-}
-.middle-button-name {
-    margin: 0px;
-    text-align: center;
-    margin-top: 12px;
-    font-size: 24px;
-    font-family: "Lucida Console", "Courier New", monospace;
-    color: white;
-    text-shadow: variables.$shadow;
-}
-
-/* Middle Text CSS */
-.middle-main {
-    display: none;
-    position: relative; /* right now this is only used to make the X button not push the middle text to the left, i don't think it does anything else */
-    color: white;
-    overflow-y: auto;
-    height: 86%;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.2), transparent 25%), 
-        linear-gradient(to left, rgba(0, 0, 0, 0.2), transparent 25%),
-        linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent 25%),
-        linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent 25%), 
-        radial-gradient(transparent 80%, rgba(4, 4, 4, 0.3)),
-        url("img/dark-noise.png")
-}
-.middle-title {
-    font-size: 35px;
-    font-family: monospace;
-    margin-top: 12px;
-    margin-bottom: 15px;
-    text-decoration: underline;
-    text-underline-offset: 0.15em;
-    font-weight: bold;
-    text-align: center;
-}
-.middle-subtitle {
-    font-size: 26px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin-top: 12px;
-    margin-bottom: 15px;
-    margin-left: 9px;
-    font-weight: bold;
-    text-align: left;
-}
-.middle-text {
-    margin-left: 9px;
-    margin-bottom: 6px;
-    margin-top: 6px;
-    font-family: Arial, Helvetica, sans-serif;
-}
-.middle-text-gray {
-    margin-left: 7px;
-    margin-bottom: 6px;
-    margin-top: 6px;
-    color: gray;
-    font-family: Arial, Helvetica, sans-serif;
-    letter-spacing: 1px;
-    font-weight: bold;
-}
-.middle-x {
-    height: 48px;
-    width: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    background-color: black;
-    border: 2px solid white;
-}
-.middle-ul {
-    font-size: 0.875em;
-}
-.middle-label {
-    margin-left: 9px;
-}
-
-/* changelog stuff */
-.changelog {
-    .version-heading {
-        font-size: 1.25em;
-        margin: 6px 0px 8px 9px;
-        text-align: left;
-        -webkit-user-select: none;
-        user-select: none;
+    .store-heading {
+        margin: 3px;
+        margin-bottom: 0px;
+        font-size: 50px;
+        text-align: center;
     }
 
-    /* notes also have middle-text class */
-    .note {
-        font-size: 0.875em;
+    .upgrades-subheading {
+        margin-top: 10px;
+        margin-bottom: 3px;
+        text-align: center;
     }
 
-    .subheading {
-        font-size: 1em;
+    .buildings-subheading {
+        margin-top: 5px;
+        margin-bottom: 3px;
+        text-align: center;
     }
-}
 
-/* middle button CSS */
-.middle-button-base {
-    width: 110px;
-    height: 50px;
-    border: 2px solid black;
-    margin-left: auto;
-    background-color: variables.$colored-container;
-    color: black; /* this wasn't nessesary until 6/3/23? idk why */
-}
-.info-button {
-    border-right-width: 0px;
-    height: 48px;
-    float: right;
-}
-.options-button {
-    border-top-width: 0px;
-    border-bottom-width: 0px;
-    border-left-width: 0px;
-    float: left;
-}
-.stats-button {
-    border-left-width: 0px;
-    float: left;
-}
-
-/* Data Buttons */
-.data-button {
-    margin-left: 9px;
-    margin-bottom: 4px;
-}
-
-/* Mods */
-.mods-list {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-.mod-in-list {
-    height: 35px;
-    float: left;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    background-color: rgb(215, 215, 215);
-}
-
-/* random specific stuff */
-.store-heading {
-    margin: 3px;
-    margin-bottom: 0px;
-    font-size: 50px;
-    text-align: center;
-}
-.upgrades-subheading {
-    margin-top: 10px;
-    margin-bottom: 3px;
-    text-align: center;
-}
-.buildings-subheading {
-    margin-top: 5px;
-    margin-bottom: 3px;
-    text-align: center;
-}
-
-.left-side-push {
-    width: 320px;
-}
-
-.saving-indicator {
-    position: absolute;
-    bottom: 20px;
-    left: 3px;
-    font-size: 20px;
-    opacity: 0;
-    transition: opacity 0.5s;
-    transition-timing-function: ease-out;
+    .buildings-wrapper {
+        float: right;
+        margin-top: 6px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 4px;
+    }
 }

@@ -23,7 +23,7 @@
             <span class="left-side-push" id="leftSidePush"></span> <!-- for some reason when you open menus it will change the size of the left side's div and smoosh everything, this prevents that (somehow) -->
             <div class="social-links">
                 <a href="404.html" target="_blank" id="githubHyperlink"> <!-- this HREF is changed programmatically in main.ts in the event of a fork and a different GitHub repo link. -->
-                    <img class="github" src="img/github-mark.svg" alt="github">
+                    <img src="img/github-mark.svg" alt="github">
                 </a>
                 <h5 class="version-number-holder pointer" id="versionNumberHolder">Version: <span id="versionNumber">null</span></h5>
                 <div class="version-switch-info" id="versionSwitchInfo">
@@ -77,8 +77,8 @@
                 <p class="middle-text">Original game made by Orteil and Opti. <small>we :heart: you!</small></p>
                 <button class="data-button pointer" id="creditsButton">Credits</button>
                 <h3 class="middle-subtitle" style="margin-top:0px;">Changelog:</h3>
-                <div class="changelog-wrapper">
-                    
+                <div id="changelogWrapper">
+
                 </div>
             </div>
             <div class="middle-main" id="optionsMiddleText">
@@ -101,14 +101,14 @@
                 </form>
                 <h5 class="middle-subtitle">Miscellaneous:</h5>
                 <p class="middle-text">Save Management:</p>
-                <div class="data-buttons">
+                <div>
                     <button class="data-button pointer" id="saveButton">Save</button>
                     <button class="data-button pointer" id="loadButton">Load</button>
                 </div>
-                <div class="data-buttons">
+                <div>
                     <button class="data-button pointer red" id="resetSaveButton">Reset</button>
                 </div>
-                <div class="data-buttons">   
+                <div>
                     <button id="exportDataButton" class="data-button pointer">Export Data</button>
                     <button id="importDataButton" class="data-button pointer">Import Data</button>
                     <input type="file" id="importDataInput" class="no-display" accept=".ccsave,.json"> <!-- this doesn't actually show up, the importDataButton just runs the click() method on this guy-->
@@ -122,7 +122,7 @@
                 </form>
                 <p class="middle-text" style="margin-bottom:0px;">Modding:</p>
                 <small class="middle-text">You have <span id="modsNumberLoaded">null</span> mods loaded!</small> <br>
-                <div class="data-buttons">
+                <div>
                     <button class="data-button pointer" id="addModButton" style="margin-top:3px;">Add Mod</button>
                     <button class="data-button pointer" id="listModsButton" style="margin-top:3px; margin-left:0px;">List Mods</button>
                 </div>
