@@ -13,7 +13,7 @@
         <script src="./main.js" type="module" defer></script> <!-- changeMarker -->
     </head>
     <body>
-        <div id="leftSide" class="leftSide">
+        <div class="left-side" id="leftSide">
             <img id="cookie" class="cookie pointer" src="img/cookie.png" alt="cookie" draggable="false">
             <div class="cookie-counter-wrapper">
                 <h3 class="cookie-counter shadow">Cookies: <span id="cookieCount">0</span></h3>
@@ -21,7 +21,7 @@
             </div>
             <!-- <h3 class="win shadow" id="win">you win.</h3> -->
             <p class="saving-indicator" id="savingIndicator">Saved!</p>
-            <span class="leftSidePush" id="leftSidePush"></span> <!-- for some reason when you open menus it will change the size of the left side's div and smoosh everything, this prevents that (somehow) -->
+            <span class="left-side-push" id="leftSidePush"></span> <!-- for some reason when you open menus it will change the size of the left side's div and smoosh everything, this prevents that (somehow) -->
             <div class="social-links">
                 <a href="404.html" target="_blank" id="githubHyperlink"> <!-- this HREF is changed programmatically in main.ts in the event of a fork and a different GitHub repo link. -->
                     <img class="github" src="img/github-mark.svg" alt="github">
@@ -139,7 +139,7 @@
                 </div>
             </div>
         </div> <!-- end middle -->
-        <div id="rightSide" class="rightSide">
+        <div class="right-side" id="rightSide">
             <h1 class="store-heading shadow">Store</h1>
             <h3 class="upgrades-marker shadow">Upgrades</h3>
             <div class="upgrades-holder-background">

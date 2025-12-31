@@ -248,7 +248,7 @@ export class Game implements SaveProvider<GameSaveData> {
             mousePos.setAttribute("style","margin-bottom:0px;");
             devDiv.appendChild(mousePos);
     
-            document.getElementById("leftSide").insertBefore(devDiv, document.getElementById("leftSidePush"));
+            document.getElementById("leftSide").insertBefore(devDiv, document.querySelector(".left-side-push"));
         }
 
         // ------- Event Listeners (very long) -------
