@@ -74,7 +74,6 @@ export class Building implements SaveProvider<BuildingSave> {
         this.html.addEventListener("mouseover", () => {this.hovered()});
         this.html.addEventListener("mouseout",() => {hideTooltip()});
             const icon = document.createElement("img");
-            icon.className = "building-icon";
             const BUILDING_ICON_IMG = (data.img) ? data.img : "img/unknown.png";
             //* Use unknown as a fallback if we can't get the defined image file (404 usually)   
             icon.onerror = () => {

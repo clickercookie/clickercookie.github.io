@@ -1,9 +1,9 @@
 /* variables (mainly for colors) */
-:root {
-    --brown-border: rgb(121, 77, 46);
-    --colored-container: rgb(255, 243, 209);
-    --dialog-backdrop-opacity: 50%; /* default value for dialog opacity if something goes wrong (and for simple popups :D) */
-}
+$brown-border: rgb(121, 77, 46);
+$colored-container: rgb(255, 243, 209);
+$dialog-backdrop-opacity: 50%; /* default value for dialog opacity if something goes wrong (and for simple popups :D) */
+
+@use "buildings.scss";
 
 /* basic basis for most html elements */
 body {
@@ -87,7 +87,7 @@ small {
     height: 100vh;
     border-style: solid;
     border-width: 0px 8px 0px 0px;
-    border-color: var(--brown-border);
+    border-color: $brown-border;
     display: flex;
     flex-direction: column;
     background-image: url(img/backgrounds/background-blue.png);
@@ -99,7 +99,7 @@ small {
     height: 100vh;
     border-style: solid;
     border-width: 0px 0px 0px 8px;
-    border-color: var(--brown-border);
+    border-color: $brown-border;
     display: flex;
     flex-direction: column;
     background-image: url(img/backgrounds/background-blue.png);
@@ -171,7 +171,7 @@ small {
 .middle-buttons {
     display: flex;
     height: 100px;
-    border: 0px solid var(--brown-border);
+    border: 0px solid $brown-border;
     border-bottom-width: 8px;
     background-image: url(img/backgrounds/background-blue.png);
 }
@@ -183,6 +183,7 @@ small {
     display: flex;
     flex-direction: column;
     align-items: center;
+    row-gap: 4px;
 }
 
 /* UPGRADES */
@@ -193,7 +194,7 @@ small {
     overflow: hidden;
     border: 6px solid;
     border-width: 6px 0px 6px 0px;
-    border-color: var(--brown-border);
+    border-color: $brown-border;
 }
 .upgrade {
     width: 59.6px;
@@ -279,64 +280,7 @@ small {
     border: 3px solid black;
     font-size: 10px;
     color: black;
-    background-color: var(--colored-container);
-}
-
-/* universal building css */
-.building {
-    width: 324px;
-    height: 64px;
-    border-style: solid;
-    border-color: rgb(248, 255, 198);
-    border-width: 3px;
-    transition: 0.3s;
-    background-color: rgb(217, 215, 165);
-    cursor: pointer;
-    margin-bottom: 4px;
-}
-.building:hover {
-    border-style: solid;
-    border-color: rgb(249, 255, 164);
-    border-width: 3px;
-}
-
-.building-content {
-    display: flex;
-    justify-content: space-between;
-    height: 64px;
-    text-shadow: 0px 1px 4px black;
-    padding-left: 4px;
-}
-
-.buildings-bought-wrapper {
-    display: flex;
-    height: 100%;
-    align-items: center;
-    float: right;
-    margin-right: 12px;
-}
-.buildings-bought {
-    font-size: 35px;
-    font-family: monospace;
-    float: right;
-    margin: 0px
-}
-
-.building-name {
-    font-size: 22px;
-    line-height: 1px;
-    margin-bottom: 0px;
-}
-
-.building-price {
-    margin-top: 11px;
-    margin-left: 0.6px;
-}
-
-.building-icon {
-    width: 64px;
-    height: 64px;
-    float: left;
+    background-color: $colored-container;
 }
 
 /* Infobox when hovering over a building */
@@ -345,7 +289,7 @@ small {
     height: 125px;
     border: solid 3px black;
     border-right-width: 0px;
-    background-color: var(--colored-container);
+    background-color: $colored-container;
     pointer-events: none; /* if it's hovered over it won't do the flickering thing */
     right: 346px;
     z-index: 1; /* legit nothing has a higher-than-normal z-index, so this will show above EVERYTHING */
@@ -423,7 +367,7 @@ small {
 dialog::backdrop {
     background-color: black;
     opacity: 50%;
-    opacity: var(--dialog-backdrop-opacity); /* for programmatic modification */
+    opacity: $dialog-backdrop-opacity; /* for programmatic modification todo: fix */
 }
 .simple-popup-button-div {
     display: flex;
@@ -559,7 +503,7 @@ dialog::backdrop {
     height: 50px;
     border: 2px solid black;
     margin-left: auto;
-    background-color: var(--colored-container);
+    background-color: $colored-container;
     color: black; /* this wasn't nessesary until 6/3/23? idk why */
 }
 .info-button {

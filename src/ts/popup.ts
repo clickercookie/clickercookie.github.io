@@ -110,8 +110,8 @@ export class AdvancedPopup {
         };
 
         this.html.style.padding = filledOptions.innerPadding+"px";
-        this.html.style.setProperty("--dialog-backdrop-opacity", filledOptions.filterLevel+"%");
-        
+        this.html.style.setProperty("--dialog-backdrop-opacity", filledOptions.filterLevel+"%"); // todo ASAP: fix
+
         document.body.appendChild(this.html);
 
         this.html.showModal(); // html must exist to show modal

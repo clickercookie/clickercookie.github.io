@@ -1,0 +1,58 @@
+.building {
+    width: 324px;
+    height: 64px;
+    border-style: solid;
+    border-color: rgb(248, 255, 198);
+    border-width: 3px;
+    transition: 0.3s;
+    background-color: rgb(217, 215, 165);
+    cursor: pointer;
+    margin-bottom: 4px;
+
+    img {
+        width: 64px;
+        height: 64px;
+        float: left;
+    }
+
+    .building-content {
+        display: flex;
+        justify-content: space-between;
+        height: 64px;
+        text-shadow: 0px 1px 4px black;
+        padding-left: 4px;
+
+        /* in an unnamed div */
+        .building-name {
+            font-size: 22px;
+            line-height: 1px;
+            margin-bottom: 0px;
+        }
+
+        .building-price {
+            margin-top: 11px;
+            margin-left: 0.6px;
+        }
+
+        .buildings-bought-wrapper {
+            display: flex;
+            height: 100%;
+            align-items: center;
+            float: right;
+            margin-right: 12px;
+
+            .buildings-bought {
+                font-size: 35px;
+                font-family: monospace;
+                float: right;
+                margin: 0px
+            }
+        }
+    }
+}
+
+.building:hover {
+    border-style: solid;
+    border-color: rgb(249, 255, 164);
+    border-width: 3px;
+}
