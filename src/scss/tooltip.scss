@@ -1,0 +1,41 @@
+@use "_variables.scss";
+
+.tooltip {
+    width: 285px;
+    height: 125px;
+    border: solid 3px black;
+    border-right-width: 0px;
+    background-color: variables.$colored-container;
+    pointer-events: none; /* if it's hovered over it won't do the flickering thing */
+    right: 346px;
+    z-index: 1; /* legit nothing has a higher-than-normal z-index, so this will show above EVERYTHING */
+}
+.tooltip-content {
+    padding: 0px 3px 0px 3px;
+}
+.tooltip-name {
+    font-size: 15px;
+    margin-top: 4px;
+    margin-bottom: 0px;
+}
+.tooltip-price {
+    font-size: 15px;
+    right: 0px;
+    top: 0px;
+    margin-top: 4px;
+    margin-right: 3px;
+}
+.tooltip-quote {
+    font-size: 12px;
+    margin-top: 5px;
+    overflow-y: hidden;
+}
+.tooltip-description {
+    font-size: 13px;
+    margin-left: 1px;
+}
+.tooltip-stats {
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}

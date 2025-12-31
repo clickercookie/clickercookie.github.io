@@ -1,0 +1,35 @@
+.popup {
+    flex-direction: column;
+    align-items: center;
+    width: 128px;
+    height: 96px;
+    padding: 0px; /* dialog boxes have padding by default */
+    text-align: center;
+    background-color: white;
+    text-shadow: none;
+}
+dialog::backdrop {
+    background-color: black;
+    opacity: 50%;
+    opacity: var(--dialog-backdrop-opacity); /* for programmatic modification */
+}
+.simple-popup-button-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.popup-text {
+    margin-left: 8px;
+    margin-right: 8px;
+    color: black;
+}
+.popup-button {
+    width: min-content;
+}
+.simple-popup-title {
+    display: none;
+    color: black;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    font-size: 17px;
+}

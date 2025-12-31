@@ -1,0 +1,66 @@
+@use "_variables.scss";
+
+.upgrades-holder-background {
+    position: relative;
+
+    .upgrades-holder {
+        position: relative;
+        width: 338px;
+        height: 67.6px;
+        overflow: hidden;
+        border: 6px solid;
+        border-width: 6px 0px 6px 0px;
+        border-color: variables.$brown-border;
+
+        .upgrade {
+            width: 59.6px;
+            height: 59.6px;
+            background-image: url(img/unknown-32-32.png);
+            background-size: contain;
+            margin: 0px;
+            display: inline-block;
+            cursor: pointer;
+            vertical-align: top;
+            border: 4px solid rgb(80, 51, 30);
+            image-rendering: pixelated; /* makes it so there's no blur in the images */
+        }
+    }
+}
+.upgrades-holder-background::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+}
+
+/* tooltip */
+.upgrade-name {
+    margin: 2px;
+    color: black;
+}
+.upgrade-price {
+    margin-left: 2px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    color: black;
+}
+.upgrade-desc {
+    margin: 2px;
+    color: black;
+}
+
+/* statistics */
+.upgrades-bought-stats-holder {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 64px);
+    justify-content: space-between;
+
+    .upgrade-stats {
+        width: 56px;
+        height: 56px;
+        margin: 3px;
+        background-size: 56px;
+        image-rendering: pixelated;
+    }
+}

@@ -1,5 +1,8 @@
 @use "_variables.scss";
 @use "buildings.scss";
+@use "upgrades.scss";
+@use "tooltip.scss";
+@use "popups.scss";
 
 // non-SCSS variables that are used for anything that needs to be modified programmatically
 :root {
@@ -187,66 +190,6 @@ small {
     row-gap: 4px;
 }
 
-/* UPGRADES */
-.upgrades-holder {
-    position: relative;
-    width: 338px;
-    height: 67.6px;
-    overflow: hidden;
-    border: 6px solid;
-    border-width: 6px 0px 6px 0px;
-    border-color: variables.$brown-border;
-}
-.upgrade {
-    width: 59.6px;
-    height: 59.6px;
-    background-image: url(img/unknown-32-32.png);
-    background-size: contain;
-    margin: 0px;
-    display: inline-block;
-    cursor: pointer;
-    vertical-align: top;
-    border: 4px solid rgb(80, 51, 30);
-    image-rendering: pixelated; /* makes it so there's no blur in the images */
-}
-.upgrades-holder-background {
-    position: relative;
-}
-.upgrades-holder-background::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-}
-.upgrade-name {
-    margin: 2px;
-    color: black;
-}
-.upgrade-price{
-    margin-left: 2px;
-    margin-top: 6px;
-    margin-bottom: 6px;
-    color: black;
-}
-.upgrade-desc {
-    margin: 2px;
-    color: black;
-}
-
-.upgrades-bought-stats-holder {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 64px);
-    justify-content: space-between;
-}
-.upgrade-stats {
-    width: 56px;
-    height: 56px;
-    margin: 3px;
-    background-size: 56px;
-    image-rendering: pixelated;
-}
-
 /* social links stuff */
 .social-links {
     position: absolute;
@@ -284,47 +227,6 @@ small {
     background-color: variables.$colored-container;
 }
 
-/* Infobox when hovering over a building */
-.tooltip {
-    width: 285px;
-    height: 125px;
-    border: solid 3px black;
-    border-right-width: 0px;
-    background-color: variables.$colored-container;
-    pointer-events: none; /* if it's hovered over it won't do the flickering thing */
-    right: 346px;
-    z-index: 1; /* legit nothing has a higher-than-normal z-index, so this will show above EVERYTHING */
-}
-.tooltip-content {
-    padding: 0px 3px 0px 3px;
-}
-.tooltip-name {
-    font-size: 15px;
-    margin-top: 4px;
-    margin-bottom: 0px;
-}
-.tooltip-price {
-    font-size: 15px;
-    right: 0px;
-    top: 0px;
-    margin-top: 4px;
-    margin-right: 3px;
-}
-.tooltip-quote {
-    font-size: 12px;
-    margin-top: 5px;
-    overflow-y: hidden;
-}
-.tooltip-description {
-    font-size: 13px;
-    margin-left: 1px;
-}
-.tooltip-stats {
-    font-size: 14px;
-    margin-top: 5px;
-    margin-bottom: 0px;
-}
-
 /* building icon css */
 .keyboard-icon {
     background: url(img/keyboard.png);
@@ -352,43 +254,6 @@ small {
 
 .church-icon {
     background-image: url(img/church.png);
-}
-
-/* Popup CSS */
-.popup {
-    flex-direction: column;
-    align-items: center;
-    width: 128px;
-    height: 96px;
-    padding: 0px; /* dialog boxes have padding by default */
-    text-align: center;
-    background-color: white;
-    text-shadow: none;
-}
-dialog::backdrop {
-    background-color: black;
-    opacity: 50%;
-    opacity: var(--dialog-backdrop-opacity); /* for programmatic modification */
-}
-.simple-popup-button-div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.popup-text {
-    margin-left: 8px;
-    margin-right: 8px;
-    color: black;
-}
-.popup-button {
-    width: min-content;
-}
-.simple-popup-title {
-    display: none;
-    color: black;
-    margin-top: 7px;
-    margin-bottom: 7px;
-    font-size: 17px;
 }
 
 /* middle buttons */
