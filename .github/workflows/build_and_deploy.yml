@@ -21,6 +21,9 @@ jobs:
       - name: Create output directory
         run: mkdir -p site/beta site/develop
 
+      - name: Install Sass
+        run: npm install -g sass
+
       # --- RELEASE (root) ---
       - name: Checkout release
         uses: actions/checkout@v4
