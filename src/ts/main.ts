@@ -217,7 +217,7 @@ export class Game implements SaveProvider<GameSaveData> {
         document.title = branchQuickSwitch("Clicker Cookie", "Clicker Cookie Beta", "Clicker Cookie Develop");
         // change version displayed
         document.getElementById("versionNumber").innerText = branchQuickSwitch(Game.VERSION, `${Game.VERSION} Beta`, `${Game.VERSION} Develop`);
-        document.getElementById("versionSwitchInfoText").innerText = (Game.VERSION_BRANCH === VersionBranch.MAIN) ? "Clicking this will switch to the beta branch" : "Clicking this will switch to the main branch";
+        document.getElementById("versionSwitchInfoBranch").innerText = (Game.VERSION_BRANCH === VersionBranch.MAIN) ? "beta" : "main";
 
         if (Game.IN_DEVELOPMENT)
             document.title = `cc_${Game.VERSION}_${Game.VERSION_BRANCH}_dev`;

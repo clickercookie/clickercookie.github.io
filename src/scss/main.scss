@@ -204,7 +204,7 @@ small {
     left: -28px;
     bottom: -28px;
 }
-.version-number {
+.version-number-holder {
     position: absolute;
     left: 50px;
     top: 9.5px;
@@ -225,35 +225,6 @@ small {
     font-size: 10px;
     color: black;
     background-color: variables.$colored-container;
-}
-
-/* building icon css */
-.keyboard-icon {
-    background: url(img/keyboard.png);
-}
-
-.grandpa-icon {
-    background: url(img/grandpa.png);
-}
-
-.ranch-icon {
-    background: url(img/ranch.png);
-}
-
-.tv-icon {
-    background: url(img/tv.png);
-}
-
-.worker-icon {
-    background: url(img/worker.png);
-}
-
-.wallet-icon {
-    background-image: url(img/wallet.png);
-}
-
-.church-icon {
-    background-image: url(img/church.png);
 }
 
 /* middle buttons */
@@ -409,28 +380,22 @@ small {
     width: 100%;
     background-color: rgb(215, 215, 215);
 }
-.mod-id {
-    font-style: italic;
-    color: gray;
-}
 
 /* random specific stuff */
-.upgrades-marker {
-    margin-top: 10px;
-    margin-bottom: 3px;
-    text-align: center;
-}
-
-.buildings-marker {
-    margin-top: 5px;
-    margin-bottom: 3px;
-    text-align: center;
-}
-
 .store-heading {
     margin: 3px;
     margin-bottom: 0px;
     font-size: 50px;
+    text-align: center;
+}
+.upgrades-subheading {
+    margin-top: 10px;
+    margin-bottom: 3px;
+    text-align: center;
+}
+.buildings-subheading {
+    margin-top: 5px;
+    margin-bottom: 3px;
     text-align: center;
 }
 
@@ -438,12 +403,6 @@ small {
     width: 320px;
 }
 
-.win {
-    display: none;
-    margin-top: 2px;
-    margin-bottom: 6px;
-    text-align: center;
-}
 .saving-indicator {
     position: absolute;
     bottom: 20px;

@@ -14,42 +14,41 @@
     </head>
     <body>
         <div class="left-side" id="leftSide">
-            <img id="cookie" class="cookie pointer" src="img/cookie.png" alt="cookie" draggable="false">
+            <img class="cookie pointer" id="cookie" src="img/cookie.png" alt="cookie" draggable="false">
             <div class="cookie-counter-wrapper">
                 <h3 class="cookie-counter shadow">Cookies: <span id="cookieCount">0</span></h3>
                 <h4 class="cookies-per-second-counter">Cookies Per Second: <span id="cookiesPerSecondCount">0</span></h4>
             </div>
-            <!-- <h3 class="win shadow" id="win">you win.</h3> -->
             <p class="saving-indicator" id="savingIndicator">Saved!</p>
             <span class="left-side-push" id="leftSidePush"></span> <!-- for some reason when you open menus it will change the size of the left side's div and smoosh everything, this prevents that (somehow) -->
             <div class="social-links">
                 <a href="404.html" target="_blank" id="githubHyperlink"> <!-- this HREF is changed programmatically in main.ts in the event of a fork and a different GitHub repo link. -->
                     <img class="github" src="img/github-mark.svg" alt="github">
                 </a>
-                <h5 id="versionNumberHolder" class="version-number pointer">Version: <span id="versionNumber">null</span></h5>
-                <div id="versionSwitchInfo" class="version-switch-info">
-                    <p style="margin:0px; color:black; text-align:center;" id="versionSwitchInfoText">Clicking this will switch to the null branch.</p>
+                <h5 class="version-number-holder pointer" id="versionNumberHolder">Version: <span id="versionNumber">null</span></h5>
+                <div class="version-switch-info" id="versionSwitchInfo">
+                    <p style="margin:0px; color:black; text-align:center;">Clicking this will switch to the <span id="versionSwitchInfoBranch">null</span> branch.</p>
                 </div>
             </div>
         </div> <!-- end leftSide -->
-        <div id="middle" class="middle">
+        <div class="middle" id="middle">
             <div class="middle-buttons" id="middleButtons">
                 <div class="left-middle-buttons pointer">
-                    <div id="statsButton" class="middle-button-base stats-button">
+                    <div class="middle-button-base stats-button" id="statsButton">
                         <p class="middle-button-name">Stats</p>
                     </div>
-                    <div id="optionsButton" class="middle-button-base options-button">
+                    <div class="middle-button-base options-button" id="optionsButton">
                         <p class="middle-button-name">Options</p>
                     </div>
                 </div>
                 <div class="right-middle-buttons pointer">
-                    <div id="infoButton" class="middle-button-base info-button">
+                    <div class="middle-button-base info-button" id="infoButton">
                         <p class="middle-button-name">Info</p>
                     </div>
                 </div>
             </div>
             <!-- middle text html -->
-            <div id="statsMiddleText" class="middle-main">
+            <div class="middle-main" id="statsMiddleText">
                 <div class="middle-x pointer">
                     <img src="img/white-x.png" alt="x button" width="38" height="38" class="no-margin">
                 </div>
@@ -82,7 +81,7 @@
                     
                 </div>
             </div>
-            <div id="optionsMiddleText" class="middle-main">
+            <div class="middle-main" id="optionsMiddleText">
                 <div class="middle-x pointer">
                     <img src="img/white-x.png" alt="x button" width="38" height="38" class="no-margin">
                 </div>
@@ -124,8 +123,8 @@
                 <p class="middle-text" style="margin-bottom:0px;">Modding:</p>
                 <small class="middle-text">You have <span id="modsNumberLoaded">null</span> mods loaded!</small> <br>
                 <div class="data-buttons">
-                    <button id="addModButton" class="data-button pointer" style="margin-top:3px;">Add Mod</button>
-                    <button id="listModsButton" class="data-button pointer" style="margin-top:3px; margin-left:0px;">List Mods</button>
+                    <button class="data-button pointer" id="addModButton" style="margin-top:3px;">Add Mod</button>
+                    <button class="data-button pointer" id="listModsButton" style="margin-top:3px; margin-left:0px;">List Mods</button>
                 </div>
             </div>
             <div class="tooltip absolute no-display" id="tooltip">
@@ -141,13 +140,13 @@
         </div> <!-- end middle -->
         <div class="right-side" id="rightSide">
             <h1 class="store-heading shadow">Store</h1>
-            <h3 class="upgrades-marker shadow">Upgrades</h3>
+            <h3 class="upgrades-subheading shadow">Upgrades</h3>
             <div class="upgrades-holder-background">
-                <div id="upgradesHolder" class="upgrades-holder">
+                <div class="upgrades-holder" id="upgradesHolder">
                 
                 </div>
             </div>
-            <h3 class="buildings-marker shadow">Buildings</h3>
+            <h3 class="buildings-subheading shadow">Buildings</h3>
             <div class="buildings-wrapper" id="buildingsWrapper">
                 
             </div>
