@@ -1,3 +1,5 @@
+@use "_variables.scss";
+
 .building {
     width: 96%;
     height: 64px;
@@ -16,7 +18,7 @@
         justify-content: space-between;
         align-items: center;
         height: 100%;
-        text-shadow: 0px 1px 4px black;
+        text-shadow: variables.$shadow;
         padding-left: 4px;
 
         /* in an unnamed div */

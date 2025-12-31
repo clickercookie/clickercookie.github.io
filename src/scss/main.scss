@@ -1,13 +1,10 @@
-/* variables (mainly for colors) */
-$brown-border: rgb(121, 77, 46);
-$colored-container: rgb(255, 243, 209);
+@use "_variables.scss";
+@use "buildings.scss";
 
 // non-SCSS variables that are used for anything that needs to be modified programmatically
 :root {
     --dialog-backdrop-opacity: 50%; /* default value for dialog opacity if something goes wrong (and for simple popups :D) */
 }
-
-@use "buildings.scss";
 
 /* basic basis for most html elements */
 body {
@@ -79,7 +76,7 @@ small {
     margin: 0px;
 }
 .shadow {
-    text-shadow: 0px 1px 4px black;
+    text-shadow: variables.$shadow;
 }
 .visible {
     opacity: 1 !important;
@@ -91,7 +88,7 @@ small {
     height: 100vh;
     border-style: solid;
     border-width: 0px 8px 0px 0px;
-    border-color: $brown-border;
+    border-color: variables.$brown-border;
     display: flex;
     flex-direction: column;
     background-image: url(img/backgrounds/background-blue.png);
@@ -103,7 +100,7 @@ small {
     height: 100vh;
     border-style: solid;
     border-width: 0px 0px 0px 8px;
-    border-color: $brown-border;
+    border-color: variables.$brown-border;
     display: flex;
     flex-direction: column;
     background-image: url(img/backgrounds/background-blue.png);
@@ -155,7 +152,7 @@ small {
     margin-bottom: 4px;
     font-size: 18px;
     color: white;
-    text-shadow: 0px 1px 4px black;
+    text-shadow: variables.$shadow;
     text-align: center;
 }
 
@@ -164,7 +161,7 @@ small {
     margin-bottom: 4px;
     font-size: 14px;
     color: white;
-    text-shadow: 0px 1px 4px black;
+    text-shadow: variables.$shadow;
     text-align: center;
 }
 
@@ -175,7 +172,7 @@ small {
 .middle-buttons {
     display: flex;
     height: 100px;
-    border: 0px solid $brown-border;
+    border: 0px solid variables.$brown-border;
     border-bottom-width: 8px;
     background-image: url(img/backgrounds/background-blue.png);
 }
@@ -198,7 +195,7 @@ small {
     overflow: hidden;
     border: 6px solid;
     border-width: 6px 0px 6px 0px;
-    border-color: $brown-border;
+    border-color: variables.$brown-border;
 }
 .upgrade {
     width: 59.6px;
@@ -272,7 +269,7 @@ small {
     font-size: 20px;
     color: white;
     font-family: monospace;
-    text-shadow: 0px 1px 4px black;
+    text-shadow: variables.$shadow;
 }
 .version-switch-info {
     display: none;
@@ -284,7 +281,7 @@ small {
     border: 3px solid black;
     font-size: 10px;
     color: black;
-    background-color: $colored-container;
+    background-color: variables.$colored-container;
 }
 
 /* Infobox when hovering over a building */
@@ -293,7 +290,7 @@ small {
     height: 125px;
     border: solid 3px black;
     border-right-width: 0px;
-    background-color: $colored-container;
+    background-color: variables.$colored-container;
     pointer-events: none; /* if it's hovered over it won't do the flickering thing */
     right: 346px;
     z-index: 1; /* legit nothing has a higher-than-normal z-index, so this will show above EVERYTHING */
@@ -411,7 +408,7 @@ dialog::backdrop {
     font-size: 24px;
     font-family: "Lucida Console", "Courier New", monospace;
     color: white;
-    text-shadow: 0px 1px 4px black;
+    text-shadow: variables.$shadow;
 }
 
 /* Middle Text CSS */
@@ -507,7 +504,7 @@ dialog::backdrop {
     height: 50px;
     border: 2px solid black;
     margin-left: auto;
-    background-color: $colored-container;
+    background-color: variables.$colored-container;
     color: black; /* this wasn't nessesary until 6/3/23? idk why */
 }
 .info-button {
