@@ -51,7 +51,6 @@ export class BackgroundHandler extends Handler<Background> {
         }
 
         document.getElementById("leftSide").style.background = url(this.getCurrentBackground().src);
-        document.getElementById("middleButtons").style.background = url(this.getCurrentBackground().src);
         document.getElementById("middle").style.background = url(this.getCurrentBackground().src);
         document.getElementById("rightSide").style.background = url(this.getCurrentBackground().src);
 
@@ -314,11 +313,10 @@ export class ModHandler extends UniqueKeyHandler<Mod<any>> {
             if (mod.NAMESPACE === "clickercookie") continue; // let's not confuse the end user too much :)
 
             const newModItem = document.createElement("div");
-            newModItem.className = "popup-text mod-in-list";
+            newModItem.className = "mod-in-list";
 
                 const newModName = document.createElement("p");
                 newModName.innerText = mod.NAMESPACE;
-                newModName.className = "popup-text";
                 newModItem.appendChild(newModName);
 
             document.getElementById("modsList")!.appendChild(newModItem);
@@ -330,32 +328,32 @@ export class ModHandler extends UniqueKeyHandler<Mod<any>> {
 
     // i dunno where to put these last two
     static addButtonClicked() {
-        const popup = new AdvancedPopup(500,350,`<h3 class='simple-popup-title' style='display:block;'>Add Mod</h3>
-        <h5 class='popup-text' style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5>
-        <h5 class='popup-text' style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5>
-        <h5 class='popup-text' style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue' target="_blank">read the documentation</a>.</h5>
+        const popup = new AdvancedPopup(500,350,`<h1>Add Mod</h1>
+        <h5 style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5>
+        <h5 style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5>
+        <h5 style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue' target="_blank">read the documentation</a>.</h5>
         <form onsubmit='return false;' id='addModURLForm' style='margin-top:22px;'>
-            <label for='addModURL' class='popup-text'>From URL: </label>
+            <label for='addModURL'>From URL: </label>
             <input id='addModURL'>
         </form>
         <form>
-            <label for='addModFile' class='popup-text' style='margin-right:0px;'>From File: </label>
-            <input type='file' id='addModFile' accept='.js' class='popup-text' style='width:86px;'>
+            <label for='addModFile' style='margin-right:0px;'>From File: </label>
+            <input type='file' id='addModFile' accept='.js' style='width:86px;'>
         </form>
-        <p class='popup-text no-display' id='importedMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>Imported!</p>
-        <button id='popupAddModButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
+        <p class='no-display' id='importedMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>Imported!</p>
+        <button id='popupAddModButton' style='margin-top:20px;'>OK</button>`);
         document.getElementById("addModURL").addEventListener("change", () => { ModHandler.loadURL((document.getElementById("addModURL") as HTMLInputElement).value) });
         document.getElementById("addModFile").addEventListener("change", () => { ModHandler.loadFile((document.getElementById("addModFile") as HTMLInputElement).files[0]) });
         document.getElementById("popupAddModButton").addEventListener("click", () => { popup.destroy() }); //* just to let it be known it's called "popupAddModButton" because "addModButton" is already used by the data button
     }
-    
+
     static listButtonClicked() {
-        const popup = new AdvancedPopup(300,350,`<h3 class='simple-popup-title' style='display:block;'>All Mods</h3>
-        <p class='popup-text no-display' id='noModsMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>You have no mods installed!</p>
+        const popup = new AdvancedPopup(300,350,`<h1>All Mods</h1>
+        <p class='no-display' id='noModsMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>You have no mods installed!</p>
         <div id='modsList' class='mods-list'></div>
-        <small class='popup-text no-display' id='removeModsMessage' style='margin-top:3px;'>To remove mods, refresh your page. (make sure to save!)</small>
-        <button id='popupListModsButton' class='popup-button' style='margin-top:20px;'>OK</button>`);
-        document.getElementById("popupListModsButton").addEventListener("click", () => { popup.destroy() });    
+        <small class='no-display' id='removeModsMessage' style='margin:3px 8px 0 8px;'>To remove mods, refresh your page. (make sure to save!)</small>
+        <button id='popupListModsButton' style='margin-top:20px;'>OK</button>`,{innerPadding: "0"});
+        document.getElementById("popupListModsButton").addEventListener("click", () => { popup.destroy() });
         ModHandler.list();
     }
 

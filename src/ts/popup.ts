@@ -23,8 +23,7 @@ export class SimplePopup {
         this.html.style.width = `${data.x}px`;
         this.html.style.height = `${data.y}px`;
         
-            const title = document.createElement("h3");
-            title.className = "simple-popup-title";
+            const title = document.createElement("h1");
             if (data.title) {
                 title.style.display = "block";
                 title.innerText = data.title;
@@ -34,16 +33,14 @@ export class SimplePopup {
             this.html.appendChild(title);
 
             const content = document.createElement("p");
-            content.className = "popup-content";
             content.innerHTML = data.text;
             this.html.appendChild(content);
 
             const buttonDiv = document.createElement("div");
-            buttonDiv.className = "simple-popup-button-div";
+            buttonDiv.className = "simple-popup-button-wrapper";
             buttonDiv.style.width = `${data.x}px`;
 
                 const backButton = document.createElement("button");
-                backButton.className = "popup-button";
                 backButton.innerText = "Back";
                 backButton.style.marginRight = "3px";
                 backButton.addEventListener("click", () => { this.destroy() });
@@ -54,7 +51,6 @@ export class SimplePopup {
                 buttonDiv.appendChild(backButton);
 
                 const button = document.createElement("button");
-                button.className = "popup-button";
                 button.innerText = "OK";
                 button.addEventListener("click", () => { if (data.func !== undefined) data.func(); this.destroy() });
                 if (data.button === false)
@@ -84,12 +80,12 @@ export class SimplePopup {
 export interface AdvancedPopupOptions {
     /** The `opacity` percentage of the dialog backdrop. Default: 50 */
     filterLevel?: number;
-    /** The padding to apply to the popup HTML, in `px` */
-    innerPadding?: number;
+    /** The padding value to apply to the HTML. Default is "0px 8px" */
+    innerPadding?: string;
 }
 const defaultValues: Required<AdvancedPopupOptions> = {
     filterLevel: 50,
-    innerPadding: 0
+    innerPadding: "0px 8px" // from .popup
 }
 
 export class AdvancedPopup {
@@ -109,7 +105,7 @@ export class AdvancedPopup {
             ...options
         };
 
-        this.html.style.padding = filledOptions.innerPadding+"px";
+        this.html.style.padding = filledOptions.innerPadding;
         this.html.style.setProperty("--dialog-backdrop-opacity", filledOptions.filterLevel+"%");
 
         document.body.appendChild(this.html);
