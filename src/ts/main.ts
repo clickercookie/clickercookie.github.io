@@ -10,8 +10,8 @@ import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
 import { branchQuickSwitch, Interval, object2HTML, StringifiedIdentifier } from "./helper.js";
 import { expandUpgradesHolder, UpgradeSave } from "./upgrades.js";
 import { convert06Save, SaveProvider, Savinator } from "./saving.js";
-import { Mod } from "./mods.js"
-import ClickerCookie from "./clickercookie.js"
+import { Mod } from "./mods.js";
+import ClickerCookie from "./clickercookie.js";
 import { SimplePopup } from "./popup.js";
 import { Handlers, ModHandler } from "./handlers.js";
 import { BuildingSave } from "./buildings.js";
@@ -68,14 +68,14 @@ export interface GameSaveData {
 export class Game implements SaveProvider<GameSaveData> {
     // --- Important game-wide constants ---
     public static readonly VERSION: string = "0.7.1";
-    public static readonly VERSION_BRANCH: VersionBranch = (location.pathname == "/develop/index.html" || location.pathname == "/develop" || location.pathname == "/develop/") ? 2 : (location.pathname == "/beta/index.html" || location.pathname == "/beta" || location.pathname == "/beta/") ? 1 : 0;
+    public static readonly VERSION_BRANCH: VersionBranch = (location.pathname === "/develop/index.html" || location.pathname === "/develop" || location.pathname === "/develop/") ? 2 : (location.pathname === "/beta/index.html" || location.pathname === "/beta" || location.pathname === "/beta/") ? 1 : 0;
     public static readonly IN_DEVELOPMENT: boolean = (location.hostname === "localhost" || location.hostname === "127.0.0.1") ? true : false; // automatically toggles if hosted locally
     public static readonly GITHUB_REPO: string = "https://github.com/clickercookie/clickercookie.github.io";
     public static readonly CREDITS: Record<string, string> = {
         "FifthTundraG": "Creation",
         "potatman4": "Playtesting",
         "Wolfsarecool44": "Playtesting, Emotional Support"
-    }
+    };
     public static readonly DEFAULT_BACKGROUND: StringifiedIdentifier = "clickercookie:blue";
     public static readonly DEFAULT_CURRENTLY_CLICKED_OBJECT: StringifiedIdentifier = "clickercookie:cookie";
 
@@ -94,15 +94,15 @@ export class Game implements SaveProvider<GameSaveData> {
      */
     public static switchToBranch(branch: VersionBranch) {
         switch (branch) {
-        case VersionBranch.MAIN:
-            window.location.href = "/";
-            break;
-        case VersionBranch.BETA:
-            window.location.href = "/beta";
-            break;
-        case VersionBranch.DEVELOP:
-            window.location.href = "/develop";
-            break;
+            case VersionBranch.MAIN:
+                window.location.href = "/";
+                break;
+            case VersionBranch.BETA:
+                window.location.href = "/beta";
+                break;
+            case VersionBranch.DEVELOP:
+                window.location.href = "/develop";
+                break;
         }
     }
 
@@ -181,7 +181,7 @@ export class Game implements SaveProvider<GameSaveData> {
         // 0.5 save 
         if (localStorage.getItem(this.savinator5000.currentSaveName) && localStorage.getItem(this.savinator5000.currentSaveName)[0] === "[" && Game.VERSION_BRANCH === VersionBranch.MAIN) {
             localStorage.setItem(`old05${this.savinator5000.currentSaveName}`, localStorage.getItem(this.savinator5000.currentSaveName));
-            new SimplePopup({x: 400, y: 220, text: "You are using a save from the 0.5 release cycle. 0.5 save transfer is no longer supported. Pressing the button below will reset your save.", title: "sorry", func: () => { this.savinator5000.reset(); }});
+            new SimplePopup({x: 400, y: 220, text: "You are using a save from the 0.5 release cycle. 0.5 save transfer is no longer supported. Pressing the button below will reset your save.", title: "sorry", func: () => { this.savinator5000.reset() }});
             return "Save the save!";
         }
 
@@ -189,14 +189,14 @@ export class Game implements SaveProvider<GameSaveData> {
         const parsedCurrentSave = JSON.parse(localStorage.getItem(this.savinator5000.currentSaveName));
         if (typeof parsedCurrentSave === "object" && parsedCurrentSave !== null) {
             if (parsedCurrentSave["core.cookies"]) {
-                console.log("0.6 save detected, prompting user to transfer save.")
+                console.log("0.6 save detected, prompting user to transfer save.");
                 new SimplePopup({
                     x: 400,
                     y: 220,
                     text: "You are using a save from the 0.6 release cycle. Pressing the button below will transfer your save to the new format.",
                     title: "yay new update!",
                     func: () => {
-                        console.log("Beginning 0.6 save transfer process.")
+                        console.log("Beginning 0.6 save transfer process.");
                         convert06Save(localStorage.getItem(this.savinator5000.currentSaveName));
                     }
                 });
@@ -237,7 +237,7 @@ export class Game implements SaveProvider<GameSaveData> {
             // quick buttons
             const devDiv = document.createElement("div");
             devDiv.setAttribute("style","padding-left: 3px;");
-            
+
             const devWarning = document.createElement("h4");
             devWarning.innerText = "localhost detected, options below";
             devWarning.setAttribute("style","color:black;");
@@ -248,7 +248,7 @@ export class Game implements SaveProvider<GameSaveData> {
             mousePos.setAttribute("id","mousePosDevText");
             mousePos.setAttribute("style","margin-bottom:0px;");
             devDiv.appendChild(mousePos);
-    
+
             document.getElementById("leftSide").insertBefore(devDiv, document.querySelector(".left-side-push"));
         }
 
@@ -270,7 +270,7 @@ export class Game implements SaveProvider<GameSaveData> {
         document.getElementById("exportDataButton").addEventListener("click", () => {this.savinator5000.export()});
         document.getElementById("importDataButton").addEventListener("click", () => {document.getElementById("importDataInput").click()});
         document.getElementById("importDataInput").addEventListener("change", () => {this.savinator5000.import()});
-        document.getElementById("autoSavingToggleSelect").addEventListener("change", () => {this.autoSavingAllowed = ((document.getElementById("autoSavingToggleSelect") as HTMLFormElement).value === "on") ? true : false});;
+        document.getElementById("autoSavingToggleSelect").addEventListener("change", () => {this.autoSavingAllowed = ((document.getElementById("autoSavingToggleSelect") as HTMLFormElement).value === "on") ? true : false});
         document.getElementById("addModButton").addEventListener("click", () => {ModHandler.addButtonClicked()});
         document.getElementById("listModsButton").addEventListener("click", () => {ModHandler.listButtonClicked()});
         // upgrades holder
@@ -326,7 +326,7 @@ export class Game implements SaveProvider<GameSaveData> {
             "info": document.getElementById("infoMiddleText"),
             "options": document.getElementById("optionsMiddleText"),
             "stats": document.getElementById("statsMiddleText")
-        }
+        };
         
         // set display none on all text
         for (const text of Object.values(middleTexts)) {
@@ -365,7 +365,7 @@ export class Game implements SaveProvider<GameSaveData> {
                 ...originalBuildingSave,
                 ...Handlers.BUILDING.dumpSave()
             }
-        }
+        };
     }
 
     loadSaveData(saveData: GameSaveData): void {

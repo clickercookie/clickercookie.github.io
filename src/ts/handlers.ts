@@ -252,7 +252,7 @@ export class UpgradeHandler extends Handler<Upgrade> {
 
             if (this.getFromIdentifier(id) === undefined) continue; // if upgrades are not registered we obviously can't load them. todo: should this warn?
 
-            this.getFromIdentifier(id).loadSaveData(saveObj[stringifiedIdentifier])
+            this.getFromIdentifier(id).loadSaveData(saveObj[stringifiedIdentifier]);
         }
     }
 }
@@ -315,6 +315,7 @@ export class ModHandler extends UniqueKeyHandler<Mod<unknown>> {
             const newModItem = document.createElement("div");
             newModItem.className = "mod-in-list";
 
+            /* eslint-disable @stylistic/indent */
                 const newModName = document.createElement("p");
                 newModName.innerText = mod.NAMESPACE;
                 newModItem.appendChild(newModName);

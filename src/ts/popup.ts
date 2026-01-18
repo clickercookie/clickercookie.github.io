@@ -22,13 +22,13 @@ export class SimplePopup {
         this.html.className = "popup";
         this.html.style.width = `${data.x}px`;
         this.html.style.height = `${data.y}px`;
-        
+        /* eslint-disable @stylistic/indent */
             const title = document.createElement("h1");
             if (data.title) {
                 title.style.display = "block";
                 title.innerText = data.title;
             } else {
-                title.style.display = "none"
+                title.style.display = "none";
             }
             this.html.appendChild(title);
 
@@ -86,10 +86,10 @@ export interface AdvancedPopupOptions {
 const defaultValues: Required<AdvancedPopupOptions> = {
     filterLevel: 50,
     innerPadding: "0px 8px" // from .popup
-}
+};
 
 export class AdvancedPopup {
-    html: HTMLDialogElement
+    html: HTMLDialogElement;
 
     constructor(x: number, y: number, html: string, options: AdvancedPopupOptions=undefined) { // todo: possibly add HTMLElement to html instead of just string?
         this.html = document.createElement("dialog");

@@ -9,7 +9,7 @@ import { Handlers } from "./handlers.js";
 // the description of almost every upgrade is the same, but just in case we want to add more upgrades in the future
 // a "desc" field has been added to the upgrades array. Most upgrade will just reference a this array, though
 const defaultUpgradeDescriptions = {
-    keyboard: `Multiplys Keyboard and clicking NULL production by 2`, // we cannot embed Personalization.getCurrentlyClicked() in here anymore since it Personalization.currentlyClicked is not defined until Game.init() 
+    keyboard: "Multiplys Keyboard and clicking NULL production by 2", // we cannot embed Personalization.getCurrentlyClicked() in here anymore since it Personalization.currentlyClicked is not defined until Game.init(). see ClickerCookie.constructor() for where this is set
     grandpa: "Multiplys Grandpa production by 2",
     ranch: "Multiplys Ranch production by 2",
     television: "Multiplys TV production by 2",
@@ -94,7 +94,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 upgradeCost: 15,
                 CPSGain: 0.1,
                 img: "img/keyboard.png",
-                condition() { return true; }
+                condition() { return true }
             },
             grandpa: {
                 name: "Grandpa",
@@ -163,7 +163,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
         // upgrades
         const keyboardUpgradeBoughtFunc = () => {
             this.cookiesPerClick *= 2;
-        }
+        };
 
         this.UPGRADES_DATA = {
             // keyboard
@@ -583,7 +583,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
             totalCookies: this.totalCookies,
             cookiesPerClick: this.cookiesPerClick,
             cookieBeenClickedTimes: this.cookieBeenClickedTimes
-        }
+        };
     }
     loadSaveData(saveData: ClickerCookieSaveData) {
         this.cookies = saveData.cookies;

@@ -5,7 +5,7 @@ import { Game, VersionBranch } from "./main.js";
 import { SimplePopup } from "./popup.js";
 
 export class Savinator {
-    private saveHandler: SaveHandler
+    private saveHandler: SaveHandler;
 
     // these are useful for debugging when i need to change the name of the local storage key temporarily
     saveName: string;
@@ -102,7 +102,7 @@ export class Savinator {
         }
         if (this.saveHandler.getFromKey("game") !== undefined) { // game should always be there, but just in case it isn't we check
             this.saveHandler.getFromKey("game").loadSaveData(localStorageSave.getData("game"));
-            console.log(`Loaded save data for game namespace.`);
+            console.log("Loaded save data for game namespace.");
         }
 
         Game.getInstance().AUTOSAVE_INTERVAL.reset();
@@ -145,7 +145,7 @@ export class Savinator {
 
             this.save(importedData);
             this.load();
-        }
+        };
         reader.onerror = (e) => alert(`something broke, don't expect me to fix it :D \nerror: ${e}`);
 
         reader.readAsText(file);
@@ -220,7 +220,7 @@ export class Save {
                     format: Save.VERSION_FORMAT
                 },
                 data: {}
-            }
+            };
         } else {
             this.data = data; //! todo: we might want some error checking here
         }

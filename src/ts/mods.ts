@@ -34,7 +34,7 @@ export class Mod<T> implements SaveProvider<T> {
         "cps": [],
         "loop": [],
         "personalization": []
-    }
+    };
 
     static registerKooh(id: Kooh, func: () => void) {
         this.koohs[id].push(func);

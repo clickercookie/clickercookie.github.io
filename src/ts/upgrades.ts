@@ -185,7 +185,7 @@ export class Upgrade implements SaveProvider<UpgradeSave> {
         return {
             unlocked: this.unlocked,
             bought: this.bought
-        }
+        };
     }
 
     loadSaveData(saveData: UpgradeSave): void {

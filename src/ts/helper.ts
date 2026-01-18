@@ -58,7 +58,7 @@ export function commaify(toComma: number): string {
  * @returns A nicer looking number
  */
 export function makeSlightlyImperfectFloatNice(num: number): string {
-    return commaify(Math.round(num * 10) / 10)
+    return commaify(Math.round(num * 10) / 10);
 }
 
 /**
@@ -135,12 +135,12 @@ export class Interval {
  */
 export function branchQuickSwitch(main: unknown, beta: unknown, develop: unknown): unknown {
     switch (Game.VERSION_BRANCH) {
-    case VersionBranch.MAIN:
-        return main;
-    case VersionBranch.BETA:
-        return beta;
-    case VersionBranch.DEVELOP:
-        return develop;
+        case VersionBranch.MAIN:
+            return main;
+        case VersionBranch.BETA:
+            return beta;
+        case VersionBranch.DEVELOP:
+            return develop;
     }
 }
 
@@ -152,10 +152,10 @@ export function branchQuickSwitch(main: unknown, beta: unknown, develop: unknown
 export function countVisibleChildren(element: HTMLElement): number {
     let count = 0;
     for (const child of element.children) {
-      const style = window.getComputedStyle(child);
-      if (style.display !== "none") {
-        count++;
-      }
+        const style = window.getComputedStyle(child);
+        if (style.display !== "none") {
+            count++;
+        }
     }
     return count;
 }
