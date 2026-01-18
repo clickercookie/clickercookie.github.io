@@ -34,16 +34,16 @@
         <div class="middle" id="middle">
             <div class="middle-buttons" id="middleButtons">
                 <div class="left-middle-buttons pointer">
-                    <div class="middle-button-base stats-button" id="statsButton">
-                        <p class="middle-button-name">Stats</p>
+                    <div class="middle-button stats-button" id="statsButton">
+                        <p>Stats</p>
                     </div>
-                    <div class="middle-button-base options-button" id="optionsButton">
-                        <p class="middle-button-name">Options</p>
+                    <div class="middle-button options-button" id="optionsButton">
+                        <p>Options</p>
                     </div>
                 </div>
-                <div class="right-middle-buttons pointer">
-                    <div class="middle-button-base info-button" id="infoButton">
-                        <p class="middle-button-name">Info</p>
+                <div class="pointer">
+                    <div class="middle-button info-button" id="infoButton">
+                        <p>Info</p>
                     </div>
                 </div>
             </div>
@@ -52,7 +52,7 @@
                 <div class="middle-x pointer">
                     <img src="img/white-x.png" alt="x button" width="38" height="38" class="no-margin">
                 </div>
-                <h3 class="middle-title">Statistics</h3>
+                <h1>Statistics</h1>
                 <p class="middle-text-gray" id="cookiesStat">Cookies: 0</p> <!-- can statistics be cool and instead be registered programmatically? -->
                 <p class="middle-text-gray" id="allTimeCookies">All Time Cookies: 0</p>
                 <p class="middle-text-gray" id="buildingsOwnedStat">Buildings Owned: 0</p>
@@ -61,22 +61,22 @@
                 <p class="middle-text-gray" id="cookiesPerClickStat">Cookies Per Click: 1</p>
                 <p class="middle-text-gray no-display" id="ifCheatedStat" style="color:white;">You have cheated on this playthrough!</p>
                 <p class="middle-text-gray no-display" id="ifModdedStat" style="color:white;">You have activated mods on this playthrough!</p>
-                <h3 class="middle-subtitle">Upgrades:</h3>
+                <h2>Upgrades:</h2>
                 <p class="middle-text-gray">Bought: <span id="upgradesBoughtCounter">null</span>/<span id="totalUpgradesCounter">null</span></p> <!-- if we ever get more upgrades this needs to be changed -->
                 <div class="upgrades-bought-stats-holder" id="upgradesBoughtStatsHolder">
 
                 </div>
             </div>
-            <div id="infoMiddleText" class="middle-main">
+            <div class="middle-main" id="infoMiddleText">
                 <div class="middle-x pointer">
                     <img src="img/white-x.png" alt="x button" width="38" height="38" class="no-margin">
                 </div>
-                <h3 class="middle-title">Infomation</h3>
-                <h3 class="middle-subtitle">About:</h3>
-                <p class="middle-text">Clicker Cookie is a totally original game about clicking a cookie. Made by <a href="https://github.com/FifthTundraG" target="_blank">FifthTundraG</a> in a few hours, this game went from a random clone of a decade old, actively developed clicker game to something that spiraled into a land of insanity.</p>
-                <p class="middle-text">Original game made by Orteil and Opti. <small>we :heart: you!</small></p>
+                <h1>Infomation</h1>
+                <h2>About:</h2>
+                <p>Clicker Cookie is a totally original game about clicking a cookie. Made by <a href="https://github.com/FifthTundraG" target="_blank">FifthTundraG</a> in a few hours, this game went from a random clone of a decade old, actively developed clicker game to something that spiraled into a land of insanity.</p>
+                <p>Original game made by Orteil and Opti. <small>we :heart: you!</small></p>
                 <button class="data-button pointer" id="creditsButton">Credits</button>
-                <h3 class="middle-subtitle" style="margin-top:0px;">Changelog:</h3>
+                <h2>Changelog:</h2>
                 <div id="changelogWrapper">
 
                 </div>
@@ -85,43 +85,45 @@
                 <div class="middle-x pointer">
                     <img src="img/white-x.png" alt="x button" width="38" height="38" class="no-margin">
                 </div>
-                <h3 class="middle-title">Options</h3>
-                <h5 class="middle-subtitle">Customization:</h5>
+                <h1>Options</h1>
+                <h2>Customization:</h2>
                 <form action="changed">
-                    <label for="backgroundSelect" class="middle-label">Background: </label>
+                    <label for="backgroundSelect">Background: </label>
                     <select class="pointer" id="backgroundSelect">
                         <!-- See personalization.ts -->
                     </select>
                 </form>
                 <form>
-                    <label for="currentlyClickedSelect" class="middle-label">Currently Clicked: </label>
+                    <label for="currentlyClickedSelect">Currently Clicked: </label>
                     <select class="pointer" id="currentlyClickedSelect">
                         <!-- See personalization.ts -->
                     </select>
                 </form>
-                <h5 class="middle-subtitle">Miscellaneous:</h5>
-                <p class="middle-text">Save Management:</p>
-                <div>
-                    <button class="data-button pointer" id="saveButton">Save</button>
-                    <button class="data-button pointer" id="loadButton">Load</button>
-                </div>
-                <div>
-                    <button class="data-button pointer red" id="resetSaveButton">Reset</button>
-                </div>
-                <div>
-                    <button id="exportDataButton" class="data-button pointer">Export Data</button>
-                    <button id="importDataButton" class="data-button pointer">Import Data</button>
-                    <input type="file" id="importDataInput" class="no-display" accept=".ccsave,.json"> <!-- this doesn't actually show up, the importDataButton just runs the click() method on this guy-->
+                <h2>Miscellaneous:</h2>
+                <p style="margin-bottom:0.5rem;">Save Management:</p> <!-- should this be h3? -->
+                <div class="data-buttons">
+                    <div>
+                        <button class="pointer" id="saveButton">Save</button>
+                        <button class="pointer" id="loadButton">Load</button>
+                    </div>
+                    <div>
+                        <button class="reset" id="resetSaveButton">Reset</button>
+                    </div>
+                    <div>
+                        <button id="exportDataButton" class="data-button pointer">Export Data</button>
+                        <button id="importDataButton" class="data-button pointer">Import Data</button>
+                        <input type="file" id="importDataInput" class="no-display" accept=".ccsave,.json"> <!-- this doesn't actually show up, the importDataButton just runs the click() method on this guy-->
+                    </div>
                 </div>
                 <form id="autoSavingToggleForm">
-                    <label for="autoSavingToggleSelect" class="middle-label">Auto Saving: </label>
+                    <label for="autoSavingToggleSelect">Auto Saving: </label>
                     <select class="pointer" id="autoSavingToggleSelect"> <!-- should this be a checkbox? -->
                         <option value="on">On</option>
                         <option value="off">Off</option>
                     </select>
                 </form>
-                <p class="middle-text" style="margin-bottom:0px;">Modding:</p>
-                <small class="middle-text">You have <span id="modsNumberLoaded">null</span> mods loaded!</small> <br>
+                <p style="margin-bottom:0px;">Modding:</p> <!-- should this be h3? -->
+                <small>You have <span id="modsNumberLoaded">null</span> mods loaded!</small> <br>
                 <div>
                     <button class="data-button pointer" id="addModButton" style="margin-top:3px;">Add Mod</button>
                     <button class="data-button pointer" id="listModsButton" style="margin-top:3px; margin-left:0px;">List Mods</button>

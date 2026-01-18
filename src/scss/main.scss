@@ -209,67 +209,59 @@ small {
 }
 
 .middle {
-    flex: auto;
+    width: 100%; // takes up all remaining space between left and right sides
     height: 100vh;
     background: url(img/backgrounds/background-blue.png);
 
-    .middle-buttons { // todo 0.7.1: these are a disaster and should probably be completely reworked
+    .middle-buttons {
         display: flex;
+        justify-content: space-between; // puts left on left and right on right with gap in between
         height: 100px;
         border: 0px solid variables.$brown-border;
         border-bottom-width: 8px;
 
         .left-middle-buttons {
             display: flex;
-            flex-direction: column;
-        }
-        .right-middle-buttons {
-            float: right;
-            margin-left: auto;
-            height: 50px;
-        }
-        .middle-button-name {
-            margin: 0px;
-            text-align: center;
-            margin-top: 12px;
-            font-size: 24px;
-            font-family: "Lucida Console", "Courier New", monospace;
-            color: white;
-            text-shadow: variables.$shadow;
+            flex-direction: column; // for whatever reason without this they stack in a row not on top of each other
         }
 
-        .middle-button-base {
+        .middle-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 110px;
-            height: 50px;
+            height: 50%;
             border: 2px solid black;
             margin-left: auto;
             background-color: variables.$colored-container;
-            color: black; /* this wasn't nessesary until 6/3/23? idk why */
+
+            p {
+                font-size: 24px;
+                font-family: "Lucida Console", "Courier New", monospace;
+                margin: 0;
+                text-shadow: variables.$shadow;
+            }
         }
-        .info-button {
-            border-right-width: 0px;
-            height: 48px;
-            float: right;
+        .stats-button { //? just put these three directly in HTML?
+            border-left-width: 0px;
         }
         .options-button {
             border-top-width: 0px;
             border-bottom-width: 0px;
             border-left-width: 0px;
-            float: left;
         }
-        .stats-button {
-            border-left-width: 0px;
-            float: left;
+        .info-button {
+            border-right-width: 0px;
         }
     }
 
     /* Middle Text */
     .middle-main {
         display: none;
-        position: relative; /* right now this is only used to make the X button not push the middle text to the left, i don't think it does anything else */
-        color: white;
-        overflow-y: auto;
-        height: 86%;
+        position: relative; // right now this is only used to make the X button not push the middle text to the left, i don't think it does anything else
+        overflow-y: auto; // scrollbar
+        height: 86%; // this should be set programmatically but we keep it here in case of catastrophic failure
+        padding: 0 8px;
         background: linear-gradient(to right, rgba(0, 0, 0, 0.2), transparent 25%),
             linear-gradient(to left, rgba(0, 0, 0, 0.2), transparent 25%),
             linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent 25%),
@@ -277,9 +269,9 @@ small {
             radial-gradient(transparent 80%, rgba(4, 4, 4, 0.3)),
             url("img/dark-noise.png");
 
-        // todo: these classes can likely be removed and just replaced with their actual elements
-        .middle-title {
-            font-size: 35px;
+        // todo: random margins?
+        h1 {
+            font-size: 2rem;
             font-family: monospace;
             margin-top: 12px;
             margin-bottom: 15px;
@@ -288,27 +280,30 @@ small {
             font-weight: bold;
             text-align: center;
         }
-        .middle-subtitle {
-            font-size: 26px;
+        h2 {
+            font-size: 1.5rem;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin-top: 12px;
             margin-bottom: 15px;
-            margin-left: 9px;
             font-weight: bold;
             text-align: left;
         }
-        .middle-text {
-            margin-left: 9px;
+        h3 {
+            font-size: 1.2rem;
+            margin: 6px 0px 8px 0px;
+            text-align: left;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        h4 {
+            font-size: 1rem;
             margin-bottom: 6px;
             margin-top: 6px;
-            font-family: Arial, Helvetica, sans-serif;
         }
         .middle-text-gray {
-            margin-left: 7px;
             margin-bottom: 6px;
             margin-top: 6px;
             color: gray;
-            font-family: Arial, Helvetica, sans-serif;
             letter-spacing: 1px;
             font-weight: bold;
         }
@@ -324,34 +319,28 @@ small {
             background-color: black;
             border: 2px solid white;
         }
-        .middle-ul {
-            font-size: 0.875em;
+        .data-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+
+            .reset {
+                color: red;
+            }
         }
-        .middle-label {
-            margin-left: 9px;
-        }
-        .data-button {
-            margin-left: 9px;
-            margin-bottom: 4px;
+
+        form {
+            margin: 0.25rem 0
         }
 
         // only in Info
         .changelog {
-            .version-heading {
-                font-size: 1.25em;
-                margin: 6px 0px 8px 9px;
-                text-align: left;
-                -webkit-user-select: none;
-                user-select: none;
-            }
-
-            /* notes also have middle-text class */
             .note {
                 font-size: 0.875em;
             }
 
-            .subheading {
-                font-size: 1em;
+            ul { // for changelog entries so they're smaller than their headers
+                font-size: 0.875rem;
             }
         }
     }

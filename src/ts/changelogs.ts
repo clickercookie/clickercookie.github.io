@@ -276,8 +276,7 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
     if (logs.type === "hotfix")
         newChangelogEntry.setAttribute("style", "font-size: 0.85em; color: #9f9f9f");
 
-    const versionHeader = document.createElement("h2");
-    versionHeader.setAttribute("class", "version-heading");
+    const versionHeader = document.createElement("h3");
 
     const releaseDate = (logs.release === undefined) ? "???" : logs.release;
     if (logs.name === undefined)
@@ -294,13 +293,11 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
     }
     
     if (logs.added !== undefined) {
-        const addedHeader = document.createElement("h3");
-        addedHeader.setAttribute("class","middle-text subheading");
+        const addedHeader = document.createElement("h4");
         addedHeader.innerText = "Added:";
         newChangelogEntry.appendChild(addedHeader);
 
         const addedList = document.createElement("ul");
-        addedList.setAttribute("class","middle-ul");
         newChangelogEntry.appendChild(addedList);
 
         for (const item of logs.added) {
@@ -310,13 +307,11 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
         }
     }
     if (logs.changed !== undefined) {
-        const changedHeader = document.createElement("h3");
-        changedHeader.setAttribute("class","middle-text subheading");
+        const changedHeader = document.createElement("h4");
         changedHeader.innerText = "Changed:";
         newChangelogEntry.appendChild(changedHeader);
 
         const changedList = document.createElement("ul");
-        changedList.setAttribute("class","middle-ul");
         newChangelogEntry.appendChild(changedList);
 
         for (const item of logs.changed) {
@@ -326,13 +321,12 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
         }
     }
     if (logs.fixed !== undefined) {
-        const fixedHeader = document.createElement("h3");
-        fixedHeader.setAttribute("class","middle-text subheading");
+        const fixedHeader = document.createElement("h4");
         fixedHeader.innerText = "Fixed:";
         newChangelogEntry.appendChild(fixedHeader);
 
         const fixedList = document.createElement("ul");
-        fixedList.setAttribute("class","middle-ul");
+        fixedList.setAttribute("class","");
         newChangelogEntry.appendChild(fixedList);
 
         for (const item of logs.fixed) {
@@ -349,7 +343,6 @@ export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make
         newChangelogEntry.appendChild(removedHeader);
 
         const removedList = document.createElement("ul");
-        removedList.setAttribute("class","middle-ul");
         newChangelogEntry.appendChild(removedList);
 
         for (const item of logs.removed) {
