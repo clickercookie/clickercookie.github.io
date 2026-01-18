@@ -87,7 +87,7 @@ small {
 
 /* important things */
 .left-side {
-    width: 312px;
+    min-width: 312px;
     height: 100vh;
     border-style: solid;
     border-width: 0px 8px 0px 0px;
@@ -164,15 +164,11 @@ small {
         transition-timing-function: ease-out;
     }
 
-    .left-side-push { // todo 0.7.1: i can't figure out for the life of me how to get rid of this class without breaking stuff but we need to
-        width: 320px;
-    }
-
     .social-links {
         position: absolute;
         left: 0px;
         bottom: 0px;
-        width: inherit;
+        min-width: inherit;
         height: 40px;
 
         img {
