@@ -1,6 +1,6 @@
 import { Identifier } from "./handler.js";
 import { Handlers, SaveHandler } from "./handlers.js";
-import { branchQuickSwitch } from "./helper.js";
+import { branchQuickSwitch, isObject } from "./helper.js";
 import { Game, VersionBranch } from "./main.js";
 import { SimplePopup } from "./popup.js";
 
@@ -12,8 +12,8 @@ export class Savinator {
     betaSaveName: string;
     developSaveName: string;
 
-    public get currentSaveName() {
-        return branchQuickSwitch(this.saveName, this.betaSaveName, this.developSaveName);
+    public get currentSaveName(): string {
+        return branchQuickSwitch(this.saveName, this.betaSaveName, this.developSaveName) as string;
     }
 
     /** If this value is false, when you save when a mod is registered with the saveHandler, then reload the page to a state where it isn't, a save will overwrite that mod's data. */
@@ -39,7 +39,7 @@ export class Savinator {
         } else {
             const parsedSave = JSON.parse(localStorage.getItem(this.currentSaveName));
 
-            if (!Save.isValidSave(parsedSave)) {
+            if (!Save.isValidSaveData(parsedSave)) {
                 console.warn("Savinator tried to get a Save from localStorage but the value was not a valid save. Returning null.");
                 return null;
             }
@@ -185,7 +185,7 @@ interface SaveDataHeader {
 
 interface SaveData {
     header: SaveDataHeader;
-    data: Record<any, any>
+    data: Record<string, unknown>
 }
 
 export class Save {
@@ -193,16 +193,19 @@ export class Save {
      * Tests if a given object is a valid {@link Save}, and returns a boolean based on if it is
      * @param save The *object* to test the validity of
      */
-    static isValidSave(save: any) {
-        try {
-            if (save["header"]["version"] || save["header"]["versionBranch"] || save["header"]["format"] || save["data"]) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch {
-            return false;
-        }
+    static isValidSaveData(save: unknown): save is SaveData {
+        if (!isObject(save)) return false;
+
+        const header = save["header"];
+        const data = save["data"];
+
+        if (!isObject(header)) return false;
+
+        return (
+            typeof header["version"] === "string" ||
+            typeof header["versionBranch"] === "string" ||
+            typeof header["format"] === "string"
+        ) && data !== undefined;
     }
 
     static VERSION_FORMAT = 4;
@@ -223,7 +226,7 @@ export class Save {
         }
     }
 
-    addData(namespace: string, value: any) {
+    addData(namespace: string, value: unknown) {
         this.data.data[namespace] = value;
     }
 
@@ -254,6 +257,7 @@ export class Save {
  * @param save The direct local storage key, i.e a stringified object
  */
 export function convert06Save(save: string) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const parsedSave: Record<string, any> = JSON.parse(save);
 
     const game = Game.getInstance();

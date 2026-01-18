@@ -157,7 +157,7 @@ export class Upgrade implements SaveProvider<UpgradeSave> {
         document.getElementById("tooltipName")!.innerText = this.name;
         document.getElementById("tooltipPrice")!.innerText = `Price: ${commaify(this.price)}`;
         document.getElementById("tooltipDesc")!.innerHTML = this.desc;
-        document.getElementById("tooltipQuote")!.innerHTML = `<i>\"${this.quote}\"</i>`;
+        document.getElementById("tooltipQuote")!.innerHTML = `<i>"${this.quote}"</i>`;
 
         tooltip.style.display = "block";
         const mousePos = Game.getMousePosition();

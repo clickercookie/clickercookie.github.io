@@ -7,7 +7,7 @@ If you're not a modder, still read the docs here: https://github.com/clickercook
 */
 
 import { createChangelogEntry, versionChangelogs } from "./changelogs.js";
-import { branchQuickSwitch, Interval, object2HTML, StringifiedIdentifier, url } from "./helper.js";
+import { branchQuickSwitch, Interval, object2HTML, StringifiedIdentifier } from "./helper.js";
 import { expandUpgradesHolder, UpgradeSave } from "./upgrades.js";
 import { convert06Save, SaveProvider, Savinator } from "./saving.js";
 import { Mod } from "./mods.js"
@@ -16,6 +16,7 @@ import { SimplePopup } from "./popup.js";
 import { Handlers, ModHandler } from "./handlers.js";
 import { BuildingSave } from "./buildings.js";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { NewMod } from "./exmod.js"; //* note: this import is intentionally left unused so tsc can find this file and compile it
 
 // Global Events
@@ -214,9 +215,9 @@ export class Game implements SaveProvider<GameSaveData> {
 
         /* change version branch specific stuff */
         // change title
-        document.title = branchQuickSwitch("Clicker Cookie", "Clicker Cookie Beta", "Clicker Cookie Develop");
+        document.title = branchQuickSwitch("Clicker Cookie", "Clicker Cookie Beta", "Clicker Cookie Develop") as string;
         // change version displayed
-        document.getElementById("versionNumber").innerText = branchQuickSwitch(Game.VERSION, `${Game.VERSION} Beta`, `${Game.VERSION} Develop`);
+        document.getElementById("versionNumber").innerText = branchQuickSwitch(Game.VERSION, `${Game.VERSION} Beta`, `${Game.VERSION} Develop`) as string;
         document.getElementById("versionSwitchInfoBranch").innerText = (Game.VERSION_BRANCH === VersionBranch.MAIN) ? "beta" : "main";
 
         if (Game.IN_DEVELOPMENT)
@@ -406,6 +407,6 @@ Game.getInstance().init();
 
 // this is kind of a "dev" thing but is an obscure enough piece of very useful functionality that it should be in release
 declare global {
-    interface Window { handlers: any; }
+    interface Window { handlers: Handlers; }
 }
 window.handlers = Handlers;

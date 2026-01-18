@@ -2,7 +2,6 @@
 
 import { Building } from "./buildings.js";
 import { Identifier } from "./handler.js";
-import { Game } from "./main.js";
 import { Mod } from "./mods.js";
 import { Upgrade, UpgradeData } from "./upgrades.js";
 import { Handlers } from "./handlers.js";

@@ -258,7 +258,7 @@ export class UpgradeHandler extends Handler<Upgrade> {
 }
 
 /* Mod */
-export class ModHandler extends UniqueKeyHandler<Mod<any>> {
+export class ModHandler extends UniqueKeyHandler<Mod<unknown>> {
     /* Static Methods */
     public static loadURL(url: string) {
         const httpCheck = url.slice(0,4);
@@ -374,7 +374,7 @@ export class ModHandler extends UniqueKeyHandler<Mod<any>> {
      * @param uid SHOULD BE YOUR MOD NAMESPACE!
      * @param mod Mod.
      */
-    override register(key: string, mod: Mod<any>) {
+    override register(key: string, mod: Mod<unknown>) {
         //! below will always warn, should that be changed?
         if (this.getFromKey(key) !== undefined) { //* do this before registering so we can get a more user-friendly popup than the console.error that we usually get for this type of error
             new SimplePopup({x: 400, y: 200, title: "Error", text: `The mod namespace "${key}" is already present!`});
@@ -392,7 +392,7 @@ export class ModHandler extends UniqueKeyHandler<Mod<any>> {
     }
 }
 
-export class SaveHandler extends UniqueKeyHandler<SaveProvider<any>> {
+export class SaveHandler extends UniqueKeyHandler<SaveProvider<unknown>> {
     dumpSaveData(): Record<string, unknown> {
         const saveData: Record<string, unknown> = {};
         for (const namespace of this.registered.keys()) {

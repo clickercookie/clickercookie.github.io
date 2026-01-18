@@ -164,7 +164,7 @@ export class Building implements SaveProvider<BuildingSave> {
 
         document.getElementById("tooltipName").innerHTML = buildingInfoName;
         document.getElementById("tooltipPrice").innerHTML = `Price: ${buildingInfoPrice}`;
-        document.getElementById("tooltipQuote").innerHTML = `\"${buildingInfoQuote}\"`;
+        document.getElementById("tooltipQuote").innerHTML = `"${buildingInfoQuote}"`;
         document.getElementById("tooltipProduces").innerHTML = `Produces: ${buildingInfoProduces} CPS`;
         document.getElementById("tooltipProducing").innerHTML = `Producing: ${buildingInfoProducing} CPS`;
     
