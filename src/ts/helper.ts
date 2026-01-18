@@ -58,7 +58,7 @@ export function commaify(toComma: number): string {
  * @returns A nicer looking number
  */
 export function makeSlightlyImperfectFloatNice(num: number): string {
-    return commaify(Math.round(num * 10) / 10)
+    return commaify(Math.round(num * 10) / 10);
 }
 
 /**
@@ -74,8 +74,8 @@ export function makeSlightlyImperfectFloatNice(num: number): string {
  */
 export function object2HTML(object: Record<string, string>): string {
     let newHTML = "";
-    for (let i in object) {
-        newHTML += `${i}: ${object[i]}<br>`;
+    for (const key in object) {
+        newHTML += `${key}: ${object[key]}<br>`;
     }
     return newHTML;
 }
@@ -133,14 +133,14 @@ export class Interval {
  * @param develop Value if develop
  * @returns One of the three given parameters depending on the current version branch.
  */
-export function branchQuickSwitch(main: any, beta: any, develop: any) {
+export function branchQuickSwitch(main: unknown, beta: unknown, develop: unknown): unknown {
     switch (Game.VERSION_BRANCH) {
-    case VersionBranch.MAIN:
-        return main;
-    case VersionBranch.BETA:
-        return beta;
-    case VersionBranch.DEVELOP:
-        return develop;
+        case VersionBranch.MAIN:
+            return main;
+        case VersionBranch.BETA:
+            return beta;
+        case VersionBranch.DEVELOP:
+            return develop;
     }
 }
 
@@ -152,12 +152,21 @@ export function branchQuickSwitch(main: any, beta: any, develop: any) {
 export function countVisibleChildren(element: HTMLElement): number {
     let count = 0;
     for (const child of element.children) {
-      const style = window.getComputedStyle(child);
-      if (style.display !== "none") {
-        count++;
-      }
+        const style = window.getComputedStyle(child);
+        if (style.display !== "none") {
+            count++;
+        }
     }
     return count;
+}
+
+/**
+ * Checks if a value is an object
+ * @param value The value to check
+ * @returns Boolean based on if the parameter is an object
+ */
+export function isObject(value: unknown): value is Record<string, unknown> {
+    return typeof value === "object" && value !== null;
 }
 
 /** An alias for a `string` that exists to make typing more clear to the user whenever a stringified identifier is involved, as there are obviously requirements expected in that case that need to be clearly shown to the user to avoid errors. */

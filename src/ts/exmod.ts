@@ -2,7 +2,6 @@
 
 import { Building } from "./buildings.js";
 import { Identifier } from "./handler.js";
-import { Game } from "./main.js";
 import { Mod } from "./mods.js";
 import { Upgrade, UpgradeData } from "./upgrades.js";
 import { Handlers } from "./handlers.js";
@@ -29,7 +28,7 @@ export class NewMod extends Mod<ModSave> {
             upgradeCost: 8,
             CPSGain: 5,
             img: "https://www.minecraft.net/content/dam/minecraftnet/franchise/logos/minecraft-creeper-face.jpg", // lol
-            condition() { return true; }
+            condition() { return true }
         });
 
         this.UPGRADES_DATA = {
@@ -62,11 +61,11 @@ export class NewMod extends Mod<ModSave> {
     getSaveData(): ModSave {
         return {
             superCookies: this.superCookies
-        }
+        };
     }
 
     loadSaveData(saveData: ModSave): void {
-        this.superCookies = saveData.superCookies
+        this.superCookies = saveData.superCookies;
     }
 }
 

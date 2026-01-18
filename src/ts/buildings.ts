@@ -73,6 +73,7 @@ export class Building implements SaveProvider<BuildingSave> {
         this.html.addEventListener("mousemove", () => {this.hovered()});
         this.html.addEventListener("mouseover", () => {this.hovered()});
         this.html.addEventListener("mouseout",() => {hideTooltip()});
+        /* eslint-disable @stylistic/indent */
             const icon = document.createElement("img");
             const BUILDING_ICON_IMG = (data.img) ? data.img : "img/unknown.png";
             //* Use unknown as a fallback if we can't get the defined image file (404 usually)   
@@ -123,7 +124,7 @@ export class Building implements SaveProvider<BuildingSave> {
 
         //* if upgradeCost is too low, Math.floor'ing it after multiplying it by upgradeCostMultiplier can actually just get you the same upgradeCost as before. warn in console if this will happen, but don't throw an error in case it's intended or smth stupid
         if (Math.floor(this.baseUpgradeCost * this.upgradeCostMultiplier) === this.baseUpgradeCost) {
-            console.warn(`${this.name} base upgrade cost is too low to increase after buy. Increase BuildingData.upgradeCost or BuildingData.upgradeCostMultiplier.`)
+            console.warn(`${this.name} base upgrade cost is too low to increase after buy. Increase BuildingData.upgradeCost or BuildingData.upgradeCostMultiplier.`);
         }
 
         this.bought = 0;
@@ -164,7 +165,7 @@ export class Building implements SaveProvider<BuildingSave> {
 
         document.getElementById("tooltipName").innerHTML = buildingInfoName;
         document.getElementById("tooltipPrice").innerHTML = `Price: ${buildingInfoPrice}`;
-        document.getElementById("tooltipQuote").innerHTML = `\"${buildingInfoQuote}\"`;
+        document.getElementById("tooltipQuote").innerHTML = `"${buildingInfoQuote}"`;
         document.getElementById("tooltipProduces").innerHTML = `Produces: ${buildingInfoProduces} CPS`;
         document.getElementById("tooltipProducing").innerHTML = `Producing: ${buildingInfoProducing} CPS`;
     
@@ -180,12 +181,12 @@ export class Building implements SaveProvider<BuildingSave> {
             bought: this.bought,
             CPSGain: this.CPSGain,
             CPSGiven: this.CPSGiven
-        }
+        };
     }
 
     loadSaveData(saveData: BuildingSave) {
         this.bought = saveData.bought;
         this.CPSGain = saveData.CPSGain;
-        this.CPSGiven = saveData.CPSGiven
+        this.CPSGiven = saveData.CPSGiven;
     }
 }

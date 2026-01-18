@@ -41,7 +41,7 @@ export class Handler<T> implements Iterable<T> {
      */
     getFromIdentifier(identifier: Identifier): T | undefined {
         if (identifier === undefined) {
-            console.warn(`Tried to get object from a Handler but identifier was undefined. Will return %cundefined%c.`, "font-style: italic;", "font-style: default;");
+            console.warn("Tried to get object from a Handler but identifier was undefined. Will return %cundefined%c.", "font-style: italic;", "font-style: default;");
             return undefined;
         }
         const stringifiedIdentifier: StringifiedIdentifier = identifier.toString();
@@ -57,8 +57,8 @@ export class Handler<T> implements Iterable<T> {
      */
     getValuesFromNamespace(namespace: string): T[] {
         return Array.from(this.registered.entries())
-            .filter(([key, _]) => Identifier.fromString(key).namespace === namespace)
-            .map(([_, value]) => value);
+            .filter(([key]) => Identifier.fromString(key).namespace === namespace)
+            .map(([, value]) => value);
     }
 
     /**
@@ -108,7 +108,7 @@ export class UniqueKeyHandler<T> implements Iterable<T> {
      */
     getFromKey(key: string): T | undefined {
         if (key === undefined) {
-            console.warn(`Tried to get object from a UniqueKeyHandler but key was undefined. Will return %cundefined%c.`, "font-style: italic;", "font-style: default;");
+            console.warn("Tried to get object from a UniqueKeyHandler but key was undefined. Will return %cundefined%c.", "font-style: italic;", "font-style: default;");
             return undefined;
         }
         if (this.registered.has(key) === false) {
@@ -162,7 +162,7 @@ export class Identifier {
     }
 
     public readonly namespace: string;
-    public readonly uid: string
+    public readonly uid: string;
 
     constructor(namespace: string, uid: string) {
         this.namespace = namespace;

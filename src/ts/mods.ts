@@ -1,6 +1,4 @@
 import { SaveProvider } from "./saving.js";
-import { ModHandler, BackgroundHandler, CurrentlyClickedHandler } from "./handlers.js";
-import { Game } from "./main.js"
 
 /**
  * Koohs ("hooks" spelled backwards) serve as events that mods can register functions to be called on. Register functions using {@link Mod.registerKooh}.
@@ -36,7 +34,7 @@ export class Mod<T> implements SaveProvider<T> {
         "cps": [],
         "loop": [],
         "personalization": []
-    }
+    };
 
     static registerKooh(id: Kooh, func: () => void) {
         this.koohs[id].push(func);
@@ -80,5 +78,6 @@ export class Mod<T> implements SaveProvider<T> {
     getSaveData(): T {
         return undefined;
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     loadSaveData(saveData: T): void {}
 }

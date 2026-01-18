@@ -9,7 +9,7 @@ import { Handlers } from "./handlers.js";
 // the description of almost every upgrade is the same, but just in case we want to add more upgrades in the future
 // a "desc" field has been added to the upgrades array. Most upgrade will just reference a this array, though
 const defaultUpgradeDescriptions = {
-    keyboard: `Multiplys Keyboard and clicking NULL production by 2`, // we cannot embed Personalization.getCurrentlyClicked() in here anymore since it Personalization.currentlyClicked is not defined until Game.init() 
+    keyboard: "Multiplys Keyboard and clicking NULL production by 2", // we cannot embed Personalization.getCurrentlyClicked() in here anymore since it Personalization.currentlyClicked is not defined until Game.init(). see ClickerCookie.constructor() for where this is set
     grandpa: "Multiplys Grandpa production by 2",
     ranch: "Multiplys Ranch production by 2",
     television: "Multiplys TV production by 2",
@@ -94,7 +94,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 upgradeCost: 15,
                 CPSGain: 0.1,
                 img: "img/keyboard.png",
-                condition() { return true; }
+                condition() { return true }
             },
             grandpa: {
                 name: "Grandpa",
@@ -161,10 +161,9 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
         this.church = new Building(this.BUILDINGS_DATA.church);
 
         // upgrades
-        const keyboardBoughtFunc = () => {
+        const keyboardUpgradeBoughtFunc = () => {
             this.cookiesPerClick *= 2;
-            this.UPGRADES_DATA["keyboard1"].building
-        }
+        };
 
         this.UPGRADES_DATA = {
             // keyboard
@@ -176,7 +175,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 desc: defaultUpgradeDescriptions.keyboard,
                 building: this.keyboard,
                 condition() { return (this.building.bought >= 1) ? true : false },
-                bought: keyboardBoughtFunc
+                bought: keyboardUpgradeBoughtFunc
             },
             "keyboard2": {
                 name: "Obsidian Keys",
@@ -186,7 +185,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 desc: defaultUpgradeDescriptions.keyboard,
                 building: this.keyboard,
                 condition() { return (this.building.bought >= 5) ? true : false },
-                bought: keyboardBoughtFunc
+                bought: keyboardUpgradeBoughtFunc
             },
             "keyboard3": {
                 name: "Osmium Keys",
@@ -196,7 +195,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 desc: defaultUpgradeDescriptions.keyboard,
                 building: this.keyboard,
                 condition() { return (this.building.bought >= 10) ? true : false },
-                bought: keyboardBoughtFunc
+                bought: keyboardUpgradeBoughtFunc
             },
             "keyboard4": {
                 name: "10 finger typing",
@@ -206,7 +205,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 desc: defaultUpgradeDescriptions.keyboard,
                 building: this.keyboard,
                 condition() { return (this.building.bought >= 25) ? true : false },
-                bought: keyboardBoughtFunc
+                bought: keyboardUpgradeBoughtFunc
             },
             "keyboard5": {
                 name: "Macros",
@@ -216,7 +215,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 desc: defaultUpgradeDescriptions.keyboard,
                 building: this.keyboard,
                 condition() { return (this.building.bought >= 50) ? true : false },
-                bought: keyboardBoughtFunc
+                bought: keyboardUpgradeBoughtFunc
             },
             // grandpa
             "grandpa1": {
@@ -440,7 +439,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
                 condition() { return this.building.bought >= 25 ? true : false}
             },
             "wallet5": {
-                name: "Wizard\'s wallet",
+                name: "Wizard's wallet",
                 quote: "<b>infinite</b> storage space*",
                 price: 7_000_000_000_000,
                 img: "img/upgrades/wizards-wallet.png",
@@ -584,7 +583,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
             totalCookies: this.totalCookies,
             cookiesPerClick: this.cookiesPerClick,
             cookieBeenClickedTimes: this.cookieBeenClickedTimes
-        }
+        };
     }
     loadSaveData(saveData: ClickerCookieSaveData) {
         this.cookies = saveData.cookies;
