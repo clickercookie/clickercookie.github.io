@@ -265,6 +265,23 @@ export const versionChangelogs: Changelog[] = [
             "Removed the mobile version due to the extreme amount of work required to upkeep it alongside the main version. (#36)",
         ],
         release: "December 29th, 2025"
+    },
+    {
+        type: "patch",
+        version: "0.7.1",
+        name: "tbd",
+        added: [
+            "Metadata is now visible in the modlist (#61, todo)",
+        ],
+        changed: [
+            "Switched to SCSS (#59)",
+            "Many styles have been adjusted for consistent sizing and spacing. As a result, some elements may appear slightly different.",
+            "Advanced Popup content is now easier to create (#31, todo)"
+        ],
+        fixed: [
+            "Loading saves allowed saves from other version branches (#68, todo)"
+        ],
+        release: "tbd"
     }
 ];
 
