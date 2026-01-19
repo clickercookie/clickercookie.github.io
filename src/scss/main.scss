@@ -39,14 +39,6 @@ a {
     font-weight: bold;
     color: inherit;
 }
-ul {
-    margin-top: 6px;
-    margin-bottom: 6px;
-}
-small {
-    margin-left: auto;
-    margin-right: auto;
-}
 
 /* todo 0.7.1: i don't like these anymore, keep a few like pointer and no-display but remove stuff like red.  */
 /* helper classes */
@@ -67,16 +59,6 @@ small {
 }
 .absolute {
     position: absolute;
-}
-.no-select { /* this contains a random list of properties that supposedly make thing not drag and stuff? It seems to work so yay? */
-    user-select: none; /* General all-browser solution for this */
-    -webkit-touch-callout: none; /* I think only images but I dont have an iPhone so idk */
-    -webkit-user-select: none; /* Still required on Safari? */
-    margin-left: auto; /* idk what on earth these do but i'm scared to remove them */
-    margin-right: auto;
-}
-.no-margin {
-    margin: 0px;
 }
 .shadow {
     text-shadow: variables.$shadow;
@@ -265,12 +247,10 @@ small {
             radial-gradient(transparent 80%, rgba(4, 4, 4, 0.3)),
             url("img/dark-noise.png");
 
-        // todo: random margins?
         h1 {
             font-size: 2rem;
             font-family: monospace;
-            margin-top: 12px;
-            margin-bottom: 15px;
+            margin: 0.75rem 0;
             text-decoration: underline;
             text-underline-offset: 0.15em;
             font-weight: bold;
@@ -279,26 +259,19 @@ small {
         h2 {
             font-size: 1.5rem;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin-top: 12px;
-            margin-bottom: 15px;
+            margin: 1rem 0;
             font-weight: bold;
-            text-align: left;
         }
         h3 {
             font-size: 1.2rem;
-            margin: 6px 0px 8px 0px;
-            text-align: left;
-            -webkit-user-select: none;
-            user-select: none;
+            margin: 0.5rem 0;
         }
         h4 {
             font-size: 1rem;
-            margin-bottom: 6px;
-            margin-top: 6px;
+            margin: 0.25rem 0;
         }
         .middle-text-gray {
-            margin-bottom: 6px;
-            margin-top: 6px;
+            margin: 0.5rem 0;
             color: gray;
             letter-spacing: 1px;
             font-weight: bold;
@@ -326,7 +299,7 @@ small {
         }
 
         form {
-            margin: 0.25rem 0
+            margin: 0.25rem 0;
         }
 
         // only in Info
@@ -335,8 +308,9 @@ small {
                 font-size: 0.875em;
             }
 
-            ul { // for changelog entries so they're smaller than their headers
-                font-size: 0.875rem;
+            ul {
+                font-size: 0.875rem; // so changelog entries are smaller than their headers
+                margin: 0.5rem 0;
             }
         }
     }
@@ -358,8 +332,7 @@ small {
     }
 
     h3 {
-        margin-top: 8px;
-        margin-bottom: 8px;
+        margin: 0.5rem 0;
         text-align: center;
     }
 
