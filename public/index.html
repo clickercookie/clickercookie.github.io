@@ -128,16 +128,6 @@
                     <button class="data-button pointer" id="listModsButton" style="margin-top:3px; margin-left:0px;">List Mods</button>
                 </div>
             </div>
-            <div class="tooltip no-display" id="tooltip">
-                <div class="tooltip-content">
-                    <p class="tooltip-name" id="tooltipName">Name</p>
-                    <p class="tooltip-price" id="tooltipPrice">Price</p>
-                    <p class="tooltip-description" id="tooltipDesc">Description</p> <!-- Hidden when buildings are hovered since they have no description -->
-                    <p class="tooltip-quote" id="tooltipQuote">"Quote"</p>
-                    <p class="tooltip-stats" id="tooltipProduces">Produces</p><!-- Hidden when upgrades are hovered since they have no produces/producing -->
-                    <p class="tooltip-stats" id="tooltipProducing">Producing</p>
-                </div>
-            </div>
         </div> <!-- end middle -->
         <div class="right-side" id="rightSide">
             <h1>Store</h1>
@@ -152,5 +142,15 @@
                 
             </div>
         </div> <!-- end rightSide -->
+        <div class="tooltip" id="tooltip" style="display: none;">
+            <div class="tooltip-content">
+                <p class="tooltip-name" id="tooltipName">Name</p>
+                <p class="tooltip-price" id="tooltipPrice">Price</p>
+                <p class="tooltip-description" id="tooltipDesc">Description</p> <!-- Hidden when buildings are hovered since they have no description -->
+                <p class="tooltip-quote" id="tooltipQuote">"Quote"</p>
+                <p class="tooltip-stats" id="tooltipProduces">Produces</p><!-- Hidden when upgrades are hovered since they have no produces/producing -->
+                <p class="tooltip-stats" id="tooltipProducing">Producing</p>
+            </div>
+        </div>
     </body>
 </html>

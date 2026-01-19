@@ -11,34 +11,35 @@
     background-color: variables.$colored-container;
     color: black; //  for children
     pointer-events: none; /* if it's hovered over it won't do the flickering thing */
-}
-.tooltip-content {
-    padding: 0px 3px 0px 3px;
-}
-.tooltip-name {
-    font-size: 15px;
-    margin-top: 4px;
-    margin-bottom: 0px;
-}
-.tooltip-price {
-    position: absolute;
-    font-size: 15px;
-    right: 0px;
-    top: 0px;
-    margin-top: 4px;
-    margin-right: 3px;
-}
-.tooltip-quote {
-    font-size: 12px;
-    margin-top: 5px;
-    overflow-y: hidden;
-}
-.tooltip-description {
-    font-size: 13px;
-    margin-left: 1px;
-}
-.tooltip-stats {
-    font-size: 14px;
-    margin-top: 5px;
-    margin-bottom: 0px;
+
+    .tooltip-content {
+        padding: 0.25rem;
+
+        // todo 0.7.1: random margins
+        .tooltip-name {
+            font-size: 1rem;
+            margin: 0;
+        }
+        .tooltip-price {
+            position: absolute;
+            font-size: 1rem;
+            right: 0px;
+            top: 0px;
+            margin-top: 0.25rem;
+            margin-right: 0.25rem;
+        }
+        .tooltip-quote {
+            font-size: 0.75rem;
+            margin-top: 5px;
+            overflow-y: hidden;
+        }
+        .tooltip-description {
+            font-size: 0.8rem;
+        }
+        .tooltip-stats {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            margin-bottom: 0px;
+        }
+    }
 }
