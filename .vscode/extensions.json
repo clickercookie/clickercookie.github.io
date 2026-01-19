@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "tobermory.es6-string-html", // for html in template strings
+    "dbaeumer.vscode-eslint",
+    "aaron-bond.better-comments"
+  ]
+}

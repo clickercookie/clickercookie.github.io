@@ -329,7 +329,7 @@ export class ModHandler extends UniqueKeyHandler<Mod<unknown>> {
 
     // i dunno where to put these last two
     static addButtonClicked() {
-        const popup = new AdvancedPopup(500,350,`<h1>Add Mod</h1>
+        const popup = new AdvancedPopup(500,350,/*html*/`<h1>Add Mod</h1>
         <h5 style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5>
         <h5 style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5>
         <h5 style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue' target="_blank">read the documentation</a>.</h5>
@@ -349,7 +349,7 @@ export class ModHandler extends UniqueKeyHandler<Mod<unknown>> {
     }
 
     static listButtonClicked() {
-        const popup = new AdvancedPopup(300,350,`<h1>All Mods</h1>
+        const popup = new AdvancedPopup(300,350,/*html*/`<h1>All Mods</h1>
         <p class='no-display' id='noModsMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>You have no mods installed!</p>
         <div id='modsList' class='mods-list'></div>
         <small class='no-display' id='removeModsMessage' style='margin:3px 8px 0 8px;'>To remove mods, refresh your page. (make sure to save!)</small>
