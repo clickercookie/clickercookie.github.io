@@ -269,19 +269,15 @@ export const versionChangelogs: Changelog[] = [
     {
         type: "patch",
         version: "0.7.1",
-        name: "tbd",
+        name: "the little things",
         added: [
-            "Metadata is now visible in the modlist (#61, todo)",
-            "ESLint is used for code linting and formatting via ESLint Stylistic."
+            "ESLint is used for code linting and formatting via ESLint Stylistic (#70)"
         ],
         changed: [
             "Switched to SCSS (#59)",
             "Many styles have been adjusted for consistent sizing and spacing. As a result, some elements may appear slightly different.",
-            "Advanced Popup content is now easier to create (#31, todo)",
+            "Advanced Popup content is now easier to create (#31)",
             "All project files are now compliant with ESLint rules."
-        ],
-        fixed: [
-            "Loading saves allowed saves from other version branches (#68, todo)"
         ],
         release: "tbd"
     }

@@ -332,7 +332,7 @@ export class ModHandler extends UniqueKeyHandler<Mod<unknown>> {
         const popup = new AdvancedPopup(500,350,/*html*/`<h1>Add Mod</h1>
         <h5 style='color:red; margin-bottom:3px; margin-top:5px;'>WARNING!</h5>
         <h5 style='color:red; margin-top:0px; margin-bottom:0px;'>Adding mods without verifying their legitimacy can result in unintended side effects! We are not responsible for any damages that may be caused by mods!</h5>
-        <h5 style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' class='blue' target="_blank">read the documentation</a>.</h5>
+        <h5 style='margin-top:5px; margin-bottom:0px;'>For information regarding mods, <a href='https://github.com/clickercookie/clickercookie.github.io/wiki/Modding' target="_blank" style="color: blue;">read the documentation</a>.</h5>
         <form onsubmit='return false;' id='addModURLForm' style='margin-top:22px;'>
             <label for='addModURL'>From URL: </label>
             <input id='addModURL'>

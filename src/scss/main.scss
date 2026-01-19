@@ -34,37 +34,18 @@ body {
     -webkit-touch-callout: none; /* mobile-only */
 }
 
-/* todo 0.7.1: find why these are here and how we can make their elements assigned to their own specific class instead of making every element have these properties*/
-a {
+a { // links should inherit color and be bold always unless otherwise specified
     font-weight: bold;
     color: inherit;
 }
 
-/* todo 0.7.1: i don't like these anymore, keep a few like pointer and no-display but remove stuff like red.  */
+/* todo 0.7.1: keep these two helpers?  */
 /* helper classes */
 .no-display {
     display: none;
 }
 .pointer {
     cursor: pointer;
-}
-.red {
-    color: red;
-}
-.black {
-    color: black;
-}
-.blue {
-    color: blue;
-}
-.absolute {
-    position: absolute;
-}
-.shadow {
-    text-shadow: variables.$shadow;
-}
-.visible {
-    opacity: 1 !important;
 }
 
 /* important things */

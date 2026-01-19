@@ -79,10 +79,10 @@ export class Savinator {
 
         // Update saving notification
         const indicator = document.getElementById("savingIndicator");
-        indicator.classList.add("visible");
+        indicator.style.opacity = "1";
 
         setTimeout(function() {
-            indicator.classList.remove("visible");
+            indicator.style.opacity = "0";
         }, 1500);
     }
 
