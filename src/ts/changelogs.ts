@@ -277,7 +277,8 @@ export const versionChangelogs: Changelog[] = [
             "Switched to SCSS (#59)",
             "Many styles have been adjusted for consistent sizing and spacing. As a result, some elements may appear slightly different.",
             "Advanced Popup content is now easier to create (#31)",
-            "All project files are now compliant with ESLint rules."
+            "All project files are now compliant with ESLint rules.",
+            "Updated to TypeScript 6 (#74)"
         ],
         release: "tbd"
     }
