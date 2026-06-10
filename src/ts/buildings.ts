@@ -47,7 +47,7 @@ export class Building implements SaveProvider<BuildingSave> {
     readonly upgradeCostMultiplier: number;
     condition: (game: Game) => boolean;
 
-    private _bought: number;
+    private _bought!: number;
     /** Number of buildings bought */
     public get bought() { return this._bought }
     public set bought(num: number) {
@@ -56,7 +56,7 @@ export class Building implements SaveProvider<BuildingSave> {
 
         document.getElementById(`${this.name}Cost`)!.innerText = commaify(this.upgradeCost); //? does this make sense here?
     }
-    private _unlocked: boolean;
+    private _unlocked!: boolean;
     public get unlocked() { return this._unlocked }
     public set unlocked(bool: boolean) {
         this._unlocked = bool;

@@ -50,10 +50,10 @@ export class Upgrade implements SaveProvider<UpgradeSave> {
     name: string;
     quote: string;
     price: number;
-    img: string;
+    img: string | undefined;
     desc: string;
     building: Building;
-    onBuy: (game: Game) => void;
+    onBuy: ((game: Game) => void) | undefined;
     condition: (game: Game) => boolean;
 
     bought: boolean;

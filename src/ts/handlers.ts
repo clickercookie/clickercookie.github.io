@@ -40,7 +40,12 @@ export class BackgroundHandler extends Handler<Background> {
      * @param value The UID of whatever {@link Background} we want from {@link backgroundHandler}. Usually `backgroundSelect`'s `value`
      */
     setBackground(stringifiedIdentifier: StringifiedIdentifier) {
-        const foundObject = Handlers.BACKGROUND.getFromIdentifier(Identifier.fromString(stringifiedIdentifier));
+        const identifier = Identifier.fromString(stringifiedIdentifier);
+        if (identifier === undefined) {
+            console.warn("Tried to set background with an invalid StringifiedIdentifier. Ignoring call.");
+            return;
+        }
+        const foundObject = Handlers.BACKGROUND.getFromIdentifier(identifier);
         if (foundObject) {
             this.currentBackground = foundObject;
         } else {
@@ -50,9 +55,9 @@ export class BackgroundHandler extends Handler<Background> {
             return;
         }
 
-        document.getElementById("leftSide").style.background = url(this.getCurrentBackground().src);
-        document.getElementById("middle").style.background = url(this.getCurrentBackground().src);
-        document.getElementById("rightSide").style.background = url(this.getCurrentBackground().src);
+        document.getElementById("leftSide")!.style.background = url(this.getCurrentBackground().src);
+        document.getElementById("middle")!.style.background = url(this.getCurrentBackground().src);
+        document.getElementById("rightSide")!.style.background = url(this.getCurrentBackground().src);
 
         (document.getElementById("backgroundSelect") as HTMLSelectElement).value = stringifiedIdentifier; //* if the thing is set by something other than the HTMLSelectElement change event then we need to make sure the correct obj is listed as the value
 
@@ -89,7 +94,12 @@ export class CurrentlyClickedHandler extends Handler<CurrentlyClickedObject> {
      * @param stringifiedIdentifier The stringified identifier of whatever {@link Background} we want from {@link currentlyClickedHandler}. Usually `currentlyClickedSelect`'s `value`
      */
     setCurrentlyClicked(stringifiedIdentifier: StringifiedIdentifier): void {
-        const foundObject = Handlers.CURRENTLY_CLICKED.getFromIdentifier(Identifier.fromString(stringifiedIdentifier));
+        const identifier = Identifier.fromString(stringifiedIdentifier);
+        if (identifier === undefined) {
+            console.warn("Tried to set currently clicked with an invalid StringifiedIdentifier. Ignoring call.");
+            return;
+        }
+        const foundObject = Handlers.CURRENTLY_CLICKED.getFromIdentifier(identifier);
         if (foundObject) {
             this.currentlyClicked = foundObject;
         } else {
@@ -147,7 +157,7 @@ export class BuildingHandler extends Handler<Building> {
     dumpSave(namespace: string=undefined) {
         const saveObj: Record<StringifiedIdentifier, BuildingSave> = {};
         for (const value of (namespace === undefined) ? this : this.getValuesFromNamespace(namespace)) {
-            saveObj[this.getIdentifierFromValue(value)] = value.getSaveData();
+            saveObj[this.getIdentifierFromValue(value)!] = value.getSaveData();
         }
         return saveObj;
     }
@@ -159,7 +169,7 @@ export class BuildingHandler extends Handler<Building> {
      */
     loadSave(saveObj: Record<StringifiedIdentifier, BuildingSave>, namespace: string=undefined) {
         for (const stringifiedIdentifier in saveObj) {
-            const id = Identifier.fromString(stringifiedIdentifier);
+            const id = Identifier.fromString(stringifiedIdentifier)!;
 
             if (namespace !== undefined && id.namespace !== namespace) continue;
 
@@ -234,7 +244,7 @@ export class UpgradeHandler extends Handler<Upgrade> {
     dumpSave(namespace: string=undefined) {
         const saveObj: Record<StringifiedIdentifier, UpgradeSave> = {};
         for (const value of (namespace === undefined) ? this : this.getValuesFromNamespace(namespace)) {
-            saveObj[this.getIdentifierFromValue(value)] = value.getSaveData();
+            saveObj[this.getIdentifierFromValue(value)!] = value.getSaveData();
         }
         return saveObj;
     }
@@ -246,13 +256,13 @@ export class UpgradeHandler extends Handler<Upgrade> {
      */
     loadSave(saveObj: Record<StringifiedIdentifier, UpgradeSave>, namespace: string=undefined) {
         for (const stringifiedIdentifier in saveObj) {
-            const id = Identifier.fromString(stringifiedIdentifier);
+            const id = Identifier.fromString(stringifiedIdentifier)!;
 
             if (namespace !== undefined && id.namespace !== namespace) continue;
 
             if (this.getFromIdentifier(id) === undefined) continue; // if upgrades are not registered we obviously can't load them. todo: should this warn?
 
-            this.getFromIdentifier(id).loadSaveData(saveObj[stringifiedIdentifier]);
+            this.getFromIdentifier(id)!.loadSaveData(saveObj[stringifiedIdentifier]);
         }
     }
 }
@@ -274,7 +284,7 @@ export class ModHandler extends UniqueKeyHandler<Mod<unknown>> {
         document.head.appendChild(file);
 
         (document.getElementById("addModURLForm") as HTMLFormElement).reset();
-        document.getElementById("importedMessage").style.display = "block";
+        document.getElementById("importedMessage")!.style.display = "block";
     
         Game.getInstance().modded = true;
 
@@ -343,9 +353,17 @@ export class ModHandler extends UniqueKeyHandler<Mod<unknown>> {
         </form>
         <p class='no-display' id='importedMessage' style='font-size:13px; margin-top:7px; margin-bottom:0px;'>Imported!</p>
         <button id='popupAddModButton' style='margin-top:20px;'>OK</button>`);
-        document.getElementById("addModURL").addEventListener("change", () => { ModHandler.loadURL((document.getElementById("addModURL") as HTMLInputElement).value) });
-        document.getElementById("addModFile").addEventListener("change", () => { ModHandler.loadFile((document.getElementById("addModFile") as HTMLInputElement).files[0]) });
-        document.getElementById("popupAddModButton").addEventListener("click", () => { popup.destroy() }); //* just to let it be known it's called "popupAddModButton" because "addModButton" is already used by the data button
+        document.getElementById("addModURL")!.addEventListener("change", () => { ModHandler.loadURL((document.getElementById("addModURL") as HTMLInputElement).value) });
+        document.getElementById("addModFile")!.addEventListener("change", () => {
+            const file = (document.getElementById("addModFile") as HTMLInputElement)!.files?.[0];
+            if (!file) {
+                alert("somehow, you managed to not select a file. impressive work!");
+                return;
+            }
+
+            ModHandler.loadFile(file);
+        });
+        document.getElementById("popupAddModButton")!.addEventListener("click", () => { popup.destroy() }); //* just to let it be known it's called "popupAddModButton" because "addModButton" is already used by the data button
     }
 
     static listButtonClicked() {
@@ -354,7 +372,7 @@ export class ModHandler extends UniqueKeyHandler<Mod<unknown>> {
         <div id='modsList' class='mods-list'></div>
         <small class='no-display' id='removeModsMessage' style='margin:3px 8px 0 8px;'>To remove mods, refresh your page. (make sure to save!)</small>
         <button id='popupListModsButton' style='margin-top:20px;'>OK</button>`,{innerPadding: "0"});
-        document.getElementById("popupListModsButton").addEventListener("click", () => { popup.destroy() });
+        document.getElementById("popupListModsButton")!.addEventListener("click", () => { popup.destroy() });
         ModHandler.list();
     }
 
@@ -397,7 +415,7 @@ export class SaveHandler extends UniqueKeyHandler<SaveProvider<unknown>> {
     dumpSaveData(): Record<string, unknown> {
         const saveData: Record<string, unknown> = {};
         for (const namespace of this.registered.keys()) {
-            saveData[namespace] = this.registered.get(namespace).getSaveData();
+            saveData[namespace] = this.registered.get(namespace)!.getSaveData();
         }
         return saveData;
     }

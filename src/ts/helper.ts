@@ -93,7 +93,7 @@ export function url(str: string): string {
  * Modified from this StackOverflow answer: https://stackoverflow.com/a/8126515
  */
 export class Interval {
-    private interval: number;
+    private interval: number | null;
 
     handler: () => void;
     timeout: number;

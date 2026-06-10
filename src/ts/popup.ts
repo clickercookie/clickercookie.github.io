@@ -91,7 +91,7 @@ const defaultValues: Required<AdvancedPopupOptions> = {
 export class AdvancedPopup {
     html: HTMLDialogElement;
 
-    constructor(x: number, y: number, html: string, options: AdvancedPopupOptions=undefined) { // todo: possibly add HTMLElement to html instead of just string?
+    constructor(x: number, y: number, html: string, options: AdvancedPopupOptions | undefined=undefined) { // todo: possibly add HTMLElement to html instead of just string?
         this.html = document.createElement("dialog");
         this.html.className = "popup";
         this.html.style.display = "flex";

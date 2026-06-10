@@ -53,7 +53,7 @@ export class Savinator {
      * If {@link Savinator.preserveUnusedNamespacesInSaves} is true, then an additional statement will be run that will ensure that if a namespace is present in localStorage and is not present in the dump, that that namespace's data is copied to the new save.
      * @param [save=undefined] The {@link Save} to use for the save. If defined, will not create a new {@link Save} using {@link Savinator.saveHandler}'s dump but will instead use this parameter.
     */
-    save(save: Save=undefined) {
+    save(save: Save | undefined=undefined) {
         if (save === undefined) {
             const newSave = new Save();
             const saveDump = this.saveHandler.dumpSaveData();
@@ -78,7 +78,7 @@ export class Savinator {
         }
 
         // Update saving notification
-        const indicator = document.getElementById("savingIndicator");
+        const indicator = document.getElementById("savingIndicator")!;
         indicator.style.opacity = "1";
 
         setTimeout(function() {
@@ -221,7 +221,7 @@ export class Save {
     static VERSION_FORMAT = 4;
 
     private data: SaveData; //? this is private, which is why we have so many get() methods. should it just be public?
-    constructor(data: SaveData=undefined) {
+    constructor(data: SaveData | undefined=undefined) {
         if (data === undefined) {
             this.data = {
                 header: {
@@ -240,7 +240,7 @@ export class Save {
         this.data.data[namespace] = value;
     }
 
-    getData(namespace: string=undefined): unknown {
+    getData(namespace: string | undefined=undefined): unknown {
         if (namespace) {
             if (this.data.data[namespace] === undefined || this.data.data[namespace] === null) 
                 throw new Error(`Tried to obtain data from a Save with a namespace (${namespace}) that does not exist on the save.`);

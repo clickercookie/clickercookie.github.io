@@ -24,7 +24,7 @@ interface MousePosition {
     x: number;
     y: number;
 }
-const mousePos: MousePosition = {x: undefined, y: undefined};
+const mousePos: MousePosition = {x: 0, y: 0};
 window.addEventListener("mousemove", (event) => {
     mousePos.x = event.clientX;
     mousePos.y = event.clientY;
@@ -110,19 +110,19 @@ export class Game implements SaveProvider<GameSaveData> {
     public clickercookie: ClickerCookie;
 
     // self-explainatory-ish things
-    private _cheated: boolean;
+    private _cheated!: boolean;
     public get cheated() { return this._cheated }
     public set cheated(bool: boolean) {
         this._cheated = bool;
         document.getElementById("ifCheatedStat")!.style.display = (this._cheated) ? "block" : "none";
     }
-    private _modded: boolean;
+    private _modded!: boolean;
     public get modded() { return this._modded }
     public set modded(bool: boolean) {
         this._modded = bool;
         document.getElementById("ifModdedStat")!.style.display = (this._modded) ? "block" : "none";
     }
-    private _autoSavingAllowed: boolean;
+    private _autoSavingAllowed!: boolean;
     public get autoSavingAllowed(): boolean { return this._autoSavingAllowed }
     public set autoSavingAllowed(value: boolean) {
         this._autoSavingAllowed = value;
@@ -268,7 +268,7 @@ export class Game implements SaveProvider<GameSaveData> {
         document.getElementById("loadButton")!.addEventListener("click", () => {this.savinator5000.load()});
         document.getElementById("resetSaveButton")!.addEventListener("click", () => {new SimplePopup({x: 300, y: 150, text: "Are you sure you want to do this?", func: () => { this.savinator5000.reset() }, title: "Warning", backButton: true, isError: true})});
         document.getElementById("exportDataButton")!.addEventListener("click", () => {this.savinator5000.export()});
-        document.getElementById("importDataButton")!.addEventListener("click", () => {document.getElementById("importDataInput").click()});
+        document.getElementById("importDataButton")!.addEventListener("click", () => {document.getElementById("importDataInput")!.click()});
         document.getElementById("importDataInput")!.addEventListener("change", () => {this.savinator5000.import()});
         document.getElementById("autoSavingToggleSelect")!.addEventListener("change", () => {this.autoSavingAllowed = ((document.getElementById("autoSavingToggleSelect") as HTMLFormElement).value === "on") ? true : false});
         document.getElementById("addModButton")!.addEventListener("click", () => {ModHandler.addButtonClicked()});
@@ -344,8 +344,8 @@ export class Game implements SaveProvider<GameSaveData> {
 
     getSaveData(): GameSaveData {
         /** savedata is null on first boot, so we use a ternary statement */
-        const originalUpgradeSave = (this.savinator5000.getLocalStorageSave()) ? (this.savinator5000.getLocalStorageSave().getData("game") as GameSaveData).upgradesSave : {};
-        const originalBuildingSave = (this.savinator5000.getLocalStorageSave()) ? (this.savinator5000.getLocalStorageSave().getData("game") as GameSaveData).buildingsSave : {};
+        const originalUpgradeSave = (this.savinator5000.getLocalStorageSave()) ? (this.savinator5000.getLocalStorageSave()!.getData("game") as GameSaveData).upgradesSave : {};
+        const originalBuildingSave = (this.savinator5000.getLocalStorageSave()) ? (this.savinator5000.getLocalStorageSave()!.getData("game") as GameSaveData).buildingsSave : {};
 
         return {
             version: 1,
@@ -354,8 +354,8 @@ export class Game implements SaveProvider<GameSaveData> {
             autoSavingAllowed: this.autoSavingAllowed,
             
             // personalization
-            currentlyClickedObjectKey: Handlers.CURRENTLY_CLICKED.getIdentifierFromValue(Handlers.CURRENTLY_CLICKED.getCurrentlyClicked()),
-            currentBackgroundKey: Handlers.BACKGROUND.getIdentifierFromValue(Handlers.BACKGROUND.getCurrentBackground()), // todo: make better
+            currentlyClickedObjectKey: Handlers.CURRENTLY_CLICKED.getIdentifierFromValue(Handlers.CURRENTLY_CLICKED.getCurrentlyClicked())!,
+            currentBackgroundKey: Handlers.BACKGROUND.getIdentifierFromValue(Handlers.BACKGROUND.getCurrentBackground())!, // todo: make better
         
             upgradesSave: { // merge to preserve unregistered upgrades
                 ...originalUpgradeSave,

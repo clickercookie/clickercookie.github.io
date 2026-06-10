@@ -37,7 +37,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
     }
     public set cookies(num: number) {
         this._cookies = num;
-        document.getElementById("cookieCount").innerText = makeSlightlyImperfectFloatNice(this._cookies);
+        document.getElementById("cookieCount")!.innerText = makeSlightlyImperfectFloatNice(this._cookies);
         this.updateStatistics();
     }
     // total cookies
@@ -47,7 +47,7 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
     public get cookiesPerSecond(): number { return this._cookiesPerSecond }
     public set cookiesPerSecond(num: number) {
         this._cookiesPerSecond = num;
-        document.getElementById("cookiesPerSecondCount").innerText = makeSlightlyImperfectFloatNice(this._cookiesPerSecond);
+        document.getElementById("cookiesPerSecondCount")!.innerText = makeSlightlyImperfectFloatNice(this._cookiesPerSecond);
         this.updateStatistics();
     }
     // cookies per click
