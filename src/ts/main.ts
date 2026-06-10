@@ -24,20 +24,20 @@ interface MousePosition {
     x: number;
     y: number;
 }
-const mousePos: MousePosition = {x: undefined, y: undefined};
+const mousePos: MousePosition = {x: 0, y: 0};
 window.addEventListener("mousemove", (event) => {
     mousePos.x = event.clientX;
     mousePos.y = event.clientY;
 
     if (Game.IN_DEVELOPMENT && document.getElementById("mousePosDevText")) // in case dev text doesn't exist for some reason idk
-        document.getElementById("mousePosDevText").innerText = `Mouse Pos: (${mousePos.x}, ${mousePos.y})`;
+        document.getElementById("mousePosDevText")!.innerText = `Mouse Pos: (${mousePos.x}, ${mousePos.y})`;
 });
 
 function resizeEventListener() {
     // change middle text heights
     const middleTexts = Array.from(document.querySelectorAll(".middle-main"));
     for (const element of middleTexts) {
-        (element as HTMLElement).style.height = window.innerHeight - document.getElementById("middleButtons").offsetHeight+"px";
+        (element as HTMLElement).style.height = window.innerHeight - document.getElementById("middleButtons")!.offsetHeight+"px";
     }
 }
 resizeEventListener(); // since we do need certain elements like the middle text to have the correct size without having to resize the window, we call this now
@@ -110,19 +110,19 @@ export class Game implements SaveProvider<GameSaveData> {
     public clickercookie: ClickerCookie;
 
     // self-explainatory-ish things
-    private _cheated: boolean;
+    private _cheated!: boolean;
     public get cheated() { return this._cheated }
     public set cheated(bool: boolean) {
         this._cheated = bool;
-        document.getElementById("ifCheatedStat").style.display = (this._cheated) ? "block" : "none";
+        document.getElementById("ifCheatedStat")!.style.display = (this._cheated) ? "block" : "none";
     }
-    private _modded: boolean;
+    private _modded!: boolean;
     public get modded() { return this._modded }
     public set modded(bool: boolean) {
         this._modded = bool;
-        document.getElementById("ifModdedStat").style.display = (this._modded) ? "block" : "none";
+        document.getElementById("ifModdedStat")!.style.display = (this._modded) ? "block" : "none";
     }
-    private _autoSavingAllowed: boolean;
+    private _autoSavingAllowed!: boolean;
     public get autoSavingAllowed(): boolean { return this._autoSavingAllowed }
     public set autoSavingAllowed(value: boolean) {
         this._autoSavingAllowed = value;
@@ -162,6 +162,7 @@ export class Game implements SaveProvider<GameSaveData> {
         this.cheated = false;
         this.modded = false;
         this.autoSavingAllowed = true;
+        this.currentMiddleState = "none";
 
         this.clickercookie = new ClickerCookie();
 
@@ -179,14 +180,14 @@ export class Game implements SaveProvider<GameSaveData> {
             new SimplePopup({x: 400, y: 200, text: "You are using an extremely outdated saving method. You will have issues with saving now that the new one is implemented. Clicking below will reset your save to the new format. Your old save cannot be restored.", func: () => { localStorage.clear() }, title: "Warning"});
     
         // 0.5 save 
-        if (localStorage.getItem(this.savinator5000.currentSaveName) && localStorage.getItem(this.savinator5000.currentSaveName)[0] === "[" && Game.VERSION_BRANCH === VersionBranch.MAIN) {
-            localStorage.setItem(`old05${this.savinator5000.currentSaveName}`, localStorage.getItem(this.savinator5000.currentSaveName));
+        if (localStorage.getItem(this.savinator5000.currentSaveName) && localStorage.getItem(this.savinator5000.currentSaveName)![0] === "[" && Game.VERSION_BRANCH === VersionBranch.MAIN) {
+            localStorage.setItem(`old05${this.savinator5000.currentSaveName}`, localStorage.getItem(this.savinator5000.currentSaveName)!);
             new SimplePopup({x: 400, y: 220, text: "You are using a save from the 0.5 release cycle. 0.5 save transfer is no longer supported. Pressing the button below will reset your save.", title: "sorry", func: () => { this.savinator5000.reset() }});
             return "Save the save!";
         }
 
         // 0.6 save
-        const parsedCurrentSave = JSON.parse(localStorage.getItem(this.savinator5000.currentSaveName));
+        const parsedCurrentSave = JSON.parse(localStorage.getItem(this.savinator5000.currentSaveName)!);
         if (typeof parsedCurrentSave === "object" && parsedCurrentSave !== null) {
             if (parsedCurrentSave["core.cookies"]) {
                 console.log("0.6 save detected, prompting user to transfer save.");
@@ -197,7 +198,7 @@ export class Game implements SaveProvider<GameSaveData> {
                     title: "yay new update!",
                     func: () => {
                         console.log("Beginning 0.6 save transfer process.");
-                        convert06Save(localStorage.getItem(this.savinator5000.currentSaveName));
+                        convert06Save(localStorage.getItem(this.savinator5000.currentSaveName)!);
                     }
                 });
                 return false;
@@ -217,8 +218,8 @@ export class Game implements SaveProvider<GameSaveData> {
         // change title
         document.title = branchQuickSwitch("Clicker Cookie", "Clicker Cookie Beta", "Clicker Cookie Develop") as string;
         // change version displayed
-        document.getElementById("versionNumber").innerText = branchQuickSwitch(Game.VERSION, `${Game.VERSION} Beta`, `${Game.VERSION} Develop`) as string;
-        document.getElementById("versionSwitchInfoBranch").innerText = (Game.VERSION_BRANCH === VersionBranch.MAIN) ? "beta" : "main";
+        document.getElementById("versionNumber")!.innerText = branchQuickSwitch(Game.VERSION, `${Game.VERSION} Beta`, `${Game.VERSION} Develop`) as string;
+        document.getElementById("versionSwitchInfoBranch")!.innerText = (Game.VERSION_BRANCH === VersionBranch.MAIN) ? "beta" : "main";
 
         if (Game.IN_DEVELOPMENT)
             document.title = `cc_${Game.VERSION}_${Game.VERSION_BRANCH}_dev`;
@@ -249,43 +250,43 @@ export class Game implements SaveProvider<GameSaveData> {
             mousePos.setAttribute("style","margin-bottom:0px;");
             devDiv.appendChild(mousePos);
 
-            document.getElementById("leftSide").insertBefore(devDiv, document.querySelector(".social-links"));
+            document.getElementById("leftSide")!.insertBefore(devDiv, document.querySelector(".social-links"));
         }
 
         // ------- Event Listeners (very long) -------
         // Middle buttons
-        document.getElementById("statsButton").addEventListener("click", () => {this.toggleMiddle("stats")});
-        document.getElementById("optionsButton").addEventListener("click", () => {this.toggleMiddle("options")});
-        document.getElementById("infoButton").addEventListener("click", () => {this.toggleMiddle("info")});
+        document.getElementById("statsButton")!.addEventListener("click", () => {this.toggleMiddle("stats")});
+        document.getElementById("optionsButton")!.addEventListener("click", () => {this.toggleMiddle("options")});
+        document.getElementById("infoButton")!.addEventListener("click", () => {this.toggleMiddle("info")});
         // middle content
         for (const element of Array.from(document.getElementsByClassName("middle-x"))) { //? i don't like how we have to do this, can we find another way? maybe somehow only one X button? actually we should probably refactor how the entire middle section works... todo: make an issue for that
             element.addEventListener("click", () => {this.toggleMiddle("none")});
         }
-        document.getElementById("creditsButton").addEventListener("click", () => {new SimplePopup({x: 320, y: 175, text: object2HTML(Game.CREDITS), title: "Credits"})});
-        document.getElementById("backgroundSelect").addEventListener("change", () => {Handlers.BACKGROUND.setBackground((document.getElementById("backgroundSelect") as HTMLFormElement).value)});
-        document.getElementById("currentlyClickedSelect").addEventListener("change", () => {Handlers.CURRENTLY_CLICKED.setCurrentlyClicked((document.getElementById("currentlyClickedSelect") as HTMLFormElement).value)});
-        document.getElementById("saveButton").addEventListener("click", () => {this.savinator5000.save()});
-        document.getElementById("loadButton").addEventListener("click", () => {this.savinator5000.load()});
-        document.getElementById("resetSaveButton").addEventListener("click", () => {new SimplePopup({x: 300, y: 150, text: "Are you sure you want to do this?", func: () => { this.savinator5000.reset() }, title: "Warning", backButton: true, isError: true})});
-        document.getElementById("exportDataButton").addEventListener("click", () => {this.savinator5000.export()});
-        document.getElementById("importDataButton").addEventListener("click", () => {document.getElementById("importDataInput").click()});
-        document.getElementById("importDataInput").addEventListener("change", () => {this.savinator5000.import()});
-        document.getElementById("autoSavingToggleSelect").addEventListener("change", () => {this.autoSavingAllowed = ((document.getElementById("autoSavingToggleSelect") as HTMLFormElement).value === "on") ? true : false});
-        document.getElementById("addModButton").addEventListener("click", () => {ModHandler.addButtonClicked()});
-        document.getElementById("listModsButton").addEventListener("click", () => {ModHandler.listButtonClicked()});
+        document.getElementById("creditsButton")!.addEventListener("click", () => {new SimplePopup({x: 320, y: 175, text: object2HTML(Game.CREDITS), title: "Credits"})});
+        document.getElementById("backgroundSelect")!.addEventListener("change", () => {Handlers.BACKGROUND.setBackground((document.getElementById("backgroundSelect") as HTMLFormElement).value)});
+        document.getElementById("currentlyClickedSelect")!.addEventListener("change", () => {Handlers.CURRENTLY_CLICKED.setCurrentlyClicked((document.getElementById("currentlyClickedSelect") as HTMLFormElement).value)});
+        document.getElementById("saveButton")!.addEventListener("click", () => {this.savinator5000.save()});
+        document.getElementById("loadButton")!.addEventListener("click", () => {this.savinator5000.load()});
+        document.getElementById("resetSaveButton")!.addEventListener("click", () => {new SimplePopup({x: 300, y: 150, text: "Are you sure you want to do this?", func: () => { this.savinator5000.reset() }, title: "Warning", backButton: true, isError: true})});
+        document.getElementById("exportDataButton")!.addEventListener("click", () => {this.savinator5000.export()});
+        document.getElementById("importDataButton")!.addEventListener("click", () => {document.getElementById("importDataInput")!.click()});
+        document.getElementById("importDataInput")!.addEventListener("change", () => {this.savinator5000.import()});
+        document.getElementById("autoSavingToggleSelect")!.addEventListener("change", () => {this.autoSavingAllowed = ((document.getElementById("autoSavingToggleSelect") as HTMLFormElement).value === "on") ? true : false});
+        document.getElementById("addModButton")!.addEventListener("click", () => {ModHandler.addButtonClicked()});
+        document.getElementById("listModsButton")!.addEventListener("click", () => {ModHandler.listButtonClicked()});
         // upgrades holder
-        document.getElementById("upgradesHolder").addEventListener("mouseover", () => {expandUpgradesHolder()});
-        document.getElementById("upgradesHolder").addEventListener("mouseout", () => {expandUpgradesHolder(true)});
+        document.getElementById("upgradesHolder")!.addEventListener("mouseover", () => {expandUpgradesHolder()});
+        document.getElementById("upgradesHolder")!.addEventListener("mouseout", () => {expandUpgradesHolder(true)});
         // misc
-        document.getElementById("cookie").addEventListener("click", () => {this.cookieClicked()});
+        document.getElementById("cookie")!.addEventListener("click", () => {this.cookieClicked()});
         if (Game.VERSION_BRANCH === VersionBranch.MAIN) {
-            document.getElementById("versionNumberHolder").addEventListener("click", () => { Game.switchToBranch(VersionBranch.BETA) });
+            document.getElementById("versionNumberHolder")!.addEventListener("click", () => { Game.switchToBranch(VersionBranch.BETA) });
         } else { // develop or beta
-            document.getElementById("versionNumberHolder").addEventListener("click", () => { Game.switchToBranch(VersionBranch.MAIN) });
+            document.getElementById("versionNumberHolder")!.addEventListener("click", () => { Game.switchToBranch(VersionBranch.MAIN) });
         }
 
-        document.getElementById("versionNumberHolder").addEventListener("mouseover", () => {versionNumberMousedOver()});
-        document.getElementById("versionNumberHolder").addEventListener("mouseout", () => {versionNumberMousedOver(true)});
+        document.getElementById("versionNumberHolder")!.addEventListener("mouseover", () => {versionNumberMousedOver()});
+        document.getElementById("versionNumberHolder")!.addEventListener("mouseout", () => {versionNumberMousedOver(true)});
 
         // start intervals (should be right at the end)
         this.AUTOSAVE_INTERVAL.start();
@@ -308,7 +309,7 @@ export class Game implements SaveProvider<GameSaveData> {
         }
         this.clickercookie.cookiesPerSecond = cps;
         
-        document.getElementById("totalUpgradesCounter").innerText = Handlers.UPGRADE.length.toString();
+        document.getElementById("totalUpgradesCounter")!.innerText = Handlers.UPGRADE.length.toString();
 
         Mod.callKooh("loop");
     }
@@ -323,9 +324,9 @@ export class Game implements SaveProvider<GameSaveData> {
 
     toggleMiddle(middleButton: MiddleState) {
         const middleTexts: Partial<Record<MiddleState, HTMLElement>> = {
-            "info": document.getElementById("infoMiddleText"),
-            "options": document.getElementById("optionsMiddleText"),
-            "stats": document.getElementById("statsMiddleText")
+            "info": document.getElementById("infoMiddleText")!,
+            "options": document.getElementById("optionsMiddleText")!,
+            "stats": document.getElementById("statsMiddleText")!
         };
         
         // set display none on all text
@@ -337,15 +338,15 @@ export class Game implements SaveProvider<GameSaveData> {
             this.currentMiddleState = "none";
             // we already set display to none on all our things
         } else { // middle state is something else
-            middleTexts[middleButton].style.display = "block";
+            middleTexts[middleButton]!.style.display = "block";
             this.currentMiddleState = middleButton;
         }
     }
 
     getSaveData(): GameSaveData {
         /** savedata is null on first boot, so we use a ternary statement */
-        const originalUpgradeSave = (this.savinator5000.getLocalStorageSave()) ? (this.savinator5000.getLocalStorageSave().getData("game") as GameSaveData).upgradesSave : {};
-        const originalBuildingSave = (this.savinator5000.getLocalStorageSave()) ? (this.savinator5000.getLocalStorageSave().getData("game") as GameSaveData).buildingsSave : {};
+        const originalUpgradeSave = (this.savinator5000.getLocalStorageSave()) ? (this.savinator5000.getLocalStorageSave()!.getData("game") as GameSaveData).upgradesSave : {};
+        const originalBuildingSave = (this.savinator5000.getLocalStorageSave()) ? (this.savinator5000.getLocalStorageSave()!.getData("game") as GameSaveData).buildingsSave : {};
 
         return {
             version: 1,
@@ -354,8 +355,8 @@ export class Game implements SaveProvider<GameSaveData> {
             autoSavingAllowed: this.autoSavingAllowed,
             
             // personalization
-            currentlyClickedObjectKey: Handlers.CURRENTLY_CLICKED.getIdentifierFromValue(Handlers.CURRENTLY_CLICKED.getCurrentlyClicked()),
-            currentBackgroundKey: Handlers.BACKGROUND.getIdentifierFromValue(Handlers.BACKGROUND.getCurrentBackground()), // todo: make better
+            currentlyClickedObjectKey: Handlers.CURRENTLY_CLICKED.getIdentifierFromValue(Handlers.CURRENTLY_CLICKED.getCurrentlyClicked())!,
+            currentBackgroundKey: Handlers.BACKGROUND.getIdentifierFromValue(Handlers.BACKGROUND.getCurrentBackground())!, // todo: make better
         
             upgradesSave: { // merge to preserve unregistered upgrades
                 ...originalUpgradeSave,
@@ -383,7 +384,7 @@ export class Game implements SaveProvider<GameSaveData> {
         Handlers.UPGRADE.destroyAllUpgrades();
         Handlers.UPGRADE.showUnlockedUpgrades();
 
-        document.getElementById("upgradesBoughtCounter").innerText = Handlers.UPGRADE.upgradesBought.toString();
+        document.getElementById("upgradesBoughtCounter")!.innerText = Handlers.UPGRADE.upgradesBought.toString();
         Handlers.UPGRADE.updateStatisticUpgrades();
     }
 }
@@ -391,9 +392,9 @@ export class Game implements SaveProvider<GameSaveData> {
 // Random Functions
 function versionNumberMousedOver(undo=false) {
     if (!undo)
-        document.getElementById("versionSwitchInfo").style.display = "block";
+        document.getElementById("versionSwitchInfo")!.style.display = "block";
     else
-        document.getElementById("versionSwitchInfo").style.display = "none";
+        document.getElementById("versionSwitchInfo")!.style.display = "none";
 }
 
 console.log(`you seem smart, how 'bout you contribute to the project? ${Game.GITHUB_REPO}`);

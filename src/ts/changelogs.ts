@@ -277,14 +277,15 @@ export const versionChangelogs: Changelog[] = [
             "Switched to SCSS (#59)",
             "Many styles have been adjusted for consistent sizing and spacing. As a result, some elements may appear slightly different.",
             "Advanced Popup content is now easier to create (#31)",
-            "All project files are now compliant with ESLint rules."
+            "All project files are now compliant with ESLint rules.",
+            "Updated to TypeScript 6 (#74)"
         ],
         release: "tbd"
     }
 ];
 
 export function createChangelogEntry(logs: Changelog) { // todo 0.7: try to make this look nicer, but lets be honest it's gonna stay this way
-    const changelog = document.getElementById("changelogWrapper");
+    const changelog = document.getElementById("changelogWrapper")!;
 
     const newChangelogEntry = document.createElement("div");
     newChangelogEntry.setAttribute("class","changelog");

@@ -37,7 +37,7 @@ export class Savinator {
         if (localStorage.getItem(this.currentSaveName) === null) {
             return null;
         } else {
-            const parsedSave = JSON.parse(localStorage.getItem(this.currentSaveName));
+            const parsedSave = JSON.parse(localStorage.getItem(this.currentSaveName)!);
 
             if (!Save.isValidSaveData(parsedSave)) {
                 console.warn("Savinator tried to get a Save from localStorage but the value was not a valid save. Returning null.");
@@ -53,12 +53,12 @@ export class Savinator {
      * If {@link Savinator.preserveUnusedNamespacesInSaves} is true, then an additional statement will be run that will ensure that if a namespace is present in localStorage and is not present in the dump, that that namespace's data is copied to the new save.
      * @param [save=undefined] The {@link Save} to use for the save. If defined, will not create a new {@link Save} using {@link Savinator.saveHandler}'s dump but will instead use this parameter.
     */
-    save(save: Save=undefined) {
+    save(save: Save | undefined=undefined) {
         if (save === undefined) {
             const newSave = new Save();
             const saveDump = this.saveHandler.dumpSaveData();
             if (this.preserveUnusedNamespacesInSaves && this.getLocalStorageSave() !== null) {
-                const localStorageSave = this.getLocalStorageSave();
+                const localStorageSave = this.getLocalStorageSave()!;
                 for (const namespace of localStorageSave.getNamespaces()) {
                     if (!(namespace in saveDump)) {
                         newSave.addData(namespace, localStorageSave.getData(namespace));
@@ -78,7 +78,7 @@ export class Savinator {
         }
 
         // Update saving notification
-        const indicator = document.getElementById("savingIndicator");
+        const indicator = document.getElementById("savingIndicator")!;
         indicator.style.opacity = "1";
 
         setTimeout(function() {
@@ -93,15 +93,20 @@ export class Savinator {
      */
     load() {
         const localStorageSave = this.getLocalStorageSave();
+        if (localStorageSave === null) {
+            console.warn("Tried to load save but nothing was found in localStorage.");
+            return;
+        }
+
         for (const provider of this.saveHandler) {
-            const namespace = this.saveHandler.getKeyFromValue(provider);
+            const namespace = this.saveHandler.getKeyFromValue(provider)!;
             if (localStorageSave.getNamespaces().includes(namespace) && namespace !== "game") {
                 provider.loadSaveData(localStorageSave.getData(namespace));
                 console.log(`Loaded save data for "${namespace}" namespace.`);
             }
         }
         if (this.saveHandler.getFromKey("game") !== undefined) { // game should always be there, but just in case it isn't we check
-            this.saveHandler.getFromKey("game").loadSaveData(localStorageSave.getData("game"));
+            this.saveHandler.getFromKey("game")!.loadSaveData(localStorageSave.getData("game"));
             console.log("Loaded save data for game namespace.");
         }
 
@@ -109,8 +114,8 @@ export class Savinator {
     }
 
     export() {
-        this.save(); //? should we do this? can we do it a different way that would be better?
-        const dataJSON = localStorage.getItem(this.currentSaveName);
+        this.save(); //? should we do this? can we do it a different way that would be better? we need to ensure sava data actually exists for the line below so maybe it's necessary...
+        const dataJSON = localStorage.getItem(this.currentSaveName)!;
 
         const textToBLOB = new Blob([dataJSON], { type: "text/plain" });
 
@@ -130,7 +135,12 @@ export class Savinator {
 
     import() {
         this.save(); //? do we need to do this?
-        const file = (document.getElementById("importDataInput") as HTMLInputElement).files[0]; //? should we get the File from the element, or should it be passed as a param to Savinator.import()?
+        const input = document.getElementById("importDataInput") as HTMLInputElement;
+        const file = input.files?.[0];
+        if (!file) {
+            alert("somehow, you managed to not select a file. impressive work!");
+            return;
+        }
         const reader = new FileReader();
 
         reader.onload = () => {
@@ -211,7 +221,7 @@ export class Save {
     static VERSION_FORMAT = 4;
 
     private data: SaveData; //? this is private, which is why we have so many get() methods. should it just be public?
-    constructor(data: SaveData=undefined) {
+    constructor(data: SaveData | undefined=undefined) {
         if (data === undefined) {
             this.data = {
                 header: {
@@ -230,7 +240,7 @@ export class Save {
         this.data.data[namespace] = value;
     }
 
-    getData(namespace: string=undefined): unknown {
+    getData(namespace: string | undefined=undefined): unknown {
         if (namespace) {
             if (this.data.data[namespace] === undefined || this.data.data[namespace] === null) 
                 throw new Error(`Tried to obtain data from a Save with a namespace (${namespace}) that does not exist on the save.`);
@@ -299,82 +309,82 @@ export function convert06Save(save: string) {
     /* upgrades */
     //* important note: we prefix each assignment with !! since these value are numbers and we need them to be booleans. one ! will negate the value and another ! will negate it again, leaving us with the same boolean but instead of a number it's a real boolean. if you don't understand write !!0 and !!1 inside of devtools and see what comes out  
     // keyboard
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard1")).unlocked = !!parsedSave["upgrades.unlocked"][0];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard1")).bought = !!parsedSave["upgrades.bought"][0];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard2")).unlocked = !!parsedSave["upgrades.unlocked"][1];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard2")).bought = !!parsedSave["upgrades.bought"][1];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard3")).unlocked = !!parsedSave["upgrades.unlocked"][2];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard3")).bought = !!parsedSave["upgrades.bought"][2];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard4")).unlocked = !!parsedSave["upgrades.unlocked"][3];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard4")).bought = !!parsedSave["upgrades.bought"][3];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard5")).unlocked = !!parsedSave["upgrades.unlocked"][4];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard5")).bought = !!parsedSave["upgrades.bought"][4];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard1"))!.unlocked = !!parsedSave["upgrades.unlocked"][0];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard1"))!.bought = !!parsedSave["upgrades.bought"][0];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard2"))!.unlocked = !!parsedSave["upgrades.unlocked"][1];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard2"))!.bought = !!parsedSave["upgrades.bought"][1];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard3"))!.unlocked = !!parsedSave["upgrades.unlocked"][2];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard3"))!.bought = !!parsedSave["upgrades.bought"][2];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard4"))!.unlocked = !!parsedSave["upgrades.unlocked"][3];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard4"))!.bought = !!parsedSave["upgrades.bought"][3];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard5"))!.unlocked = !!parsedSave["upgrades.unlocked"][4];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "keyboard5"))!.bought = !!parsedSave["upgrades.bought"][4];
     // grandpa
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa1")).unlocked = !!parsedSave["upgrades.unlocked"][5];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa1")).bought = !!parsedSave["upgrades.bought"][5];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa2")).unlocked = !!parsedSave["upgrades.unlocked"][6];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa2")).bought = !!parsedSave["upgrades.bought"][6];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa3")).unlocked = !!parsedSave["upgrades.unlocked"][7];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa3")).bought = !!parsedSave["upgrades.bought"][7];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa4")).unlocked = !!parsedSave["upgrades.unlocked"][8];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa4")).bought = !!parsedSave["upgrades.bought"][8];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa5")).unlocked = !!parsedSave["upgrades.unlocked"][9];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa5")).bought = !!parsedSave["upgrades.bought"][9];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa1"))!.unlocked = !!parsedSave["upgrades.unlocked"][5];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa1"))!.bought = !!parsedSave["upgrades.bought"][5];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa2"))!.unlocked = !!parsedSave["upgrades.unlocked"][6];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa2"))!.bought = !!parsedSave["upgrades.bought"][6];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa3"))!.unlocked = !!parsedSave["upgrades.unlocked"][7];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa3"))!.bought = !!parsedSave["upgrades.bought"][7];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa4"))!.unlocked = !!parsedSave["upgrades.unlocked"][8];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa4"))!.bought = !!parsedSave["upgrades.bought"][8];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa5"))!.unlocked = !!parsedSave["upgrades.unlocked"][9];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "grandpa5"))!.bought = !!parsedSave["upgrades.bought"][9];
     // ranch
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch1")).unlocked = !!parsedSave["upgrades.unlocked"][10];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch1")).bought = !!parsedSave["upgrades.bought"][10];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch2")).unlocked = !!parsedSave["upgrades.unlocked"][11];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch2")).bought = !!parsedSave["upgrades.bought"][11];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch3")).unlocked = !!parsedSave["upgrades.unlocked"][12];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch3")).bought = !!parsedSave["upgrades.bought"][12];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch4")).unlocked = !!parsedSave["upgrades.unlocked"][13];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch4")).bought = !!parsedSave["upgrades.bought"][13];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch5")).unlocked = !!parsedSave["upgrades.unlocked"][14];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch5")).bought = !!parsedSave["upgrades.bought"][14];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch1"))!.unlocked = !!parsedSave["upgrades.unlocked"][10];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch1"))!.bought = !!parsedSave["upgrades.bought"][10];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch2"))!.unlocked = !!parsedSave["upgrades.unlocked"][11];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch2"))!.bought = !!parsedSave["upgrades.bought"][11];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch3"))!.unlocked = !!parsedSave["upgrades.unlocked"][12];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch3"))!.bought = !!parsedSave["upgrades.bought"][12];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch4"))!.unlocked = !!parsedSave["upgrades.unlocked"][13];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch4"))!.bought = !!parsedSave["upgrades.bought"][13];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch5"))!.unlocked = !!parsedSave["upgrades.unlocked"][14];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "ranch5"))!.bought = !!parsedSave["upgrades.bought"][14];
     // television
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television1")).unlocked = !!parsedSave["upgrades.unlocked"][15];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television1")).bought = !!parsedSave["upgrades.bought"][15];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television2")).unlocked = !!parsedSave["upgrades.unlocked"][16];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television2")).bought = !!parsedSave["upgrades.bought"][16];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television3")).unlocked = !!parsedSave["upgrades.unlocked"][17];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television3")).bought = !!parsedSave["upgrades.bought"][17];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television4")).unlocked = !!parsedSave["upgrades.unlocked"][18];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television4")).bought = !!parsedSave["upgrades.bought"][18];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television5")).unlocked = !!parsedSave["upgrades.unlocked"][19];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television5")).bought = !!parsedSave["upgrades.bought"][19];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television1"))!.unlocked = !!parsedSave["upgrades.unlocked"][15];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television1"))!.bought = !!parsedSave["upgrades.bought"][15];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television2"))!.unlocked = !!parsedSave["upgrades.unlocked"][16];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television2"))!.bought = !!parsedSave["upgrades.bought"][16];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television3"))!.unlocked = !!parsedSave["upgrades.unlocked"][17];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television3"))!.bought = !!parsedSave["upgrades.bought"][17];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television4"))!.unlocked = !!parsedSave["upgrades.unlocked"][18];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television4"))!.bought = !!parsedSave["upgrades.bought"][18];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television5"))!.unlocked = !!parsedSave["upgrades.unlocked"][19];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "television5"))!.bought = !!parsedSave["upgrades.bought"][19];
     // worker
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker1")).unlocked = !!parsedSave["upgrades.unlocked"][20];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker1")).bought = !!parsedSave["upgrades.bought"][20];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker2")).unlocked = !!parsedSave["upgrades.unlocked"][21];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker2")).bought = !!parsedSave["upgrades.bought"][21];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker3")).unlocked = !!parsedSave["upgrades.unlocked"][22];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker3")).bought = !!parsedSave["upgrades.bought"][22];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker4")).unlocked = !!parsedSave["upgrades.unlocked"][23];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker4")).bought = !!parsedSave["upgrades.bought"][23];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker5")).unlocked = !!parsedSave["upgrades.unlocked"][24];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker5")).bought = !!parsedSave["upgrades.bought"][24];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker1"))!.unlocked = !!parsedSave["upgrades.unlocked"][20];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker1"))!.bought = !!parsedSave["upgrades.bought"][20];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker2"))!.unlocked = !!parsedSave["upgrades.unlocked"][21];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker2"))!.bought = !!parsedSave["upgrades.bought"][21];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker3"))!.unlocked = !!parsedSave["upgrades.unlocked"][22];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker3"))!.bought = !!parsedSave["upgrades.bought"][22];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker4"))!.unlocked = !!parsedSave["upgrades.unlocked"][23];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker4"))!.bought = !!parsedSave["upgrades.bought"][23];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker5"))!.unlocked = !!parsedSave["upgrades.unlocked"][24];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "worker5"))!.bought = !!parsedSave["upgrades.bought"][24];
     // wallet
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet1")).unlocked = !!parsedSave["upgrades.unlocked"][25];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet1")).bought = !!parsedSave["upgrades.bought"][25];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet2")).unlocked = !!parsedSave["upgrades.unlocked"][26];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet2")).bought = !!parsedSave["upgrades.bought"][26];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet3")).unlocked = !!parsedSave["upgrades.unlocked"][27];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet3")).bought = !!parsedSave["upgrades.bought"][27];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet4")).unlocked = !!parsedSave["upgrades.unlocked"][28];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet4")).bought = !!parsedSave["upgrades.bought"][28];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet5")).unlocked = !!parsedSave["upgrades.unlocked"][29];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet5")).bought = !!parsedSave["upgrades.bought"][29];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet1"))!.unlocked = !!parsedSave["upgrades.unlocked"][25];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet1"))!.bought = !!parsedSave["upgrades.bought"][25];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet2"))!.unlocked = !!parsedSave["upgrades.unlocked"][26];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet2"))!.bought = !!parsedSave["upgrades.bought"][26];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet3"))!.unlocked = !!parsedSave["upgrades.unlocked"][27];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet3"))!.bought = !!parsedSave["upgrades.bought"][27];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet4"))!.unlocked = !!parsedSave["upgrades.unlocked"][28];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet4"))!.bought = !!parsedSave["upgrades.bought"][28];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet5"))!.unlocked = !!parsedSave["upgrades.unlocked"][29];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "wallet5"))!.bought = !!parsedSave["upgrades.bought"][29];
     // church
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church1")).unlocked = !!parsedSave["upgrades.unlocked"][30];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church1")).bought = !!parsedSave["upgrades.bought"][30];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church2")).unlocked = !!parsedSave["upgrades.unlocked"][31];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church2")).bought = !!parsedSave["upgrades.bought"][31];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church3")).unlocked = !!parsedSave["upgrades.unlocked"][32];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church3")).bought = !!parsedSave["upgrades.bought"][32];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church4")).unlocked = !!parsedSave["upgrades.unlocked"][33];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church4")).bought = !!parsedSave["upgrades.bought"][33];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church5")).unlocked = !!parsedSave["upgrades.unlocked"][34];
-    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church5")).bought = !!parsedSave["upgrades.bought"][34];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church1"))!.unlocked = !!parsedSave["upgrades.unlocked"][30];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church1"))!.bought = !!parsedSave["upgrades.bought"][30];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church2"))!.unlocked = !!parsedSave["upgrades.unlocked"][31];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church2"))!.bought = !!parsedSave["upgrades.bought"][31];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church3"))!.unlocked = !!parsedSave["upgrades.unlocked"][32];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church3"))!.bought = !!parsedSave["upgrades.bought"][32];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church4"))!.unlocked = !!parsedSave["upgrades.unlocked"][33];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church4"))!.bought = !!parsedSave["upgrades.bought"][33];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church5"))!.unlocked = !!parsedSave["upgrades.unlocked"][34];
+    Handlers.UPGRADE.getFromIdentifier(new Identifier("clickercookie", "church5"))!.bought = !!parsedSave["upgrades.bought"][34];
 
     game.clickercookie.cookiesPerClick = parsedSave["core.cookiesPerClick"];
     game.clickercookie.cookieBeenClickedTimes = parsedSave["core.cookieBeenClickedTimes"];

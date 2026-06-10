@@ -47,16 +47,16 @@ export class Building implements SaveProvider<BuildingSave> {
     readonly upgradeCostMultiplier: number;
     condition: (game: Game) => boolean;
 
-    private _bought: number;
+    private _bought!: number;
     /** Number of buildings bought */
     public get bought() { return this._bought }
     public set bought(num: number) {
         this._bought = num;
-        document.getElementById(`${this.namePlural}Bought`).innerText = commaify(this._bought);
+        document.getElementById(`${this.namePlural}Bought`)!.innerText = commaify(this._bought);
 
-        document.getElementById(`${this.name}Cost`).innerText = commaify(this.upgradeCost); //? does this make sense here?
+        document.getElementById(`${this.name}Cost`)!.innerText = commaify(this.upgradeCost); //? does this make sense here?
     }
-    private _unlocked: boolean;
+    private _unlocked!: boolean;
     public get unlocked() { return this._unlocked }
     public set unlocked(bool: boolean) {
         this._unlocked = bool;
@@ -106,7 +106,7 @@ export class Building implements SaveProvider<BuildingSave> {
                 buildingsBought.innerText = "0";
                 buildingContent.appendChild(buildingsBought);
             this.html.appendChild(buildingContent);
-        document.getElementById("buildingsWrapper").appendChild(this.html);
+        document.getElementById("buildingsWrapper")!.appendChild(this.html);
         // end setup HTML
         
         // must setup HTML before assigning these, see setters
@@ -143,11 +143,11 @@ export class Building implements SaveProvider<BuildingSave> {
     }
 
     hovered() { // todo: this is very similar to Upgrade.hovered
-        const tooltip = document.getElementById("tooltip");
+        const tooltip = document.getElementById("tooltip")!;
 
-        document.getElementById("tooltipDesc").style.display = "none";
-        document.getElementById("tooltipProduces").style.display = "block";
-        document.getElementById("tooltipProducing").style.display = "block";
+        document.getElementById("tooltipDesc")!.style.display = "none";
+        document.getElementById("tooltipProduces")!.style.display = "block";
+        document.getElementById("tooltipProducing")!.style.display = "block";
 
         const buildingInfoName = capitalize(this.name);
         const buildingInfoPrice = commaify(this.upgradeCost);
@@ -163,11 +163,11 @@ export class Building implements SaveProvider<BuildingSave> {
 
         tooltip.style.borderRightWidth = "0px";
 
-        document.getElementById("tooltipName").innerHTML = buildingInfoName;
-        document.getElementById("tooltipPrice").innerHTML = `Price: ${buildingInfoPrice}`;
-        document.getElementById("tooltipQuote").innerHTML = `"${buildingInfoQuote}"`;
-        document.getElementById("tooltipProduces").innerHTML = `Produces: ${buildingInfoProduces} CPS`;
-        document.getElementById("tooltipProducing").innerHTML = `Producing: ${buildingInfoProducing} CPS`;
+        document.getElementById("tooltipName")!.innerHTML = buildingInfoName;
+        document.getElementById("tooltipPrice")!.innerHTML = `Price: ${buildingInfoPrice}`;
+        document.getElementById("tooltipQuote")!.innerHTML = `"${buildingInfoQuote}"`;
+        document.getElementById("tooltipProduces")!.innerHTML = `Produces: ${buildingInfoProduces} CPS`;
+        document.getElementById("tooltipProducing")!.innerHTML = `Producing: ${buildingInfoProducing} CPS`;
     
         tooltip.style.display = "block";
     }
