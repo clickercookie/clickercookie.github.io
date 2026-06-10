@@ -55,7 +55,7 @@ export class Mod<T> implements SaveProvider<T> {
     /** Mod namespace used for saving */
     public readonly NAMESPACE: string;
 
-    constructor(namespace: string, metadata: ModMetadata={name: undefined, description: undefined, img: undefined}) {
+    constructor(namespace: string, metadata: ModMetadata={name: "MOD NAME", description: "MOD DESCRIPTION", img: undefined}) {
         this.NAMESPACE = namespace;
 
         this.METADATA = {
@@ -76,6 +76,7 @@ export class Mod<T> implements SaveProvider<T> {
 
     /* we need these two to correctly impliment SaveProvider but they still are only used when overriden */
     getSaveData(): T {
+        // @ts-expect-error: this should be overridden
         return undefined;
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

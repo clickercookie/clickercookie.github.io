@@ -12,7 +12,7 @@ import { Upgrade, UpgradeSave } from "./upgrades.js";
 
 /* Personalization */
 export class BackgroundHandler extends Handler<Background> {
-    private currentBackground: Background;
+    private currentBackground!: Background;
 
     /**
      * {@link Handler.register} with modifications to add a new {@link HTMLSelectElement} to the `backgroundSelect`.
@@ -66,7 +66,7 @@ export class BackgroundHandler extends Handler<Background> {
     }
 }
 export class CurrentlyClickedHandler extends Handler<CurrentlyClickedObject> {
-    private currentlyClicked: CurrentlyClickedObject;
+    private currentlyClicked!: CurrentlyClickedObject;
 
     /**
      * {@link Handler.register()} with modifications to add a new {@link HTMLSelectElement} to the `currentlyClickedSelect`.
@@ -154,7 +154,7 @@ export class BuildingHandler extends Handler<Building> {
      * @param namespace Optional: if present only dump savedata from this namespace
      * @returns savedata as obj in following format: `stringifiedIdentifier: BuildingSave`
      */
-    dumpSave(namespace: string=undefined) {
+    dumpSave(namespace: string | undefined=undefined) {
         const saveObj: Record<StringifiedIdentifier, BuildingSave> = {};
         for (const value of (namespace === undefined) ? this : this.getValuesFromNamespace(namespace)) {
             saveObj[this.getIdentifierFromValue(value)!] = value.getSaveData();
@@ -167,7 +167,7 @@ export class BuildingHandler extends Handler<Building> {
      * @param saveObj The save object to load the data of
      * @param namespace Optional: if present will only load data for buildings of a given namespace.
      */
-    loadSave(saveObj: Record<StringifiedIdentifier, BuildingSave>, namespace: string=undefined) {
+    loadSave(saveObj: Record<StringifiedIdentifier, BuildingSave>, namespace: string | undefined=undefined) {
         for (const stringifiedIdentifier in saveObj) {
             const id = Identifier.fromString(stringifiedIdentifier)!;
 
@@ -241,7 +241,7 @@ export class UpgradeHandler extends Handler<Upgrade> {
      * @param namespace Optional: if present only dump savedata from this namespace
      * @returns savedata as obj in following format: `stringifiedIdentifier: UpgradeSave`
      */
-    dumpSave(namespace: string=undefined) {
+    dumpSave(namespace: string | undefined=undefined) {
         const saveObj: Record<StringifiedIdentifier, UpgradeSave> = {};
         for (const value of (namespace === undefined) ? this : this.getValuesFromNamespace(namespace)) {
             saveObj[this.getIdentifierFromValue(value)!] = value.getSaveData();
@@ -254,7 +254,7 @@ export class UpgradeHandler extends Handler<Upgrade> {
      * @param saveObj The save object to load the data of
      * @param namespace Optional: if present will only load data for upgrades of a given namespace.
      */
-    loadSave(saveObj: Record<StringifiedIdentifier, UpgradeSave>, namespace: string=undefined) {
+    loadSave(saveObj: Record<StringifiedIdentifier, UpgradeSave>, namespace: string | undefined=undefined) {
         for (const stringifiedIdentifier in saveObj) {
             const id = Identifier.fromString(stringifiedIdentifier)!;
 

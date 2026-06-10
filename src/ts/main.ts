@@ -162,6 +162,7 @@ export class Game implements SaveProvider<GameSaveData> {
         this.cheated = false;
         this.modded = false;
         this.autoSavingAllowed = true;
+        this.currentMiddleState = "none";
 
         this.clickercookie = new ClickerCookie();
 
@@ -337,7 +338,7 @@ export class Game implements SaveProvider<GameSaveData> {
             this.currentMiddleState = "none";
             // we already set display to none on all our things
         } else { // middle state is something else
-            middleTexts[middleButton].style.display = "block";
+            middleTexts[middleButton]!.style.display = "block";
             this.currentMiddleState = middleButton;
         }
     }

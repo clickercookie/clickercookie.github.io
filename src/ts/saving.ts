@@ -114,8 +114,8 @@ export class Savinator {
     }
 
     export() {
-        this.save(); //? should we do this? can we do it a different way that would be better?
-        const dataJSON = localStorage.getItem(this.currentSaveName);
+        this.save(); //? should we do this? can we do it a different way that would be better? we need to ensure sava data actually exists for the line below so maybe it's necessary...
+        const dataJSON = localStorage.getItem(this.currentSaveName)!;
 
         const textToBLOB = new Blob([dataJSON], { type: "text/plain" });
 
