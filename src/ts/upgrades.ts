@@ -32,11 +32,11 @@ export interface UpgradeData {
 }
 
 export function expandUpgradesHolder(retract: boolean=false) {
-    const upgradesShown = countVisibleChildren(document.getElementById("upgradesHolder"));
+    const upgradesShown = countVisibleChildren(document.getElementById("upgradesHolder")!);
 
     const rowsOfUpgrades = Math.ceil(upgradesShown / 5);
 
-    const holder = document.getElementById("upgradesHolder");
+    const holder = document.getElementById("upgradesHolder")!;
     const holderHeight = 67.6; // this is the height of the upgrade holder set in style.css, i would figure out how to get the height directly from the element but the height is constantly changing when it's hovered so it's more trouble then it's worth
     if (retract) {
         holder.style.height = holderHeight+"px";
@@ -119,8 +119,8 @@ export class Upgrade implements SaveProvider<UpgradeSave> {
         img.src = UPGRADE_ICON; //* so the onload/onerror events are actually fired
 
         // create it
-        document.getElementById("upgradesHolder").appendChild(this.html);
-        document.getElementById("upgradesBoughtStatsHolder").appendChild(this.statisticHTML);
+        document.getElementById("upgradesHolder")!.appendChild(this.html);
+        document.getElementById("upgradesBoughtStatsHolder")!.appendChild(this.statisticHTML);
     }
 
     clicked() {

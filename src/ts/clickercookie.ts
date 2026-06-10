@@ -498,14 +498,14 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
         Mod.registerKooh("click", () => { this.cookieClicked() });
         Mod.registerKooh("cps", () => { this.cpsUpdate() });
         Mod.registerKooh("personalization", () => {
-            Handlers.UPGRADE.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard1")).desc = `Multiplys Keyboard and clicking ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()} production by 2`;
-            Handlers.UPGRADE.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard2")).desc = `Multiplys Keyboard and clicking ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()} production by 2`;
-            Handlers.UPGRADE.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard3")).desc = `Multiplys Keyboard and clicking ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()} production by 2`;
-            Handlers.UPGRADE.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard4")).desc = `Multiplys Keyboard and clicking ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()} production by 2`;
-            Handlers.UPGRADE.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard5")).desc = `Multiplys Keyboard and clicking ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()} production by 2`;
+            Handlers.UPGRADE.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard1"))!.desc = `Multiplys Keyboard and clicking ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()} production by 2`;
+            Handlers.UPGRADE.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard2"))!.desc = `Multiplys Keyboard and clicking ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()} production by 2`;
+            Handlers.UPGRADE.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard3"))!.desc = `Multiplys Keyboard and clicking ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()} production by 2`;
+            Handlers.UPGRADE.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard4"))!.desc = `Multiplys Keyboard and clicking ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()} production by 2`;
+            Handlers.UPGRADE.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard5"))!.desc = `Multiplys Keyboard and clicking ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name.toLowerCase()} production by 2`;
             
-            Handlers.BUILDING.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard")).quote = `type in ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural.toLowerCase()}`;
-            Handlers.BUILDING.getFromIdentifier(new Identifier(this.NAMESPACE, "television")).quote = `hold infomercials on your ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural.toLowerCase()}`;
+            Handlers.BUILDING.getFromIdentifier(new Identifier(this.NAMESPACE, "keyboard"))!.quote = `type in ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural.toLowerCase()}`;
+            Handlers.BUILDING.getFromIdentifier(new Identifier(this.NAMESPACE, "television"))!.quote = `hold infomercials on your ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural.toLowerCase()}`;
         });
     }
 
@@ -557,12 +557,12 @@ export default class ClickerCookie extends Mod<ClickerCookieSaveData> {
     }
 
     updateStatistics() { // todo: make this only run when the stats page is a. first pulled up, b. continued to be pulled up
-        document.getElementById("cookiesStat").innerText = `${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural}: ${makeSlightlyImperfectFloatNice(this.cookies)}`;
-        document.getElementById("allTimeCookies").innerText = `All Time ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural}: ${makeSlightlyImperfectFloatNice(this.totalCookies)}`;
-        document.getElementById("cookiesPerSecondStat").innerText = `${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural} Per Second: ${makeSlightlyImperfectFloatNice(this.cookiesPerSecond)}`;
-        document.getElementById("buildingsOwnedStat").innerText = `Buildings Owned: ${commaify(Handlers.BUILDING.buildingsOwned)}`; // todo: should this be in Game? How should statistics actually work at all?
-        document.getElementById("cookieBeenClickedTimesStat").innerText = `Total ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name} Clicks: ${this.cookieBeenClickedTimes}`;
-        document.getElementById("cookiesPerClickStat").innerText = `${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural} Per Click: ${this.cookiesPerClick}`;
+        document.getElementById("cookiesStat")!.innerText = `${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural}: ${makeSlightlyImperfectFloatNice(this.cookies)}`;
+        document.getElementById("allTimeCookies")!.innerText = `All Time ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural}: ${makeSlightlyImperfectFloatNice(this.totalCookies)}`;
+        document.getElementById("cookiesPerSecondStat")!.innerText = `${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural} Per Second: ${makeSlightlyImperfectFloatNice(this.cookiesPerSecond)}`;
+        document.getElementById("buildingsOwnedStat")!.innerText = `Buildings Owned: ${commaify(Handlers.BUILDING.buildingsOwned)}`; // todo: should this be in Game? How should statistics actually work at all?
+        document.getElementById("cookieBeenClickedTimesStat")!.innerText = `Total ${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().name} Clicks: ${this.cookieBeenClickedTimes}`;
+        document.getElementById("cookiesPerClickStat")!.innerText = `${Handlers.CURRENTLY_CLICKED.getCurrentlyClicked().namePlural} Per Click: ${this.cookiesPerClick}`;
     }
 
     cookieClicked() {

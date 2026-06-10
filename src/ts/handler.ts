@@ -57,7 +57,7 @@ export class Handler<T> implements Iterable<T> {
      */
     getValuesFromNamespace(namespace: string): T[] {
         return Array.from(this.registered.entries())
-            .filter(([key]) => Identifier.fromString(key).namespace === namespace)
+            .filter(([key]) => Identifier.fromString(key)!.namespace === namespace)
             .map(([, value]) => value);
     }
 
