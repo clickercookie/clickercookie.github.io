@@ -11,8 +11,9 @@
 
 /* basic basis for most html elements */
 body {
-    margin: 0;
     display: flex;
+    margin: 0;
+    height: 100lvh;
     overflow: hidden;
     touch-action: manipulation;
     color: white;
@@ -177,7 +178,6 @@ a { // links should inherit color and be bold always unless otherwise specified
 
 .middle {
     width: 100%; // takes up all remaining space between left and right sides
-    height: 100vh;
     background: url(img/backgrounds/background-blue.png);
 
     .middle-buttons {
@@ -237,7 +237,7 @@ a { // links should inherit color and be bold always unless otherwise specified
             url("img/dark-noise.png");
 
         h1 {
-            font-size: 2rem;
+            font-size: 2em;
             font-family: monospace;
             margin: 0.75rem 0;
             text-decoration: underline;
@@ -246,17 +246,17 @@ a { // links should inherit color and be bold always unless otherwise specified
             text-align: center;
         }
         h2 {
-            font-size: 1.5rem;
+            font-size: 1.5em;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 1rem 0;
             font-weight: bold;
         }
         h3 {
-            font-size: 1.2rem;
+            font-size: 1.2em;
             margin: 0.5rem 0;
         }
         h4 {
-            font-size: 1rem;
+            font-size: 1em;
             margin: 0.25rem 0;
         }
         .middle-text-gray {
@@ -298,7 +298,7 @@ a { // links should inherit color and be bold always unless otherwise specified
             }
 
             ul {
-                font-size: 0.875rem; // so changelog entries are smaller than their headers
+                font-size: 0.875em; // so changelog entries are smaller than their headers
                 margin: 0.5rem 0;
             }
         }
