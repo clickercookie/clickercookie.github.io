@@ -278,7 +278,8 @@ export const versionChangelogs: Changelog[] = [
             "Many styles have been adjusted for consistent sizing and spacing. As a result, some elements may appear slightly different.",
             "Advanced Popup content is now easier to create (#31)",
             "All project files are now compliant with ESLint rules.",
-            "Updated to TypeScript 6 (#74)"
+            "Updated to TypeScript 6 (#74)",
+            "Version number has been slightly modified to be smaller and less obtrusive"
         ],
         release: "tbd"
     }

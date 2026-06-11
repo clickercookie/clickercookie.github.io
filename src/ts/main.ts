@@ -218,7 +218,7 @@ export class Game implements SaveProvider<GameSaveData> {
         // change title
         document.title = branchQuickSwitch("Clicker Cookie", "Clicker Cookie Beta", "Clicker Cookie Develop") as string;
         // change version displayed
-        document.getElementById("versionNumber")!.innerText = branchQuickSwitch(Game.VERSION, `${Game.VERSION} Beta`, `${Game.VERSION} Develop`) as string;
+        document.getElementById("versionNumber")!.innerText = branchQuickSwitch(Game.VERSION, `${Game.VERSION}-beta`, `${Game.VERSION}-develop`) as string;
         document.getElementById("versionSwitchInfoBranch")!.innerText = (Game.VERSION_BRANCH === VersionBranch.MAIN) ? "beta" : "main";
 
         if (Game.IN_DEVELOPMENT)
@@ -250,7 +250,7 @@ export class Game implements SaveProvider<GameSaveData> {
             mousePos.setAttribute("style","margin-bottom:0px;");
             devDiv.appendChild(mousePos);
 
-            document.getElementById("leftSide")!.insertBefore(devDiv, document.querySelector(".social-links"));
+            document.getElementById("leftSide")!.insertBefore(devDiv, document.querySelector(".left-side-bottom"));
         }
 
         // ------- Event Listeners (very long) -------

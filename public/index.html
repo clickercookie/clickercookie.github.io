@@ -14,17 +14,21 @@
     </head>
     <body>
         <div class="left-side" id="leftSide">
-            <img class="cookie pointer" id="cookie" src="img/cookie.png" alt="cookie" draggable="false">
+            <div class="cookie-container">
+                <img class="cookie pointer" id="cookie" src="img/cookie.png" alt="cookie" draggable="false">
+            </div>
             <div class="cookie-counter-wrapper">
                 <h3 class="cookie-counter">Cookies: <span id="cookieCount">0</span></h3>
-                <h4 class="cookies-per-second-counter">Cookies Per Second: <span id="cookiesPerSecondCount">0</span></h4>
+                <h4 class="cps-counter">Cookies Per Second: <span id="cookiesPerSecondCount">0</span></h4>
             </div>
             <p class="saving-indicator" id="savingIndicator">Saved!</p>
-            <div class="social-links">
-                <a href="404.html" target="_blank" id="githubHyperlink"> <!-- this HREF is changed programmatically in main.ts in the event of a fork and a different GitHub repo link. -->
-                    <img src="img/github-mark.svg" alt="github">
-                </a>
-                <h5 class="version-number-holder pointer" id="versionNumberHolder">Version: <span id="versionNumber">null</span></h5>
+            <div class="left-side-bottom">
+                <div class="social-links">
+                    <a href="404.html" target="_blank" id="githubHyperlink"> <!-- this HREF is changed programmatically in main.ts in the event of a fork and a different GitHub repo link. -->
+                        <img src="img/github-mark.svg" alt="github">
+                    </a>
+                </div>
+                <h5 class="version-number-holder pointer" id="versionNumberHolder">v<span id="versionNumber">null</span></h5>
                 <div class="version-switch-info" id="versionSwitchInfo">
                     <p style="margin:0px; color:black; text-align:center;">Clicking this will switch to the <span id="versionSwitchInfoBranch">null</span> branch.</p>
                 </div>
