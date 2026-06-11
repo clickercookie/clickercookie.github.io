@@ -279,7 +279,10 @@ export const versionChangelogs: Changelog[] = [
             "Advanced Popup content is now easier to create (#31)",
             "All project files are now compliant with ESLint rules.",
             "Updated to TypeScript 6 (#74)",
-            "Version number has been slightly modified to be smaller and less obtrusive"
+            "Version number has been slightly modified to be smaller and less obtrusive."
+        ],
+        fixed: [
+            "When importing a save from another version branch, the error message would give the wrong branch name for the save that was being imported."
         ],
         release: "tbd"
     }

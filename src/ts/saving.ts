@@ -148,9 +148,8 @@ export class Savinator {
             // helper.consoleLogDev("imported data: ");
             // helper.consoleLogDev(importedData.toString());
 
-            const versionBranchToDisplay = branchQuickSwitch("main", "beta", "develop");
             if (importedData.getHeader().versionBranch !== Game.VERSION_BRANCH) {
-                new SimplePopup({x: 300, y: 150, text: `This is a save file from another version branch (${versionBranchToDisplay}), which is incompatible with this version. Please use a different file.`, title: "Alert", isError: true});
+                new SimplePopup({x: 300, y: 150, text: `This is a save file from another version branch (${importedData.getHeader().versionBranch}), which is incompatible with this version. Please use a different file.`, title: "Alert", isError: true});
             }
 
             this.save(importedData);
